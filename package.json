@@ -1,0 +1,58 @@
+{
+  "name": "@toryt/allen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^8.3.2",
+    "nyc": "^15.1.0",
+    "prettier-standard": "^16.4.1",
+    "should": "^13.2.3",
+    "standard": "^16.0.3"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "proseWrap": "always",
+    "endOfLine": "lf",
+    "arrowParens": "avoid"
+  },
+  "standard": {
+    "ignore": [
+      "/scripts/common/"
+    ]
+  },
+  "mocha": {
+    "check-leaks": true,
+    "forbid-only": true,
+    "forbid-pending": true,
+    "recursive": true,
+    "sort": true,
+    "require": [
+      "should"
+    ],
+    "reporter": [
+      "mocha-reporter"
+    ]
+  },
+  "nyc": {
+    "check-coverage": true,
+    "per-file": true,
+    "lines": 100,
+    "statements": 100,
+    "functions": 100,
+    "branches": 100,
+    "reporter": [
+      "html",
+      "text"
+    ]
+  },
+  "dependencies": {
+    "joi": "^17.4.0"
+  }
+}
