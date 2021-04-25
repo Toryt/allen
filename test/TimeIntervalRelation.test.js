@@ -4,8 +4,8 @@ const { VALUES, BASIC_RELATIONS } = require('../lib/TimeIntervalRelations')
 
 describe('TimeIntervalRelation', function () {
   describe('constructor', function () {
-    bitPatterns.forEach(value => {
-      it(`constructs for ${value}`, function () {
+    it('constructs for all bit patterns', function () {
+      bitPatterns.forEach(value => {
         const result = new TimeIntervalRelation(value)
         result.$bitPattern.should.equal(value)
       })
