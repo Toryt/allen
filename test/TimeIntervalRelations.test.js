@@ -4,7 +4,10 @@ const {
   PRECEDES_BIT_PATTERN,
   MEETS_BIT_PATTERN,
   OVERLAPS_BIT_PATTERN,
-  FINISHED_BY_BIT_PATTERN
+  FINISHED_BY_BIT_PATTERN,
+  CONTAINS_BIT_PATTERN,
+  STARTS_BIT_PATTERN,
+  EQUALS_BIT_PATTERN
 } = require('../lib/bitPattern')
 const { TimeIntervalRelation } = require('../lib/TimeIntervalRelation')
 const {
@@ -14,6 +17,9 @@ const {
   MEETS,
   OVERLAPS,
   FINISHED_BY,
+  CONTAINS,
+  STARTS,
+  EQUALS,
   BASIC_RELATIONS
 } = require('../lib/TimeIntervalRelations')
 
@@ -66,12 +72,16 @@ describe('TimeIntervalRelations', function () {
     testBasicRelation('MEETS', MEETS, MEETS_BIT_PATTERN)
     testBasicRelation('OVERLAPS', OVERLAPS, OVERLAPS_BIT_PATTERN)
     testBasicRelation('FINISHED_BY', FINISHED_BY, FINISHED_BY_BIT_PATTERN)
+    testBasicRelation('CONTAINS', CONTAINS, CONTAINS_BIT_PATTERN)
+    testBasicRelation('STARTS', STARTS, STARTS_BIT_PATTERN)
+    testBasicRelation('EQUALS', EQUALS, EQUALS_BIT_PATTERN)
   })
   describe('BASIC_RELATIONS', function () {
     it('is an array', function () {
       BASIC_RELATIONS.should.be.an.Array()
     })
     it('has 13 entries', function () {
+      // MUDO generalize 13
       BASIC_RELATIONS.length.should.equal(13)
     })
     it('contains only TimeIntervalRelations', function () {
