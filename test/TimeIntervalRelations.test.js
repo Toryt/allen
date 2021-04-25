@@ -3,10 +3,19 @@ const {
   EMPTY_BIT_PATTERN,
   PRECEDES_BIT_PATTERN,
   MEETS_BIT_PATTERN,
-  OVERLAPS_BIT_PATTERN
+  OVERLAPS_BIT_PATTERN,
+  FINISHED_BY_BIT_PATTERN
 } = require('../lib/bitPattern')
 const { TimeIntervalRelation } = require('../lib/TimeIntervalRelation')
-const { VALUES, EMPTY, PRECEDES, MEETS, OVERLAPS, BASIC_RELATIONS } = require('../lib/TimeIntervalRelations')
+const {
+  VALUES,
+  EMPTY,
+  PRECEDES,
+  MEETS,
+  OVERLAPS,
+  FINISHED_BY,
+  BASIC_RELATIONS
+} = require('../lib/TimeIntervalRelations')
 
 function testBasicRelation (name, br, bp) {
   describe(name, function () {
@@ -56,6 +65,7 @@ describe('TimeIntervalRelations', function () {
     testBasicRelation('PRECEDES', PRECEDES, PRECEDES_BIT_PATTERN)
     testBasicRelation('MEETS', MEETS, MEETS_BIT_PATTERN)
     testBasicRelation('OVERLAPS', OVERLAPS, OVERLAPS_BIT_PATTERN)
+    testBasicRelation('FINISHED_BY', FINISHED_BY, FINISHED_BY_BIT_PATTERN)
   })
   describe('BASIC_RELATIONS', function () {
     it('is an array', function () {
