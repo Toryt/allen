@@ -1,4 +1,5 @@
-const { bitPatterns, TimeIntervalRelation } = require('../lib/TimeIntervalRelation')
+const { bitPatterns } = require('../lib/bitPattern')
+const { TimeIntervalRelation } = require('../lib/TimeIntervalRelation')
 
 describe('TimeIntervalRelation', function () {
   describe('constructor', function () {

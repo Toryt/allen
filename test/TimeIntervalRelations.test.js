@@ -1,4 +1,6 @@
-const { NR_OF_RELATIONS, bitPatterns, TimeIntervalRelation, VALUES } = require('../lib/TimeIntervalRelations')
+const { NR_OF_RELATIONS } = require('../lib/bitPattern')
+const { TimeIntervalRelation } = require('../lib/TimeIntervalRelation')
+const { VALUES } = require('../lib/TimeIntervalRelations')
 
 describe('TimeIntervalRelations', function () {
   describe('VALUES', function () {
