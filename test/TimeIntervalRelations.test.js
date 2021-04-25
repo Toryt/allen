@@ -1,6 +1,17 @@
-const { NR_OF_RELATIONS } = require('../lib/bitPattern')
+const { NR_OF_RELATIONS, EMPTY_BIT_PATTERN, PRECEDES_BIT_PATTERN } = require('../lib/bitPattern')
 const { TimeIntervalRelation } = require('../lib/TimeIntervalRelation')
-const { VALUES, BASIC_RELATIONS } = require('../lib/TimeIntervalRelations')
+const { VALUES, EMPTY, PRECEDES, BASIC_RELATIONS } = require('../lib/TimeIntervalRelations')
+
+function testBasicRelation (name, br, bp) {
+  describe(name, function () {
+    it('is a TimeIntervalRelation', function () {
+      br.should.be.instanceof(TimeIntervalRelation)
+    })
+    it('has the expected bit pattern', function () {
+      br.$bitPattern.should.equal(bp)
+    })
+  })
+}
 
 describe('TimeIntervalRelations', function () {
   describe('VALUES', function () {
@@ -22,6 +33,22 @@ describe('TimeIntervalRelations', function () {
       })
     })
   })
+  describe('special relations', function () {
+    describe('EMPTY', function () {
+      it('is a TimeIntervalRelation', function () {
+        EMPTY.should.be.instanceof(TimeIntervalRelation)
+      })
+      it('has bit pattern 0', function () {
+        EMPTY.$bitPattern.should.equal(EMPTY_BIT_PATTERN)
+      })
+      it.skip('is not implied by anything', function () {
+        VALUES.forEach(ar => {
+          EMPTY.impliedBy(ar).should.be.false()
+        })
+      })
+    })
+    testBasicRelation('PRECEDES', PRECEDES, PRECEDES_BIT_PATTERN)
+  })
   describe('BASIC_RELATIONS', function () {
     it('is an array', function () {
       BASIC_RELATIONS.should.be.an.Array()
@@ -36,7 +63,7 @@ describe('TimeIntervalRelations', function () {
     })
     it('has the basic relation at the position of its ordinal', function () {
       BASIC_RELATIONS.forEach(br => {
-        BASIC_RELATIONS[br.basicRelationOrdinal()].should.strictEqual(br)
+        BASIC_RELATIONS[br.basicRelationOrdinal()].should.equal(br)
       })
     })
   })
