@@ -7,7 +7,8 @@ const {
   FINISHED_BY_BIT_PATTERN,
   CONTAINS_BIT_PATTERN,
   STARTS_BIT_PATTERN,
-  EQUALS_BIT_PATTERN
+  EQUALS_BIT_PATTERN,
+  STARTED_BY_BIT_PATTERN
 } = require('../lib/bitPattern')
 const { TimeIntervalRelation } = require('../lib/TimeIntervalRelation')
 const {
@@ -20,6 +21,7 @@ const {
   CONTAINS,
   STARTS,
   EQUALS,
+  STARTED_BY,
   BASIC_RELATIONS
 } = require('../lib/TimeIntervalRelations')
 
@@ -75,6 +77,7 @@ describe('TimeIntervalRelations', function () {
     testBasicRelation('CONTAINS', CONTAINS, CONTAINS_BIT_PATTERN)
     testBasicRelation('STARTS', STARTS, STARTS_BIT_PATTERN)
     testBasicRelation('EQUALS', EQUALS, EQUALS_BIT_PATTERN)
+    testBasicRelation('STARTED_BY', STARTED_BY, STARTED_BY_BIT_PATTERN)
   })
   describe('BASIC_RELATIONS', function () {
     it('is an array', function () {
