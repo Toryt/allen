@@ -13,7 +13,8 @@ const {
   FINISHES_BIT_PATTERN,
   OVERLAPPED_BY_BIT_PATTERN,
   MET_BY_BIT_PATTERN,
-  PRECEDED_BY_BIT_PATTERN
+  PRECEDED_BY_BIT_PATTERN,
+  FULL_BIT_PATTERN
 } = require('../lib/bitPattern')
 const { TimeIntervalRelation } = require('../lib/TimeIntervalRelation')
 const {
@@ -32,6 +33,7 @@ const {
   OVERLAPPED_BY,
   MET_BY,
   PRECEDED_BY,
+  FULL,
   BASIC_RELATIONS
 } = require('../lib/TimeIntervalRelations')
 
@@ -93,6 +95,19 @@ describe('TimeIntervalRelations', function () {
     testBasicRelation('OVERLAPPED_BY', OVERLAPPED_BY, OVERLAPPED_BY_BIT_PATTERN)
     testBasicRelation('MET_BY', MET_BY, MET_BY_BIT_PATTERN)
     testBasicRelation('PRECEDED_BY', PRECEDED_BY, PRECEDED_BY_BIT_PATTERN)
+    describe('FULL', function () {
+      it('is a TimeIntervalRelation', function () {
+        FULL.should.be.instanceof(TimeIntervalRelation)
+      })
+      it('has bit pattern 0', function () {
+        FULL.$bitPattern.should.equal(FULL_BIT_PATTERN)
+      })
+      it.skip('is implied by everything', function () {
+        VALUES.forEach(ar => {
+          FULL.impliedBy(ar).should.be.true()
+        })
+      })
+    })
   })
   describe('BASIC_RELATIONS', function () {
     it('is an array', function () {

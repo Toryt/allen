@@ -36,4 +36,33 @@ describe('TimeIntervalRelation', function () {
       })
     })
   })
+  describe('impliedBy', function () {
+    it('is implied by itself', function () {
+      VALUES.forEach(ar => {
+        ar.impliedBy(ar).should.be.true()
+      })
+    })
+    it('basic relations are not implied by other basic relations', function () {
+      BASIC_RELATIONS.forEach(br1 => {
+        BASIC_RELATIONS.filter(br2 => br2 !== br1).forEach(br2 => br1.impliedBy(br2).should.be.false())
+      })
+    })
+    it('is equivalent', function () {
+      this.timeout(50000)
+      let total = VALUES.length * VALUES.length
+      let counter = 0
+      // 67 million tests
+      VALUES.forEach(ar1 => {
+        VALUES.forEach(ar2 => {
+          counter++
+          if (counter % 100000 === 0) {
+            console.log(`${counter}/${total} (${(counter * 100) / total}%`)
+          }
+          const result = ar1.impliedBy(ar2)
+          const calculated = BASIC_RELATIONS.every(br => !ar2.impliedBy(br) || ar1.impliedBy(br))
+          result.should.equal(calculated)
+        })
+      })
+    })
+  })
 })
