@@ -76,8 +76,8 @@ describe('TimeIntervalRelations', function () {
       it('has bit pattern 0', function () {
         EMPTY.$bitPattern.should.equal(EMPTY_BIT_PATTERN)
       })
-      it.skip('is not implied by anything', function () {
-        VALUES.forEach(ar => {
+      it('is not implied by anything', function () {
+        VALUES.filter(ar => ar !== EMPTY).forEach(ar => {
           EMPTY.impliedBy(ar).should.be.false()
         })
       })
@@ -102,7 +102,7 @@ describe('TimeIntervalRelations', function () {
       it('has bit pattern 0', function () {
         FULL.$bitPattern.should.equal(FULL_BIT_PATTERN)
       })
-      it.skip('is implied by everything', function () {
+      it('is implied by everything', function () {
         VALUES.forEach(ar => {
           FULL.impliedBy(ar).should.be.true()
         })
