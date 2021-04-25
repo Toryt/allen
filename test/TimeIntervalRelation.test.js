@@ -1,11 +1,27 @@
-const { NR_OF_RELATIONS, TimeIntervalRelation } = require('../lib/TimeIntervalRelation')
-
-const values = [...Array(NR_OF_RELATIONS).keys()]
+const { NR_OF_RELATIONS, bitPatterns, TimeIntervalRelation, VALUES } = require('../lib/TimeIntervalRelation')
 
 describe('TimeIntervalRelation', function () {
-  describe('VALUES', function () {})
+  describe('VALUES', function () {
+    it('is an array', function () {
+      VALUES.should.be.an.Array()
+    })
+    it('contains the exact amount of instances', function () {
+      VALUES.length.should.equal(NR_OF_RELATIONS)
+    })
+    it('contains only TimeIntervalRelations', function () {
+      VALUES.forEach(ar => {
+        ar.should.be.instanceof(TimeIntervalRelation)
+      })
+    })
+    it('does not contain duplicates', function () {
+      // optimized to avoid quadratic time
+      VALUES.forEach((ar, i) => {
+        ar.$bitPattern.should.equal(i)
+      })
+    })
+  })
   describe('constructor', function () {
-    values.forEach(value => {
+    bitPatterns.forEach(value => {
       it(`constructs for ${value}`, function () {
         const result = new TimeIntervalRelation(value)
         result.$bitPattern.should.equal(value)
