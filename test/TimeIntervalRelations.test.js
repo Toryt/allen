@@ -1,6 +1,6 @@
-const { NR_OF_RELATIONS, EMPTY_BIT_PATTERN, PRECEDES_BIT_PATTERN } = require('../lib/bitPattern')
+const { NR_OF_RELATIONS, EMPTY_BIT_PATTERN, PRECEDES_BIT_PATTERN, MEETS_BIT_PATTERN } = require('../lib/bitPattern')
 const { TimeIntervalRelation } = require('../lib/TimeIntervalRelation')
-const { VALUES, EMPTY, PRECEDES, BASIC_RELATIONS } = require('../lib/TimeIntervalRelations')
+const { VALUES, EMPTY, PRECEDES, MEETS, BASIC_RELATIONS } = require('../lib/TimeIntervalRelations')
 
 function testBasicRelation (name, br, bp) {
   describe(name, function () {
@@ -48,6 +48,7 @@ describe('TimeIntervalRelations', function () {
       })
     })
     testBasicRelation('PRECEDES', PRECEDES, PRECEDES_BIT_PATTERN)
+    testBasicRelation('MEETS', MEETS, MEETS_BIT_PATTERN)
   })
   describe('BASIC_RELATIONS', function () {
     it('is an array', function () {
