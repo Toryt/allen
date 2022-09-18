@@ -57,7 +57,7 @@ describe('TimeIntervalRelation', function () {
       VALUES.forEach(ar1 => {
         VALUES.forEach(ar2 => {
           counter++
-          if (counter % 100000 === 0) {
+          if (counter % 500000 === 0) {
             console.log(`${counter}/${total} (${(counter * 100) / total}%)`)
           }
           const result = ar1.impliedBy(ar2)
