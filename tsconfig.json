@@ -25,7 +25,7 @@
     "forceConsistentCasingInFileNames": true,
     "target": "ES2021",
     "listEmittedFiles": true,
-    "listFiles": true,
+    "listFiles": false,
     "incremental": true,
     "noErrorTruncation": true,
     "skipLibCheck": true,
