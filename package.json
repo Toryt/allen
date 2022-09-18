@@ -15,7 +15,7 @@
     "nyc": "^15.1.0",
     "prettier-standard": "^16.4.1",
     "should": "^13.2.3",
-    "standard": "^16.0.3"
+    "standard": "^17.0.0"
   },
   "prettier": {
     "printWidth": 120,
