@@ -23,7 +23,7 @@ import {
 } from '../src/bitPattern'
 import Joi from 'joi'
 import should from 'should'
-import { stuffWithUndefined } from './stuff'
+import { stuff } from './stuff'
 
 interface PatternCase {
   name: string
@@ -92,7 +92,7 @@ describe('bitPattern', function () {
       })
     })
 
-    stuffWithUndefined
+    stuff
       .filter(s => !isBasicBitPattern(s))
       .forEach(s => {
         it(`fails for ${JSON.stringify(s)}`, function () {
