@@ -1,9 +1,8 @@
-import { Schema, number } from 'joi'
-
 /**
  * The total number of possible time interval relations <strong>= {@value}</strong>
  * (i.e., <code>2<sup>13</sup></code>).
  */
+import Joi from 'joi'
 
 export const NR_OF_RELATIONS: number = 8192
 
@@ -27,7 +26,7 @@ export const FULL_BIT_PATTERN: number = 8191 // 1111111111111 pmoFDseSdfOMP
 
 export const bitPatterns: number[] = [...Array(NR_OF_RELATIONS).keys()]
 
-export const BitPattern: Schema<number> = number()
+export const BitPattern: Joi.Schema<number> = Joi.number()
   .integer()
   .min(EMPTY_BIT_PATTERN)
   .max(FULL_BIT_PATTERN)
@@ -35,7 +34,7 @@ export const BitPattern: Schema<number> = number()
 /**
  * A basic relation is expressed by a single bit in the bit pattern.
  */
-export function isBasicBitPattern (bitPattern: number): boolean {
+export function isBasicBitPattern (bitPattern: unknown): bitPattern is number {
   /* http://graphics.stanford.edu/~seander/bithacks.html
    * Determining if an integer is a power of 2
    * unsigned int v; // we want to see if v is a power of 2
@@ -45,5 +44,5 @@ export function isBasicBitPattern (bitPattern: number): boolean {
    * Note that 0 is incorrectly considered a power of 2 here. To remedy this, use:
    * f = !(v & (v - 1)) && v;
    */
-  return (bitPattern & (bitPattern - 1)) === 0 && bitPattern !== 0
+  return typeof bitPattern === 'number' && (bitPattern & (bitPattern - 1)) === 0 && bitPattern !== 0
 }
