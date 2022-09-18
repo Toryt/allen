@@ -2,7 +2,8 @@
   "name": "@toryt/allen",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.js",
   "scripts": {
     "pretest": "npm-check -i \"\"; npm outdated || exit 0",
     "test": "standard && nyc mocha 'test/**/*.test.js'"
