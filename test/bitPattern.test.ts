@@ -23,7 +23,8 @@ import {
 } from '../src/bitPattern'
 import Joi from 'joi'
 import should from 'should'
-import { stuff } from './stuff'
+import { stuff, stuffWithUndefined } from './stuff'
+import { isBitPattern } from '../lib2/bitPattern'
 
 interface PatternCase {
   name: string
@@ -93,10 +94,25 @@ describe('bitPattern', function () {
     })
 
     stuff
-      .filter(s => !isBasicBitPattern(s))
+      .filter(s => !isBitPattern(s))
       .forEach(s => {
         it(`fails for ${JSON.stringify(s)}`, function () {
           BitPattern.validate(s).should.have.property('error')
+        })
+      })
+  })
+  describe('isBitPattern', function () {
+    it('returns true for all bit patterns', function () {
+      bitPatterns.forEach(bp => {
+        isBitPattern(bp).should.be.true()
+      })
+    })
+
+    stuffWithUndefined
+      .filter(s => s !== 0 && s !== 1)
+      .forEach(s => {
+        it(`returns false for ${JSON.stringify(s)}`, function () {
+          isBitPattern(s).should.be.false()
         })
       })
   })
@@ -113,5 +129,13 @@ describe('bitPattern', function () {
           isBasicBitPattern(nonBasicBitPattern).should.be.false()
         })
     })
+
+    stuffWithUndefined
+      .filter(s => s !== 1)
+      .forEach(s => {
+        it(`returns false for ${JSON.stringify(s)}`, function () {
+          isBasicBitPattern(s).should.be.false()
+        })
+      })
   })
 })

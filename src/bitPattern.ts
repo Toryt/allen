@@ -31,10 +31,19 @@ export const BitPattern: Joi.Schema<number> = Joi.number()
   .min(EMPTY_BIT_PATTERN)
   .max(FULL_BIT_PATTERN)
 
+export function isBitPattern (candidate: unknown): candidate is number {
+  return (
+    typeof candidate === 'number' &&
+    Number.isInteger(candidate) &&
+    EMPTY_BIT_PATTERN <= candidate &&
+    candidate <= FULL_BIT_PATTERN
+  )
+}
+
 /**
  * A basic relation is expressed by a single bit in the bit pattern.
  */
-export function isBasicBitPattern (bitPattern: unknown): bitPattern is number {
+export function isBasicBitPattern (candidate: unknown): candidate is number {
   /* http://graphics.stanford.edu/~seander/bithacks.html
    * Determining if an integer is a power of 2
    * unsigned int v; // we want to see if v is a power of 2
@@ -44,5 +53,5 @@ export function isBasicBitPattern (bitPattern: unknown): bitPattern is number {
    * Note that 0 is incorrectly considered a power of 2 here. To remedy this, use:
    * f = !(v & (v - 1)) && v;
    */
-  return typeof bitPattern === 'number' && (bitPattern & (bitPattern - 1)) === 0 && bitPattern !== 0
+  return typeof candidate === 'number' && (candidate & (candidate - 1)) === 0 && candidate !== 0
 }
