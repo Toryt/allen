@@ -15,11 +15,11 @@ export type BitPattern = number & { __brand: 'BitPattern' }
 
 export function isBitPattern (candidate: unknown): candidate is BitPattern {
   return (
-    typeof candidate === 'number' && Number.isInteger(candidate) && 0 <= candidate && candidate <= NR_OF_RELATIONS - 1
+    typeof candidate === 'number' && Number.isInteger(candidate) && candidate >= 0 && candidate <= NR_OF_RELATIONS - 1
   )
 }
 
-export const BitPattern: Joi.Schema<BitPattern> = Joi.number()
+export const BitPatternSchema: Joi.Schema<BitPattern> = Joi.number()
   .integer()
   .min(0)
   .max(NR_OF_RELATIONS - 1)
@@ -47,7 +47,7 @@ export const MET_BY_BIT_PATTERN: BitPattern = numberToBitPattern(2048) // 010000
 export const PRECEDED_BY_BIT_PATTERN: BitPattern = numberToBitPattern(4096) // 1000000000000 P
 export const FULL_BIT_PATTERN: BitPattern = numberToBitPattern(8191) // 1111111111111 pmoFDseSdfOMP
 
-export const bitPatterns: BitPattern[] = [...Array(NR_OF_RELATIONS).keys()].map(nr => numberToBitPattern(nr))
+export const bitPatterns: readonly BitPattern[] = [...Array(NR_OF_RELATIONS).keys()].map(nr => numberToBitPattern(nr))
 
 /**
  * A basic relation is expressed by a single bit in the bit pattern.

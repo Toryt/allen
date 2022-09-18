@@ -2,7 +2,6 @@
 
 import {
   bitPatterns,
-  BitPattern,
   NR_OF_RELATIONS,
   PRECEDES_BIT_PATTERN,
   MEETS_BIT_PATTERN,
@@ -19,12 +18,13 @@ import {
   PRECEDED_BY_BIT_PATTERN,
   EMPTY_BIT_PATTERN,
   FULL_BIT_PATTERN,
-  isBasicBitPattern
+  isBasicBitPattern,
+  BitPatternSchema,
+  isBitPattern
 } from '../src/bitPattern'
 import Joi from 'joi'
 import should from 'should'
 import { stuff, stuffWithUndefined } from './stuff'
-import { isBitPattern } from '../lib2/bitPattern'
 
 interface PatternCase {
   name: string
@@ -85,11 +85,11 @@ describe('bitPattern', function () {
   })
   describe('BitPattern', function () {
     it('is a schema', function () {
-      Joi.isSchema(BitPattern).should.be.true()
+      Joi.isSchema(BitPatternSchema).should.be.true()
     })
     it('passes for all bit patterns', function () {
       bitPatterns.forEach(bp => {
-        Joi.assert(bp, BitPattern)
+        Joi.assert(bp, BitPatternSchema)
       })
     })
 
@@ -97,7 +97,7 @@ describe('bitPattern', function () {
       .filter(s => !isBitPattern(s))
       .forEach(s => {
         it(`fails for ${JSON.stringify(s)}`, function () {
-          BitPattern.validate(s).should.have.property('error')
+          BitPatternSchema.validate(s).should.have.property('error')
         })
       })
   })
