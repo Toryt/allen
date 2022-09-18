@@ -58,7 +58,7 @@ describe('TimeIntervalRelation', function () {
         VALUES.forEach(ar2 => {
           counter++
           if (counter % 100000 === 0) {
-            console.log(`${counter}/${total} (${(counter * 100) / total}%`)
+            console.log(`${counter}/${total} (${(counter * 100) / total}%)`)
           }
           const result = ar1.impliedBy(ar2)
           const calculated = BASIC_RELATIONS.every(br => !ar2.impliedBy(br) || ar1.impliedBy(br))
