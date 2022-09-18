@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha 'test/**/*.test.js'"
+    "pretest": "npm-check -i \"\"; npm outdated || exit 0",
+    "test": "standard && nyc mocha 'test/**/*.test.js'"
   },
   "keywords": [],
   "author": "",
