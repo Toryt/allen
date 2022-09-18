@@ -1,3 +1,5 @@
+/* eslint-env mocha */
+
 const Joi = require('joi')
 const {
   NR_OF_RELATIONS,

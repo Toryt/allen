@@ -1,3 +1,5 @@
+/* eslint-env mocha */
+
 const {
   NR_OF_RELATIONS,
   EMPTY_BIT_PATTERN,

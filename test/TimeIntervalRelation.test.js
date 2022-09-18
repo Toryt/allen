@@ -1,3 +1,5 @@
+/* eslint-env mocha */
+
 const { bitPatterns } = require('../lib/bitPattern')
 const { TimeIntervalRelation } = require('../lib/TimeIntervalRelation')
 const { VALUES, BASIC_RELATIONS } = require('../lib/TimeIntervalRelations')
