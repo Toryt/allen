@@ -51,7 +51,7 @@ describe('TimeIntervalRelation', function () {
     })
     it('is equivalent', function () {
       this.timeout(50000)
-      let total = VALUES.length * VALUES.length
+      const total = VALUES.length * VALUES.length
       let counter = 0
       // 67 million tests
       VALUES.forEach(ar1 => {
