@@ -50,7 +50,7 @@ describe('TimeIntervalRelation', function () {
       })
     })
     it('is equivalent', function () {
-      this.timeout(50000)
+      this.timeout(500000)
       const total = VALUES.length * VALUES.length
       let counter = 0
       // 67 million tests
