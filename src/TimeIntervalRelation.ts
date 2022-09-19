@@ -20,6 +20,8 @@ import {
 } from './bitPattern'
 import assert from 'assert'
 
+export type LetterAlias = 'p' | 'm' | 'o' | 'F' | 'D' | 's' | 'e' | 'S' | 'd' | 'f' | 'O' | 'M' | 'P'
+
 export class TimeIntervalRelation {
   /**
    * All possible time interval relations.
@@ -63,6 +65,9 @@ export class TimeIntervalRelation {
    */
   static readonly PRECEDES: TimeIntervalRelation = TimeIntervalRelation.VALUES[PRECEDES_BIT_PATTERN]
 
+  static readonly p: TimeIntervalRelation = TimeIntervalRelation.PRECEDES
+  static readonly 'br-[[〈〈': TimeIntervalRelation = TimeIntervalRelation.PRECEDES
+
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
    * <var>I1</var> <dfn>meets</dfn> an interval <var>I2</var>, i.e., the end
@@ -81,6 +86,9 @@ export class TimeIntervalRelation {
    * @type {TimeIntervalRelation}
    */
   static readonly MEETS: TimeIntervalRelation = TimeIntervalRelation.VALUES[MEETS_BIT_PATTERN]
+
+  static readonly m: TimeIntervalRelation = TimeIntervalRelation.MEETS
+  static readonly 'br-[《〈': TimeIntervalRelation = TimeIntervalRelation.MEETS
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -103,6 +111,9 @@ export class TimeIntervalRelation {
    */
   static readonly OVERLAPS: TimeIntervalRelation = TimeIntervalRelation.VALUES[OVERLAPS_BIT_PATTERN]
 
+  static readonly o: TimeIntervalRelation = TimeIntervalRelation.OVERLAPS
+  static readonly 'br-[〈[〈': TimeIntervalRelation = TimeIntervalRelation.OVERLAPS
+
   /**
    * <A <strong>basic</strong> time interval relation that says that an interval
    * <var>I1</var> <dfn>is finished by</dfn> an interval <var>I2</var>, i.e.,
@@ -123,6 +134,9 @@ export class TimeIntervalRelation {
    * @type {TimeIntervalRelation}
    */
   static readonly FINISHED_BY: TimeIntervalRelation = TimeIntervalRelation.VALUES[FINISHED_BY_BIT_PATTERN]
+
+  static readonly F: TimeIntervalRelation = TimeIntervalRelation.FINISHED_BY
+  static readonly 'br-[〈《': TimeIntervalRelation = TimeIntervalRelation.FINISHED_BY
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -145,6 +159,9 @@ export class TimeIntervalRelation {
    */
   static readonly CONTAINS: TimeIntervalRelation = TimeIntervalRelation.VALUES[CONTAINS_BIT_PATTERN]
 
+  static readonly D: TimeIntervalRelation = TimeIntervalRelation.CONTAINS
+  static readonly 'br-[〈〈[': TimeIntervalRelation = TimeIntervalRelation.CONTAINS
+
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
    * <var>I1</var> <dfn>starts</dfn> an interval <var>I2</var>, i.e., the
@@ -165,6 +182,9 @@ export class TimeIntervalRelation {
    * @type {TimeIntervalRelation}
    */
   static readonly STARTS: TimeIntervalRelation = TimeIntervalRelation.VALUES[STARTS_BIT_PATTERN]
+
+  static readonly s: TimeIntervalRelation = TimeIntervalRelation.STARTS
+  static readonly 'br-《[〈': TimeIntervalRelation = TimeIntervalRelation.STARTS
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -187,6 +207,9 @@ export class TimeIntervalRelation {
    */
   static readonly EQUALS: TimeIntervalRelation = TimeIntervalRelation.VALUES[EQUALS_BIT_PATTERN]
 
+  static readonly e: TimeIntervalRelation = TimeIntervalRelation.EQUALS
+  static readonly 'br-《《': TimeIntervalRelation = TimeIntervalRelation.EQUALS
+
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
    * <var>I1</var> <dfn>is started by</dfn> an interval <var>I2</var>, i.e.,
@@ -207,6 +230,9 @@ export class TimeIntervalRelation {
    * @type {TimeIntervalRelation}
    */
   static readonly STARTED_BY: TimeIntervalRelation = TimeIntervalRelation.VALUES[STARTED_BY_BIT_PATTERN]
+
+  static readonly S: TimeIntervalRelation = TimeIntervalRelation.STARTED_BY
+  static readonly 'br-《〈[': TimeIntervalRelation = TimeIntervalRelation.STARTED_BY
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -229,6 +255,9 @@ export class TimeIntervalRelation {
    */
   static readonly DURING: TimeIntervalRelation = TimeIntervalRelation.VALUES[DURING_BIT_PATTERN]
 
+  static readonly d: TimeIntervalRelation = TimeIntervalRelation.DURING
+  static readonly 'br-〈[[〈': TimeIntervalRelation = TimeIntervalRelation.DURING
+
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
    * <var>I1</var> <dfn>finishes</dfn> an interval <var>I2</var>, i.e., the
@@ -249,6 +278,9 @@ export class TimeIntervalRelation {
    * @type {TimeIntervalRelation}
    */
   static readonly FINISHES: TimeIntervalRelation = TimeIntervalRelation.VALUES[FINISHES_BIT_PATTERN]
+
+  static readonly f: TimeIntervalRelation = TimeIntervalRelation.FINISHES
+  static readonly 'br-〈[《': TimeIntervalRelation = TimeIntervalRelation.FINISHES
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -271,6 +303,9 @@ export class TimeIntervalRelation {
    */
   static readonly OVERLAPPED_BY: TimeIntervalRelation = TimeIntervalRelation.VALUES[OVERLAPPED_BY_BIT_PATTERN]
 
+  static readonly O: TimeIntervalRelation = TimeIntervalRelation.OVERLAPPED_BY
+  static readonly 'br-〈[〈[': TimeIntervalRelation = TimeIntervalRelation.OVERLAPPED_BY
+
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
    * <var>I1</var> <dfn>is met by</dfn> an interval <var>I2</var>, i.e., the
@@ -290,6 +325,9 @@ export class TimeIntervalRelation {
    */
   static readonly MET_BY: TimeIntervalRelation = TimeIntervalRelation.VALUES[MET_BY_BIT_PATTERN]
 
+  static readonly M: TimeIntervalRelation = TimeIntervalRelation.MET_BY
+  static readonly 'br-〈《[': TimeIntervalRelation = TimeIntervalRelation.MET_BY
+
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
    * <var>I1</var> <dfn>is preceded by</dfn> an interval <var>I2</var>, i.e.,
@@ -308,6 +346,9 @@ export class TimeIntervalRelation {
    * @type {TimeIntervalRelation}
    */
   static readonly PRECEDED_BY: TimeIntervalRelation = TimeIntervalRelation.VALUES[PRECEDED_BY_BIT_PATTERN]
+
+  static readonly P: TimeIntervalRelation = TimeIntervalRelation.PRECEDED_BY
+  static readonly 'br-〈〈[[': TimeIntervalRelation = TimeIntervalRelation.PRECEDED_BY
 
   /**
    * The full time interval relation, which expresses that nothing definite can be

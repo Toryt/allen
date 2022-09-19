@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 
-import { TimeIntervalRelation } from '../src/TimeIntervalRelation'
+import { LetterAlias, TimeIntervalRelation } from '../src/TimeIntervalRelation'
 import {
   BitPattern,
   CONTAINS_BIT_PATTERN,
@@ -22,13 +22,26 @@ import {
 } from '../src/bitPattern'
 import 'should'
 
-function testBasicRelation (name: string, br: TimeIntervalRelation, bp: BitPattern): void {
+function testBasicRelation (
+  name: string,
+  br: TimeIntervalRelation,
+  bp: BitPattern,
+  visualAlias: TimeIntervalRelation,
+  letterAlias: LetterAlias
+): void {
   describe(name, function () {
     it('is a TimeIntervalRelation', function () {
       br.should.be.instanceof(TimeIntervalRelation)
     })
     it('has the expected bit pattern', function () {
       br.bitPattern.should.equal(bp)
+    })
+    it('has the correct visual alias', function () {
+      visualAlias.should.equal(br)
+    })
+    it(`has ${letterAlias} as letter alias`, function () {
+      // @ts-ignore
+      TimeIntervalRelation[letterAlias].should.equal(br)
     })
   })
 }
@@ -68,19 +81,67 @@ describe('TimeIntervalRelations', function () {
         })
       })
     })
-    testBasicRelation('PRECEDES', TimeIntervalRelation.PRECEDES, PRECEDES_BIT_PATTERN)
-    testBasicRelation('MEETS', TimeIntervalRelation.MEETS, MEETS_BIT_PATTERN)
-    testBasicRelation('OVERLAPS', TimeIntervalRelation.OVERLAPS, OVERLAPS_BIT_PATTERN)
-    testBasicRelation('FINISHED_BY', TimeIntervalRelation.FINISHED_BY, FINISHED_BY_BIT_PATTERN)
-    testBasicRelation('CONTAINS', TimeIntervalRelation.CONTAINS, CONTAINS_BIT_PATTERN)
-    testBasicRelation('STARTS', TimeIntervalRelation.STARTS, STARTS_BIT_PATTERN)
-    testBasicRelation('EQUALS', TimeIntervalRelation.EQUALS, EQUALS_BIT_PATTERN)
-    testBasicRelation('STARTED_BY', TimeIntervalRelation.STARTED_BY, STARTED_BY_BIT_PATTERN)
-    testBasicRelation('DURING', TimeIntervalRelation.DURING, DURING_BIT_PATTERN)
-    testBasicRelation('FINISHES', TimeIntervalRelation.FINISHES, FINISHES_BIT_PATTERN)
-    testBasicRelation('OVERLAPPED_BY', TimeIntervalRelation.OVERLAPPED_BY, OVERLAPPED_BY_BIT_PATTERN)
-    testBasicRelation('MET_BY', TimeIntervalRelation.MET_BY, MET_BY_BIT_PATTERN)
-    testBasicRelation('PRECEDED_BY', TimeIntervalRelation.PRECEDED_BY, PRECEDED_BY_BIT_PATTERN)
+    testBasicRelation(
+      'PRECEDES',
+      TimeIntervalRelation.PRECEDES,
+      PRECEDES_BIT_PATTERN,
+      TimeIntervalRelation['br-[[〈〈'],
+      'p'
+    )
+    testBasicRelation('MEETS', TimeIntervalRelation.MEETS, MEETS_BIT_PATTERN, TimeIntervalRelation['br-[《〈'], 'm')
+    testBasicRelation(
+      'OVERLAPS',
+      TimeIntervalRelation.OVERLAPS,
+      OVERLAPS_BIT_PATTERN,
+      TimeIntervalRelation['br-[〈[〈'],
+      'o'
+    )
+    testBasicRelation(
+      'FINISHED_BY',
+      TimeIntervalRelation.FINISHED_BY,
+      FINISHED_BY_BIT_PATTERN,
+      TimeIntervalRelation['br-[〈《'],
+      'F'
+    )
+    testBasicRelation(
+      'CONTAINS',
+      TimeIntervalRelation.CONTAINS,
+      CONTAINS_BIT_PATTERN,
+      TimeIntervalRelation['br-[〈〈['],
+      'D'
+    )
+    testBasicRelation('STARTS', TimeIntervalRelation.STARTS, STARTS_BIT_PATTERN, TimeIntervalRelation['br-《[〈'], 's')
+    testBasicRelation('EQUALS', TimeIntervalRelation.EQUALS, EQUALS_BIT_PATTERN, TimeIntervalRelation['br-《《'], 'e')
+    testBasicRelation(
+      'STARTED_BY',
+      TimeIntervalRelation.STARTED_BY,
+      STARTED_BY_BIT_PATTERN,
+      TimeIntervalRelation['br-《〈['],
+      'S'
+    )
+    testBasicRelation('DURING', TimeIntervalRelation.DURING, DURING_BIT_PATTERN, TimeIntervalRelation['br-〈[[〈'], 'd')
+    testBasicRelation(
+      'FINISHES',
+      TimeIntervalRelation.FINISHES,
+      FINISHES_BIT_PATTERN,
+      TimeIntervalRelation['br-〈[《'],
+      'f'
+    )
+    testBasicRelation(
+      'OVERLAPPED_BY',
+      TimeIntervalRelation.OVERLAPPED_BY,
+      OVERLAPPED_BY_BIT_PATTERN,
+      TimeIntervalRelation['br-〈[〈['],
+      'O'
+    )
+    testBasicRelation('MET_BY', TimeIntervalRelation.MET_BY, MET_BY_BIT_PATTERN, TimeIntervalRelation['br-〈《['], 'M')
+    testBasicRelation(
+      'PRECEDED_BY',
+      TimeIntervalRelation.PRECEDED_BY,
+      PRECEDED_BY_BIT_PATTERN,
+      TimeIntervalRelation['br-〈〈[['],
+      'P'
+    )
     describe('FULL', function () {
       it('is a TimeIntervalRelation', function () {
         TimeIntervalRelation.FULL.should.be.instanceof(TimeIntervalRelation)
