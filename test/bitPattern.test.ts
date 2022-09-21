@@ -25,6 +25,7 @@ import {
 import Joi from 'joi'
 import should from 'should'
 import { stuff, stuffWithUndefined } from './stuff'
+import { inspect } from 'util'
 
 interface PatternCase {
   name: string
@@ -132,8 +133,20 @@ describe('bitPattern', function () {
 
     stuffWithUndefined
       .filter(s => s !== 1)
+      .concat([
+        NaN,
+        Number.POSITIVE_INFINITY,
+        Number.NEGATIVE_INFINITY,
+        Number.EPSILON,
+        Number.MAX_VALUE,
+        Number.MIN_VALUE,
+        Number.MAX_SAFE_INTEGER,
+        Number.MIN_SAFE_INTEGER,
+        NR_OF_RELATIONS + 1,
+        Math.pow(2, 14)
+      ])
       .forEach(s => {
-        it(`returns false for ${JSON.stringify(s)}`, function () {
+        it(`returns false for ${inspect(s)}`, function () {
           isBasicBitPattern(s).should.be.false()
         })
       })
