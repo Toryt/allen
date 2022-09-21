@@ -1,11 +1,11 @@
-/**
- * The total number of possible time interval relations <strong>= {@value}</strong>
- * (i.e., <code>2<sup>13</sup></code>).
- */
 import Joi from 'joi'
 import assert from 'assert'
 
 export const NR_OF_RELATIONS: number = 8192
+/**
+ * The total number of possible time interval relations **= 8192** * (i.e., <code>2<sup>13</sup></code>).
+ */
+
 
 /**
  * See [Coding Adventure: PositiveNumber in TypeScript, Aleksey Kozin,
