@@ -1,6 +1,6 @@
 import {
-  BitPattern,
-  bitPatterns,
+  IntervalIntervalRelationBitPattern,
+  intervalIntervalRelationBitPatterns,
   CONTAINS_BIT_PATTERN,
   DURING_BIT_PATTERN,
   EMPTY_BIT_PATTERN,
@@ -8,7 +8,7 @@ import {
   FINISHED_BY_BIT_PATTERN,
   FINISHES_BIT_PATTERN,
   FULL_BIT_PATTERN,
-  isBasicBitPattern,
+  isBasicIntervalIntervalRelationBitPattern,
   MEETS_BIT_PATTERN,
   MET_BY_BIT_PATTERN,
   OVERLAPPED_BY_BIT_PATTERN,
@@ -17,7 +17,7 @@ import {
   PRECEDES_BIT_PATTERN,
   STARTED_BY_BIT_PATTERN,
   STARTS_BIT_PATTERN
-} from './bitPattern'
+} from './intervalIntervalRelationBitPattern'
 import assert from 'assert'
 
 export type LetterAlias = 'p' | 'm' | 'o' | 'F' | 'D' | 's' | 'e' | 'S' | 'd' | 'f' | 'O' | 'M' | 'P'
@@ -32,7 +32,9 @@ export class TimeIntervalRelation {
    * @invar VALUES.every((ar1, i1) => VALUES.every((ar2, i2) => i1 < i2 || ar1 !== ar2)
    * @invar ∀ ar: !(ar instanceof TimeIntervalRelation) || VALUES.includes(ar)
    */
-  static VALUES: readonly TimeIntervalRelation[] = bitPatterns.map(bitPattern => new TimeIntervalRelation(bitPattern))
+  static VALUES: readonly TimeIntervalRelation[] = intervalIntervalRelationBitPatterns.map(
+    bitPattern => new TimeIntervalRelation(bitPattern)
+  )
 
   /**
    * This empty relation is not a true time interval relation. It does not express a
@@ -405,9 +407,9 @@ export class TimeIntervalRelation {
     TimeIntervalRelation.PRECEDED_BY
   ]
 
-  public readonly bitPattern: BitPattern
+  public readonly bitPattern: IntervalIntervalRelationBitPattern
 
-  private constructor (bitpattern: BitPattern) {
+  private constructor (bitpattern: IntervalIntervalRelationBitPattern) {
     /**
      * Only the 13 lowest bits are used. The other (32 - 13 = 19 bits) are 0.
      */
@@ -420,7 +422,7 @@ export class TimeIntervalRelation {
    * @post BASIC_RELATIONS.contains(this)
    */
   isBasic (): boolean {
-    return isBasicBitPattern(this.bitPattern)
+    return isBasicIntervalIntervalRelationBitPattern(this.bitPattern)
   }
 
   /**

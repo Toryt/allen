@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
 import {
-  bitPatterns,
+  intervalIntervalRelationBitPatterns,
   NR_OF_RELATIONS,
   PRECEDES_BIT_PATTERN,
   MEETS_BIT_PATTERN,
@@ -18,10 +18,10 @@ import {
   PRECEDED_BY_BIT_PATTERN,
   EMPTY_BIT_PATTERN,
   FULL_BIT_PATTERN,
-  isBasicBitPattern,
+  isBasicIntervalIntervalRelationBitPattern,
   BitPatternSchema,
-  isBitPattern
-} from '../src/bitPattern'
+  isIntervalIntervalRelationBitPattern
+} from '../src/intervalIntervalRelationBitPattern'
 import Joi from 'joi'
 import should from 'should'
 import { stuff, stuffWithUndefined } from './stuff'
@@ -48,14 +48,14 @@ const basicPatterns: PatternCase[] = [
   { name: 'PRECEDED_BY_BIT_PATTERN', value: PRECEDED_BY_BIT_PATTERN }
 ]
 
-describe('bitPattern', function () {
+describe('intervalIntervalRelationBitPattern', function () {
   describe('NR_OF_RELATIONS', function () {
     it('is an integer', function () {
       NR_OF_RELATIONS.should.be.a.Number()
       Number.isInteger(NR_OF_RELATIONS).should.be.true()
     })
     it('is 2^13', function () {
-      NR_OF_RELATIONS.should.equal(Math.pow(2, 13))
+      NR_OF_RELATIONS.should.equal(8192)
     })
   })
   describe('basic patterns', function () {
@@ -71,16 +71,16 @@ describe('bitPattern', function () {
       FULL_BIT_PATTERN.should.equal(NR_OF_RELATIONS - 1)
     })
   })
-  describe('bitpatterns', function () {
+  describe('intervalIntervalRelationBitPatterns', function () {
     it('is an array', function () {
-      bitPatterns.should.be.an.Array()
+      intervalIntervalRelationBitPatterns.should.be.an.Array()
     })
     it('contains the exact amount of numbers', function () {
-      bitPatterns.length.should.equal(NR_OF_RELATIONS)
+      intervalIntervalRelationBitPatterns.length.should.equal(NR_OF_RELATIONS)
     })
     it('contains the pattern of the index at each location', function () {
-      bitPatterns.forEach((_, i) => {
-        should(bitPatterns[i]).equal(i)
+      intervalIntervalRelationBitPatterns.forEach((_, i) => {
+        should(intervalIntervalRelationBitPatterns[i]).equal(i)
       })
     })
   })
@@ -89,23 +89,23 @@ describe('bitPattern', function () {
       Joi.isSchema(BitPatternSchema).should.be.true()
     })
     it('passes for all bit patterns', function () {
-      bitPatterns.forEach(bp => {
+      intervalIntervalRelationBitPatterns.forEach(bp => {
         Joi.assert(bp, BitPatternSchema)
       })
     })
 
     stuff
-      .filter(s => !isBitPattern(s))
+      .filter(s => !isIntervalIntervalRelationBitPattern(s))
       .forEach(s => {
         it(`fails for ${JSON.stringify(s)}`, function () {
           BitPatternSchema.validate(s).should.have.property('error')
         })
       })
   })
-  describe('isBitPattern', function () {
+  describe('isIntervalIntervalRelationBitPattern', function () {
     it('returns true for all bit patterns', function () {
-      bitPatterns.forEach(bp => {
-        isBitPattern(bp).should.be.true()
+      intervalIntervalRelationBitPatterns.forEach(bp => {
+        isIntervalIntervalRelationBitPattern(bp).should.be.true()
       })
     })
 
@@ -113,21 +113,21 @@ describe('bitPattern', function () {
       .filter(s => s !== 0 && s !== 1)
       .forEach(s => {
         it(`returns false for ${JSON.stringify(s)}`, function () {
-          isBitPattern(s).should.be.false()
+          isIntervalIntervalRelationBitPattern(s).should.be.false()
         })
       })
   })
-  describe('isBasicBitPattern', function () {
+  describe('isBasicIntervalIntervalRelationBitPattern', function () {
     basicPatterns.forEach(bbp => {
       it(`returns true for ${bbp.name}`, function () {
-        isBasicBitPattern(bbp.value).should.be.true()
+        isBasicIntervalIntervalRelationBitPattern(bbp.value).should.be.true()
       })
     })
     it('returns false for all non-basic bit patterns', function () {
-      bitPatterns
+      intervalIntervalRelationBitPatterns
         .filter(bp => !basicPatterns.map(bbp => bbp.value).includes(bp))
         .forEach(nonBasicBitPattern => {
-          isBasicBitPattern(nonBasicBitPattern).should.be.false()
+          isBasicIntervalIntervalRelationBitPattern(nonBasicBitPattern).should.be.false()
         })
     })
 
@@ -147,7 +147,7 @@ describe('bitPattern', function () {
       ])
       .forEach(s => {
         it(`returns false for ${inspect(s)}`, function () {
-          isBasicBitPattern(s).should.be.false()
+          isBasicIntervalIntervalRelationBitPattern(s).should.be.false()
         })
       })
   })
