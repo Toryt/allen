@@ -62,5 +62,5 @@ export function isBasicBitPattern (candidate: unknown): candidate is BitPattern 
    * Note that 0 is incorrectly considered a power of 2 here. To remedy this, use:
    * f = !(v & (v - 1)) && v;
    */
-  return typeof candidate === 'number' && (candidate & (candidate - 1)) === 0 && candidate !== 0
+  return isBitPattern(candidate) && (candidate & (candidate - 1)) === 0 && candidate !== 0
 }
