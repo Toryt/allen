@@ -1,15 +1,17 @@
 /* eslint-env mocha */
 
-const { bitPatterns } = require('../lib/bitPattern')
-const { TimeIntervalRelation } = require('../lib/TimeIntervalRelation')
-const { VALUES, BASIC_RELATIONS } = require('../lib/TimeIntervalRelations')
+const { intervalIntervalRelationBitPatterns: bitPatterns } = require('../src/intervalIntervalRelationBitPattern')
+const {
+  TimeIntervalRelation,
+  TimeIntervalRelation: { VALUES, BASIC_RELATIONS }
+} = require('../src/TimeIntervalRelation')
 
 describe('TimeIntervalRelation', function () {
   describe('constructor', function () {
     it('constructs for all bit patterns', function () {
       bitPatterns.forEach(value => {
         const result = new TimeIntervalRelation(value)
-        result.$bitPattern.should.equal(value)
+        result.bitPattern.should.equal(value)
       })
     })
   })
