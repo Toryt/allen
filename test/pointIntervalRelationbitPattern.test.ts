@@ -1,31 +1,21 @@
 /* eslint-env mocha */
 
-import {
-  intervalIntervalRelationBitPatterns,
-  NR_OF_RELATIONS,
-  PRECEDES_BIT_PATTERN,
-  MEETS_BIT_PATTERN,
-  OVERLAPS_BIT_PATTERN,
-  FINISHED_BY_BIT_PATTERN,
-  CONTAINS_BIT_PATTERN,
-  STARTS_BIT_PATTERN,
-  EQUALS_BIT_PATTERN,
-  STARTED_BY_BIT_PATTERN,
-  DURING_BIT_PATTERN,
-  FINISHES_BIT_PATTERN,
-  OVERLAPPED_BY_BIT_PATTERN,
-  MET_BY_BIT_PATTERN,
-  PRECEDED_BY_BIT_PATTERN,
-  EMPTY_BIT_PATTERN,
-  FULL_BIT_PATTERN,
-  isBasicIntervalIntervalRelationBitPattern,
-  BitPatternSchema,
-  isIntervalIntervalRelationBitPattern
-} from '../src/intervalIntervalRelationBitPattern'
-import Joi from 'joi'
 import should from 'should'
-import { stuff, stuffWithUndefined } from './stuff'
+import { stuffWithUndefined } from './stuff'
 import { inspect } from 'util'
+import {
+  NR_OF_RELATIONS,
+  AFTER_BIT_PATTERN,
+  BEFORE_BIT_PATTERN,
+  BEGINS_BIT_PATTERN,
+  EMPTY_BIT_PATTERN,
+  ENDS_BIT_PATTERN,
+  FULL_BIT_PATTERN,
+  IN_BIT_PATTERN,
+  pointIntervalRelationBitPatterns,
+  isPointIntervalRelationBitPattern,
+  isBasicPointIntervalRelationBitPattern
+} from '../src/pointIntervalRelationBitPattern'
 
 interface PatternCase {
   name: string
@@ -33,29 +23,21 @@ interface PatternCase {
 }
 
 const basicPatterns: PatternCase[] = [
-  { name: 'PRECEDES_BIT_PATTERN', value: PRECEDES_BIT_PATTERN },
-  { name: 'MEETS_BIT_PATTERN', value: MEETS_BIT_PATTERN },
-  { name: 'OVERLAPS_BIT_PATTERN', value: OVERLAPS_BIT_PATTERN },
-  { name: 'FINISHED_BY_BIT_PATTERN', value: FINISHED_BY_BIT_PATTERN },
-  { name: 'CONTAINS_BIT_PATTERN', value: CONTAINS_BIT_PATTERN },
-  { name: 'STARTS_BIT_PATTERN', value: STARTS_BIT_PATTERN },
-  { name: 'EQUALS_BIT_PATTERN', value: EQUALS_BIT_PATTERN },
-  { name: 'STARTED_BY_BIT_PATTERN', value: STARTED_BY_BIT_PATTERN },
-  { name: 'DURING_BIT_PATTERN', value: DURING_BIT_PATTERN },
-  { name: 'FINISHES_BIT_PATTERN', value: FINISHES_BIT_PATTERN },
-  { name: 'OVERLAPPED_BY_BIT_PATTERN', value: OVERLAPPED_BY_BIT_PATTERN },
-  { name: 'MET_BY_BIT_PATTERN', value: MET_BY_BIT_PATTERN },
-  { name: 'PRECEDED_BY_BIT_PATTERN', value: PRECEDED_BY_BIT_PATTERN }
+  { name: 'BEFORE_BIT_PATTERN', value: BEFORE_BIT_PATTERN },
+  { name: 'BEGINS_BIT_PATTERN', value: BEGINS_BIT_PATTERN },
+  { name: 'IN_BIT_PATTERN', value: IN_BIT_PATTERN },
+  { name: 'ENDS_BIT_PATTERN', value: ENDS_BIT_PATTERN },
+  { name: 'AFTER_BIT_PATTERN', value: AFTER_BIT_PATTERN }
 ]
 
-describe('intervalIntervalRelationBitPattern', function () {
+describe('pointIntervalRelationBitPattern', function () {
   describe('NR_OF_RELATIONS', function () {
     it('is an integer', function () {
       NR_OF_RELATIONS.should.be.a.Number()
       Number.isInteger(NR_OF_RELATIONS).should.be.true()
     })
     it('is 2^13', function () {
-      NR_OF_RELATIONS.should.equal(8192)
+      NR_OF_RELATIONS.should.equal(32)
     })
   })
   describe('basic patterns', function () {
@@ -71,41 +53,23 @@ describe('intervalIntervalRelationBitPattern', function () {
       FULL_BIT_PATTERN.should.equal(NR_OF_RELATIONS - 1)
     })
   })
-  describe('intervalIntervalRelationBitPatterns', function () {
+  describe('pointIntervalRelationBitPatterns', function () {
     it('is an array', function () {
-      intervalIntervalRelationBitPatterns.should.be.an.Array()
+      pointIntervalRelationBitPatterns.should.be.an.Array()
     })
     it('contains the exact amount of numbers', function () {
-      intervalIntervalRelationBitPatterns.length.should.equal(NR_OF_RELATIONS)
+      pointIntervalRelationBitPatterns.length.should.equal(NR_OF_RELATIONS)
     })
     it('contains the pattern of the index at each location', function () {
-      intervalIntervalRelationBitPatterns.forEach((_, i) => {
-        should(intervalIntervalRelationBitPatterns[i]).equal(i)
+      pointIntervalRelationBitPatterns.forEach((_, i) => {
+        should(pointIntervalRelationBitPatterns[i]).equal(i)
       })
     })
   })
-  describe('BitPattern', function () {
-    it('is a schema', function () {
-      Joi.isSchema(BitPatternSchema).should.be.true()
-    })
-    it('passes for all bit patterns', function () {
-      intervalIntervalRelationBitPatterns.forEach(bp => {
-        Joi.assert(bp, BitPatternSchema)
-      })
-    })
-
-    stuff
-      .filter(s => !isIntervalIntervalRelationBitPattern(s))
-      .forEach(s => {
-        it(`fails for ${JSON.stringify(s)}`, function () {
-          BitPatternSchema.validate(s).should.have.property('error')
-        })
-      })
-  })
-  describe('isIntervalIntervalRelationBitPattern', function () {
+  describe('isPointIntervalRelationBitPattern', function () {
     it('returns true for all bit patterns', function () {
-      intervalIntervalRelationBitPatterns.forEach(bp => {
-        isIntervalIntervalRelationBitPattern(bp).should.be.true()
+      pointIntervalRelationBitPatterns.forEach(bp => {
+        isPointIntervalRelationBitPattern(bp).should.be.true()
       })
     })
 
@@ -113,21 +77,21 @@ describe('intervalIntervalRelationBitPattern', function () {
       .filter(s => s !== 0 && s !== 1)
       .forEach(s => {
         it(`returns false for ${JSON.stringify(s)}`, function () {
-          isIntervalIntervalRelationBitPattern(s).should.be.false()
+          isPointIntervalRelationBitPattern(s).should.be.false()
         })
       })
   })
-  describe('isBasicIntervalIntervalRelationBitPattern', function () {
+  describe('isBasicPointIntervalRelationBitPattern', function () {
     basicPatterns.forEach(bbp => {
       it(`returns true for ${bbp.name}`, function () {
-        isBasicIntervalIntervalRelationBitPattern(bbp.value).should.be.true()
+        isBasicPointIntervalRelationBitPattern(bbp.value).should.be.true()
       })
     })
     it('returns false for all non-basic bit patterns', function () {
-      intervalIntervalRelationBitPatterns
+      pointIntervalRelationBitPatterns
         .filter(bp => !basicPatterns.map(bbp => bbp.value).includes(bp))
         .forEach(nonBasicBitPattern => {
-          isBasicIntervalIntervalRelationBitPattern(nonBasicBitPattern).should.be.false()
+          isBasicPointIntervalRelationBitPattern(nonBasicBitPattern).should.be.false()
         })
     })
 
@@ -143,11 +107,11 @@ describe('intervalIntervalRelationBitPattern', function () {
         Number.MAX_SAFE_INTEGER,
         Number.MIN_SAFE_INTEGER,
         NR_OF_RELATIONS + 1,
-        Math.pow(2, 14)
+        Math.pow(2, 6)
       ])
       .forEach(s => {
         it(`returns false for ${inspect(s)}`, function () {
-          isBasicIntervalIntervalRelationBitPattern(s).should.be.false()
+          isBasicPointIntervalRelationBitPattern(s).should.be.false()
         })
       })
   })
