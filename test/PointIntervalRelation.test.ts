@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 
 import {
+  NR_OF_BITS,
   NR_OF_RELATIONS as BITPATTERN_NR_OF_RELATIONS,
   PointIntervalRelationBitPattern,
   EMPTY_BIT_PATTERN,
@@ -22,6 +23,7 @@ import {
   ENDS,
   AFTER,
   FULL,
+  BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS,
   BASIC_RELATIONS
 } from '../src/PointIntervalRelation'
 import 'should'
@@ -39,11 +41,20 @@ function testBasicRelation (
     it('has the expected bit pattern', function () {
       pir.bitPattern.should.equal(pirbp)
     })
-    it(`it is at position ${ordinal} in VALUES`, function () {
-      pir.should.equal(BASIC_RELATIONS[ordinal])
+    it(`has ${ordinal} as ordinal`, function () {
+      pir.ordinal().should.equal(ordinal)
+    })
+    it(`has an integer ordinal [0, 5[`, function () {
+      const o = pir.ordinal()
+      Number.isInteger(o).should.be.true()
+      o.should.be.greaterThanOrEqual(0)
+      o.should.be.lessThan(NR_OF_BITS)
     })
     it('reports as a basic PointIntervalRelation', function () {
       pir.isBasic().should.be.true()
+    })
+    it(`has ${BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[ordinal]} as representation`, function () {
+      pir.representation.should.equal(BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[ordinal])
     })
   })
 }
@@ -103,8 +114,13 @@ describe('PointIntervalRelations', function () {
         ar.should.be.instanceof(BasicPointIntervalRelation)
       })
     })
-    it('is the exported statis', function () {
+    it('is the exported static', function () {
       BASIC_RELATIONS.should.equal(BasicPointIntervalRelation.BASIC_RELATIONS_VALUES)
+    })
+    it('has the basic relation at the position of its ordinal', function () {
+      BASIC_RELATIONS.forEach((br, i) => {
+        br.ordinal().should.equal(i)
+      })
     })
   })
   describe('basic relations', function () {

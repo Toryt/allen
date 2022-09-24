@@ -833,11 +833,24 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
    * There is only 1 constructor, that constructs the wrapper object
    * around the bitpattern. This is used exclusively in {@link VALUES} initialization code.
    */
-  protected constructor (bitPattern: PointIntervalRelationBitPattern) {
+  private constructor (bitPattern: PointIntervalRelationBitPattern) {
     assert(bitPattern >= EMPTY_BIT_PATTERN)
     assert(bitPattern <= FULL_BIT_PATTERN)
     super(bitPattern)
-    this.representation = BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[0 /* MUDO */]
+    this.representation = BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[this.ordinal()]
+  }
+
+  /**
+   * An ordinal for basic relations (zero-based).
+   */
+  public ordinal (): number {
+    /*
+     * This is the bit position, 0-based, in the 5-bit bit pattern, of the bit
+     * representing this as basic relation.
+     *
+     * See https://www.geeksforgeeks.org/position-of-rightmost-set-bit/
+     */
+    return Math.log2(this.bitPattern & -this.bitPattern)
   }
 }
 
