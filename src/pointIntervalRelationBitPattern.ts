@@ -1,9 +1,14 @@
 import assert from 'assert'
 
 /**
+ * The number of bits used in Point Interval Relation bit patterns.
+ */
+export const NR_OF_BITS = 5
+
+/**
  * The total number of possible time point-interval relations **= 32** (i.e., <code>2<sup>5</sup></code>).
  */
-export const NR_OF_RELATIONS: number = Math.pow(2, 5)
+export const NR_OF_RELATIONS: number = Math.pow(2, NR_OF_BITS)
 
 /**
  * See [Coding Adventure: PositiveNumber in TypeScript, Aleksey Kozin,

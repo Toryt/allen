@@ -4,6 +4,7 @@ import should from 'should'
 import { stuffWithUndefined } from './stuff'
 import { inspect } from 'util'
 import {
+  NR_OF_BITS,
   NR_OF_RELATIONS,
   AFTER_BIT_PATTERN,
   BEFORE_BIT_PATTERN,
@@ -31,6 +32,15 @@ const basicPatterns: PatternCase[] = [
 ]
 
 describe('pointIntervalRelationBitPattern', function () {
+  describe('NR_OF_BITS', function () {
+    it('is an integer', function () {
+      NR_OF_BITS.should.be.a.Number()
+      Number.isInteger(NR_OF_BITS).should.be.true()
+    })
+    it('is 5', function () {
+      NR_OF_BITS.should.equal(5)
+    })
+  })
   describe('NR_OF_RELATIONS', function () {
     it('is an integer', function () {
       NR_OF_RELATIONS.should.be.a.Number()
