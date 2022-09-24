@@ -1,4 +1,5 @@
 import {
+  NR_OF_RELATIONS as BIT_PATTERN_NR_OF_RELATIONS,
   AFTER_BIT_PATTERN,
   BEFORE_BIT_PATTERN,
   BEGINS_BIT_PATTERN,
@@ -809,6 +810,7 @@ export const NR_OF_RELATIONS: number = 32
 export const VALUES: readonly PointIntervalRelation[] = Object.freeze(
   pointIntervalRelationBitPatterns.map(bitPattern => new PointIntervalRelation(bitPattern))
 )
+export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
 
 /**
  * This empty relation is not a true point-interval relation. It does not express a relational condition between
