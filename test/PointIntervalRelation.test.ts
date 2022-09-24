@@ -20,17 +20,26 @@ import {
   IN,
   ENDS,
   AFTER,
-  FULL
+  FULL,
+  BASIC_RELATIONS
 } from '../src/PointIntervalRelation'
 import 'should'
 
-function testBasicRelation (name: string, pir: PointIntervalRelation, pirbp: PointIntervalRelationBitPattern): void {
+function testBasicRelation (
+  name: string,
+  pir: PointIntervalRelation,
+  pirbp: PointIntervalRelationBitPattern,
+  ordinal: number
+): void {
   describe(name, function () {
     it('is a TimeIntervalRelation', function () {
       pir.should.be.instanceof(PointIntervalRelation)
     })
     it('has the expected bit pattern', function () {
       pir.bitPattern.should.equal(pirbp)
+    })
+    it(`it is at position ${ordinal} in VALUES`, function () {
+      pir.should.equal(BASIC_RELATIONS[ordinal])
     })
   })
 }
@@ -69,11 +78,6 @@ describe('PointIntervalRelations', function () {
         EMPTY.bitPattern.should.equal(EMPTY_BIT_PATTERN)
       })
     })
-    testBasicRelation('BEFORE', BEFORE, BEFORE_BIT_PATTERN)
-    testBasicRelation('BEGINS', BEGINS, BEGINS_BIT_PATTERN)
-    testBasicRelation('IN', IN, IN_BIT_PATTERN)
-    testBasicRelation('ENDS', ENDS, ENDS_BIT_PATTERN)
-    testBasicRelation('AFTER', AFTER, AFTER_BIT_PATTERN)
     describe('FULL', function () {
       it('is a PointIntervalRelation', function () {
         FULL.should.be.instanceof(PointIntervalRelation)
@@ -82,5 +86,25 @@ describe('PointIntervalRelations', function () {
         FULL.bitPattern.should.equal(FULL_BIT_PATTERN)
       })
     })
+  })
+  describe('BASIC_RELATIONS', function () {
+    it('is an array', function () {
+      BASIC_RELATIONS.should.be.an.Array()
+    })
+    it('has 5 entries', function () {
+      BASIC_RELATIONS.length.should.equal(5)
+    })
+    it('contains only PointIntervalRelations', function () {
+      BASIC_RELATIONS.forEach(ar => {
+        ar.should.be.instanceof(PointIntervalRelation)
+      })
+    })
+  })
+  describe('basic relations', function () {
+    testBasicRelation('BEFORE', BEFORE, BEFORE_BIT_PATTERN, 0)
+    testBasicRelation('BEGINS', BEGINS, BEGINS_BIT_PATTERN, 1)
+    testBasicRelation('IN', IN, IN_BIT_PATTERN, 2)
+    testBasicRelation('ENDS', ENDS, ENDS_BIT_PATTERN, 3)
+    testBasicRelation('AFTER', AFTER, AFTER_BIT_PATTERN, 4)
   })
 })
