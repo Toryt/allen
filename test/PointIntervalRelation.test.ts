@@ -28,7 +28,7 @@ import 'should'
 
 function testBasicRelation (
   name: string,
-  pir: PointIntervalRelation,
+  pir: BasicPointIntervalRelation,
   pirbp: PointIntervalRelationBitPattern,
   ordinal: number
 ): void {
