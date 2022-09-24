@@ -130,6 +130,41 @@ describe('PointIntervalRelations', function () {
     testBasicRelation('ENDS', ENDS, ENDS_BIT_PATTERN, 3)
     testBasicRelation('AFTER', AFTER, AFTER_BIT_PATTERN, 4)
   })
+  describe('#impliedBy', function () {
+    BasicPointIntervalRelation.VALUES.forEach(gr => {
+      if (gr === EMPTY) {
+        it(`EMPTY is implied by itself`, function () {
+          EMPTY.impliedBy(gr).should.be.true()
+        })
+      } else {
+        it(`EMPTY is not implied by ${gr}`, function () {
+          EMPTY.impliedBy(gr).should.be.false()
+        })
+      }
+    })
+    BASIC_RELATIONS.forEach(br1 => {
+      BASIC_RELATIONS.forEach(br2 => {
+        if (br1 === br2) {
+          it(`${br1.representation} is implied by itself`, function () {
+            br1.impliedBy(br2).should.be.true()
+          })
+        } else {
+          it(`${br1.representation} is not implied by ${br2.representation}`, function () {
+            br1.impliedBy(br2).should.be.false()
+          })
+        }
+      })
+    })
+    BasicPointIntervalRelation.VALUES.forEach(gr1 => {
+      BasicPointIntervalRelation.VALUES.forEach(gr2 => {
+        const expected = BASIC_RELATIONS.every(br => !gr2.impliedBy(br) || gr1.impliedBy(br))
+
+        it(`should return ${gr1}.impliedBy(${gr2}) as ${expected}`, function () {
+          gr1.impliedBy(gr2).should.equal(expected)
+        })
+      })
+    })
+  })
   describe('#uncertainty', function () {
     it('returns NaN for EMPTY', function () {
       EMPTY.uncertainty().should.be.NaN()

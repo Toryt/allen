@@ -615,11 +615,25 @@ public final boolean impliedBy(PointIntervalRelation gr) {
     assert preArgumentNotNull(gr, "gr");
     return ($bitPattern & gr.$bitPattern) == gr.$bitPattern;
 }
+*/
 
-/!**
- * Does {@code this} imply {@code gr}? In other words, when considering the relations as a set
- * of basic relations, is {@code this} a subset of {@code gr} (considering equality as also acceptable)?
- *!/
+  /**
+   * Is `this` implied by `gr`?
+   *
+   * In other words, when considering the relations as a set of basic relations, is `this` a superset of `gr`
+   * (considering equality as also acceptable)?
+  @Basic(
+      pre = @Expression("_gr != null"),
+      invars = {
+        @Expression("impliedBy(this)"),
+        @Expression("basic ? for (TimePointIntervalRelation br : BASIC_RELATIONS) : {br != this ? ! impliedBy(br)}"),
+        @Expression("for (TimePointIntervalRelation gr) {impliedBy(gr) == for (TimePointIntervalRelation br : BASIC_RELATIONS) : {gr.impliedBy(br) ? impliedBy(br)}")
+      }
+  )
+   */
+  impliedBy (gr: PointIntervalRelation): boolean {
+    return (this.bitPattern & gr.bitPattern) === gr.bitPattern
+  }
 @Basic(
     pre = @Expression("_gr != null"),
     invars = @Expression("_gr.impliedBy(this)")
@@ -642,6 +656,7 @@ public final int hashCode() {
     return $bitPattern;
 }
 
+  /*
 /!**
  * This returns a representation of the time point-interval relation in the most used short notation (&lt; =[&lt; &gt;&lt; =[&gt; &gt;).
  *!/
