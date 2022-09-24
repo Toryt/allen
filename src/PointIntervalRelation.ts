@@ -565,19 +565,6 @@ public static PointIntervalRelation timePointIntervalRelation(Date t, TimeInterv
 */
 
   /**
-   * All possible time point-interval relations.
-   @Invars({
-    @Expression("VALUES != null"),
-    @Expression("for (PointIntervalRelation tir : VALUES) {tir != null}"),
-    @Expression("for (int i : 0 .. VALUES.length) {for (int j : i + 1 .. VALUES.length) {VALUES[i] != VALUES[j]}}"),
-    @Expression("for (PointIntervalRelation tir) {VALUES.contains(tir)}")
-})
-   */
-  public static readonly VALUES: readonly PointIntervalRelation[] = Object.freeze(
-    pointIntervalRelationBitPatterns.map(bitPattern => new PointIntervalRelation(bitPattern))
-  )
-
-  /**
    * Only the 5 lowest bits are used. The other (32 - 5 = 27 bits) are 0.
    *
    * @private
@@ -588,7 +575,7 @@ public static PointIntervalRelation timePointIntervalRelation(Date t, TimeInterv
    * There is only 1 constructor, that constructs the wrapper object
    * around the bitpattern. This is used exclusively in {@link VALUES} initialization code.
    */
-  private constructor (bitPattern: PointIntervalRelationBitPattern) {
+  protected constructor (bitPattern: PointIntervalRelationBitPattern) {
     assert(bitPattern >= EMPTY_BIT_PATTERN)
     assert(bitPattern <= FULL_BIT_PATTERN)
     this.bitPattern = bitPattern
@@ -812,6 +799,45 @@ public String toString() {
 */
 }
 
+// MUDO 'b b(repeated) i e (equal) a'
+//      replace ENDS with TERMINATES (t)
+//      replace BEGINS with COMMENCES (c)
+
+export const BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
+export type BasicPointIntervalRelationRepresentation = typeof BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[number]
+
+export class BasicPointIntervalRelation extends PointIntervalRelation {
+  /**
+   * All possible time point-interval relations.
+   @Invars({
+    @Expression("VALUES != null"),
+    @Expression("for (PointIntervalRelation tir : VALUES) {tir != null}"),
+    @Expression("for (int i : 0 .. VALUES.length) {for (int j : i + 1 .. VALUES.length) {VALUES[i] != VALUES[j]}}"),
+    @Expression("for (PointIntervalRelation tir) {VALUES.contains(tir)}")
+})
+   */
+  public static readonly VALUES: readonly PointIntervalRelation[] = Object.freeze(
+    pointIntervalRelationBitPatterns.map(bitPattern =>
+      isBasicPointIntervalRelationBitPattern(bitPattern)
+        ? new BasicPointIntervalRelation(bitPattern)
+        : new PointIntervalRelation(bitPattern)
+    )
+  )
+
+  public readonly representation: BasicPointIntervalRelationRepresentation
+
+  /**
+   * There is only 1 constructor, that constructs the wrapper object
+   * around the bitpattern. This is used exclusively in {@link VALUES} initialization code.
+   */
+  protected constructor (bitPattern: PointIntervalRelationBitPattern) {
+    assert(bitPattern >= EMPTY_BIT_PATTERN)
+    assert(bitPattern <= FULL_BIT_PATTERN)
+    super(bitPattern)
+    this.representation = BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[0 /* MUDO */]
+  }
+}
+
 /**
  * The total number of possible time point-interval relations **= 32**
  * (i.e., <code>2<sup>5</sup></code>).
@@ -824,7 +850,7 @@ export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
  *
  * @Invars(@Expression("for (PointIntervalRelation basic : BASIC_RELATIONS) {! EMPTY.impliedBy(basic)}"))
  */
-export const EMPTY: PointIntervalRelation = PointIntervalRelation.VALUES[EMPTY_BIT_PATTERN]
+export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EMPTY_BIT_PATTERN]
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _comes before_ an interval `I`, i.e., `t`
@@ -838,7 +864,7 @@ export const EMPTY: PointIntervalRelation = PointIntervalRelation.VALUES[EMPTY_B
  *
  * The short representation of this time point-interval relation is `'<'`.
  */
-export const BEFORE: PointIntervalRelation = PointIntervalRelation.VALUES[BEFORE_BIT_PATTERN]
+export const BEFORE: PointIntervalRelation = BasicPointIntervalRelation.VALUES[BEFORE_BIT_PATTERN]
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _begins_ an interval `I`, i.e., `t` is the
@@ -852,7 +878,7 @@ export const BEFORE: PointIntervalRelation = PointIntervalRelation.VALUES[BEFORE
  *
  * The short representation of this time point-interval relation is `'=[<'`.
  */
-export const BEGINS: PointIntervalRelation = PointIntervalRelation.VALUES[BEGINS_BIT_PATTERN]
+export const BEGINS: PointIntervalRelation = BasicPointIntervalRelation.VALUES[BEGINS_BIT_PATTERN]
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _is in_ an interval `I`, i.e., `t` is after
@@ -866,7 +892,7 @@ export const BEGINS: PointIntervalRelation = PointIntervalRelation.VALUES[BEGINS
  *
  * The short representation of this time point-interval relation is `'><'`.
  */
-export const IN: PointIntervalRelation = PointIntervalRelation.VALUES[IN_BIT_PATTERN]
+export const IN: PointIntervalRelation = BasicPointIntervalRelation.VALUES[IN_BIT_PATTERN]
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _ends_ an interval `I`, i.e., `t` is the end
@@ -880,7 +906,7 @@ export const IN: PointIntervalRelation = PointIntervalRelation.VALUES[IN_BIT_PAT
  *
  * The short representation of this time point-interval relation is `'=[>'`.
  */
-export const ENDS: PointIntervalRelation = PointIntervalRelation.VALUES[ENDS_BIT_PATTERN]
+export const ENDS: PointIntervalRelation = BasicPointIntervalRelation.VALUES[ENDS_BIT_PATTERN]
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _comes after_ an interval `I`, i.e., `t` is
@@ -894,7 +920,7 @@ export const ENDS: PointIntervalRelation = PointIntervalRelation.VALUES[ENDS_BIT
  *
  * The short representation of this time point-interval relation is `'>'`.
  */
-export const AFTER: PointIntervalRelation = PointIntervalRelation.VALUES[AFTER_BIT_PATTERN]
+export const AFTER: PointIntervalRelation = BasicPointIntervalRelation.VALUES[AFTER_BIT_PATTERN]
 
 /**
  * The full time point-interval relation, which expresses that nothing definite can be said about the relationship
@@ -902,7 +928,7 @@ export const AFTER: PointIntervalRelation = PointIntervalRelation.VALUES[AFTER_B
  *
  * @Invars(@Expression("FULL == or(BEFORE, BEGINS, IN, ENDS, AFTER"))
  */
-export const FULL: PointIntervalRelation = PointIntervalRelation.VALUES[FULL_BIT_PATTERN]
+export const FULL: PointIntervalRelation = BasicPointIntervalRelation.VALUES[FULL_BIT_PATTERN]
 
 /**
  * The set of all 5 basic time point-interval relations. That they are presented here in a particular order, is a
@@ -924,4 +950,3 @@ export const BASIC_RELATIONS: readonly PointIntervalRelation[] = Object.freeze([
   ENDS,
   AFTER
 ] as const)
-export const BASIC_CODES: readonly String[] = Object.freeze(['<', '=[<', '><', '=[>', '>'] as const)

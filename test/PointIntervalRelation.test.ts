@@ -14,6 +14,7 @@ import {
 import {
   NR_OF_RELATIONS,
   PointIntervalRelation,
+  BasicPointIntervalRelation,
   EMPTY,
   BEFORE,
   BEGINS,
@@ -32,8 +33,8 @@ function testBasicRelation (
   ordinal: number
 ): void {
   describe(name, function () {
-    it('is a TimeIntervalRelation', function () {
-      pir.should.be.instanceof(PointIntervalRelation)
+    it('is a BasicPointIntervalRelation', function () {
+      pir.should.be.instanceof(BasicPointIntervalRelation)
     })
     it('has the expected bit pattern', function () {
       pir.bitPattern.should.equal(pirbp)
@@ -55,19 +56,19 @@ describe('PointIntervalRelations', function () {
   })
   describe('VALUES', function () {
     it('is an array', function () {
-      PointIntervalRelation.VALUES.should.be.an.Array()
+      BasicPointIntervalRelation.VALUES.should.be.an.Array()
     })
     it('contains the exact amount of instances', function () {
-      PointIntervalRelation.VALUES.length.should.equal(NR_OF_RELATIONS)
+      BasicPointIntervalRelation.VALUES.length.should.equal(NR_OF_RELATIONS)
     })
     it('contains only TimeIntervalRelations', function () {
-      PointIntervalRelation.VALUES.forEach(ar => {
+      BasicPointIntervalRelation.VALUES.forEach(ar => {
         ar.should.be.instanceof(PointIntervalRelation)
       })
     })
     it('does not contain duplicates', function () {
       // optimized to avoid quadratic time
-      PointIntervalRelation.VALUES.forEach((ar, i) => {
+      BasicPointIntervalRelation.VALUES.forEach((ar, i) => {
         ar.bitPattern.should.equal(i)
       })
     })
@@ -99,7 +100,7 @@ describe('PointIntervalRelations', function () {
     })
     it('contains only PointIntervalRelations', function () {
       BASIC_RELATIONS.forEach(ar => {
-        ar.should.be.instanceof(PointIntervalRelation)
+        ar.should.be.instanceof(BasicPointIntervalRelation)
       })
     })
   })
