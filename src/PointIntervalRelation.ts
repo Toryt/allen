@@ -5,7 +5,8 @@ import {
   PointIntervalRelationBitPattern,
   pointIntervalRelationBitPatterns,
   isBasicPointIntervalRelationBitPattern,
-  basicPointIntervalRelationBitPatterns
+  basicPointIntervalRelationBitPatterns,
+  NR_OF_BITS
 } from './pointIntervalRelationBitPattern'
 import assert from 'assert'
 
@@ -492,30 +493,39 @@ public int basicRelationOrdinal() {
     assert pre(isBasic());
     return Integer.numberOfTrailingZeros($bitPattern);
 }
+*/
 
-
-/!**
- * A measure about the uncertainty this time point-interval relation expresses.
- * This is the fraction of the 5 basic relations that imply this general relation.
- * {@link FULL} is complete uncertainty, and returns {@code 1}.
- * A basic relation is complete certainty, and returns {@code 0}.
- * The {@link #EMPTY empty} relation has no meaningful uncertainty. This method returns
- * {@link Float#NaN} as value for {@link EMPTY}.
- *!/
+  /**
+   * A measure about the uncertainty this point-interval relation expresses.
+   *
+   * This is the fraction of the 5 basic relations that imply this general relation. {@link FULL} is complete
+   * uncertainty, and returns `1`. A basic relation is complete certainty, and returns `0`.
+   *
+   * The {@link EMPTY} relation has no meaningful uncertainty. This method returns `NaN` as value for {@link EMPTY}.
+   *
 @MethodContract(post = {
     @Expression("this != EMPTY ? result == count (PointIntervalRelation br : BASIC_RELATIONS) {br.implies(this)} - 1) / 4"),
     @Expression("this == EMPTY ? result == Float.NaN")
 })
-public float uncertainty() {
-    int count = Integer.bitCount($bitPattern);
-    if (count == 0) {
-        return Float.NaN;
+   */
+  uncertainty (): number {
+    function bitCount (n: number): number {
+      let count = 0
+      while (n) {
+        n &= n - 1
+        count++
+      }
+      return count
     }
-    count--;
-    float result = count / 4.0F;
-    return result;
-}
 
+    const count = bitCount(this.bitPattern)
+    if (count === 0) {
+      return NaN
+    }
+    return (count - 1) / (NR_OF_BITS - 1)
+  }
+
+  /*
 /!**
  * <p>The complement of an time point-interval relation is the logic negation of the condition the time point-interval relation expresses.
  *   The complement of a basic time point-interval relation is the disjunction of all the other basic time point-interval relations.

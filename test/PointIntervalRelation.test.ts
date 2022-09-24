@@ -130,4 +130,18 @@ describe('PointIntervalRelations', function () {
     testBasicRelation('ENDS', ENDS, ENDS_BIT_PATTERN, 3)
     testBasicRelation('AFTER', AFTER, AFTER_BIT_PATTERN, 4)
   })
+  describe('#uncertainty', function () {
+    it('returns NaN for EMPTY', function () {
+      EMPTY.uncertainty().should.be.NaN()
+    })
+    BASIC_RELATIONS.forEach(br => {
+      it(`returns 0 for ${br.representation}`, function () {
+        br.uncertainty().should.equal(0)
+      })
+    })
+    it('returns 1 for FULL', function () {
+      FULL.uncertainty().should.equal(1)
+    })
+    // MUDO test others, see post
+  })
 })
