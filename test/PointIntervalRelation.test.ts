@@ -1,7 +1,11 @@
 /* eslint-env mocha */
 
-import { NR_OF_RELATIONS as BITPATTERN_NR_OF_RELATIONS } from '../src/pointIntervalRelationBitPattern'
-import { NR_OF_RELATIONS, PointIntervalRelation } from '../src/PointIntervalRelation'
+import {
+  NR_OF_RELATIONS as BITPATTERN_NR_OF_RELATIONS,
+  EMPTY_BIT_PATTERN,
+  FULL_BIT_PATTERN
+} from '../src/pointIntervalRelationBitPattern'
+import { NR_OF_RELATIONS, PointIntervalRelation, EMPTY, FULL } from '../src/PointIntervalRelation'
 import 'should'
 
 describe('PointIntervalRelations', function () {
@@ -26,6 +30,23 @@ describe('PointIntervalRelations', function () {
       // optimized to avoid quadratic time
       PointIntervalRelation.VALUES.forEach((ar, i) => {
         ar.bitPattern.should.equal(i)
+      })
+    })
+  })
+  describe('special relations', function () {
+    describe('EMPTY', function () {
+      it('is a PointIntervalRelation', function () {
+        EMPTY.should.be.instanceof(PointIntervalRelation)
+      })
+      it('has bit pattern 0', function () {
+        EMPTY.bitPattern.should.equal(EMPTY_BIT_PATTERN)
+      })
+    describe('FULL', function () {
+      it('is a PointIntervalRelation', function () {
+        FULL.should.be.instanceof(PointIntervalRelation)
+      })
+      it('has bit pattern 5 1‘s', function () {
+        FULL.bitPattern.should.equal(FULL_BIT_PATTERN)
       })
     })
   })
