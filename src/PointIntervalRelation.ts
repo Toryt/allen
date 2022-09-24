@@ -503,7 +503,7 @@ public int basicRelationOrdinal() {
    *
    * The {@link EMPTY} relation has no meaningful uncertainty. This method returns `NaN` as value for {@link EMPTY}.
    *
-@MethodContract(post = {
+   @MethodContract(post = {
     @Expression("this != EMPTY ? result == count (PointIntervalRelation br : BASIC_RELATIONS) {br.implies(this)} - 1) / 4"),
     @Expression("this == EMPTY ? result == Float.NaN")
 })
@@ -605,14 +605,14 @@ public final PointIntervalRelation complement() {
    *
    * In other words, when considering the relations as a set of basic relations, is `this` a superset of `gr`
    * (considering equality as also acceptable)?
-  @Basic(
-      pre = @Expression("_gr != null"),
-      invars = {
+   @Basic(
+   pre = @Expression("_gr != null"),
+   invars = {
         @Expression("impliedBy(this)"),
         @Expression("basic ? for (TimePointIntervalRelation br : BASIC_RELATIONS) : {br != this ? ! impliedBy(br)}"),
         @Expression("for (TimePointIntervalRelation gr) {impliedBy(gr) == for (TimePointIntervalRelation br : BASIC_RELATIONS) : {gr.impliedBy(br) ? impliedBy(br)}")
       }
-  )
+   )
    */
   impliedBy (gr: PointIntervalRelation): boolean {
     return (this.bitPattern & gr.bitPattern) === gr.bitPattern
@@ -623,42 +623,26 @@ public final PointIntervalRelation complement() {
    *
    * In other words, when considering the relations as a set of basic relations, is `this` a subset of `gr` (considering
    * equality as also acceptable)?
-@Basic(
-    pre = @Expression("_gr != null"),
-    invars = @Expression("_gr.impliedBy(this)")
-)
+   @Basic(
+   pre = @Expression("_gr != null"),
+   invars = @Expression("_gr.impliedBy(this)")
+   )
    */
   implies (gr: PointIntervalRelation): boolean {
     return (gr.bitPattern & this.bitPattern) === this.bitPattern
   }
 
-  /*
-/!**
- * This returns a representation of the time point-interval relation in the most used short notation (&lt; =[&lt; &gt;&lt; =[&gt; &gt;).
- *!/
-@Override
-public String toString() {
-    StringBuilder result = new StringBuilder();
-    result.append("(");
-    if (isBasic()) {
-        result.append(BASIC_CODES[basicRelationOrdinal()]);
-    }
-    else {
-        boolean first = true;
-        for (int i = 0; i < BASIC_CODES.length; i++) {
-            if (impliedBy(BASIC_RELATIONS[i])) {
-                result.append(BASIC_CODES[i]);
-                if (first) {
-                    result.append(" ");
-                    first = false;
-                }
-            }
-        }
-    }
-    result.append(")");
-    return result.toString();
-}
-*/
+  /**
+   * A representation of the time point-interval relation in the used short notation (`'b'`, `'c'`,`'i'`, `'t'`, `'a'`).
+   */
+  toString (): string {
+    return `(${BASIC_RELATIONS.reduce((acc: string[], br) => {
+      if (this.impliedBy(br)) {
+        acc.push(br.representation)
+      }
+      return acc
+    }, []).join('')})`
+  }
 }
 
 // MUDO 'b b(repeated) i e (equal) a'
