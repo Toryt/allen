@@ -103,6 +103,9 @@ describe('PointIntervalRelations', function () {
         ar.should.be.instanceof(BasicPointIntervalRelation)
       })
     })
+    it('is the exported statis', function () {
+      BASIC_RELATIONS.should.equal(BasicPointIntervalRelation.BASIC_RELATIONS_VALUES)
+    })
   })
   describe('basic relations', function () {
     testBasicRelation('BEFORE', BEFORE, BEFORE_BIT_PATTERN, 0)

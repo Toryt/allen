@@ -9,7 +9,8 @@ import {
   IN_BIT_PATTERN,
   PointIntervalRelationBitPattern,
   pointIntervalRelationBitPatterns,
-  isBasicPointIntervalRelationBitPattern
+  isBasicPointIntervalRelationBitPattern,
+  basicPointIntervalRelationBitPatterns
 } from './pointIntervalRelationBitPattern'
 import assert from 'assert'
 
@@ -808,6 +809,13 @@ export type BasicPointIntervalRelationRepresentation = typeof BASIC_POINT_INTERV
 
 export class BasicPointIntervalRelation extends PointIntervalRelation {
   /**
+   * All possible basic point interval relations
+   */
+  public static readonly BASIC_RELATIONS_VALUES: readonly BasicPointIntervalRelation[] = Object.freeze(
+    basicPointIntervalRelationBitPatterns.map(bitPattern => new BasicPointIntervalRelation(bitPattern))
+  )
+
+  /**
    * All possible time point-interval relations.
    @Invars({
     @Expression("VALUES != null"),
@@ -943,10 +951,4 @@ export const FULL: PointIntervalRelation = BasicPointIntervalRelation.VALUES[FUL
     @Expression("BASIC_RELATIONS[ 4] == AFTER")
 })
  */
-export const BASIC_RELATIONS: readonly PointIntervalRelation[] = Object.freeze([
-  BEFORE,
-  BEGINS,
-  IN,
-  ENDS,
-  AFTER
-] as const)
+export const BASIC_RELATIONS: readonly BasicPointIntervalRelation[] = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES
