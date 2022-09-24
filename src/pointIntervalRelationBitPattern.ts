@@ -28,12 +28,12 @@ function numberToPointIntervalRelationBitPattern (n: number): PointIntervalRelat
 }
 
 export const EMPTY_BIT_PATTERN = numberToPointIntervalRelationBitPattern(0) // 00000
-export const BEFORE_BIT_PATTERN = numberToPointIntervalRelationBitPattern(1) // 00001 <
-export const BEGINS_BIT_PATTERN = numberToPointIntervalRelationBitPattern(2) // 00010 =[<
-export const IN_BIT_PATTERN = numberToPointIntervalRelationBitPattern(4) // 00100 ><
-export const ENDS_BIT_PATTERN = numberToPointIntervalRelationBitPattern(8) // 01000 =[>
-export const AFTER_BIT_PATTERN = numberToPointIntervalRelationBitPattern(16) // 10000 >
-export const FULL_BIT_PATTERN = numberToPointIntervalRelationBitPattern(31) // 11111 < =[< >< =[> >
+export const BEFORE_BIT_PATTERN = numberToPointIntervalRelationBitPattern(1) // 00001 b
+export const BEGINS_BIT_PATTERN = numberToPointIntervalRelationBitPattern(2) // 00010 c
+export const IN_BIT_PATTERN = numberToPointIntervalRelationBitPattern(4) // 00100 i
+export const ENDS_BIT_PATTERN = numberToPointIntervalRelationBitPattern(8) // 01000 t
+export const AFTER_BIT_PATTERN = numberToPointIntervalRelationBitPattern(16) // 10000 a
+export const FULL_BIT_PATTERN = numberToPointIntervalRelationBitPattern(31) // 11111 bcita
 
 export const basicPointIntervalRelationBitPatterns: readonly PointIntervalRelationBitPattern[] = [
   ...Array(NR_OF_BITS).keys()
