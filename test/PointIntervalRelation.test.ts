@@ -2,11 +2,38 @@
 
 import {
   NR_OF_RELATIONS as BITPATTERN_NR_OF_RELATIONS,
+  PointIntervalRelationBitPattern,
   EMPTY_BIT_PATTERN,
+  BEFORE_BIT_PATTERN,
+  BEGINS_BIT_PATTERN,
+  IN_BIT_PATTERN,
+  ENDS_BIT_PATTERN,
+  AFTER_BIT_PATTERN,
   FULL_BIT_PATTERN
 } from '../src/pointIntervalRelationBitPattern'
-import { NR_OF_RELATIONS, PointIntervalRelation, EMPTY, FULL } from '../src/PointIntervalRelation'
+import {
+  NR_OF_RELATIONS,
+  PointIntervalRelation,
+  EMPTY,
+  BEFORE,
+  BEGINS,
+  IN,
+  ENDS,
+  AFTER,
+  FULL
+} from '../src/PointIntervalRelation'
 import 'should'
+
+function testBasicRelation (name: string, pir: PointIntervalRelation, pirbp: PointIntervalRelationBitPattern): void {
+  describe(name, function () {
+    it('is a TimeIntervalRelation', function () {
+      pir.should.be.instanceof(PointIntervalRelation)
+    })
+    it('has the expected bit pattern', function () {
+      pir.bitPattern.should.equal(pirbp)
+    })
+  })
+}
 
 describe('PointIntervalRelations', function () {
   describe('NR_OF_RELATIONS', function () {
@@ -41,6 +68,12 @@ describe('PointIntervalRelations', function () {
       it('has bit pattern 0', function () {
         EMPTY.bitPattern.should.equal(EMPTY_BIT_PATTERN)
       })
+    })
+    testBasicRelation('BEFORE', BEFORE, BEFORE_BIT_PATTERN)
+    testBasicRelation('BEGINS', BEGINS, BEGINS_BIT_PATTERN)
+    testBasicRelation('IN', IN, IN_BIT_PATTERN)
+    testBasicRelation('ENDS', ENDS, ENDS_BIT_PATTERN)
+    testBasicRelation('AFTER', AFTER, AFTER_BIT_PATTERN)
     describe('FULL', function () {
       it('is a PointIntervalRelation', function () {
         FULL.should.be.instanceof(PointIntervalRelation)
