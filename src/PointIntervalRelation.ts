@@ -8,7 +8,8 @@ import {
   FULL_BIT_PATTERN,
   IN_BIT_PATTERN,
   PointIntervalRelationBitPattern,
-  pointIntervalRelationBitPatterns
+  pointIntervalRelationBitPatterns,
+  isBasicPointIntervalRelationBitPattern
 } from './pointIntervalRelationBitPattern'
 import assert from 'assert'
 
@@ -597,6 +598,10 @@ public static PointIntervalRelation timePointIntervalRelation(Date t, TimeInterv
     () => this.bitPattern >= EMPTY_BIT_PATTERN,
     () => this.bitPattern <= FULL_BIT_PATTERN
   ]
+
+  public isBasic (): this is BasicPointIntervalRelation {
+    return isBasicPointIntervalRelationBitPattern(this.bitPattern)
+  }
 
   /*
 /!*<section name="instance operations">*!/

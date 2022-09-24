@@ -41,6 +41,9 @@ function testBasicRelation (
     it(`it is at position ${ordinal} in VALUES`, function () {
       pir.should.equal(BASIC_RELATIONS[ordinal])
     })
+    it('reports as a basic PointIntervalRelation', function () {
+      pir.isBasic().should.be.true()
+    })
   })
 }
 
