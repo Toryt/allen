@@ -61,7 +61,7 @@ describe('PointIntervalRelations', function () {
     it('contains the exact amount of instances', function () {
       BasicPointIntervalRelation.VALUES.length.should.equal(NR_OF_RELATIONS)
     })
-    it('contains only TimeIntervalRelations', function () {
+    it('contains only PointIntervalRelations', function () {
       BasicPointIntervalRelation.VALUES.forEach(ar => {
         ar.should.be.instanceof(PointIntervalRelation)
       })
