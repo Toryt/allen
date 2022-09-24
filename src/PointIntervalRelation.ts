@@ -598,23 +598,6 @@ public final PointIntervalRelation complement() {
     int result = full ^ $bitPattern;
     return VALUES[result];
 }
-
-/!**
- * Is {@code this} implied by {@code gr}? In other words, when considering the relations as a set
- * of basic relations, is {@code this} a superset of {@code gr} (considering equality as also acceptable)?
- *!/
-@Basic(
-    pre = @Expression("_gr != null"),
-    invars = {
-        @Expression("impliedBy(this)"),
-        @Expression("basic ? for (PointIntervalRelation br : BASIC_RELATIONS) : {br != this ? ! impliedBy(br)}"),
-        @Expression("for (PointIntervalRelation gr) {impliedBy(gr) == for (PointIntervalRelation br : BASIC_RELATIONS) : {gr.impliedBy(br) ? impliedBy(br)}")
-    }
-)
-public final boolean impliedBy(PointIntervalRelation gr) {
-    assert preArgumentNotNull(gr, "gr");
-    return ($bitPattern & gr.$bitPattern) == gr.$bitPattern;
-}
 */
 
   /**
@@ -634,27 +617,20 @@ public final boolean impliedBy(PointIntervalRelation gr) {
   impliedBy (gr: PointIntervalRelation): boolean {
     return (this.bitPattern & gr.bitPattern) === gr.bitPattern
   }
+
+  /**
+   * Does `this` imply `gr`?
+   *
+   * In other words, when considering the relations as a set of basic relations, is `this` a subset of `gr` (considering
+   * equality as also acceptable)?
 @Basic(
     pre = @Expression("_gr != null"),
     invars = @Expression("_gr.impliedBy(this)")
 )
-public final boolean implies(PointIntervalRelation gr) {
-    assert preArgumentNotNull(gr, "gr");
-    return (gr.$bitPattern & $bitPattern) == $bitPattern;
-}
-
-/!*</section>*!/
-
-
-
-@Override
-public final int hashCode() {
-    /!*
-     * this returns the internal representation of this object: it is a way for people
-     * that know about the implementation to see the bit pattern of this time point-interval relation
-     *!/
-    return $bitPattern;
-}
+   */
+  implies (gr: PointIntervalRelation): boolean {
+    return (gr.bitPattern & this.bitPattern) === this.bitPattern
+  }
 
   /*
 /!**

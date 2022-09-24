@@ -165,6 +165,39 @@ describe('PointIntervalRelations', function () {
       })
     })
   })
+  describe('#implies', function () {
+    BasicPointIntervalRelation.VALUES.forEach(gr => {
+      it(`EMPTY implies ${gr}`, function () {
+        EMPTY.implies(gr).should.be.true()
+      })
+    })
+    BASIC_RELATIONS.forEach(br1 => {
+      BASIC_RELATIONS.forEach(br2 => {
+        if (br1 === br2) {
+          it(`${br1.representation} implies itself`, function () {
+            br1.implies(br2).should.be.true()
+          })
+        } else {
+          it(`${br1.representation} does not imply ${br2.representation}`, function () {
+            br1.implies(br2).should.be.false()
+          })
+        }
+      })
+      it(`${br1.representation} does not imply EMPTY`, function () {
+        br1.implies(EMPTY).should.be.false()
+      })
+      it(`${br1.representation} implies FULL`, function () {
+        br1.implies(FULL).should.be.true()
+      })
+    })
+    BasicPointIntervalRelation.VALUES.forEach(gr1 => {
+      BasicPointIntervalRelation.VALUES.forEach(gr2 => {
+        it(`${gr1}.implies(${gr2}) === ${gr2}.impliedBy(${gr1})`, function () {
+          gr1.implies(gr2).should.equal(gr2.impliedBy(gr1))
+        })
+      })
+    })
+  })
   describe('#uncertainty', function () {
     it('returns NaN for EMPTY', function () {
       EMPTY.uncertainty().should.be.NaN()
