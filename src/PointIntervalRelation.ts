@@ -917,6 +917,11 @@ export const FULL: PointIntervalRelation = PointIntervalRelation.VALUES[FULL_BIT
     @Expression("BASIC_RELATIONS[ 4] == AFTER")
 })
  */
-export const BASIC_RELATIONS: readonly PointIntervalRelation[] = Object.freeze([BEFORE, BEGINS, IN, ENDS, AFTER])
-
-export const BASIC_CODES: readonly String[] = Object.freeze(['<', '=[<', '><', '=[>', '>'])
+export const BASIC_RELATIONS: readonly PointIntervalRelation[] = Object.freeze([
+  BEFORE,
+  BEGINS,
+  IN,
+  ENDS,
+  AFTER
+] as const)
+export const BASIC_CODES: readonly String[] = Object.freeze(['<', '=[<', '><', '=[>', '>'] as const)
