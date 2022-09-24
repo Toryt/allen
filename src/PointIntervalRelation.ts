@@ -578,6 +578,8 @@ public static PointIntervalRelation timePointIntervalRelation(Date t, TimeInterv
 
   /**
    * Only the 5 lowest bits are used. The other (32 - 5 = 27 bits) are 0.
+   *
+   * @private
    */
   public readonly bitPattern: PointIntervalRelationBitPattern
 
