@@ -13,6 +13,7 @@ import {
   ENDS_BIT_PATTERN,
   FULL_BIT_PATTERN,
   IN_BIT_PATTERN,
+  basicPointIntervalRelationBitPatterns,
   pointIntervalRelationBitPatterns,
   isPointIntervalRelationBitPattern,
   isBasicPointIntervalRelationBitPattern
@@ -61,6 +62,19 @@ describe('pointIntervalRelationBitPattern', function () {
     })
     it('FULL_BIT_PATTERN is all ones', function () {
       FULL_BIT_PATTERN.should.equal(NR_OF_RELATIONS - 1)
+    })
+  })
+  describe('basicPointIntervalRelationBitPatterns', function () {
+    it('is an array', function () {
+      basicPointIntervalRelationBitPatterns.should.be.an.Array()
+    })
+    it('contains the exact amount of numbers', function () {
+      basicPointIntervalRelationBitPatterns.length.should.equal(NR_OF_BITS)
+    })
+    it('contains the pattern of the index at each location', function () {
+      basicPointIntervalRelationBitPatterns.forEach((_, i) => {
+        should(basicPointIntervalRelationBitPatterns[i]).equal(Math.pow(2, i))
+      })
     })
   })
   describe('pointIntervalRelationBitPatterns', function () {

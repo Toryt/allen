@@ -35,6 +35,10 @@ export const ENDS_BIT_PATTERN = numberToPointIntervalRelationBitPattern(8) // 01
 export const AFTER_BIT_PATTERN = numberToPointIntervalRelationBitPattern(16) // 10000 >
 export const FULL_BIT_PATTERN = numberToPointIntervalRelationBitPattern(31) // 11111 < =[< >< =[> >
 
+export const basicPointIntervalRelationBitPatterns: readonly PointIntervalRelationBitPattern[] = [
+  ...Array(NR_OF_BITS).keys()
+].map(nr => numberToPointIntervalRelationBitPattern(Math.pow(2, nr)))
+
 export const pointIntervalRelationBitPatterns: readonly PointIntervalRelationBitPattern[] = [
   ...Array(NR_OF_RELATIONS).keys()
 ].map(nr => numberToPointIntervalRelationBitPattern(nr))
