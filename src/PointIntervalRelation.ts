@@ -1,12 +1,7 @@
 import {
   NR_OF_RELATIONS as BIT_PATTERN_NR_OF_RELATIONS,
-  AFTER_BIT_PATTERN,
-  BEFORE_BIT_PATTERN,
-  BEGINS_BIT_PATTERN,
   EMPTY_BIT_PATTERN,
-  ENDS_BIT_PATTERN,
   FULL_BIT_PATTERN,
-  IN_BIT_PATTERN,
   PointIntervalRelationBitPattern,
   pointIntervalRelationBitPatterns,
   isBasicPointIntervalRelationBitPattern,
@@ -827,7 +822,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
   public static readonly VALUES: readonly PointIntervalRelation[] = Object.freeze(
     pointIntervalRelationBitPatterns.map(bitPattern =>
       isBasicPointIntervalRelationBitPattern(bitPattern)
-        ? new BasicPointIntervalRelation(bitPattern)
+        ? BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[Math.log2(bitPattern & -bitPattern)]
         : new PointIntervalRelation(bitPattern)
     )
   )
@@ -872,7 +867,7 @@ export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EM
  *
  * The short representation of this time point-interval relation is `'<'`.
  */
-export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[BEFORE_BIT_PATTERN]
+export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[0]
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _begins_ an interval `I`, i.e., `t` is the
@@ -886,7 +881,7 @@ export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BAS
  *
  * The short representation of this time point-interval relation is `'=[<'`.
  */
-export const BEGINS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[BEGINS_BIT_PATTERN]
+export const BEGINS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[1]
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _is in_ an interval `I`, i.e., `t` is after
@@ -900,7 +895,7 @@ export const BEGINS: BasicPointIntervalRelation = BasicPointIntervalRelation.BAS
  *
  * The short representation of this time point-interval relation is `'><'`.
  */
-export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[IN_BIT_PATTERN]
+export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[2]
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _ends_ an interval `I`, i.e., `t` is the end
@@ -914,7 +909,7 @@ export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_R
  *
  * The short representation of this time point-interval relation is `'=[>'`.
  */
-export const ENDS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[ENDS_BIT_PATTERN]
+export const ENDS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[3]
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _comes after_ an interval `I`, i.e., `t` is
@@ -928,7 +923,7 @@ export const ENDS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC
  *
  * The short representation of this time point-interval relation is `'>'`.
  */
-export const AFTER: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[AFTER_BIT_PATTERN]
+export const AFTER: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[4]
 
 /**
  * The full time point-interval relation, which expresses that nothing definite can be said about the relationship
