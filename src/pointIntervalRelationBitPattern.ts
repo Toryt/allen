@@ -22,7 +22,7 @@ export function isPointIntervalRelationBitPattern (candidate: unknown): candidat
   )
 }
 
-function numberToPointIntervalRelationBitPattern (n: number): PointIntervalRelationBitPattern {
+export function numberToPointIntervalRelationBitPattern (n: number): PointIntervalRelationBitPattern {
   assert(isPointIntervalRelationBitPattern(n))
   return n
 }
