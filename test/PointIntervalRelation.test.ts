@@ -140,6 +140,17 @@ describe('PointIntervalRelations', function () {
     testBasicRelation('ENDS', ENDS, ENDS_BIT_PATTERN, 3)
     testBasicRelation('AFTER', AFTER, AFTER_BIT_PATTERN, 4)
   })
+  describe('#complement', function () {
+    BasicPointIntervalRelation.VALUES.forEach(pir => {
+      it(`the complement of ${pir} is implied by the basic relations that are not implied by it`, function () {
+        const result = pir.complement()
+        console.log(result.toString())
+        BASIC_RELATIONS.forEach(br => {
+          pir.impliedBy(br).should.equal(!result.impliedBy(br))
+        })
+      })
+    })
+  })
   describe('#impliedBy', function () {
     BasicPointIntervalRelation.VALUES.forEach(gr => {
       if (gr === EMPTY) {

@@ -581,20 +581,6 @@ public int basicRelationOrdinal() {
  *   non-basic relations.</p>
  * <p>Note that it is exactly this counter-intuitivity that makes reasoning with time intervals so difficult.</p>
  *!/
-@MethodContract(post = {
-    @Expression("for (PointIntervalRelation br : BASIC_RELATIONS) {" +
-        "(impliedBy(br) ?? ! complement().impliedBy(br)) && (! impliedBy(br) ?? complement().impliedBy(br))" +
-        "}")
-})
-public final PointIntervalRelation complement() {
-    /!*
-     * implemented as the XOR of the FULL bit pattern with this bit pattern;
-     * this simply replaces 0 with 1 and 1 with 0.
-     *!/
-    int full = FULL.$bitPattern;
-    int result = full ^ $bitPattern;
-    return VALUES[result];
-}
 */
 
   /**
@@ -630,6 +616,17 @@ public final PointIntervalRelation complement() {
     assert(gr instanceof PointIntervalRelation)
 
     return (gr.bitPattern & this.bitPattern) === this.bitPattern
+  }
+
+  /**
+   * @returns BASIC_RELATIONS.every(br => this.impliedBy(br) === !result.impliedBy(br))
+   */
+  complement (): PointIntervalRelation {
+    /*
+     * implemented as the XOR of the FULL bit pattern with this bit pattern;
+     * this simply replaces 0 with 1 and 1 with 0.
+     */
+    return BasicPointIntervalRelation.VALUES[FULL_BIT_PATTERN ^ this.bitPattern]
   }
 
   /**
