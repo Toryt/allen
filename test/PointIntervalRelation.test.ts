@@ -24,7 +24,8 @@ import {
   AFTER,
   FULL,
   BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS,
-  BASIC_RELATIONS
+  BASIC_RELATIONS,
+  or
 } from '../src/PointIntervalRelation'
 import 'should'
 
@@ -259,6 +260,20 @@ describe('PointIntervalRelations', function () {
           const result = pir1.and(pir2)
           console.log(result.toString())
           BASIC_RELATIONS.forEach(br => result.impliedBy(br).should.equal(pir1.impliedBy(br) && pir2.impliedBy(br)))
+        })
+      })
+    })
+  })
+  describe('#or', function () {
+    BasicPointIntervalRelation.VALUES.forEach(pir1 => {
+      BasicPointIntervalRelation.VALUES.forEach(pir2 => {
+        BasicPointIntervalRelation.VALUES.forEach(pir3 => {
+          it(`or(${pir1}, ${pir2}, ${pir3}) has the basic relations of all`, function () {
+            const args = [pir1, pir2, pir3]
+            const result = or(...args)
+            console.log(result.toString())
+            BASIC_RELATIONS.forEach(br => result.impliedBy(br).should.equal(args.some(gr => gr.impliedBy(br))))
+          })
         })
       })
     })
