@@ -630,6 +630,13 @@ public int basicRelationOrdinal() {
   }
 
   /**
+   * @return BASIC_RELATIONS.every(br => result.impliedBy(br) ===this.impliedBy(br) || gr.impliedBy(br))
+   */
+  or (gr: PointIntervalRelation): PointIntervalRelation {
+    return BasicPointIntervalRelation.VALUES[this.bitPattern | gr.bitPattern]
+  }
+
+  /**
    * A representation of the time point-interval relation in the used short notation (`'b'`, `'c'`,`'i'`, `'t'`, `'a'`).
    */
   toString (): string {
