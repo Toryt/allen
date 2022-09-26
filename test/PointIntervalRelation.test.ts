@@ -140,15 +140,26 @@ describe('PointIntervalRelations', function () {
     testBasicRelation('ENDS', ENDS, ENDS_BIT_PATTERN, 3)
     testBasicRelation('AFTER', AFTER, AFTER_BIT_PATTERN, 4)
   })
-  describe('#complement', function () {
-    BasicPointIntervalRelation.VALUES.forEach(pir => {
-      it(`the complement of ${pir} is implied by the basic relations that are not implied by it`, function () {
-        const result = pir.complement()
-        console.log(result.toString())
-        BASIC_RELATIONS.forEach(br => {
-          pir.impliedBy(br).should.equal(!result.impliedBy(br))
-        })
+  describe('#uncertainty', function () {
+    it('returns NaN for EMPTY', function () {
+      EMPTY.uncertainty().should.be.NaN()
+    })
+    BASIC_RELATIONS.forEach(br => {
+      it(`returns 0 for ${br.representation}`, function () {
+        br.uncertainty().should.equal(0)
       })
+    })
+    it('returns 1 for FULL', function () {
+      FULL.uncertainty().should.equal(1)
+    })
+
+    BasicPointIntervalRelation.VALUES.forEach(pir => {
+      if (pir !== EMPTY) {
+        const expected = BASIC_RELATIONS.reduce((acc, br) => (br.implies(pir) ? acc + 1 : acc), -1) / 4
+        it(`${pir} has uncertainty ${expected}`, function () {
+          pir.uncertainty().should.equal(expected)
+        })
+      }
     })
   })
   describe('#impliedBy', function () {
@@ -219,26 +230,15 @@ describe('PointIntervalRelations', function () {
       })
     })
   })
-  describe('#uncertainty', function () {
-    it('returns NaN for EMPTY', function () {
-      EMPTY.uncertainty().should.be.NaN()
-    })
-    BASIC_RELATIONS.forEach(br => {
-      it(`returns 0 for ${br.representation}`, function () {
-        br.uncertainty().should.equal(0)
-      })
-    })
-    it('returns 1 for FULL', function () {
-      FULL.uncertainty().should.equal(1)
-    })
-
+  describe('#complement', function () {
     BasicPointIntervalRelation.VALUES.forEach(pir => {
-      if (pir !== EMPTY) {
-        const expected = BASIC_RELATIONS.reduce((acc, br) => (br.implies(pir) ? acc + 1 : acc), -1) / 4
-        it(`${pir} has uncertainty ${expected}`, function () {
-          pir.uncertainty().should.equal(expected)
+      it(`the complement of ${pir} is implied by the basic relations that are not implied by it`, function () {
+        const result = pir.complement()
+        console.log(result.toString())
+        BASIC_RELATIONS.forEach(br => {
+          pir.impliedBy(br).should.equal(!result.impliedBy(br))
         })
-      }
+      })
     })
   })
 })
