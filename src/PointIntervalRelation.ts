@@ -8,7 +8,7 @@ import {
   basicPointIntervalRelationBitPatterns,
   NR_OF_BITS
 } from './pointIntervalRelationBitPattern'
-import assert from 'assert'
+import assert, { ok } from 'assert'
 
 /**
  * Support for reasoning about relations between time points and time intervals, and constraints on those
@@ -503,10 +503,7 @@ public int basicRelationOrdinal() {
    *
    * The {@link EMPTY} relation has no meaningful uncertainty. This method returns `NaN` as value for {@link EMPTY}.
    *
-   @MethodContract(post = {
-    @Expression("this != EMPTY ? result == count (PointIntervalRelation br : BASIC_RELATIONS) {br.implies(this)} - 1) / 4"),
-    @Expression("this == EMPTY ? result == Float.NaN")
-})
+   * @returns this === EMPTY ? NaN : BASIC_RELATIONS.reduce((acc, br) => br.implies(this) ? acc + 1 : acc, -1) / 4
    */
   uncertainty (): number {
     function bitCount (n: number): number {
@@ -605,16 +602,17 @@ public final PointIntervalRelation complement() {
    *
    * In other words, when considering the relations as a set of basic relations, is `this` a superset of `gr`
    * (considering equality as also acceptable)?
-   @Basic(
-   pre = @Expression("_gr != null"),
-   invars = {
-        @Expression("impliedBy(this)"),
-        @Expression("basic ? for (TimePointIntervalRelation br : BASIC_RELATIONS) : {br != this ? ! impliedBy(br)}"),
-        @Expression("for (TimePointIntervalRelation gr) {impliedBy(gr) == for (TimePointIntervalRelation br : BASIC_RELATIONS) : {gr.impliedBy(br) ? impliedBy(br)}")
-      }
-   )
+   *
+   * @basic
+   * @pre = @Expression("_gr != null")
+   * @invar this.impliedBy(this)
+   * @invar !this.isBasic() || BASIC_RELATIONS.every(br => br === this || !this.impliedBy(br)),
+   * @returns BASIC_RELATIONS.every(br => !gr.impliedBy(br) || this.impliedBy(br))
    */
   impliedBy (gr: PointIntervalRelation): boolean {
+    ok(gr)
+    assert(gr instanceof PointIntervalRelation)
+
     return (this.bitPattern & gr.bitPattern) === gr.bitPattern
   }
 
@@ -623,12 +621,13 @@ public final PointIntervalRelation complement() {
    *
    * In other words, when considering the relations as a set of basic relations, is `this` a subset of `gr` (considering
    * equality as also acceptable)?
-   @Basic(
-   pre = @Expression("_gr != null"),
-   invars = @Expression("_gr.impliedBy(this)")
-   )
+   *
+   * @returns gr.impliedBy(this)
    */
   implies (gr: PointIntervalRelation): boolean {
+    ok(gr)
+    assert(gr instanceof PointIntervalRelation)
+
     return (gr.bitPattern & this.bitPattern) === this.bitPattern
   }
 
