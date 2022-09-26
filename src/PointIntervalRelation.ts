@@ -697,6 +697,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
   private constructor (bitPattern: PointIntervalRelationBitPattern) {
     assert(bitPattern >= EMPTY_BIT_PATTERN)
     assert(bitPattern <= FULL_BIT_PATTERN)
+
     super(bitPattern)
     this.representation = BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[this.ordinal()]
   }
