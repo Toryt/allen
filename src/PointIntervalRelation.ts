@@ -316,23 +316,24 @@ export class PointIntervalRelation {
     ]
   }
 
-  /*
-/!**
- * The conjunction of the time point-interval relations in {@code gr}.
- * This is the intersection of all time point-interval relations in {@code gr}, when they are considered
- * as sets of basic relations.
- *!/
-@MethodContract(post = {
-    @Expression("for (PointIntervalRelation br : BASIC_RELATIONS) {for (PointIntervalRelation tir : _gr) {tir.impliedBy(br)} ?? result.impliedBy(br)}")
-})
-public static PointIntervalRelation and(PointIntervalRelation... gr) {
-    int acc = FULL_BIT_PATTERN;
-    for (PointIntervalRelation tir : gr) {
-        acc &= tir.$bitPattern;
-    }
-    return VALUES[acc];
-}
+  /**
+   * The conjunction of the time point-interval relations in {@code gr}.
+   * This is the intersection of all time point-interval relations in {@code gr}, when they are considered
+   * as sets of basic relations.
+   *
+   * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
+   */
+  public static and (...gr: PointIntervalRelation[]): PointIntervalRelation {
+    return BasicPointIntervalRelation.VALUES[
+      gr.reduce(
+        (acc: PointIntervalRelationBitPattern, grr: PointIntervalRelation): PointIntervalRelationBitPattern =>
+          numberToPointIntervalRelationBitPattern(acc & grr.bitPattern),
+        FULL_BIT_PATTERN
+      )
+    ]
+  }
 
+  /*
 /!**
  * Remove basic relations in {@code gr2} from {@code gr1}.
  *!/
@@ -822,3 +823,4 @@ export const FULL: PointIntervalRelation = BasicPointIntervalRelation.VALUES[FUL
 export const BASIC_RELATIONS: readonly BasicPointIntervalRelation[] = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES
 
 export const or = PointIntervalRelation.or
+export const and = PointIntervalRelation.and
