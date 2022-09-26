@@ -252,4 +252,15 @@ describe('PointIntervalRelations', function () {
       })
     })
   })
+  describe('#and', function () {
+    BasicPointIntervalRelation.VALUES.forEach(pir1 => {
+      BasicPointIntervalRelation.VALUES.forEach(pir2 => {
+        it(`${pir1}.or(${pir2}) has the common basic relations`, function () {
+          const result = pir1.and(pir2)
+          console.log(result.toString())
+          BASIC_RELATIONS.forEach(br => result.impliedBy(br).should.equal(pir1.impliedBy(br) && pir2.impliedBy(br)))
+        })
+      })
+    })
+  })
 })
