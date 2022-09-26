@@ -604,7 +604,7 @@ public final PointIntervalRelation complement() {
    * (considering equality as also acceptable)?
    *
    * @basic
-   * @pre = @Expression("_gr != null")
+   * @pre !!gr
    * @invar this.impliedBy(this)
    * @invar !this.isBasic() || BASIC_RELATIONS.every(br => br === this || !this.impliedBy(br)),
    * @returns BASIC_RELATIONS.every(br => !gr.impliedBy(br) || this.impliedBy(br))
@@ -622,6 +622,7 @@ public final PointIntervalRelation complement() {
    * In other words, when considering the relations as a set of basic relations, is `this` a subset of `gr` (considering
    * equality as also acceptable)?
    *
+   * @pre !!gr
    * @returns gr.impliedBy(this)
    */
   implies (gr: PointIntervalRelation): boolean {
