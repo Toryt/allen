@@ -92,6 +92,11 @@ describe('PointIntervalRelations', function () {
       it('has bit pattern 0', function () {
         EMPTY.bitPattern.should.equal(EMPTY_BIT_PATTERN)
       })
+      // it('is not implied by anything', function () {
+      //   PointIntervalRelation.VALUES.filter(ar => ar !== EMPTY).forEach(ar => {
+      //     EMPTY.impliedBy(ar).should.be.false()
+      //   })
+      // })
     })
     describe('FULL', function () {
       it('is a PointIntervalRelation', function () {
@@ -100,6 +105,11 @@ describe('PointIntervalRelations', function () {
       it('has bit pattern 5 1‘s', function () {
         FULL.bitPattern.should.equal(FULL_BIT_PATTERN)
       })
+      // it('is implied by everything', function () {
+      //   PointIntervalRelation.VALUES.forEach(ar => {
+      //     FULL.impliedBy(ar).should.be.true()
+      //   })
+      // })
     })
   })
   describe('BASIC_RELATIONS', function () {
@@ -210,6 +220,14 @@ describe('PointIntervalRelations', function () {
     it('returns 1 for FULL', function () {
       FULL.uncertainty().should.equal(1)
     })
-    // MUDO test others, see post
+
+    BasicPointIntervalRelation.VALUES.forEach(pir => {
+      if (pir !== EMPTY) {
+        const expected = BASIC_RELATIONS.reduce((acc, br) => (br.implies(pir) ? acc + 1 : acc), -1) / 4
+        it(`${pir} has uncertainty ${expected}`, function () {
+          pir.uncertainty().should.equal(expected)
+        })
+      }
+    })
   })
 })
