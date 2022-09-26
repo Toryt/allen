@@ -264,18 +264,24 @@ describe('PointIntervalRelations', function () {
       })
     })
   })
-  describe('#or', function () {
+  describe('or', function () {
     BasicPointIntervalRelation.VALUES.forEach(pir1 => {
       BasicPointIntervalRelation.VALUES.forEach(pir2 => {
-        BasicPointIntervalRelation.VALUES.forEach(pir3 => {
-          it(`or(${pir1}, ${pir2}, ${pir3}) has the basic relations of all`, function () {
-            const args = [pir1, pir2, pir3]
-            const result = or(...args)
-            console.log(result.toString())
-            BASIC_RELATIONS.forEach(br => result.impliedBy(br).should.equal(args.some(gr => gr.impliedBy(br))))
-          })
+        it(`or(${pir1}, ${pir2}) has the basic relations of both`, function () {
+          const args = [pir1, pir2]
+          const result = or(...args)
+          console.log(result.toString())
+          BASIC_RELATIONS.forEach(br => result.impliedBy(br).should.equal(args.some(gr => gr.impliedBy(br))))
         })
       })
+    })
+    it('the or of all basic point relations is FULL', function () {
+      const result = or(...BASIC_RELATIONS)
+      result.should.equal(FULL)
+    })
+    it('the or of all point relations is FULL', function () {
+      const result = or(...BasicPointIntervalRelation.VALUES)
+      result.should.equal(FULL)
     })
   })
 })
