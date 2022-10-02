@@ -62,7 +62,7 @@ import assert, { ok } from 'assert'
  *
  * Point-interval relations will most often be used in business code to _constrain_ relations between time points and
  * time intervals. This is notoriously, treacherously difficult. It is for this reason that you should use code like
- * this, that at least forces you to think things trough, and tries to offers tools to ease reasoning. The idiom to do
+ * this, that at least forces you to think things trough, and tries to offer tools to ease reasoning. The idiom to do
  * this is explained next.
  *
  * First we need to determine the relation we want to uphold (`condition`). E.g., we want to assert that given a point
@@ -317,9 +317,9 @@ export class PointIntervalRelation {
   }
 
   /**
-   * The conjunction of the time point-interval relations in {@code gr}.
-   * This is the intersection of all time point-interval relations in {@code gr}, when they are considered
-   * as sets of basic relations.
+   * The conjunction of the time point-interval relations in `gr`.
+   * This is the intersection of all time point-interval relations in `gr`, when they are considered as sets of basic
+   * relations.
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
    */
@@ -334,24 +334,6 @@ export class PointIntervalRelation {
   }
 
   /*
-/!**
- * Remove basic relations in {@code gr2} from {@code gr1}.
- *!/
-@MethodContract(
-    pre  = {
-        @Expression("_base != null"),
-        @Expression("_term != null")
-    },
-    post = @Expression("for (PointIntervalRelation br : BASIC_RELATIONS) {br.implies(result) ?? br.implies(_base) && ! br.implies(_term)}")
-)
-public static PointIntervalRelation min(PointIntervalRelation base, PointIntervalRelation term) {
-    assert preArgumentNotNull(base, "base");
-    assert preArgumentNotNull(term, "term");
-    int xor = base.$bitPattern ^ term.$bitPattern;
-    int min = base.$bitPattern & xor;
-    return VALUES[min];
-}
-
 /!**
  * This matrix holds the compositions of basic time point-interval relations with Allen relations. These are part
  * of the given semantics, and cannot be calculated. See {@link #compose(PointIntervalRelation, TimeIntervalRelation)}.
@@ -745,7 +727,7 @@ export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EM
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _comes before_ an interval `I`, i.e., `t`
- * is before the begin of `I`:
+ * is before the start of `I`:
  *
  * ```
  * (I.from != undefined) && (t < I.from)
