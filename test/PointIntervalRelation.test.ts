@@ -265,6 +265,17 @@ describe('PointIntervalRelations', function () {
       })
     })
   })
+  describe('#min', function () {
+    BasicPointIntervalRelation.VALUES.forEach(pir1 => {
+      BasicPointIntervalRelation.VALUES.forEach(pir2 => {
+        it(`${pir1}.min(${pir2}) has the basic relations of ${pir1} that are not implied by ${pir2}`, function () {
+          const result = pir1.min(pir2)
+          console.log(result.toString())
+          BASIC_RELATIONS.forEach(br => result.impliedBy(br).should.equal(pir1.impliedBy(br) && !pir2.impliedBy(br)))
+        })
+      })
+    })
+  })
   describe('or', function () {
     BasicPointIntervalRelation.VALUES.forEach(pir1 => {
       BasicPointIntervalRelation.VALUES.forEach(pir2 => {

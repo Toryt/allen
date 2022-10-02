@@ -643,6 +643,20 @@ public int basicRelationOrdinal() {
   }
 
   /**
+   * @return BASIC_RELATIONS.every(br => result.impliedBy(br) === this.impliedBy(br) && !gr.impliedBy(br))
+   */
+  min (gr: PointIntervalRelation): PointIntervalRelation {
+    /* e.g.,
+       this 10011 01100
+         gr 11011 00101
+        xor 01000 01001
+        and 00000 01000 */
+    const xor = this.bitPattern ^ gr.bitPattern
+    const min = this.bitPattern & xor
+    return BasicPointIntervalRelation.VALUES[min]
+  }
+
+  /**
    * A representation of the time point-interval relation in the used short notation (`'b'`, `'c'`,`'i'`, `'t'`, `'a'`).
    */
   toString (): string {
