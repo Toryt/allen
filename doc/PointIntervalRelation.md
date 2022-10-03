@@ -117,9 +117,9 @@ if (!pointIntervalRelation(t, i).implies(or(BEFORE, COMMENCES)) {
 In our example this is already clear. If the actual relation results in `(i)`, both expressions evaluate to `true`:
 
 ```
-  !(pointIntervalRelation(t, i) ⇒ (bc))
-⇔ !((i) ⇒ (bc))
-⇔ !false
+  ¬(pointIntervalRelation(t, i) ⇒ (bc))
+⇔ ¬((i) ⇒ (bc))
+⇔ ¬false
 ⇔ true
 
   (pointIntervalRelation(t, i) ⇒ (bc).complement
@@ -131,9 +131,9 @@ In our example this is already clear. If the actual relation results in `(i)`, b
 But in the case where the actual relation results in `(bi)`, they do not:
 
 ```
-  !(pointIntervalRelation(t, i) ⇒ (bc))
-⇔ !((bi) ⇒ (bc))
-⇔ !false
+  ¬(pointIntervalRelation(t, i) ⇒ (bc))
+⇔ ¬((bi) ⇒ (bc))
+⇔ ¬false
 ⇔ true
 
   (pointIntervalRelation(t, i) ⇒ (bc).complement

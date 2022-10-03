@@ -58,7 +58,7 @@ export class PointIntervalRelation {
   /**
    * The main factory method for PointIntervalRelations. Although this is intended to create
    * any disjunction of the basic relations, you can use any relation in the argument
-   * list. This is the union of all time point-interval relations in {@code gr}, when they are considered
+   * list. This is the union of all point – interval relations in {@code gr}, when they are considered
    * as sets of basic relations.
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.some(gr => gr.impliedBy(br)))
@@ -74,8 +74,8 @@ export class PointIntervalRelation {
   }
 
   /**
-   * The conjunction of the time point-interval relations in `gr`.
-   * This is the intersection of all time point-interval relations in `gr`, when they are considered as sets of basic
+   * The conjunction of the point – interval relations in `gr`.
+   * This is the intersection of all point – interval relations in `gr`, when they are considered as sets of basic
    * relations.
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
@@ -92,7 +92,7 @@ export class PointIntervalRelation {
 
   /*
 /!**
- * This matrix holds the compositions of basic time point-interval relations with Allen relations. These are part
+ * This matrix holds the compositions of basic point – interval relations with Allen relations. These are part
  * of the given semantics, and cannot be calculated. See {@link #compose(PointIntervalRelation, TimeIntervalRelation)}.
  *!/
 public final static PointIntervalRelation[][] BASIC_COMPOSITIONS =
@@ -264,67 +264,107 @@ public static PointIntervalRelation timePointIntervalRelation(Date t, TimeInterv
     return (gr.bitPattern & this.bitPattern) === this.bitPattern
   }
 
-  /*
-/!**
- * <p>The complement of an time point-interval relation is the logic negation of the condition the time point-interval relation expresses.
- *   The complement of a basic time point-interval relation is the disjunction of all the other basic time point-interval relations.
- *   The complement of a general time point-interval relation is the disjunction of all basic time point-interval relations that are
- *   not implied by the general time point-interval relation.</p>
- * <p>This method is key to validating semantic constraints on time intervals, using the following idiom:</p>
- * <pre>
- *   ...
- *   Date t1 = ...;
- *   Date t2 = ...;
- *   PointIntervalRelation condition = ...;
- *   PointIntervalRelation actual = timePointIntervalRelation(t1, t2);
- *   if (! actual.implies(condition)) {
- *     throw new ....
- *   }
- *   ...
- * </pre>
- * <p><strong>Be aware that the complement has in general not the same meaning as a logic negation.</strong>
- *   For a basic relation <var>br</var> and a general time point-interval relation <var>cond</var>, it is true that</p>
- * <p><code><var>br</var>.implies(<var>cond</var>)</code> &hArr;
- *   <code>! <var>br</var>.implies(<var>cond</var>.complement())</code></p>
- * <p><strong>This is however not so for non-basic, and thus general time point-interval relations</strong>, as the following
- *   counterexample proofs. Suppose a condition is that, for a general relation <var>gr</var>:</p>
- * <pre><var>gr</var>.implies(<var>cond</var>)</pre>
- * <p>Suppose <code><var>gr</var> == (=[&lt; &gt;&lt;)</code>. Then we can rewrite in the following way:</p>
- * <p>&nbsp;&nbsp;&nbsp;<code><var>gr</var>.implies(<var>cond</var>)</code><br />
- *   &hArr; <code>(=[&lt; &gt;&lt;).implies(<var>cond</var>)</code><br />
- *   &hArr; <code>(=[&lt; &gt;&lt;) &sube; <var>cond</var></code><br />
- *   &hArr; <code>(=[&lt; &isin; <var>cond</var>) && (&gt;&lt; &isin; <var>cond</var>)</code></p>
- * <p>From the definition of the complement, it follows that, for a basic relation <var>br</var> and a general
- *   relation <var>GR</var> as set</p>
- * <p><code>br &isin; GR</code> &hArr; <code>br &notin; GR.complement()</code></p>
- * <p>Thus:</p>
- * <p>&hArr; <code>(=[&lt; &notin; <var>cond</var>.complement()) && (&gt;&lt; &notin; <var>cond</var>.complement())</code><br />
- *   &hArr; <code>! ((=[&lt; &isin; <var>cond</var>.complement()) || (&gt;&lt; &isin; <var>cond</var>.complement())</code> (1)</p>
- * <p>While, from the other side:</p>
- * <p>&nbsp;&nbsp;&nbsp;<code>! <var>gr</var>.implies(<var>cond</var>.complement())</code><br />
- *   &hArr; <code>! (=[&lt; &gt;&lt;).implies(<var>cond</var>.complement())</code><br />
- *   &hArr; <code>! (=[&lt; &gt;&lt;) &sube; (<var>cond</var>.complement())</code><br />
- *   &hArr; <code>! ((=[&lt; &isin; <var>cond</var>.complement()) && (&gt;&lt; &isin; <var>cond</var>.complement())</code> (2)</p>
- * <p>It is clear that (1) is incompatible with (2), except for the case where the initial relation is basic.</p>
- * <p>In the reverse case, for a basic relation <var>br</var> and a general time point-interval relation <var>actual</var>, nothing
- *   special can be said about the complement of <var>actual</var>, as the following reasoning illustrates:</p>
- * <p>&nbsp;&nbsp;&nbsp;<code><var>actual</var>.implies(<var>br</var>)</code><br />
- *   &hArr;<code><var>actual</var> &sube; <var>br</var></code><br />
- *   &hArr;<code><var>actual</var> &sube; (<var>br</var>)</code><br />
- *   &hArr;<code><var>actual</var> == (<var>br</var>) || <var>actual</var> == &empty;</code><br />
- *   &hArr;<code><var>actual</var>.complement() == (<var>br</var>).complement() || <var>actual</var>.complement() == FULL</code> (3)</p>
- * <p>From the other side:</p>
- * <p>&nbsp;&nbsp;&nbsp;<code>! <var>actual</var>.complement().implies(<var>br</var>)</code><br />
- *   &hArr;<code>! (<var>actual</var>.complement() &sube; <var>br</var>)</code><br />
- *   &hArr;<code>! (<var>actual</var>.complement() &sube; (<var>br</var>))</code><br />
- *   &hArr;<code>! (<var>actual</var>.complement() == (<var>br</var>) || <var>actual</var>.complement() == &empty;)</code><br />
- *   &hArr;<code><var>actual</var>.complement() != (<var>br</var>) && <var>actual</var>.complement() != &empty;</code> (4)</p>
- * <p>It is clear that (3) expresses something completely different then (4), and this effect is obviously even stronger with
- *   non-basic relations.</p>
- * <p>Note that it is exactly this counter-intuitivity that makes reasoning with time intervals so difficult.</p>
- *!/
-*/
   /**
+   * The complement of a point – interval relation is the logic negation of the condition the point – interval relation
+   * expresses.
+   *
+   * The complement of a basic point – interval relation is the disjunction of all the other basic point – interval
+   * relations. The complement of a general point – interval relation is the disjunction of all basic point – interval
+   * relations that are not implied by the general point – interval relation.
+   *
+   * This method is key to validating semantic constraints on time intervals, using the following idiom:
+   *
+   * ```ts
+   * ...
+   * T t = ...;
+   * Interval<T> i = ...;
+   * PointIntervalRelation condition = ...;
+   * PointIntervalRelation actual = pointIntervalRelation(t, i);
+   * if (!actual.implies(condition)) {
+   *   throw new ....
+   * }
+   * ...
+   * ```
+   *
+   * The complement of the complement of a general point – interval relation is the orginal general point – interval
+   * relation.
+   *
+   * ```
+   * gr.complement().complement() = gr
+   * ```
+   *
+   * **Be aware that the complement has in general a different meaning than a logic negation.** For a basic relation
+   * `br` and a general point – interval relation `condition`, it is true that
+   *
+   * ```
+   * (br ⇒ condition) ⇔ ¬ (br.implies(condition.complement())
+   * ```
+   *
+   * **This is however not so for non-basic, and thus general point – interval relations**, as the following
+   * counterexample proofs. Suppose a condition is that, for a general relation `gr`:
+   *
+   * ```
+   * gr.implies(condition)
+   * ```
+   *
+   * Suppose `gr = (bi)`. Then we can rewrite in the following way:
+   *
+   * ```
+   *   gr ⇒ condition
+   * ⇔ (bi) ⇒ condition
+   * ⇔ {b, i} ⊆ condition
+   * ⇔ b ∈ condition ∧ i ∈ condition
+   * ```
+   *
+   * From the definition of the complement, it follows that, for a basic relation `br` and a general relation `gr` as
+   * set
+   *
+   * ```
+   * br ∈ gr ⇔ br ∉ gr.complement()
+   * ```
+   *
+   * Thus:
+   *
+   * ```
+   * ⇔ b ∉ condition.complement() ∧ i ∉ condition.complement()
+   * ⇔ ¬(b ∈ condition.complement() ∨ i ∈ condition.complement()) (1)
+   * ```
+   *
+   * While, from the other side:
+   *
+   * ```
+   *   ¬(gr ⇒ condition.complement())
+   * ⇔ ¬((bi) ⇒ condition.complement())
+   * ⇔ ¬({b, i} ⊆ condition.complement())
+   * ⇔ ¬(b ∈ condition.complement() ∧ i ∈ condition.complement()) (2)
+   * ```
+   *
+   * It is clear that _(1)_ is incompatible with _(2)_, except for the case where the initial relation is basic.
+   *
+   * In the reverse case, for a basic relation `br` and a general point – interval relation `actual`, nothing special can
+   * be said about the complement of `actual`, as the following reasoning illustrates:
+   *
+   * ```
+   *   actual ⇒ br
+   * ⇔ actual ⊆ br
+   * ⇔ actual = br || actual = ∅
+   * ⇔ actual.complement() = br.complement() ∨ actual.complement() = FULL (3)
+   * ```
+   *
+   * From the other side:
+   *
+   * ```
+   *   ¬(actual.complement() ⇒ br)
+   * ⇔ ¬(actual.complement() ⊆ br)
+   * ⇔ ¬(actual.complement() = br ∨ actual.complement = ∅)
+   * ⇔ actual.complement() ≠ br ∧ actual.complement ≠ ∅ (4)
+   * ```
+   *
+   * It is clear that _(3)_ expresses something completely different from _(4)_, and this effect is even stronger with
+   * non-basic relations.
+   *
+   * Note that it is exactly this counter-intuitivity that makes reasoning with time intervals so difficult.
+   *
    * @returns BASIC_RELATIONS.every(br => this.impliedBy(br) === !result.impliedBy(br))
    */
   complement (): PointIntervalRelation {
@@ -350,7 +390,7 @@ public static PointIntervalRelation timePointIntervalRelation(Date t, TimeInterv
   }
 
   /**
-   * A representation of the time point-interval relation in the used short notation (`'b'`, `'c'`,`'i'`, `'t'`, `'a'`).
+   * A representation of the point – interval relation in the used short notation (`'b'`, `'c'`,`'i'`, `'t'`, `'a'`).
    */
   toString (): string {
     return `(${BASIC_RELATIONS.reduce((acc: string[], br) => {
@@ -374,7 +414,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
   )
 
   /**
-   * All possible time point-interval relations.
+   * All possible point – interval relations.
    @Invars({
     @Expression("VALUES != null"),
     @Expression("for (PointIntervalRelation tir : VALUES) {tir != null}"),
@@ -419,7 +459,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
 }
 
 /**
- * The total number of possible time point-interval relations **= 32**
+ * The total number of possible point – interval relations **= 32**
  * (i.e., <code>2<sup>5</sup></code>).
  */
 export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
@@ -442,7 +482,7 @@ export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EM
  *
  * ![before](https://github.com/jandppw/ppwcode-recovered-from-google-code/blob/master/java/value/trunk/src/main/java/org/ppwcode/value_III/time/interval/doc-files/PointIntervalRelation-before.png?raw=true)
  *
- * The short representation of this time point-interval relation is `'<'`.
+ * The short representation of this point – interval relation is `'<'`.
  */
 export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[0]
 
@@ -456,7 +496,7 @@ export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BAS
  *
  * ![begins](https://github.com/jandppw/ppwcode-recovered-from-google-code/blob/master/java/value/trunk/src/main/java/org/ppwcode/value_III/time/interval/doc-files/PointIntervalRelation-begins.png?raw=true)
  *
- * The short representation of this time point-interval relation is `'=[<'`.
+ * The short representation of this point – interval relation is `'=[<'`.
  */
 export const BEGINS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[1]
 
@@ -470,7 +510,7 @@ export const BEGINS: BasicPointIntervalRelation = BasicPointIntervalRelation.BAS
  *
  * ![in](https://github.com/jandppw/ppwcode-recovered-from-google-code/blob/master/java/value/trunk/src/main/java/org/ppwcode/value_III/time/interval/doc-files/PointIntervalRelation-in.png?raw=true)
  *
- * The short representation of this time point-interval relation is `'><'`.
+ * The short representation of this point – interval relation is `'><'`.
  */
 export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[2]
 
@@ -484,7 +524,7 @@ export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_R
  *
  * ![ends](https://github.com/jandppw/ppwcode-recovered-from-google-code/blob/master/java/value/trunk/src/main/java/org/ppwcode/value_III/time/interval/doc-files/PointIntervalRelation-ends.png?raw=true)
  *
- * The short representation of this time point-interval relation is `'=[>'`.
+ * The short representation of this point – interval relation is `'=[>'`.
  */
 export const ENDS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[3]
 
@@ -498,12 +538,12 @@ export const ENDS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC
  *
  * ![after](https://github.com/jandppw/ppwcode-recovered-from-google-code/blob/master/java/value/trunk/src/main/java/org/ppwcode/value_III/time/interval/doc-files/PointIntervalRelation-after.png?raw=true)
  *
- * The short representation of this time point-interval relation is `'>'`.
+ * The short representation of this point – interval relation is `'>'`.
  */
 export const AFTER: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[4]
 
 /**
- * The full time point-interval relation, which expresses that nothing definite can be said about the relationship
+ * The full point – interval relation, which expresses that nothing definite can be said about the relationship
  * between a time point and a time interval.
  *
  * @Invars(@Expression("FULL == or(BEFORE, BEGINS, IN, ENDS, AFTER"))
@@ -511,7 +551,7 @@ export const AFTER: BasicPointIntervalRelation = BasicPointIntervalRelation.BASI
 export const FULL: PointIntervalRelation = BasicPointIntervalRelation.VALUES[FULL_BIT_PATTERN]
 
 /**
- * The set of all 5 basic time point-interval relations. That they are presented here in a particular order, is a
+ * The set of all 5 basic point – interval relations. That they are presented here in a particular order, is a
  * pleasant side note, but in general not relevant for the user.
  *
 @Invars({

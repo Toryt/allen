@@ -241,6 +241,10 @@ describe('PointIntervalRelations', function () {
           pir.impliedBy(br).should.equal(!result.impliedBy(br))
         })
       })
+      it(`the complement of the complement if ${pir} is ${pir}`, function () {
+        const result = pir.complement().complement()
+        result.should.equal(pir)
+      })
     })
   })
   describe('#min', function () {
