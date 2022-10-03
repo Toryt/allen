@@ -90,6 +90,26 @@ export class PointIntervalRelation {
     ]
   }
 
+  public static relation (s: string): PointIntervalRelation {
+    let result = EMPTY
+    if (s.includes('b')) {
+      result = or(result, BEFORE)
+    }
+    if (s.includes('c')) {
+      result = or(result, BEGINS)
+    }
+    if (s.includes('i')) {
+      result = or(result, IN)
+    }
+    if (s.includes('t')) {
+      result = or(result, ENDS)
+    }
+    if (s.includes('a')) {
+      result = or(result, AFTER)
+    }
+    return result
+  }
+
   /*
 /!**
  * This matrix holds the compositions of basic point – interval relations with Allen relations. These are part
