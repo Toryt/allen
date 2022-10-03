@@ -10,6 +10,8 @@ import {
   numberToPointIntervalRelationBitPattern
 } from './pointIntervalRelationBitPattern'
 import assert, { ok } from 'assert'
+import { Interval } from './Interval'
+import { Comparable, Comparator, getComparator } from './comparator'
 
 /**
  * Support for reasoning about relations between time points and time intervals, and constraints on those
@@ -155,51 +157,48 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
     }
     return acc;
 }
-
-/!**
- * The relation of {@code t} with {@code i} with the lowest possible {@link #uncertainty()}.
- * {@code null} as {@link TimeInterval#getBegin()} or {@link TimeInterval#getEnd()} is considered
- * as unknown, and thus is not used to restrict the relation more, leaving it with
- * more {@link #uncertainty()}.
- *
- * @mudo contract
- *!/
-public static PointIntervalRelation timePointIntervalRelation(Date t, TimeInterval i) {
-    if (t == null) {
-        return FULL;
-    }
-    Date iBegin = i.getBegin();
-    Date iEnd = i.getEnd();
-    PointIntervalRelation result = FULL;
-    if (iBegin != null) {
-        if (t.before(iBegin)) {
-            return BEFORE;
-        }
-        else if (t.equals(iBegin)) {
-            return BEGINS;
-        }
-        else {
-            assert t.after(iBegin);
-            result = min(result, BEFORE);
-            result = min(result, BEGINS);
-        }
-    }
-    if (iEnd != null) {
-        if (t.before(iEnd)) {
-            result = min(result, ENDS);
-            result = min(result, AFTER);
-        }
-        else if (t.equals(iEnd)) {
-            return ENDS;
-        }
-        else {
-            assert t.after(iEnd);
-            return AFTER;
-        }
-    }
-    return result;
-}
 */
+
+  /**
+   * The relation of `t` with `i` with the lowest possible {@link uncertainty}.
+   *
+   * `undefined` as start or end of `i` is considered as ‘unknown’, and thus is not used to restrict the relation more,
+   * leaving it with more {@link uncertainty}.
+   */
+  static pointIntervalRelation<T extends Comparable> (
+    t: T | undefined,
+    i: Interval<T>,
+    compare?: Comparator<T>
+  ): PointIntervalRelation {
+    if (t === undefined) {
+      return FULL
+    }
+    const comparator = compare ?? getComparator(t, i.start, i.end)
+    let result = FULL
+    if (i.start !== undefined) {
+      const tToStart = comparator(t, i.start)
+      if (tToStart < 0) {
+        return BEFORE
+      } else if (tToStart === 0) {
+        return BEGINS
+      } else {
+        // assert(tToStart > 0)
+        result = result.min(BEFORE).min(BEGINS)
+      }
+    }
+    if (i.end !== undefined) {
+      const tToEnd = comparator(t, i.end)
+      if (tToEnd < 0) {
+        result = result.min(ENDS).min(AFTER)
+      } else if (tToEnd === 0) {
+        return ENDS
+      } else {
+        // assert(tToEnd > 0)
+        return AFTER
+      }
+    }
+    return result
+  }
 
   /**
    * Only the 5 lowest bits are used. The other (32 - 5 = 27 bits) are 0.

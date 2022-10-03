@@ -298,4 +298,107 @@ describe('PointIntervalRelations', function () {
       result.should.equal(EMPTY)
     })
   })
+  describe('pointIntervalRelation', function () {
+    const fivePoints = [-6, -4.983458, -1, 2, Math.PI]
+
+    class SomethingToCompare {
+      public n: number
+
+      constructor (n: number) {
+        this.n = n
+      }
+
+      compare (other: SomethingToCompare): number {
+        return this.n < other.n ? -1 : this.n > other.n ? +1 : 0
+      }
+
+      toString (): string {
+        return `SomethingToCompare(${this.n})`
+      }
+    }
+
+    const cases = [
+      { type: 'number', points: fivePoints },
+      { type: 'string', points: ['a smallest', 'b less small', 'c medium', 'd larger', 'e largest'] },
+      {
+        type: 'Date',
+        points: [
+          new Date(2006, 9, 3, 19, 49, 34, 848),
+          new Date(2011, 9, 3, 19, 49, 34, 848),
+          new Date(2015, 9, 3, 19, 49, 34, 848),
+          new Date(2018, 9, 3, 19, 49, 34, 848),
+          new Date(2022, 9, 3, 19, 49, 34, 848)
+        ]
+      },
+      {
+        type: 'HasCompare',
+        points: fivePoints.map(p => new SomethingToCompare(p))
+      }
+      // {
+      //   type: 'compare',
+      //   points: fivePoints.map(p => [p]),
+      //   comparator: (c1: number[], c2: number[]): number => (c1[0] < c2[0] ? -1 : c1[0] > c2[0] ? +1 : 0)
+      // }
+    ]
+
+    cases.forEach(c => {
+      describe(c.type, function () {
+        const fullyQuantified = { start: c.points[1], end: c.points[3] }
+        const expectedWithFullyQuantified = [BEFORE, BEGINS, IN, ENDS, AFTER]
+
+        describe(`fully qualified — [${fullyQuantified.start}, ${fullyQuantified.end}[`, function () {
+          expectedWithFullyQuantified.forEach((expected, i) => {
+            it(`returns ${expected} for ${c.points[i]}`, function () {
+              const result = PointIntervalRelation.pointIntervalRelation(c.points[i], fullyQuantified)
+              result.should.equal(expected)
+            })
+          })
+          it(`returns FULL for \`undefined\``, function () {
+            const result = PointIntervalRelation.pointIntervalRelation(undefined, fullyQuantified)
+            result.should.equal(FULL)
+          })
+        })
+        const unknownEnd = { start: c.points[1], end: undefined }
+        const expectedWithUnknownEnd = [
+          BEFORE,
+          BEGINS,
+          PointIntervalRelation.relation('ita'),
+          PointIntervalRelation.relation('ita'),
+          PointIntervalRelation.relation('ita')
+        ]
+        describe(`unkown end — [${unknownEnd.start}, ${unknownEnd.end}[`, function () {
+          expectedWithUnknownEnd.forEach((expected, i) => {
+            it(`returns ${expected} for ${c.points[i]}`, function () {
+              const result = PointIntervalRelation.pointIntervalRelation(c.points[i], unknownEnd)
+              result.should.equal(expected)
+            })
+          })
+          it(`returns FULL for \`undefined\``, function () {
+            const result = PointIntervalRelation.pointIntervalRelation(undefined, unknownEnd)
+            result.should.equal(FULL)
+          })
+        })
+        const unknownStart = { start: undefined, end: c.points[3] }
+        const expectedWithUnknownStart = [
+          PointIntervalRelation.relation('bci'),
+          PointIntervalRelation.relation('bci'),
+          PointIntervalRelation.relation('bci'),
+          ENDS,
+          AFTER
+        ]
+        describe(`unkown start — [${unknownStart.start}, ${unknownStart.end}[`, function () {
+          expectedWithUnknownStart.forEach((expected, i) => {
+            it(`returns ${expected} for ${c.points[i]}`, function () {
+              const result = PointIntervalRelation.pointIntervalRelation(c.points[i], unknownStart)
+              result.should.equal(expected)
+            })
+          })
+          it(`returns FULL for \`undefined\``, function () {
+            const result = PointIntervalRelation.pointIntervalRelation(undefined, unknownStart)
+            result.should.equal(FULL)
+          })
+        })
+      })
+    })
+  })
 })
