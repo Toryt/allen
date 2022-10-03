@@ -13,28 +13,35 @@ import assert, { ok } from 'assert'
 
 /**
  * Support for reasoning about relations between time points and time intervals, and constraints on those
- * relationships. **We strongly advise to use this class when working with relations between time points and time
+ * relationships.
+ *
+ * **We strongly advise to use this class when working with relations between time points and time
  * intervals. Reasoning about relations between time points and time intervals is treacherously difficult.**
  *
  * ### About the code
  *
- * We have chosen to introduce a full-featured type for working with point-interval relations, to make encapsulation as
- * good as possible. This has a slight performance overhead, but we believe that this is worth it, considering the
+ * We have chosen to introduce a full-featured type for working with point – interval relations, to make encapsulation
+ * as good as possible. This has a slight performance overhead, but we believe that this is worth it, considering the
  * immense complexity of reasoning about relations between points in time and time intervals.
  *
- * Point-interval relations follow the ‘32-fold singleton pattern’. All possible instances are created when this module
+ * Point – interval relations follow the ‘32-fold singleton pattern’. All possible instances are created when this module
  * is loaded, and it is impossible for a user to create new instances. This means that reference equality (‘`===`’) can
- * can be used to compare point-interval relations, Instances are to be obtained using the constants this module offers,
- * or using the combination methods {@link #or(PointIntervalRelation...)},
- * {@link #and(PointIntervalRelation...)}, {@link #compose(PointIntervalRelation, TimeIntervalRelation)}, and
- * {@link #min(PointIntervalRelation, PointIntervalRelation)}, and the unary method {@link #complement()}. Also,
- * a PointIntervalRelation can be determined [based on a point in time and a time
- * interval]{@link #pointIntervalRelation(Date, TimeInterval)}. {@link VALUES} lists all possible point-interval
- * relations.
+ * be used to compare point – interval relations, Instances are obtained using the constants this module offers, or
+ * using
+ *
+ * - the combination methods
+ *   - {@link or},
+ *   - {@link and},
+ *   - {@link min},
+ *   - {@link compose}, and // MUDO make instance method?
+ * - the unary method {@link complement}.
+ *
+ * A `PointIntervalRelation` can be determined based on a point in time and a time interval with {@link pointInterRelation}. // MUDO move to AllenRelation?
+ *
+ * {@link VALUES} lists all possible point – interval relations.
  *
  * All methods in this class are _O(n)_, i.e., work in constant time, although
- * {@link #compose(PointIntervalRelation, TimeIntervalRelation)} takes a significant longer constant time than the other
- * methods.
+ * {@link compose} takes a significant longer constant time than the other methods.
  */
 export class PointIntervalRelation {
   /* Implementation note:
@@ -47,46 +54,6 @@ export class PointIntervalRelation {
 
      The order of the basic relations in the bit pattern is important for some algorithms. There is some trickery
      involved. */
-
-  /*
-
-
-
-    /!*<section name="secondary relations">*!/
-    //------------------------------------------------------------------
-
-    /!**
-     * A non-basic time point-interval relation that is often handy to use, which expresses that a time point <var>t</var>
-     * and an interval <var>I</var> are concurrent in some way.
-     * Thus, <var>t</var> does <em>not</em> come before <var>I</var>, <var>t</var> is not the end time of <var>I</var>,
-     * and <var>t</var> does <em>not</em> come after <var>I</var> (remember that we define time intervals as right half-open).
-     *!/
-    @Invars(@Expression("CONCURS_WITH == or(BEGINS, IN)"))
-    public final static PointIntervalRelation CONCURS_WITH = or(BEGINS, IN);
-
-    /!**
-     * A non-basic time point-interval relation that is often handy to use, which expresses that a time point <var>t</var>
-     * is earlier than an interval <var>I</var> ends:
-     * <pre>
-     *   (I.end != null) && (t &lt; I.end)
-     * </pre>.
-     * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-     *!/
-    @Invars(@Expression("BEFORE_END == or(BEFORE, BEGINS, IN)"))
-    public static final PointIntervalRelation BEFORE_END = or(BEFORE, BEGINS, IN);
-
-    /!**
-     * A non-basic time point-interval relation that is often handy to use, which expresses that a time point <var>t</var>
-     * is later than an interval <var>I</var> begins:
-     * <pre>
-     *   (I.begin != null) && (t &gt; I.begin)
-     * </pre>.
-     * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-     *!/
-    @Invars(@Expression("AFTER_BEGIN == or(IN, ENDS, AFTER)"))
-    public static final PointIntervalRelation AFTER_BEGIN = or(IN, ENDS, AFTER);
-
-    /!*</section>*!/
 
   /**
    * The main factory method for PointIntervalRelations. Although this is intended to create
@@ -212,13 +179,6 @@ public static PointIntervalRelation timePointIntervalRelation(Date t, TimeInterv
     }
     return result;
 }
-
-/!*</section>*!/
-
-
-
-/!*construction>*!/
-//------------------------------------------------------------------
 */
 
   /**
@@ -238,33 +198,9 @@ public static PointIntervalRelation timePointIntervalRelation(Date t, TimeInterv
     this.bitPattern = bitPattern
   }
 
-  public invariants: ((this: PointIntervalRelation) => boolean)[] = [
-    () => this.bitPattern >= EMPTY_BIT_PATTERN,
-    () => this.bitPattern <= FULL_BIT_PATTERN
-  ]
-
   public isBasic (): this is BasicPointIntervalRelation {
     return isBasicPointIntervalRelationBitPattern(this.bitPattern)
   }
-
-  /*
-/!*<section name="instance operations">*!/
-//------------------------------------------------------------------
-
-/!**
- * An ordinal for basic relations.
- *!/
-@Basic(pre    = @Expression("isBasic()"),
-    invars = {@Expression("result >= 0"), @Expression("result < 5")})
-public int basicRelationOrdinal() {
-    /!*
-     * This is the bit position, 0-based, in the 13-bit bit pattern, of the bit
-     * representing this as basic relation.
-     *!/
-    assert pre(isBasic());
-    return Integer.numberOfTrailingZeros($bitPattern);
-}
-*/
 
   /**
    * A measure about the uncertainty this point-interval relation expresses.
@@ -291,6 +227,41 @@ public int basicRelationOrdinal() {
       return NaN
     }
     return (count - 1) / (NR_OF_BITS - 1)
+  }
+
+  /**
+   * Is `this` implied by `gr`?
+   *
+   * In other words, when considering the relations as a set of basic relations, is `this` a superset of `gr`
+   * (considering equality as also acceptable)?
+   *
+   * @basic
+   * @pre !!gr
+   * @invar this.impliedBy(this)
+   * @invar !this.isBasic() || BASIC_RELATIONS.every(br => br === this || !this.impliedBy(br)),
+   * @returns BASIC_RELATIONS.every(br => !gr.impliedBy(br) || this.impliedBy(br))
+   */
+  impliedBy (gr: PointIntervalRelation): boolean {
+    ok(gr)
+    assert(gr instanceof PointIntervalRelation)
+
+    return (this.bitPattern & gr.bitPattern) === gr.bitPattern
+  }
+
+  /**
+   * Does `this` imply `gr`?
+   *
+   * In other words, when considering the relations as a set of basic relations, is `this` a subset of `gr` (considering
+   * equality as also acceptable)?
+   *
+   * @pre !!gr
+   * @returns gr.impliedBy(this)
+   */
+  implies (gr: PointIntervalRelation): boolean {
+    ok(gr)
+    assert(gr instanceof PointIntervalRelation)
+
+    return (gr.bitPattern & this.bitPattern) === this.bitPattern
   }
 
   /*
@@ -353,42 +324,6 @@ public int basicRelationOrdinal() {
  * <p>Note that it is exactly this counter-intuitivity that makes reasoning with time intervals so difficult.</p>
  *!/
 */
-
-  /**
-   * Is `this` implied by `gr`?
-   *
-   * In other words, when considering the relations as a set of basic relations, is `this` a superset of `gr`
-   * (considering equality as also acceptable)?
-   *
-   * @basic
-   * @pre !!gr
-   * @invar this.impliedBy(this)
-   * @invar !this.isBasic() || BASIC_RELATIONS.every(br => br === this || !this.impliedBy(br)),
-   * @returns BASIC_RELATIONS.every(br => !gr.impliedBy(br) || this.impliedBy(br))
-   */
-  impliedBy (gr: PointIntervalRelation): boolean {
-    ok(gr)
-    assert(gr instanceof PointIntervalRelation)
-
-    return (this.bitPattern & gr.bitPattern) === gr.bitPattern
-  }
-
-  /**
-   * Does `this` imply `gr`?
-   *
-   * In other words, when considering the relations as a set of basic relations, is `this` a subset of `gr` (considering
-   * equality as also acceptable)?
-   *
-   * @pre !!gr
-   * @returns gr.impliedBy(this)
-   */
-  implies (gr: PointIntervalRelation): boolean {
-    ok(gr)
-    assert(gr instanceof PointIntervalRelation)
-
-    return (gr.bitPattern & this.bitPattern) === this.bitPattern
-  }
-
   /**
    * @returns BASIC_RELATIONS.every(br => this.impliedBy(br) === !result.impliedBy(br))
    */
@@ -398,20 +333,6 @@ public int basicRelationOrdinal() {
      * this simply replaces 0 with 1 and 1 with 0.
      */
     return BasicPointIntervalRelation.VALUES[FULL_BIT_PATTERN ^ this.bitPattern]
-  }
-
-  /**
-   * @return BASIC_RELATIONS.every(br => result.impliedBy(br) ===this.impliedBy(br) || gr.impliedBy(br))
-   */
-  or (gr: PointIntervalRelation): PointIntervalRelation {
-    return BasicPointIntervalRelation.VALUES[this.bitPattern | gr.bitPattern]
-  }
-
-  /**
-   * @return BASIC_RELATIONS.every(br => result.impliedBy(br) ===this.impliedBy(br) && gr.impliedBy(br))
-   */
-  and (gr: PointIntervalRelation): PointIntervalRelation {
-    return BasicPointIntervalRelation.VALUES[this.bitPattern & gr.bitPattern]
   }
 
   /**
@@ -440,10 +361,6 @@ public int basicRelationOrdinal() {
     }, []).join('')})`
   }
 }
-
-// MUDO 'b b(repeated) i e (equal) a'
-//      replace ENDS with TERMINATES (t)
-//      replace BEGINS with COMMENCES (c)
 
 export const BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
 export type BasicPointIntervalRelationRepresentation = typeof BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[number]
