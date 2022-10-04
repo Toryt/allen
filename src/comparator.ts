@@ -18,6 +18,10 @@ function comparableComparator<T extends HasCompare> (t1: T, t2: T) {
 
 export type Comparable = number | string | Date | HasCompare
 
+export function isComparable (u: unknown): u is Comparable {
+  return ['number', 'string'].includes(typeof u) || u instanceof Date || isHasCompare(u)
+}
+
 function isArrayOf (u: unknown, type: string): boolean {
   return (
     Array.isArray(u) &&
