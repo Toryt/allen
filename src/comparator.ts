@@ -34,7 +34,7 @@ function isArrayOfDate (u: unknown): u is Date[] {
   )
 }
 
-function isArrayOfComparable (u: unknown): u is HasCompare[] {
+function isArrayOfHasCompare (u: unknown): u is HasCompare[] {
   return (
     Array.isArray(u) &&
     u.every((e: unknown) => e === undefined || isHasCompare(e)) &&
@@ -54,7 +54,7 @@ export function getComparator<T extends Comparable | undefined> (...t: T[]): Com
     return defaultComparator<string>
   } else if (isArrayOfDate(t)) {
     return defaultComparator<Date>
-  } else if (isArrayOfComparable(t)) {
+  } else if (isArrayOfHasCompare(t)) {
     return comparableComparator<HasCompare>
   } else {
     throw new Error('cannot determine a comparator: argument types are incompatible or all undefined')
