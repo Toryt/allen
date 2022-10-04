@@ -30,6 +30,7 @@ import {
 } from '../src/PointIntervalRelation'
 import 'should'
 import { Interval } from '../src/Interval'
+import { inspect } from 'util'
 
 function testBasicRelation (
   name: string,
@@ -194,7 +195,7 @@ describe('PointIntervalRelations', function () {
       BasicPointIntervalRelation.VALUES.forEach(gr2 => {
         const expected = BASIC_RELATIONS.every(br => !gr2.impliedBy(br) || gr1.impliedBy(br))
 
-        it(`should return ${gr1.toString()}.impliedBy(${gr2.toString()}) as ${expected}`, function () {
+        it(`should return ${gr1.toString()}.impliedBy(${gr2.toString()}) as ${expected.toString()}`, function () {
           gr1.impliedBy(gr2).should.equal(expected)
         })
       })
@@ -251,7 +252,7 @@ describe('PointIntervalRelations', function () {
   describe('#min', function () {
     BasicPointIntervalRelation.VALUES.forEach(pir1 => {
       BasicPointIntervalRelation.VALUES.forEach(pir2 => {
-        it(`${pir1}.min(${pir2}) has the basic relations of ${pir1} that are not implied by ${pir2}`, function () {
+        it(`${pir1.toString()}.min(${pir2.toString()}) has the basic relations of ${pir1.toString()} that are not implied by ${pir2.toString()}`, function () {
           const result = pir1.min(pir2)
           console.log(result.toString())
           BASIC_RELATIONS.forEach(br => result.impliedBy(br).should.equal(pir1.impliedBy(br) && !pir2.impliedBy(br)))
@@ -262,7 +263,7 @@ describe('PointIntervalRelations', function () {
   describe('or', function () {
     BasicPointIntervalRelation.VALUES.forEach(pir1 => {
       BasicPointIntervalRelation.VALUES.forEach(pir2 => {
-        it(`or(${pir1}, ${pir2}) has the basic relations of both`, function () {
+        it(`or(${pir1.toString()}, ${pir2.toString()}) has the basic relations of both`, function () {
           const args = [pir1, pir2]
           const result = or(...args)
           console.log(result.toString())
@@ -282,7 +283,7 @@ describe('PointIntervalRelations', function () {
   describe('and', function () {
     BasicPointIntervalRelation.VALUES.forEach(pir1 => {
       BasicPointIntervalRelation.VALUES.forEach(pir2 => {
-        it(`and(${pir1}, ${pir2}) has the common basic relations`, function () {
+        it(`and(${pir1.toString()}, ${pir2.toString()}) has the common basic relations`, function () {
           const args = [pir1, pir2]
           const result = and(...args)
           console.log(result.toString())
@@ -344,9 +345,23 @@ describe('PointIntervalRelations', function () {
           : PointIntervalRelation.pointIntervalRelation(t, i)
       }
 
-      describe(`${label} — [${interval.start}, ${interval.end}[`, function () {
+      function intervalToString (i: Interval<T>): string {
+        function valueToString (v: T | undefined): string {
+          if (typeof v === 'string') {
+            return v
+          }
+          if (typeof v === 'number' || v instanceof Date) {
+            return v.toString()
+          }
+          return inspect(v)
+        }
+
+        return `[${valueToString(i.start)}, ${valueToString(i.end)}[`
+      }
+
+      describe(`${label} — ${intervalToString(interval)}`, function () {
         expected.forEach((exp, i) => {
-          it(`returns ${exp} for ${points[i]}`, function () {
+          it(`returns ${exp.toString()} for ${inspect(points[i])}`, function () {
             const result = callIt(points[i], interval)
             result.should.equal(exp)
           })
