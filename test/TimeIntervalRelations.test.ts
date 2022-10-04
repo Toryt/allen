@@ -40,7 +40,6 @@ function testBasicRelation (
       visualAlias.should.equal(br)
     })
     it(`has ${letterAlias} as letter alias`, function () {
-      // @ts-ignore
       TimeIntervalRelation[letterAlias].should.equal(br)
     })
   })

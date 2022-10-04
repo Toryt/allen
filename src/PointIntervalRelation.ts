@@ -241,7 +241,7 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
   uncertainty (): number {
     function bitCount (n: number): number {
       let count = 0
-      while (n) {
+      while (n > 0) {
         n &= n - 1
         count++
       }

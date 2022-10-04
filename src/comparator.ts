@@ -5,14 +5,14 @@ function defaultComparator<T extends number | string | Date> (t1: T, t2: T): num
 }
 
 export interface HasCompare {
-  compare(other: this): number
+  compare: (other: this) => number
 }
 
 export function isHasCompare (t: unknown): t is HasCompare {
   return typeof t === 'object' && t !== null && typeof (t as Partial<HasCompare>).compare === 'function'
 }
 
-function comparableComparator<T extends HasCompare> (t1: T, t2: T) {
+function comparableComparator<T extends HasCompare> (t1: T, t2: T): number {
   return t1.compare(t2)
 }
 
@@ -22,10 +22,18 @@ export function isComparable (u: unknown): u is Comparable {
   return ['number', 'string'].includes(typeof u) || u instanceof Date || isHasCompare(u)
 }
 
-function isArrayOf (u: unknown, type: string): boolean {
+function isArrayOfNumber (u: unknown): u is number[] {
   return (
     Array.isArray(u) &&
-    u.every((e: unknown) => e === undefined || typeof e === type) &&
+    u.every((e: unknown) => e === undefined || typeof e === 'number') &&
+    u.some((e: unknown) => e !== undefined)
+  )
+}
+
+function isArrayOfString (u: unknown): u is string[] {
+  return (
+    Array.isArray(u) &&
+    u.every((e: unknown) => e === undefined || typeof e === 'string') &&
     u.some((e: unknown) => e !== undefined)
   )
 }
@@ -46,15 +54,15 @@ function isArrayOfHasCompare (u: unknown): u is HasCompare[] {
   )
 }
 
-export function getComparator (...t: (number | undefined)[]): Comparator<number>
-export function getComparator (...t: (string | undefined)[]): Comparator<string>
-export function getComparator (...t: (Date | undefined)[]): Comparator<Date>
-export function getComparator<T extends HasCompare> (...t: (T | undefined)[]): Comparator<T>
-export function getComparator (...t: (unknown | undefined)[]): never
+export function getComparator (...t: Array<number | undefined>): Comparator<number>
+export function getComparator (...t: Array<string | undefined>): Comparator<string>
+export function getComparator (...t: Array<Date | undefined>): Comparator<Date>
+export function getComparator<T extends HasCompare> (...t: Array<T | undefined>): Comparator<T>
+export function getComparator (...t: Array<unknown | undefined>): never
 export function getComparator<T extends Comparable | undefined> (...t: T[]): Comparator<any> {
-  if (isArrayOf(t, 'number')) {
+  if (isArrayOfNumber(t)) {
     return defaultComparator<number>
-  } else if (isArrayOf(t, 'string')) {
+  } else if (isArrayOfString(t)) {
     return defaultComparator<string>
   } else if (isArrayOfDate(t)) {
     return defaultComparator<Date>

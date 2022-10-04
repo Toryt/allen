@@ -47,7 +47,7 @@ function testBasicRelation (
     it(`has ${ordinal} as ordinal`, function () {
       pir.ordinal().should.equal(ordinal)
     })
-    it(`has an integer ordinal [0, 5[`, function () {
+    it('has an integer ordinal [0, 5[', function () {
       const o = pir.ordinal()
       Number.isInteger(o).should.be.true()
       o.should.be.greaterThanOrEqual(0)
@@ -159,7 +159,7 @@ describe('PointIntervalRelations', function () {
     BasicPointIntervalRelation.VALUES.forEach(pir => {
       if (pir !== EMPTY) {
         const expected = BASIC_RELATIONS.reduce((acc, br) => (br.implies(pir) ? acc + 1 : acc), -1) / 4
-        it(`${pir} has uncertainty ${expected}`, function () {
+        it(`${pir.toString()} has uncertainty ${expected}`, function () {
           pir.uncertainty().should.equal(expected)
         })
       }
@@ -168,11 +168,11 @@ describe('PointIntervalRelations', function () {
   describe('#impliedBy', function () {
     BasicPointIntervalRelation.VALUES.forEach(gr => {
       if (gr === EMPTY) {
-        it(`EMPTY is implied by itself`, function () {
+        it('EMPTY is implied by itself', function () {
           EMPTY.impliedBy(gr).should.be.true()
         })
       } else {
-        it(`EMPTY is not implied by ${gr}`, function () {
+        it(`EMPTY is not implied by ${gr.toString()}`, function () {
           EMPTY.impliedBy(gr).should.be.false()
         })
       }
@@ -194,7 +194,7 @@ describe('PointIntervalRelations', function () {
       BasicPointIntervalRelation.VALUES.forEach(gr2 => {
         const expected = BASIC_RELATIONS.every(br => !gr2.impliedBy(br) || gr1.impliedBy(br))
 
-        it(`should return ${gr1}.impliedBy(${gr2}) as ${expected}`, function () {
+        it(`should return ${gr1.toString()}.impliedBy(${gr2.toString()}) as ${expected}`, function () {
           gr1.impliedBy(gr2).should.equal(expected)
         })
       })
@@ -202,7 +202,7 @@ describe('PointIntervalRelations', function () {
   })
   describe('#implies', function () {
     BasicPointIntervalRelation.VALUES.forEach(gr => {
-      it(`EMPTY implies ${gr}`, function () {
+      it(`EMPTY implies ${gr.toString()}`, function () {
         EMPTY.implies(gr).should.be.true()
       })
     })
@@ -227,7 +227,7 @@ describe('PointIntervalRelations', function () {
     })
     BasicPointIntervalRelation.VALUES.forEach(gr1 => {
       BasicPointIntervalRelation.VALUES.forEach(gr2 => {
-        it(`${gr1}.implies(${gr2}) === ${gr2}.impliedBy(${gr1})`, function () {
+        it(`${gr1.toString()}.implies(${gr2.toString()}) === ${gr2.toString()}.impliedBy(${gr1.toString()})`, function () {
           gr1.implies(gr2).should.equal(gr2.impliedBy(gr1))
         })
       })
@@ -235,14 +235,14 @@ describe('PointIntervalRelations', function () {
   })
   describe('#complement', function () {
     BasicPointIntervalRelation.VALUES.forEach(pir => {
-      it(`the complement of ${pir} is implied by the basic relations that are not implied by it`, function () {
+      it(`the complement of ${pir.toString()} is implied by the basic relations that are not implied by it`, function () {
         const result = pir.complement()
         console.log(result.toString())
         BASIC_RELATIONS.forEach(br => {
           pir.impliedBy(br).should.equal(!result.impliedBy(br))
         })
       })
-      it(`the complement of the complement if ${pir} is ${pir}`, function () {
+      it(`the complement of the complement if ${pir.toString()} is ${pir.toString()}`, function () {
         const result = pir.complement().complement()
         result.should.equal(pir)
       })
@@ -334,8 +334,8 @@ describe('PointIntervalRelations', function () {
       expected: PointIntervalRelation[],
       compare?: (a1: T, a2: T) => number
     ): void {
-      function callIt<T> (t: T | undefined, i: Interval<T>) {
-        return compare
+      function callIt<T> (t: T | undefined, i: Interval<T>): PointIntervalRelation {
+        return compare != null
           ? PointIntervalRelation.pointIntervalRelation(
               t as Parameters<typeof compare>[0],
               (i as unknown) as Interval<Parameters<typeof compare>[0]>,
@@ -351,7 +351,7 @@ describe('PointIntervalRelations', function () {
             result.should.equal(exp)
           })
         })
-        it(`returns FULL for \`undefined\``, function () {
+        it('returns FULL for `undefined`', function () {
           const result = callIt(undefined, interval)
           result.should.equal(FULL)
         })
