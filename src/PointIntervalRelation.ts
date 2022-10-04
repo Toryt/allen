@@ -11,7 +11,7 @@ import {
 } from './pointIntervalRelationBitPattern'
 import assert, { ok } from 'assert'
 import { Interval } from './Interval'
-import { Comparable, Comparator, getComparator } from './comparator'
+import { Comparator, getComparator } from './comparator'
 
 /**
  * Support for reasoning about relations between time points and time intervals, and constraints on those
@@ -165,11 +165,8 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
    * `undefined` as start or end of `i` is considered as ‘unknown’, and thus is not used to restrict the relation more,
    * leaving it with more {@link uncertainty}.
    */
-  static pointIntervalRelation<T extends Comparable> (
-    t: T | undefined,
-    i: Interval<T>,
-    compare?: Comparator<T>
-  ): PointIntervalRelation {
+  static pointIntervalRelation<T> (t: T | undefined, i: Interval<T>, compare?: Comparator<T>): PointIntervalRelation {
+    // IDEA for signature: there must be a comparator if T is not Comparable
     if (t === undefined) {
       return FULL
     }

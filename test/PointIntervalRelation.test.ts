@@ -29,6 +29,7 @@ import {
   and
 } from '../src/PointIntervalRelation'
 import 'should'
+import { Interval } from '../src/Interval'
 
 function testBasicRelation (
   name: string,
@@ -317,88 +318,86 @@ describe('PointIntervalRelations', function () {
       }
     }
 
-    const cases = [
-      { type: 'number', points: fivePoints },
-      { type: 'string', points: ['a smallest', 'b less small', 'c medium', 'd larger', 'e largest'] },
-      {
-        type: 'Date',
-        points: [
-          new Date(2006, 9, 3, 19, 49, 34, 848),
-          new Date(2011, 9, 3, 19, 49, 34, 848),
-          new Date(2015, 9, 3, 19, 49, 34, 848),
-          new Date(2018, 9, 3, 19, 49, 34, 848),
-          new Date(2022, 9, 3, 19, 49, 34, 848)
-        ]
-      },
-      {
-        type: 'HasCompare',
-        points: fivePoints.map(p => new SomethingToCompare(p))
+    function generatePointIntervalRelationTests<T> (
+      label: string,
+      interval: Interval<T>,
+      points: T[],
+      expected: PointIntervalRelation[],
+      compare?: (a1: T, a2: T) => number
+    ): void {
+      function callIt<T> (t: T | undefined, i: Interval<T>) {
+        return compare
+          ? PointIntervalRelation.pointIntervalRelation(
+              t as Parameters<typeof compare>[0],
+              (i as unknown) as Interval<Parameters<typeof compare>[0]>,
+              compare
+            )
+          : PointIntervalRelation.pointIntervalRelation(t, i)
       }
-      // {
-      //   type: 'compare',
-      //   points: fivePoints.map(p => [p]),
-      //   comparator: (c1: number[], c2: number[]): number => (c1[0] < c2[0] ? -1 : c1[0] > c2[0] ? +1 : 0)
-      // }
-    ]
 
-    cases.forEach(c => {
-      describe(c.type, function () {
-        const fullyQuantified = { start: c.points[1], end: c.points[3] }
-        const expectedWithFullyQuantified = [BEFORE, BEGINS, IN, ENDS, AFTER]
-
-        describe(`fully qualified — [${fullyQuantified.start}, ${fullyQuantified.end}[`, function () {
-          expectedWithFullyQuantified.forEach((expected, i) => {
-            it(`returns ${expected} for ${c.points[i]}`, function () {
-              const result = PointIntervalRelation.pointIntervalRelation(c.points[i], fullyQuantified)
-              result.should.equal(expected)
-            })
-          })
-          it(`returns FULL for \`undefined\``, function () {
-            const result = PointIntervalRelation.pointIntervalRelation(undefined, fullyQuantified)
-            result.should.equal(FULL)
+      describe(`${label} — [${interval.start}, ${interval.end}[`, function () {
+        expected.forEach((exp, i) => {
+          it(`returns ${exp} for ${points[i]}`, function () {
+            const result = callIt(points[i], interval)
+            result.should.equal(exp)
           })
         })
-        const unknownEnd = { start: c.points[1], end: undefined }
-        const expectedWithUnknownEnd = [
-          BEFORE,
-          BEGINS,
-          PointIntervalRelation.relation('ita'),
-          PointIntervalRelation.relation('ita'),
-          PointIntervalRelation.relation('ita')
-        ]
-        describe(`unkown end — [${unknownEnd.start}, ${unknownEnd.end}[`, function () {
-          expectedWithUnknownEnd.forEach((expected, i) => {
-            it(`returns ${expected} for ${c.points[i]}`, function () {
-              const result = PointIntervalRelation.pointIntervalRelation(c.points[i], unknownEnd)
-              result.should.equal(expected)
-            })
-          })
-          it(`returns FULL for \`undefined\``, function () {
-            const result = PointIntervalRelation.pointIntervalRelation(undefined, unknownEnd)
-            result.should.equal(FULL)
-          })
-        })
-        const unknownStart = { start: undefined, end: c.points[3] }
-        const expectedWithUnknownStart = [
-          PointIntervalRelation.relation('bci'),
-          PointIntervalRelation.relation('bci'),
-          PointIntervalRelation.relation('bci'),
-          ENDS,
-          AFTER
-        ]
-        describe(`unkown start — [${unknownStart.start}, ${unknownStart.end}[`, function () {
-          expectedWithUnknownStart.forEach((expected, i) => {
-            it(`returns ${expected} for ${c.points[i]}`, function () {
-              const result = PointIntervalRelation.pointIntervalRelation(c.points[i], unknownStart)
-              result.should.equal(expected)
-            })
-          })
-          it(`returns FULL for \`undefined\``, function () {
-            const result = PointIntervalRelation.pointIntervalRelation(undefined, unknownStart)
-            result.should.equal(FULL)
-          })
+        it(`returns FULL for \`undefined\``, function () {
+          const result = callIt(undefined, interval)
+          result.should.equal(FULL)
         })
       })
-    })
+    }
+
+    function generateAllPointIntervalRelationTests<T> (
+      label: string,
+      points: T[],
+      compare?: (a1: T, a2: T) => number
+    ): void {
+      describe(label, function () {
+        const ita = PointIntervalRelation.relation('ita')
+        const bci = PointIntervalRelation.relation('bci')
+        generatePointIntervalRelationTests(
+          'fully qualified',
+          { start: points[1], end: points[3] },
+          points,
+          [BEFORE, BEGINS, IN, ENDS, AFTER],
+          compare
+        )
+        generatePointIntervalRelationTests(
+          'unkown until',
+          { start: points[1], end: undefined },
+          points,
+          [BEFORE, BEGINS, ita, ita, ita],
+          compare
+        )
+        generatePointIntervalRelationTests(
+          'unknown from',
+          { start: undefined, end: points[3] },
+          points,
+          [bci, bci, bci, ENDS, AFTER],
+          compare
+        )
+      })
+    }
+
+    generateAllPointIntervalRelationTests('number', fivePoints)
+    generateAllPointIntervalRelationTests('string', ['a smallest', 'b less small', 'c medium', 'd larger', 'e largest'])
+    generateAllPointIntervalRelationTests('Date', [
+      new Date(2006, 9, 3, 19, 49, 34, 848),
+      new Date(2011, 9, 3, 19, 49, 34, 848),
+      new Date(2015, 9, 3, 19, 49, 34, 848),
+      new Date(2018, 9, 3, 19, 49, 34, 848),
+      new Date(2022, 9, 3, 19, 49, 34, 848)
+    ])
+    generateAllPointIntervalRelationTests(
+      'HasCompare',
+      fivePoints.map(p => new SomethingToCompare(p))
+    )
+    generateAllPointIntervalRelationTests(
+      'compare',
+      fivePoints.map(p => [p]),
+      (c1: number[], c2: number[]): number => (c1[0] < c2[0] ? -1 : c1[0] > c2[0] ? +1 : 0)
+    )
   })
 })
