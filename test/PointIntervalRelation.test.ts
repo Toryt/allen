@@ -299,6 +299,15 @@ describe('PointIntervalRelations', function () {
       result.should.equal(EMPTY)
     })
   })
+  describe('relation', function () {
+    BasicPointIntervalRelation.VALUES.forEach(pir => {
+      const representation = pir.toString()
+      it(`recognizes ${representation} correctly`, function () {
+        const result = PointIntervalRelation.relation(representation)
+        result.should.equal(pir)
+      })
+    })
+  })
   describe('pointIntervalRelation', function () {
     const fivePoints = [-6, -4.983458, -1, 2, Math.PI]
 
