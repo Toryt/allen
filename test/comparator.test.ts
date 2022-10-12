@@ -10,7 +10,7 @@ interface Case<T> {
   larger: T
 }
 
-const cases: Case<unknown>[] = [
+const cases: Array<Case<unknown>> = [
   { label: 'number', smaller: -4, larger: Math.PI },
   { label: 'number with -∞', smaller: Number.NEGATIVE_INFINITY, larger: Math.PI },
   { label: 'number with +∞', smaller: -4, larger: Number.POSITIVE_INFINITY },
@@ -38,21 +38,21 @@ describe('comparator', function () {
           ltComparator(c.smaller, c.larger).should.be.lessThan(0)
         })
         it(`returns zero when the first argument is equal to the second (${inspect(c.smaller)})`, function () {
+          /* prettier-ignore */
           const t =
             c.smaller instanceof Date
               ? new Date(c.smaller.getTime())
               : c.smaller instanceof Number
-              ? Number(c.smaller.valueOf())
-              : c.smaller instanceof BigInt
-              ? BigInt(c.smaller.valueOf())
-              : c.smaller instanceof String
-              ? String(c.smaller.valueOf())
-              : c.smaller instanceof Boolean
-              ? Boolean(c.smaller.valueOf())
-              : typeof c.smaller === 'object'
-              ? { ...c.smaller }
-              : c.smaller
-          console.log(inspect(t))
+                ? Number(c.smaller.valueOf())
+                : c.smaller instanceof BigInt
+                  ? BigInt(c.smaller.valueOf())
+                  : c.smaller instanceof String
+                    ? String(c.smaller.valueOf())
+                    : c.smaller instanceof Boolean
+                      ? Boolean(c.smaller.valueOf())
+                      : typeof c.smaller === 'object'
+                        ? { ...c.smaller }
+                        : c.smaller
           ltComparator(t, t).should.equal(0)
         })
         it(`returns a positive number when the first argument (${inspect(

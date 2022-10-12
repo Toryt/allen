@@ -1,10 +1,10 @@
-export function arePointsOfSameType (...p: unknown[]) {
+export function arePointsOfSameType (...p: unknown[]): boolean {
   if (!Array.isArray(p)) {
     return false
   }
   const { result } = p.reduce(
     ({ type, result }, e) => {
-      if (!result || Number.isNaN(e) || typeof e === 'symbol') {
+      if (result === false || Number.isNaN(e) || typeof e === 'symbol') {
         return { type, result: false }
       }
       if (e === undefined || e === null) {
