@@ -90,15 +90,21 @@ What is left, is the comparison of `object`s (including arrays), and `symbol`s.
 
 `object`s and `symbol`s are coerced to `number`s, `bigint`s, or `string`s (by `@@toPrimitive()`, `valueOf()`,
 `toNumber()`, or`toString()` —
-[ECMAScript®2023 Language Specification; 7.2.13 IsLessThan (x, y, LeftFirst )](https://tc39.es/ecma262/#sec-islessthan)).
+[ECMAScript®2023 Language Specification; 7.2.13 IsLessThan (x, y, LeftFirst)](https://tc39.es/ecma262/#sec-islessthan)).
 This results in the expected primitive types, which behave intuitively, for wrapper objects (`Number`,
 `BigInt`,`String`, `Boolean`), and in `number` for `Date` (ms since epoch).
 
-All other `object`s or `symbol`s do produce a comparison result, but this is hardly intuitive, unless you explicitly
-code a `valueOf()` `toNumber()`, or `toString()` method.
+All other `object`s do produce a comparison result, but this is hardly intuitive, unless you explicitly code a
+`valueOf()` `toNumber()`, or `toString()` method. As a result of the coercion, all generic `objects`s are considered
+equal (both `a < b` and `b < a` return `false`). Arrays are also objects, and comparison “works”, but via string
+comparison. This gives weird results. E.g., `[1, 3] < [2, 3]` is `true`, but `[2] < [11]` is `false`.
 
-If you must use non-`Date` `object`s or `symbol`s as representations of points, we advise to make the comparison
-explicit with the optional `compareFn` parameter (see below).
+Generic `symbol`s fail with a `TypeError`. JavaScript tries to convert the `symbol` to a `number`, and that is not
+supported. It is a precondition that a point must never be a `symbol`. The library throws an exception when it
+encounters a `symbol` as a point.
+
+If you must use non-`Date` `object`s, arrays, or `symbol`s as representations of points, we advise to make the
+comparison explicit with the optional `compareFn` parameter (see below).
 
 ### Equality
 
