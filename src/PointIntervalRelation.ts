@@ -10,8 +10,9 @@ import {
   numberToPointIntervalRelationBitPattern
 } from './pointIntervalRelationBitPattern'
 import assert, { ok } from 'assert'
-import { Interval } from './Interval'
+import { Interval, isInterval } from './Interval'
 import { Comparator, ltComparator } from './comparator'
+import { arePointsOfSameType } from './util'
 
 /**
  * Support for reasoning about relations between time points and time intervals, and constraints on those
@@ -175,9 +176,11 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
    * `undefined` as start or end of `i` is considered as ‘unknown’, and thus is not used to restrict the relation more,
    * leaving it with more {@link uncertainty}.
    */
-  static pointIntervalRelation<T> (t: T | undefined, i: Interval<T>, compare?: Comparator<T>): PointIntervalRelation {
-    // IDEA for signature: there must be a comparator if T is not Comparable
-    if (t === undefined) {
+  static pointIntervalRelation<T> (t: T | undefined, i: Interval<T>, compareFn?: Comparator<T>): PointIntervalRelation {
+    assert(isInterval(i))
+    assert(arePointsOfSameType(t, i.start, i.end))
+
+    if (t === undefined || t === null) {
       return FULL
     }
     const comparator: Comparator<T> = compareFn ?? ltComparator
