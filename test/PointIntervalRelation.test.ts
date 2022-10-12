@@ -312,22 +312,6 @@ describe('PointIntervalRelations', function () {
   describe('pointIntervalRelation', function () {
     const fivePoints = [-6, -4.983458, -1, 2, Math.PI]
 
-    class SomethingToCompare {
-      public n: number
-
-      constructor (n: number) {
-        this.n = n
-      }
-
-      compare (other: SomethingToCompare): number {
-        return this.n < other.n ? -1 : this.n > other.n ? +1 : 0
-      }
-
-      toString (): string {
-        return `SomethingToCompare(${this.n})`
-      }
-    }
-
     function generatePointIntervalRelationTests<T> (
       label: string,
       interval: Interval<T>,
@@ -414,10 +398,6 @@ describe('PointIntervalRelations', function () {
       new Date(2018, 9, 3, 19, 49, 34, 848),
       new Date(2022, 9, 3, 19, 49, 34, 848)
     ])
-    generateAllPointIntervalRelationTests(
-      'HasCompare',
-      fivePoints.map(p => new SomethingToCompare(p))
-    )
     generateAllPointIntervalRelationTests(
       'compare',
       fivePoints.map(p => [p]),
