@@ -6,7 +6,7 @@ export interface Interval<T> {
 }
 
 export function isInterval (i: unknown): boolean {
-  if (typeof i === 'object' && i !== null) {
+  if (i === undefined || i === null || typeof i !== 'object') {
     return false
   }
 
