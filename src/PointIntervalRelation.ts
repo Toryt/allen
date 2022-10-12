@@ -11,7 +11,7 @@ import {
 } from './pointIntervalRelationBitPattern'
 import assert, { ok } from 'assert'
 import { Interval } from './Interval'
-import { Comparator, getComparator } from './comparator'
+import { Comparator, ltComparator } from './comparator'
 
 /**
  * Support for reasoning about relations between time points and time intervals, and constraints on those
@@ -180,7 +180,7 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
     if (t === undefined) {
       return FULL
     }
-    const comparator = compare ?? getComparator(t, i.start, i.end)
+    const comparator: Comparator<T> = compareFn ?? ltComparator
     let result = FULL
     if (i.start !== undefined) {
       const tToStart = comparator(t, i.start)
