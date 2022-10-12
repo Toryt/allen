@@ -3,20 +3,24 @@ export function arePointsOfSameType (...p: unknown[]): boolean {
     return false
   }
   const { result } = p.reduce(
-    ({ type, result }, e) => {
+    ({ firstWithType, result }, e) => {
       if (result === false || Number.isNaN(e) || typeof e === 'symbol') {
-        return { type, result: false }
+        return { firstWithType, result: false }
       }
       if (e === undefined || e === null) {
-        return { type, result }
+        return { firstWithType, result }
       }
-      if (type === undefined) {
-        const eType = typeof e
-        return { type: eType === 'object' ? e.constructor : eType, result }
+      if (firstWithType === undefined) {
+        return { typeDefining: e, result }
       }
-      return { type, result: (typeof type === 'string' && typeof e === type) || e instanceof type }
+      return {
+        firstWithType,
+        result:
+          typeof e === typeof firstWithType &&
+          (typeof firstWithType !== 'object' || e instanceof firstWithType.constructor)
+      }
     },
-    { type: undefined, result: true }
+    { typeDefining: undefined, result: true }
   )
   return result
 }
