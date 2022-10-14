@@ -1,26 +1,39 @@
+import assert from 'assert'
+
+interface Acc {
+  typeDefiner?: unknown
+  type?: TypeResult | undefined
+  result: boolean
+}
+
+// MUDO what about functions?
+
 export function arePointsOfSameType (...p: unknown[]): boolean {
-  if (!Array.isArray(p)) {
-    return false
-  }
   const { result } = p.reduce(
-    ({ firstWithType, result }, e) => {
+    ({ typeDefiner, result }: Acc, e: unknown): Acc => {
       if (result === false || Number.isNaN(e) || typeof e === 'symbol') {
-        return { firstWithType, result: false }
+        return { typeDefiner: typeDefiner, result: false }
       }
       if (e === undefined || e === null) {
-        return { firstWithType, result }
+        return { typeDefiner: typeDefiner, result }
       }
-      if (firstWithType === undefined) {
-        return { typeDefining: e, result }
+      if (typeDefiner === undefined) {
+        return { typeDefiner: e, result }
       }
-      return {
-        firstWithType,
-        result:
-          typeof e === typeof firstWithType &&
-          (typeof firstWithType !== 'object' || e instanceof firstWithType.constructor)
+      if (typeof typeDefiner !== 'object') {
+        return {
+          typeDefiner: typeDefiner,
+          result: typeof e === typeof typeDefiner
+        }
       }
+      assert(typeDefiner !== null)
+      if (typeDefiner instanceof e.constructor) {
+        // e is a supertype of firstWithType: switch
+        return { typeDefiner: e, result }
+      }
+      return { typeDefiner: typeDefiner, result: e instanceof typeDefiner.constructor }
     },
-    { typeDefining: undefined, result: true }
+    { result: true }
   )
   return result
 }
