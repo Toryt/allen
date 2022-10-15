@@ -1,9 +1,9 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { pointTypeOf, primitivePointTypes } from '../src/point'
-import { inspect } from 'util'
 import {
+  pointTypeOf,
+  primitivePointTypes,
   DefinitePoint,
   DefinitePointTypeFor,
   DefinitePointTypeRepresentation,
@@ -11,7 +11,8 @@ import {
   isPoint,
   Point,
   PointTypeFor
-} from '../lib2/point'
+} from '../src/point'
+import { inspect } from 'util'
 
 const notAPointCases = [NaN, Symbol('not a point')]
 const dontKnowCases = [undefined, null]
@@ -96,6 +97,11 @@ const objectCases = [
   new C()
 ]
 
+const pointCases = (notAPointCases as unknown[])
+  .concat(dontKnowCases)
+  .concat(primitiveCases)
+  .concat(objectCases)
+
 const pptsAsDefinitePointTypeRepresentations: readonly DefinitePointTypeRepresentation[] = primitivePointTypes
 const pointTypeRepresentations: DefinitePointTypeRepresentation[] = pptsAsDefinitePointTypeRepresentations.concat([
   Object,
@@ -104,6 +110,24 @@ const pointTypeRepresentations: DefinitePointTypeRepresentation[] = pptsAsDefini
   B,
   C
 ])
+
+const idiotPointTypeRepresentations = [
+  null,
+  'undefined',
+  'object',
+  'symbol',
+  'another string',
+  '',
+  43,
+  890623470896376978306924906437890634n,
+  true,
+  false,
+  Symbol('not a point type representation'),
+  {},
+  new A(),
+  [],
+  [1, 2, 3]
+]
 
 describe('point', function () {
   describe('primitivePointTypes', function () {
@@ -278,6 +302,18 @@ describe('point', function () {
           })
         })
       })
+      describe('idiot point types', function () {
+        idiotPointTypeRepresentations.forEach(iptr => {
+          describe(`with ${inspect(iptr)} as point type`, function () {
+            pointCases.forEach(c => {
+              it(`returns false for ${inspect(c)} with point type ${inspect(iptr)}`, function () {
+                // @ts-ignore TS does not allow this
+                isDefinitePoint(c, iptr).should.be.false()
+              })
+            })
+          })
+        })
+      })
     })
   })
   describe('isPoint', function () {
@@ -399,6 +435,18 @@ describe('point', function () {
                   console.log(typed)
                 })
               }
+            })
+          })
+        })
+      })
+      describe('idiot point types', function () {
+        idiotPointTypeRepresentations.forEach(iptr => {
+          describe(`with ${inspect(iptr)} as point type`, function () {
+            pointCases.forEach(c => {
+              it(`returns false for ${inspect(c)} with point type ${inspect(iptr)}`, function () {
+                // @ts-ignore TS does not allow this
+                isPoint(c, iptr).should.be.false()
+              })
             })
           })
         })
