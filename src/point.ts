@@ -45,19 +45,21 @@ export type DefinitePoint = typeof primitivePointTypes[number] | Object
 //   ? Constructor<T>
 //   : never
 
-export type DefinitePointTypeFor<T extends DefinitePointTypeRepresentation> = T extends 'number'
+export type DefinitePointTypeFor<
+  T extends DefinitePointTypeRepresentation
+> = /* prettier-ignore */ T extends 'number'
   ? number
   : T extends 'bigint'
-  ? bigint
-  : T extends 'string'
-  ? string
-  : T extends 'boolean'
-  ? boolean
-  : T extends 'function'
-  ? Function
-  : T extends Constructor<Object>
-  ? InstanceType<T>
-  : never
+    ? bigint
+    : T extends 'string'
+      ? string
+      : T extends 'boolean'
+        ? boolean
+        : T extends 'function'
+          ? Function
+          : T extends Constructor<Object>
+            ? InstanceType<T>
+            : never
 
 /**
  * _Dynamic representation_ of the type of a point, i.e., {@link DefinitePointTypeRepresentation} or
@@ -85,9 +87,9 @@ export type Point = DefinitePoint | undefined | null
 //
 export type PointTypeFor<T extends PointTypeRepresentation> = T extends DefinitePointTypeRepresentation
   ? DefinitePointTypeFor<T>
-  : T extends undefined
-  ? undefined | null
-  : never
+  : /* prettier-ignore */ T extends undefined
+    ? undefined | null
+    : never
 
 /**
  * Approximation of determining whether `u` is a {@link DefinitePointTypeRepresentation}.

@@ -176,7 +176,7 @@ describe('point', function () {
       idiotDefinitePointTypeRepresentations.forEach(iptr => {
         it(`returns false for ${inspect(iptr)}`, function () {
           isDefinitePointTypeRepresentation(iptr).should.be.false()
-          // @ts-ignore
+          // @ts-expect-error
           const typed: DefinitePointTypeRepresentation = iptr
           console.log(typed)
         })
@@ -228,10 +228,10 @@ describe('point', function () {
       })
       describe("don't know", function () {
         dontKnowCases.forEach(c => {
-          it(`returns false for ${c}, because it is indefinite`, function () {
+          it(`returns false for ${inspect(c)}, because it is indefinite`, function () {
             isDefinitePoint(c).should.be.false()
             // typescript forbids this assignment, since `c` is `undefined | null`, which is not a `DefinitePoint`
-            // @ts-ignore
+            // @ts-expect-error
             const typed: DefinitePoint = c
             console.log(typed)
           })
@@ -239,7 +239,7 @@ describe('point', function () {
       })
       describe('primitive or wrapped value', function () {
         primitiveCases.forEach(c => {
-          it(`returns true for primitive or wrapped value ${c}`, function () {
+          it(`returns true for primitive or wrapped value ${inspect(c)}`, function () {
             isDefinitePoint(c).should.be.true()
             // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint`
             const typed: DefinitePoint = c
@@ -280,10 +280,12 @@ describe('point', function () {
         pointTypeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             dontKnowCases.forEach(c => {
-              it(`returns false for ${c} with point type ${inspect(ptr)}, because it is indefinite`, function () {
+              it(`returns false for ${inspect(c)} with point type ${inspect(
+                ptr
+              )}, because it is indefinite`, function () {
                 isDefinitePoint(c, ptr).should.be.false()
                 // typescript forbids this assignment, since `c` is `undefined | null`, which is not a `DefinitePoint`
-                // @ts-ignore
+                // @ts-expect-error
                 const typed: DefinitePoint = c
                 console.log(typed)
               })
@@ -296,14 +298,18 @@ describe('point', function () {
           describe(`point type ${inspect(ptr)}`, function () {
             primitiveCases.forEach(c => {
               if (typeof c === ptr || (typeof c === 'function' && typeof ptr === 'function' && c instanceof ptr)) {
-                it(`returns true for primitive or wrapped value ${c} with point type ${inspect(ptr)}`, function () {
+                it(`returns true for primitive or wrapped value ${inspect(c)} with point type ${inspect(
+                  ptr
+                )}`, function () {
                   isDefinitePoint(c, ptr).should.be.true()
                   // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint`
                   const typed: DefinitePointTypeFor<typeof ptr> = c
                   console.log(typed)
                 })
               } else {
-                it(`returns false for primitive or wrapped value ${c} with point type ${inspect(ptr)}`, function () {
+                it(`returns false for primitive or wrapped value ${inspect(c)} with point type ${inspect(
+                  ptr
+                )}`, function () {
                   isDefinitePoint(c, ptr).should.be.false()
                   // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint`
                   // if we do not add more static information about `ptr`, TS cannot do better
@@ -344,7 +350,7 @@ describe('point', function () {
           describe(`with ${inspect(iptr)} as point type`, function () {
             pointCases.forEach(c => {
               it(`returns false for ${inspect(c)} with point type ${inspect(iptr)}`, function () {
-                // @ts-ignore TS does not allow this
+                // @ts-expect-error : TS does not allow this
                 isDefinitePoint(c, iptr).should.be.false()
               })
             })
@@ -368,7 +374,7 @@ describe('point', function () {
       })
       describe("don't know", function () {
         dontKnowCases.forEach(c => {
-          it(`returns true for ${c}, because it is indefinite`, function () {
+          it(`returns true for ${inspect(c)}, because it is indefinite`, function () {
             isPoint(c).should.be.true()
             // typescript allows this assignment, since `c` is `undefined | null`, which is a `Point`
             const typed: Point = c
@@ -378,7 +384,7 @@ describe('point', function () {
       })
       describe('primitive or wrapped value', function () {
         primitiveCases.forEach(c => {
-          it(`returns true for primitive or wrapped value ${c}`, function () {
+          it(`returns true for primitive or wrapped value ${inspect(c)}`, function () {
             isPoint(c).should.be.true()
             // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint`
             const typed: Point = c
@@ -419,7 +425,9 @@ describe('point', function () {
         pointTypeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             dontKnowCases.forEach(c => {
-              it(`returns true for ${c} with point type ${inspect(ptr)}, because it is indefinite`, function () {
+              it(`returns true for ${inspect(c)} with point type ${inspect(
+                ptr
+              )}, because it is indefinite`, function () {
                 isPoint(c, ptr).should.be.true()
                 // typescript allows this assignment, since `c` is `undefined | null`, which is a `Point`
                 const typed: Point = c
@@ -434,14 +442,18 @@ describe('point', function () {
           describe(`point type ${inspect(ptr)}`, function () {
             primitiveCases.forEach(c => {
               if (typeof c === ptr || (typeof c === 'function' && typeof ptr === 'function' && c instanceof ptr)) {
-                it(`returns true for primitive or wrapped value ${c} with point type ${inspect(ptr)}`, function () {
+                it(`returns true for primitive or wrapped value ${inspect(c)} with point type ${inspect(
+                  ptr
+                )}`, function () {
                   isPoint(c, ptr).should.be.true()
                   // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint`
                   const typed: PointTypeFor<typeof ptr> = c
                   console.log(typed)
                 })
               } else {
-                it(`returns false for primitive or wrapped value ${c} with point type ${inspect(ptr)}`, function () {
+                it(`returns false for primitive or wrapped value ${inspect(c)} with point type ${inspect(
+                  ptr
+                )}`, function () {
                   isPoint(c, ptr).should.be.false()
                   // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint` (although not of the expected type)
                   // if we do not add more static information about `ptr`, TS cannot do better
@@ -481,7 +493,7 @@ describe('point', function () {
           describe(`with ${inspect(iptr)} as point type`, function () {
             pointCases.forEach(c => {
               it(`returns false for ${inspect(c)} with point type ${inspect(iptr)}`, function () {
-                // @ts-ignore TS does not allow this
+                // @ts-expect-error: TS does not allow this
                 isPoint(c, iptr).should.be.false()
               })
             })
