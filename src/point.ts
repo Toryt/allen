@@ -27,6 +27,21 @@ export type DefinitePointTypeRepresentation = typeof primitivePointTypes[number]
  */
 export type DefinitePoint = typeof primitivePointTypes[number] | Object
 
+// TODO remove when not really used
+// export type DefinitePointTypeRepresentationOf<T extends DefinitePoint> = T extends number
+//   ? 'number'
+//   : T extends bigint
+//   ? 'bigint'
+//   : T extends string
+//   ? 'string'
+//   : T extends boolean
+//   ? 'boolean'
+//   : T extends Function
+//   ? 'function'
+//   : T extends Object
+//   ? Constructor<T>
+//   : never
+
 export type DefinitePointTypeFor<T extends DefinitePointTypeRepresentation> = T extends 'number'
   ? number
   : T extends 'bigint'
@@ -58,11 +73,18 @@ export type PointTypeRepresentation = DefinitePointTypeRepresentation | undefine
  */
 export type Point = DefinitePoint | undefined | null
 
-export type PointTypeFor<T extends PointTypeRepresentation> = T extends DefinitePointTypeRepresentation
-  ? DefinitePointTypeFor<T>
-  : T extends undefined
-  ? undefined | null
-  : never
+// TODO remove when not really used
+// export type PointTypeRepresentationOf<T extends Point> = T extends DefinitePoint
+//   ? DefinitePointTypeRepresentationOf<T>
+//   : T extends undefined | null
+//   ? undefined
+//   : never
+//
+// export type PointTypeFor<T extends PointTypeRepresentation> = T extends DefinitePointTypeRepresentation
+//   ? DefinitePointTypeFor<T>
+//   : T extends undefined
+//   ? undefined | null
+//   : never
 
 /**
  * The dynamic representation of the precise point type.
