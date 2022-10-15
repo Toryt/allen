@@ -13,6 +13,7 @@ import {
   PointTypeFor
 } from '../src/point'
 import { inspect } from 'util'
+import { isDefinitePointTypeRepresentation } from '../lib2/point'
 
 const notAPointCases = [NaN, Symbol('not a point')]
 const dontKnowCases = [undefined, null]
@@ -111,6 +112,18 @@ const pointTypeRepresentations: DefinitePointTypeRepresentation[] = pptsAsDefini
   C
 ])
 
+function notAConstructor1 (): string {
+  return 'not a constructor 1'
+}
+
+notAConstructor1.prototype.constructor = A
+
+function notAConstructor2 (): string {
+  return 'not a constructor 2'
+}
+
+notAConstructor2.prototype = Object.prototype
+
 const idiotPointTypeRepresentations = [
   null,
   'undefined',
@@ -126,7 +139,10 @@ const idiotPointTypeRepresentations = [
   {},
   new A(),
   [],
-  [1, 2, 3]
+  [1, 2, 3],
+  notAConstructor1,
+  notAConstructor2,
+  () => 43
 ]
 
 describe('point', function () {
@@ -143,6 +159,27 @@ describe('point', function () {
     notPrimitivePointTypes.forEach(nppt => {
       it(`${nppt} is not a primitive point type`, function () {
         pptsAsString.includes(nppt).should.be.false()
+      })
+    })
+  })
+  describe('isDefinitePointTypeRepresentation', function () {
+    describe('yes', function () {
+      pointTypeRepresentations.forEach(ptr => {
+        it(`returns true for ${inspect(ptr)}`, function () {
+          isDefinitePointTypeRepresentation(ptr).should.be.true()
+          const typed: DefinitePointTypeRepresentation = ptr
+          console.log(typed)
+        })
+      })
+    })
+    describe('idiot point types', function () {
+      idiotPointTypeRepresentations.forEach(iptr => {
+        it(`returns false for ${inspect(iptr)}`, function () {
+          isDefinitePointTypeRepresentation(iptr).should.be.false()
+          // @ts-ignore
+          const typed: DefinitePointTypeRepresentation = iptr
+          console.log(typed)
+        })
       })
     })
   })

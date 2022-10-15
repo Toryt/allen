@@ -90,6 +90,20 @@ export type PointTypeFor<T extends PointTypeRepresentation> = T extends Definite
   : never
 
 /**
+ * Approximation of determining whether `u` is a {@link DefinitePointTypeRepresentation}.
+ *
+ * This is not a full type guard, since we can determine it is a string that describes a primitive point type (see
+ * {@link primitivePointTypes}), but we can only determine dynamically in JS that `u` is a function, and not necessarily
+ * a constructor according to TS, although we can come close.
+ */
+export function isDefinitePointTypeRepresentation (u: unknown): boolean {
+  return (
+    ((primitivePointTypes as unknown) as unknown[]).includes(u) ||
+    (typeof u === 'function' && 'prototype' in u && 'constructor' in u.prototype && u.prototype.constructor === u)
+  )
+}
+
+/**
  * The dynamic representation of the precise point type.
  *
  * Returns `undefined` when `p` is `undefined` or `null`, expressing “don't know 🤷”.
