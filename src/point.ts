@@ -37,6 +37,14 @@ export type DefinitePoint = typeof primitivePointTypes[number] | Object
 export type PointTypeRepresentation = DefinitePointTypeRepresentation | undefined
 
 /**
+ * The super type of all possible points, i.e., {@link DefinitePoint}s, or `undefined` or `null`,
+ * to express “don't know 🤷”.
+ *
+ * We advise against using `null`. Use `undefined` to express “don't know 🤷”.
+ */
+export type Point = DefinitePoint | undefined | null
+
+/**
  * The dynamic representation of the precise point type.
  *
  * Returns `undefined` when `p` is `undefined` or `null`, expressing “don't know 🤷”.
@@ -70,3 +78,15 @@ export function isDefinitePoint (u: unknown, pointType?: DefinitePointTypeRepres
   )
 }
 
+/**
+ * `u` is a {@link Point}. `undefined` or `null` express “don't know 🤷”.
+ */
+export function isPoint (u: unknown): u is Point
+
+export function isPoint (u: unknown, pointType?: DefinitePointTypeRepresentation): boolean {
+  const tOfU = pointTypeOf(u)
+  return (
+    tOfU !== false &&
+    (pointType === undefined || tOfU === pointType || (typeof tOfU === 'function' && u instanceof tOfU))
+  )
+}

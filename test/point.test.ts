@@ -3,7 +3,7 @@
 import should from 'should'
 import { pointTypeOf, primitivePointTypes } from '../src/point'
 import { inspect } from 'util'
-import { DefinitePoint, isDefinitePoint } from '../lib2/point'
+import { DefinitePoint, isDefinitePoint, isPoint, Point } from '../lib2/point'
 
 const notAPointCases = [NaN, Symbol('not a point')]
 const dontKnowCases = [undefined, null]
@@ -130,6 +130,44 @@ describe('point', function () {
           isDefinitePoint(c).should.be.true()
           // typescript allows this assignment, since `c` is an object, which is a `DefinitePoint`
           const typed: DefinitePoint = c
+          console.log(typed)
+        })
+      })
+    })
+    describe('with point type', function () {})
+  })
+  describe('isPoint', function () {
+    describe('without point type', function () {
+      notAPointCases.forEach(c => {
+        it(`returns false for ${inspect(c)}, because it is not a point`, function () {
+          isPoint(c).should.be.false()
+          // MUDO typescript should forbid this assignment, since `c` can be `symbol`, which is not a `DefinitePoint`
+          //      It cannot help us with NaN, but it should with `symbol`
+          const typed: Point = c
+          console.log(typed)
+        })
+      })
+      dontKnowCases.forEach(c => {
+        it(`returns true for ${c}, because it is indefinite`, function () {
+          isPoint(c).should.be.true()
+          // typescript allows this assignment, since `c` is `undefined | null`, which is a `Point`
+          const typed: Point = c
+          console.log(typed)
+        })
+      })
+      primitiveCases.forEach(c => {
+        it(`returns true for primitive or wrapped value ${c}`, function () {
+          isPoint(c).should.be.true()
+          // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint`
+          const typed: Point = c
+          console.log(typed)
+        })
+      })
+      objectCases.forEach(c => {
+        it(`returns true for object ${inspect(c)}`, function () {
+          isPoint(c).should.be.true()
+          // typescript allows this assignment, since `c` is an object, which is a `DefinitePoint`
+          const typed: Point = c
           console.log(typed)
         })
       })
