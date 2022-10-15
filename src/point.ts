@@ -19,6 +19,9 @@ export type Constructor<T extends Object> = new (...args: never[]) => T
  * _Dynamic representation_ of the type of a definite point.
  *
  * For primitive types, this is the `typeof` string. For `objects`, it is the constructor.
+ *
+ * As a side effect, funtions can be represented both as `'function'` and the `Function` constructor
+ * `Constructor<Function>`, which is the representation of the function as an `object`.
  */
 export type DefinitePointTypeRepresentation = typeof primitivePointTypes[number] | Constructor<Object>
 

@@ -234,7 +234,7 @@ describe('point', function () {
         pointTypeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             primitiveCases.forEach(c => {
-              if (typeof c === ptr) {
+              if (typeof c === ptr || (typeof c === 'function' && typeof ptr === 'function' && c instanceof ptr)) {
                 it(`returns true for primitive or wrapped value ${c} with point type ${inspect(ptr)}`, function () {
                   isDefinitePoint(c, ptr).should.be.true()
                   // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint`
@@ -360,7 +360,7 @@ describe('point', function () {
         pointTypeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             primitiveCases.forEach(c => {
-              if (typeof c === ptr) {
+              if (typeof c === ptr || (typeof c === 'function' && typeof ptr === 'function' && c instanceof ptr)) {
                 it(`returns true for primitive or wrapped value ${c} with point type ${inspect(ptr)}`, function () {
                   isPoint(c, ptr).should.be.true()
                   // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint`
