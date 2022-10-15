@@ -169,14 +169,18 @@ describe('point', function () {
       })
     })
     describe('with point type', function () {
-      notAPointCases.forEach(c => {
-        pointTypeRepresentations.forEach(ptr => {
-          it(`returns false for ${inspect(c)} with point type ${inspect(ptr)}, because it is not a point`, function () {
-            isDefinitePoint(c, ptr).should.be.false()
-            // MUDO typescript should forbid this assignment, since `c` can be `symbol`, which is not a `DefinitePoint`
-            //      It cannot help us with NaN, but it should with `symbol`
-            const typed: DefinitePoint = c
-            console.log(typed)
+      pointTypeRepresentations.forEach(ptr => {
+        describe(`point type ${inspect(ptr)}`, function () {
+          notAPointCases.forEach(c => {
+            it(`returns false for ${inspect(c)} with point type ${inspect(
+              ptr
+            )}, because it is not a point`, function () {
+              isDefinitePoint(c, ptr).should.be.false()
+              // MUDO typescript should forbid this assignment, since `c` can be `symbol`, which is not a `DefinitePoint`
+              //      It cannot help us with NaN, but it should with `symbol`
+              const typed: DefinitePoint = c
+              console.log(typed)
+            })
           })
         })
       })
@@ -219,14 +223,18 @@ describe('point', function () {
       })
     })
     describe('with point type', function () {
-      notAPointCases.forEach(c => {
-        pointTypeRepresentations.forEach(ptr => {
-          it(`returns false for ${inspect(c)} with point type ${inspect(ptr)}, because it is not a point`, function () {
-            isDefinitePoint(c, ptr).should.be.false()
-            // MUDO typescript should forbid this assignment, since `c` can be `symbol`, which is not a `DefinitePoint`
-            //      It cannot help us with NaN, but it should with `symbol`
-            const typed: DefinitePoint = c
-            console.log(typed)
+      pointTypeRepresentations.forEach(ptr => {
+        describe(`point type ${inspect(ptr)}`, function () {
+          notAPointCases.forEach(c => {
+            it(`returns false for ${inspect(c)} with point type ${inspect(
+              ptr
+            )}, because it is not a point`, function () {
+              isDefinitePoint(c, ptr).should.be.false()
+              // MUDO typescript should forbid this assignment, since `c` can be `symbol`, which is not a `DefinitePoint`
+              //      It cannot help us with NaN, but it should with `symbol`
+              const typed: DefinitePoint = c
+              console.log(typed)
+            })
           })
         })
       })
