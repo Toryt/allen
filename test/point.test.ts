@@ -5,6 +5,7 @@ import { pointTypeOf, primitivePointTypes } from '../src/point'
 import { inspect } from 'util'
 import {
   DefinitePoint,
+  DefinitePointTypeFor,
   DefinitePointTypeRepresentation,
   isDefinitePoint,
   isPoint,
@@ -220,12 +221,22 @@ describe('point', function () {
         pointTypeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             primitiveCases.forEach(c => {
-              it(`returns false for primitive or wrapped value ${c} with point type ${inspect(ptr)}`, function () {
-                isDefinitePoint(c, ptr).should.be.false()
-                // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint`
-                const typed: DefinitePoint = c
-                console.log(typed)
-              })
+              if (typeof c === ptr) {
+                it(`returns true for primitive or wrapped value ${c} with point type ${inspect(ptr)}`, function () {
+                  isDefinitePoint(c, ptr).should.be.true()
+                  // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint`
+                  const typed: DefinitePointTypeFor<typeof ptr> = c
+                  console.log(typed)
+                })
+              } else {
+                it(`returns false for primitive or wrapped value ${c} with point type ${inspect(ptr)}`, function () {
+                  isDefinitePoint(c, ptr).should.be.false()
+                  // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint`
+                  // if we do not add more static information about `ptr`, TS cannot do better
+                  const typed: DefinitePoint = c
+                  console.log(typed)
+                })
+              }
             })
           })
         })
