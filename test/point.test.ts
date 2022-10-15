@@ -124,7 +124,7 @@ function notAConstructor2 (): string {
 
 notAConstructor2.prototype = Object.prototype
 
-const idiotPointTypeRepresentations = [
+const idiotDefinitePointTypeRepresentations = [
   null,
   'undefined',
   'object',
@@ -173,7 +173,7 @@ describe('point', function () {
       })
     })
     describe('idiot point types', function () {
-      idiotPointTypeRepresentations.forEach(iptr => {
+      idiotDefinitePointTypeRepresentations.forEach(iptr => {
         it(`returns false for ${inspect(iptr)}`, function () {
           isDefinitePointTypeRepresentation(iptr).should.be.false()
           // @ts-ignore
@@ -339,8 +339,8 @@ describe('point', function () {
           })
         })
       })
-      describe('idiot point types', function () {
-        idiotPointTypeRepresentations.forEach(iptr => {
+      describe('idiot definite point types', function () {
+        idiotDefinitePointTypeRepresentations.forEach(iptr => {
           describe(`with ${inspect(iptr)} as point type`, function () {
             pointCases.forEach(c => {
               it(`returns false for ${inspect(c)} with point type ${inspect(iptr)}`, function () {
@@ -476,8 +476,8 @@ describe('point', function () {
           })
         })
       })
-      describe('idiot point types', function () {
-        idiotPointTypeRepresentations.forEach(iptr => {
+      describe('idiot definite point types', function () {
+        idiotDefinitePointTypeRepresentations.forEach(iptr => {
           describe(`with ${inspect(iptr)} as point type`, function () {
             pointCases.forEach(c => {
               it(`returns false for ${inspect(c)} with point type ${inspect(iptr)}`, function () {

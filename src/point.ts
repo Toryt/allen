@@ -144,6 +144,9 @@ export function isDefinitePoint<T extends DefinitePointTypeRepresentation> (
 ): u is DefinitePointTypeFor<T>
 
 export function isDefinitePoint (u: unknown, pointType?: DefinitePointTypeRepresentation): boolean {
+  if (pointType !== undefined && !isDefinitePointTypeRepresentation(pointType)) {
+    return false
+  }
   const tOfU = pointTypeOf(u)
   return (
     tOfU !== false &&
@@ -175,6 +178,9 @@ export function isPoint<T extends DefinitePointTypeRepresentation> (
 ): u is DefinitePointTypeFor<T>
 
 export function isPoint (u: unknown, pointType?: DefinitePointTypeRepresentation): boolean {
+  if (pointType !== undefined && !isDefinitePointTypeRepresentation(pointType)) {
+    return false
+  }
   const tOfU = pointTypeOf(u)
   return (
     tOfU !== false &&
