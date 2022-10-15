@@ -80,11 +80,11 @@ export type Point = DefinitePoint | undefined | null
 //   ? undefined
 //   : never
 //
-// export type PointTypeFor<T extends PointTypeRepresentation> = T extends DefinitePointTypeRepresentation
-//   ? DefinitePointTypeFor<T>
-//   : T extends undefined
-//   ? undefined | null
-//   : never
+export type PointTypeFor<T extends PointTypeRepresentation> = T extends DefinitePointTypeRepresentation
+  ? DefinitePointTypeFor<T>
+  : T extends undefined
+  ? undefined | null
+  : never
 
 /**
  * The dynamic representation of the precise point type.
