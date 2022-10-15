@@ -65,7 +65,7 @@ export function commonType (...p: unknown[]): TypeResult | undefined | false {
       }
       if (typeof type !== 'function') {
         // we expect a primitive type: is e of that type?
-        if (typeof e !== type) {
+        if (/* eslint-disable-line valid-typeof */ typeof e !== type) {
           return { result: false }
         }
         return {

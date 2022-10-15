@@ -297,7 +297,10 @@ describe('point', function () {
         pointTypeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             primitiveCases.forEach(c => {
-              if (typeof c === ptr || (typeof c === 'function' && typeof ptr === 'function' && c instanceof ptr)) {
+              if (
+                /* eslint-disable-line valid-typeof */ typeof c === ptr ||
+                (typeof c === 'function' && typeof ptr === 'function' && c instanceof ptr)
+              ) {
                 it(`returns true for primitive or wrapped value ${inspect(c)} with point type ${inspect(
                   ptr
                 )}`, function () {
@@ -441,7 +444,10 @@ describe('point', function () {
         pointTypeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             primitiveCases.forEach(c => {
-              if (typeof c === ptr || (typeof c === 'function' && typeof ptr === 'function' && c instanceof ptr)) {
+              if (
+                /* eslint-disable-line valid-typeof */ typeof c === ptr ||
+                (typeof c === 'function' && typeof ptr === 'function' && c instanceof ptr)
+              ) {
                 it(`returns true for primitive or wrapped value ${inspect(c)} with point type ${inspect(
                   ptr
                 )}`, function () {
