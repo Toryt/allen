@@ -27,6 +27,20 @@ export type DefinitePointTypeRepresentation = typeof primitivePointTypes[number]
  */
 export type DefinitePoint = typeof primitivePointTypes[number] | Object
 
+export type DefinitePointTypeFor<T extends DefinitePointTypeRepresentation> = T extends 'number'
+  ? number
+  : T extends 'bigint'
+  ? bigint
+  : T extends 'string'
+  ? string
+  : T extends 'boolean'
+  ? boolean
+  : T extends 'function'
+  ? Function
+  : T extends Constructor<Object>
+  ? InstanceType<T>
+  : never
+
 /**
  * _Dynamic representation_ of the type of a point, i.e., {@link DefinitePointTypeRepresentation} or
  * `undefined`.
@@ -43,6 +57,12 @@ export type PointTypeRepresentation = DefinitePointTypeRepresentation | undefine
  * We advise against using `null`. Use `undefined` to express “don't know 🤷”.
  */
 export type Point = DefinitePoint | undefined | null
+
+export type PointTypeFor<T extends PointTypeRepresentation> = T extends DefinitePointTypeRepresentation
+  ? DefinitePointTypeFor<T>
+  : T extends undefined
+  ? undefined | null
+  : never
 
 /**
  * The dynamic representation of the precise point type.
@@ -69,6 +89,21 @@ export function pointTypeOf (u: unknown): PointTypeRepresentation | false {
  */
 export function isDefinitePoint (u: unknown): u is DefinitePoint
 
+/**
+ * `u` is a {@link DefinitePoint} of specfic type `pointType`.
+ *
+ * `undefined` or `null` as `u`, expressing “don't know 🤷”, are not {@link DefinitePoint}s.
+ *
+ * When calling this function in JavaScript, `pointType` might be explicitly set to `undefined` (in violation of the
+ * TypeScript precondition that `pointType` is required, and has to be a {@link DefinitePointTypeRepresentation}). The
+ * function behaves as {@link isDefinitePoint} in that case, as if the parameter is not given. This does not check
+ * whether `u` is `undefined` or `null`, expressing “don't know 🤷”.
+ */
+export function isDefinitePoint<T extends DefinitePointTypeRepresentation> (
+  u: unknown,
+  pointType: T
+): u is DefinitePointTypeFor<T>
+
 export function isDefinitePoint (u: unknown, pointType?: DefinitePointTypeRepresentation): boolean {
   const tOfU = pointTypeOf(u)
   return (
@@ -82,6 +117,23 @@ export function isDefinitePoint (u: unknown, pointType?: DefinitePointTypeRepres
  * `u` is a {@link Point}. `undefined` or `null` express “don't know 🤷”.
  */
 export function isPoint (u: unknown): u is Point
+
+/**
+ * `u` is a {@link Point}, of specific type `pointType`.
+ *
+ * `undefined` or `null` as `u`, expressing “don't know 🤷”, are considered valid instances of every `pointType`.
+ * That is why `pointType` is forced to extend {@link DefinitePointTypeRepresentation}, and not
+ * {@link PointTypeRepresentation}.
+ *
+ * When calling this function in JavaScript, `pointType` might be explicitly set to `undefined` (in violation of the
+ * TypeScript precondition that `pointType` is required, and has to be a {@link DefinitePointTypeRepresentation}). The
+ * function behaves as {@link isPoint} in that case, as if the parameter is not given. This does not check whether `u`
+ * is `undefined` or `null`, expressing “don't know 🤷”.
+ */
+export function isPoint<T extends DefinitePointTypeRepresentation> (
+  u: unknown,
+  pointType: T
+): u is DefinitePointTypeFor<T>
 
 export function isPoint (u: unknown, pointType?: DefinitePointTypeRepresentation): boolean {
   const tOfU = pointTypeOf(u)

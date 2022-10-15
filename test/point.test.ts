@@ -3,7 +3,7 @@
 import should from 'should'
 import { pointTypeOf, primitivePointTypes } from '../src/point'
 import { inspect } from 'util'
-import { DefinitePoint, isDefinitePoint, isPoint, Point } from '../lib2/point'
+import { DefinitePoint, DefinitePointTypeRepresentation, isDefinitePoint, isPoint, Point } from '../lib2/point'
 
 const notAPointCases = [NaN, Symbol('not a point')]
 const dontKnowCases = [undefined, null]
@@ -50,6 +50,40 @@ const primitiveCases = [
 ]
 const objectCases = [new Date(89673548), {}, { a: 'an object' }, [], [1, 2], [1, {}], Math, JSON]
 
+class A {
+  public a: number
+
+  constructor () {
+    this.a = 4
+  }
+}
+
+class B extends A {
+  public b: string
+
+  constructor () {
+    super()
+    this.b = 'a string'
+  }
+}
+
+class C {
+  public c: boolean
+
+  constructor () {
+    this.c = false
+  }
+}
+
+const pptsAsDefinitePointTypeRepresentations: readonly DefinitePointTypeRepresentation[] = primitivePointTypes
+const pointTypeRepresentations: DefinitePointTypeRepresentation[] = pptsAsDefinitePointTypeRepresentations.concat([
+  Object,
+  Date,
+  A,
+  B,
+  C
+])
+
 describe('point', function () {
   describe('primitivePointTypes', function () {
     it('is an array of strings', function () {
@@ -60,10 +94,10 @@ describe('point', function () {
     })
 
     const notPrimitivePointTypes = ['object', 'symbol', 'undefined']
-    const ppts: string[] = primitivePointTypes.slice()
+    const pptsAsString: string[] = primitivePointTypes.slice()
     notPrimitivePointTypes.forEach(nppt => {
       it(`${nppt} is not a primitive point type`, function () {
-        ppts.includes(nppt).should.be.false()
+        pptsAsString.includes(nppt).should.be.false()
       })
     })
   })
@@ -134,7 +168,19 @@ describe('point', function () {
         })
       })
     })
-    describe('with point type', function () {})
+    describe('with point type', function () {
+      notAPointCases.forEach(c => {
+        pointTypeRepresentations.forEach(ptr => {
+          it(`returns false for ${inspect(c)} with point type ${inspect(ptr)}, because it is not a point`, function () {
+            isDefinitePoint(c, ptr).should.be.false()
+            // MUDO typescript should forbid this assignment, since `c` can be `symbol`, which is not a `DefinitePoint`
+            //      It cannot help us with NaN, but it should with `symbol`
+            const typed: DefinitePoint = c
+            console.log(typed)
+          })
+        })
+      })
+    })
   })
   describe('isPoint', function () {
     describe('without point type', function () {
@@ -172,6 +218,18 @@ describe('point', function () {
         })
       })
     })
-    describe('with point type', function () {})
+    describe('with point type', function () {
+      notAPointCases.forEach(c => {
+        pointTypeRepresentations.forEach(ptr => {
+          it(`returns false for ${inspect(c)} with point type ${inspect(ptr)}, because it is not a point`, function () {
+            isDefinitePoint(c, ptr).should.be.false()
+            // MUDO typescript should forbid this assignment, since `c` can be `symbol`, which is not a `DefinitePoint`
+            //      It cannot help us with NaN, but it should with `symbol`
+            const typed: DefinitePoint = c
+            console.log(typed)
+          })
+        })
+      })
+    })
   })
 })
