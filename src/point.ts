@@ -131,7 +131,7 @@ export function isDefinitePoint (u: unknown, pointType?: DefinitePointTypeRepres
   return (
     tOfU !== false &&
     tOfU !== undefined &&
-    (pointType === undefined || tOfU === pointType || (typeof tOfU === 'function' && u instanceof tOfU))
+    (pointType === undefined || tOfU === pointType || (typeof pointType === 'function' && u instanceof pointType))
   )
 }
 
@@ -164,6 +164,6 @@ export function isPoint (u: unknown, pointType?: DefinitePointTypeRepresentation
     (tOfU === undefined ||
       pointType === undefined ||
       tOfU === pointType ||
-      (typeof tOfU === 'function' && u instanceof tOfU))
+      (typeof pointType === 'function' && u instanceof pointType))
   )
 }
