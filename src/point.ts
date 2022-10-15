@@ -119,6 +119,7 @@ export function isPointTypeRepresentation (u: unknown): boolean {
  * Returns `undefined` when `p` is `undefined` or `null`, expressing “don't know 🤷”.
  * Returns `false` when `p` is not an acceptable point, i.e., when `p` is `NaN`, or a `symbol`.
  */
+// MUDO will return false for symbol; why? if the user gives a compare, it is ok
 export function pointTypeOf (u: unknown): PointTypeRepresentation | undefined | false {
   if (u === undefined || u === null) {
     return undefined
