@@ -1,8 +1,9 @@
 import assert from 'assert'
+import { Constructor, pointTypeOf, PointTypeRepresentation } from './point'
 
 interface Acc {
   typeDefiner?: unknown
-  type?: TypeResult | undefined
+  type?: PointTypeRepresentation | undefined
   result: boolean
 }
 
@@ -38,53 +39,48 @@ export function arePointsOfSameType (...p: unknown[]): boolean {
   return result
 }
 
-export const primitiveTypes = ['number', 'bigint', 'string', 'boolean'] as const
-export type Constructor<T extends Object> = new (...args: never[]) => T
-export type TypeResult = typeof primitiveTypes[number] | Constructor<Object>
+export function mostSpecializedCommonType (c1: Constructor<Object>, c2: Constructor<Object>): Constructor<Object> {
+  if (c1 === c2 || c2.prototype instanceof c1) {
+    return c1
+  }
+  return mostSpecializedCommonType(c1.prototype.constructor, c2)
+}
 
-export function commonType (...p: unknown[]): TypeResult | undefined | false {
+export function commonType (...p: unknown[]): PointTypeRepresentation | undefined | false {
   const { type, result } = p.reduce(
-    ({ typeDefiner, type, result }: Acc, e: unknown): Acc => {
-      if (!result || Number.isNaN(e) || typeof e === 'symbol') {
-        // there is no common type: return false
+    ({ type, result }: Acc, e: unknown): Acc => {
+      if (!result) {
+        // determined earlier that there is no common type; return false
+        return { result }
+      }
+      // MUDO will return false for symbol; why? if the user gives a compare, it is ok
+      const eType = pointTypeOf(e)
+      if (eType === false) {
+        // there is no common type: override previous results and return false
         return { result: false }
       }
-      if (e === undefined || e === null) {
+      if (eType === undefined) {
         // e does not define the common type: continue
-        return { typeDefiner, type, result }
+        return { type, result }
       }
       if (type === undefined) {
-        // first occurence of a value that might determine the common type
-        const type: TypeResult =
-          typeof e === 'object' ? (e.constructor as Constructor<Object>) : (typeof e as typeof primitiveTypes[number])
-        // assert(type1 !== 'undefined')
-        // assert(type1 !== 'symbol')
-        // assert(type1 !== 'object')
-        // assert(type1 !== 'function') // MUDO
-        return { typeDefiner: e, type, result }
+        // first occurence of a value that determines the common type
+        return { type: eType, result }
       }
-      if (typeof type !== 'function') {
-        // we expect a primitive type: is e of that type?
-        if (/* eslint-disable-line valid-typeof */ typeof e !== type) {
+      if (typeof eType !== 'function' || typeof type !== 'function') {
+        // e is a primitive type: is that the common type?
+        if (eType !== type) {
+          // nope: there is no common type; return false
           return { result: false }
         }
+        // yes; continue
         return {
-          typeDefiner,
           type,
           result
         }
       }
-      // assert(typeDefiner !== null)
-      if (typeDefiner instanceof e.constructor) {
-        // e is a supertype of typeDefiner: switch
-        return { typeDefiner: e, type: e.constructor as Constructor<Object>, result }
-      }
-      if (e instanceof type) {
-        // typeDefiner is a supertype of e: continue
-        return { typeDefiner, type, result }
-      }
-      // e and typeDefiner are unrelated: there is no common type: return false
-      return { result: false }
+      // the common type so far could finally be Object, but there always is one
+      return { type: mostSpecializedCommonType(eType, type), result }
     },
     { result: true }
   )
