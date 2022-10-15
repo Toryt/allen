@@ -56,7 +56,6 @@ const primitiveCases = [
   Date,
   Object
 ]
-const objectCases = [new Date(89673548), {}, { a: 'an object' }, [], [1, 2], [1, {}], Math, JSON]
 
 class A {
   public a: number
@@ -82,6 +81,20 @@ class C {
     this.c = false
   }
 }
+
+const objectCases = [
+  new Date(89673548),
+  {},
+  { a: 'an object' },
+  [],
+  [1, 2],
+  [1, {}],
+  Math,
+  JSON,
+  new A(),
+  new B(),
+  new C()
+]
 
 const pptsAsDefinitePointTypeRepresentations: readonly DefinitePointTypeRepresentation[] = primitivePointTypes
 const pointTypeRepresentations: DefinitePointTypeRepresentation[] = pptsAsDefinitePointTypeRepresentations.concat([
@@ -245,12 +258,22 @@ describe('point', function () {
         pointTypeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             objectCases.forEach(c => {
-              it(`returns false for object ${inspect(c)} with point type ${inspect(ptr)}`, function () {
-                isDefinitePoint(c, ptr).should.be.false()
-                // typescript allows this assignment, since `c` is an object, which is a `DefinitePoint`
-                const typed: DefinitePoint = c
-                console.log(typed)
-              })
+              if (typeof ptr === 'function' && c instanceof ptr) {
+                it(`returns true for object ${inspect(c)} with point type ${inspect(ptr)}`, function () {
+                  isDefinitePoint(c, ptr).should.be.true()
+                  // typescript allows this assignment, since `c` is an object, which is a `DefinitePoint`
+                  const typed: DefinitePointTypeFor<typeof ptr> = c
+                  console.log(typed)
+                })
+              } else {
+                it(`returns false for object ${inspect(c)} with point type ${inspect(ptr)}`, function () {
+                  isDefinitePoint(c, ptr).should.be.false()
+                  // typescript allows this assignment, since `c` is an object, which is a `DefinitePoint`
+                  // if we do not add more static information about `ptr`, TS cannot do better
+                  const typed: DefinitePoint = c
+                  console.log(typed)
+                })
+              }
             })
           })
         })
