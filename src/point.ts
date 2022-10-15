@@ -161,6 +161,9 @@ export function isPoint (u: unknown, pointType?: DefinitePointTypeRepresentation
   const tOfU = pointTypeOf(u)
   return (
     tOfU !== false &&
-    (pointType === undefined || tOfU === pointType || (typeof tOfU === 'function' && u instanceof tOfU))
+    (tOfU === undefined ||
+      pointType === undefined ||
+      tOfU === pointType ||
+      (typeof tOfU === 'function' && u instanceof tOfU))
   )
 }
