@@ -1,4 +1,4 @@
-# Points
+# Points and comparison
 
 ## Summary
 
@@ -76,7 +76,7 @@ rest of this discussion is limited to that case.
   < (a: boolean, b: boolean) => boolean
   ```
 
-What is left, is the comparison of `object`s (including arrays) `function`s, and `symbol`s.
+What is left, is the comparison of `object`s (including arrays), `function`s, and `symbol`s.
 
 `object`s are coerced to `number`s, `bigint`s, or `string`s (by `@@toPrimitive()`, `valueOf()`, `toNumber()`,
 or`toString()` —
@@ -87,11 +87,9 @@ This results in the expected primitive types, which behave intuitively, for wrap
 All other `object`s do produce a comparison result, but this is hardly intuitive, unless you explicitly code a
 `@@toPrimitive()`, `valueOf()` `toNumber()`, or `toString()` method. As a result of the coercion, all generic `objects`s
 are considered equal (both `a < b` and `b < a` return `false`). Arrays are also objects, and comparison “works”, but via
-string comparison. This gives weird results. E.g., `[1, 3] < [2, 3]` is `true`, but `[2] < [11]` is `false`.
-
-`function`s are comparable with `<`, and give more reasonable results out-of-the-box, because the source code is
-compared as a string. The coercion can be manipulated by overriding `@@toPrimitive()`, `valueOf()` `toNumber()`, or
-`toString()`.
+string comparison. This gives weird results. E.g., `[1, 3] < [2, 3]` is `true`, but `[2] < [11]` is `false`. `function`s
+are comparable with `<`, and give more reasonable results out-of-the-box, because the source code is compared as a
+string. The coercion can be manipulated by overriding `@@toPrimitive()`, `valueOf()` `toNumber()`, or `toString()`.
 
 `symbol`s fail with a `TypeError`. JavaScript tries to coerce the `symbol`, and that is not supported. It is not
 possbible to override the `@@toPrimitive()`, `valueOf()` `toNumber()`, or `toString()` method of a `symbol`. `symbols`
@@ -105,8 +103,8 @@ Comparing `object`s, including `Date`s, with `===` or `==` is not guaranteed to 
 the way you use the `object`s, 2 different `object`s (`!==`) can represent the same point. The equality comparison
 evaluates reference equality, not semantic equality.
 
-Therefor, this library never compares values with the `===` or `==` (or `'!==`, or `!=`) operators. Instead, because the
-order is connected (total), `object`s are considered equal when ¬(a < b) ∧ ¬(b < a):
+Therefor, this library never compares values with the `===` or `==` (or `!==`, or `!=`) operators. Instead, because the
+order is connected (total), `object`s are considered equal when `¬(a < b) ∧ ¬(b < a)`:
 
 ```
   ∀ a, b ∈ T: a ≠ b ⇒ (a ⨀ b) ∨ (b ⨀ a)
@@ -140,6 +138,7 @@ Note that it is the implementation's responsibility to make sure the order is co
 | irreflexive       | ∀ `a` ∈ `T`: `compare(a, a) === 0`                                                           |
 | transitive        | ∀ `a`, `b`, `c` ∈ `T`: `compare(a, b) < 0 && compare(b, c) < 0` ⇒ `compare(a, c) < 0`        |
 | connected (total) | ∀ `a`, `b` ∈ `T`: `compare(a, b) !== 0` ⇒ `compare(a, b) < 0 &vert;&vert; compare(b, a) < 0` |
+|                   | ∀ `a`, `b` ∈ `T`: `compare(a, b) === 0` ⇔ `compare(b, a) === 0`                              |
 |                   | ∀ `a`, `b` ∈ `T`: `compare(a, b) < 0` ⇔ `compare(b, a) > 0`                                  |
 |                   | ∀ `a`, `b` ∈ `T`: `!Number.isNaN(compare(a, b))`                                             |
 
@@ -153,10 +152,33 @@ function ltComparator<LTComparable> (t1: T, t2: T): number
 
 `ltComparator<T>` compares 2 points with `<`.
 
-A precondition for this function is that the values cannot be `NaN` or a `symbol`, and that the values must be “of the
-same type”.
+The preconditions for this function are
 
-This is the right choice in most sensible cases, where points are represented by `number`s, `string`s, or `Date`s.
+- that the values must be “of the same type”.
+- that the values cannot be `NaN` or a `symbol`, and
+
+Using this default is the right choice in most sensible cases, where points are represented by `number`s, `string`s, or
+`Date`s.
+
+## Of the same type
+
+This library is limited to compare points “of the same type”.
+
+For primitive values (`number`, `bigint`, `string`, `boolean`) this means `typeof t1 === typeof t2`.
+
+For `object`s, this means they have to have a common “most specialized common supertype”. Finally, `Object` is a common
+supertype of all `object`s. So all `object`s are “of the same type”. This creates a challenge for `Date`, which is an
+important `object` subtype for this library. Users would expect to only compare `Date`s with other `Date`s, but in fact
+they can be compared with any other `object` (but probably not with the expected semantics). Because we do not want to
+exclude mixed usage of `Date`s with, e.g., `moment.js` `object`s, this is up to the user.
+
+The library user can override the `@@toPrimitive()`, `valueOf()` `toNumber()`, or `toString()` methods of `function`
+instances, as they can for any `object`. It is impossible in JavaScript to create subtypes of `Function` that are still
+`Callable`, but a library user might set things up to compare `function` instances with other `function` instances or
+`object`s. Therefor, `function` instances are threathed as any other `object`, and, `function` instances are considered
+“of the same type” as other `function` instances, and finally any other `object`.
+
+When using TypeScript, the library user can limit the “common type” more using generics.
 
 ## Don't know 🤷
 
