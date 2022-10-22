@@ -1,8 +1,9 @@
 /* eslint-env mocha */
 
 import 'should'
-import { ltComparator } from '../lib2/comparator'
+import { ltComparator } from '../src/comparator'
 import { inspect } from 'util'
+import { PrimitivePoint } from '../src/point'
 
 interface Case<T> {
   label: string
@@ -25,7 +26,8 @@ const cases: Array<Case<unknown>> = [
   { label: 'String', smaller: String('a'), larger: String('b') },
   { label: 'Boolean', smaller: Boolean(false), larger: Boolean(true) },
   { label: 'array', smaller: [1, 3], larger: [2, 3] },
-  { label: 'array', smaller: [11], larger: [2] }
+  { label: 'array', smaller: [11], larger: [2] },
+  { label: 'function', smaller: () => 5, larger: function a () {} }
 ]
 
 describe('comparator', function () {
@@ -65,6 +67,70 @@ describe('comparator', function () {
     describe('object', function () {
       it('always returns zero for objects (all objects are the same)', function () {
         ltComparator({ a: 'an object' }, { b: 43 }).should.equal(0)
+      })
+    })
+    describe('tweaked objects', function () {
+      it('uses toPrimitive to coerce objects', function () {
+        class A {
+          private readonly i: number
+
+          constructor (i: number) {
+            this.i = i
+          }
+
+          [Symbol.toPrimitive] (): PrimitivePoint {
+            return this.i
+          }
+        }
+
+        const a1 = new A(1)
+        const a2 = new A(2)
+
+        ltComparator(a1, a2).should.be.lessThan(0)
+        ltComparator(a1, a1).should.be.equal(0)
+        ltComparator(a2, a1).should.be.greaterThan(0)
+      })
+
+      it('uses valueOf to coerce objects', function () {
+        class A {
+          private readonly i: number
+
+          constructor (i: number) {
+            this.i = i
+          }
+
+          valueOf (): PrimitivePoint {
+            return this.i
+          }
+        }
+
+        const a1 = new A(1)
+        const a2 = new A(2)
+
+        ltComparator(a1, a2).should.be.lessThan(0)
+        ltComparator(a1, a1).should.be.equal(0)
+        ltComparator(a2, a1).should.be.greaterThan(0)
+      })
+
+      it('uses toString to coerce objects', function () {
+        class A {
+          private readonly i: number
+
+          constructor (i: number) {
+            this.i = i
+          }
+
+          toString (): string {
+            return this.i.toString()
+          }
+        }
+
+        const a1 = new A(1)
+        const a2 = new A(2)
+
+        ltComparator(a1, a2).should.be.lessThan(0)
+        ltComparator(a1, a1).should.be.equal(0)
+        ltComparator(a2, a1).should.be.greaterThan(0)
       })
     })
   })

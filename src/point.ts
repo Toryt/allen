@@ -25,10 +25,12 @@ export type Constructor<T extends Object> = new (...args: never[]) => T
  */
 export type PointTypeRepresentation = typeof primitivePointTypes[number] | Constructor<Object>
 
+export type PrimitivePoint = number | bigint | string | boolean | Function
+
 /**
  * The super type of all possible definite points, i.e., everything but `symbol`.
  */
-export type Point = typeof primitivePointTypes[number] | Object
+export type Point = PrimitivePoint | Object
 
 // TODO remove when not really used
 // export type DefinitePointTypeRepresentationOf<T extends DefinitePoint> = T extends number

@@ -2,23 +2,27 @@
 
 ## Summary
 
-For this library, we need to be able to compare the `from` and the `until` of intervals with each other, and with
-individual points. We require that all points we need to compare are of the same type, to avoid mistakes.
+For this library, we need to be able to compare the `start` and the `end` of intervals with each other, and with
+individual _points_. We require that all points we need to compare are “of the same type”.
 
 This library:
 
-- does not compare values if one of the values is `undefined` or `null`
+- does not compare values if one of the values is `undefined` or `null`; `undefined` and `null` values represent “don't
+  know 🤷”.
 - never tests for equality with `===` or `==`
 - compares values with the optional `compareFn` function parameter, if it is given
 - if no `compareFn` function parameter is given, compares values with `<`
   - when `¬(a < b) ∧ ¬(b < a)`, `a` and `b` are considered equal
-  - the library fails when one of the points to compare is `NaN`
+  - we do not use `>`; `a > b` is calculated as `b < a`
+- a `compareFn` function parameter is mandatory when one of the points to compare is `NaN` or a `symbol`
 
-## Reasoning
+When `undefined` or `null` values are used as points, they represent “don't know 🤷”.
 
-The type of points we want to compare has to have a [strict total order](https://en.wikipedia.org/wiki/Total¬_order) ⨀
-(where the symbol ⨀ represents a generic operator) and equality. ⨀ has to be _irreflexive_, _transitive_, and
-_connected_ (a.k.a. _total_):
+## Strict total order
+
+To be able to compare points of a certain type, the type has to have a
+[strict total order](https://en.wikipedia.org/wiki/Total¬_order) ⨀ (where the symbol ⨀ represents a generic operator). ⨀
+has to be _irreflexive_, _transitive_, and _connected_ (a.k.a. _total_):
 
 |                   | definition                                 |
 | ----------------- | ------------------------------------------ |
@@ -26,28 +30,25 @@ _connected_ (a.k.a. _total_):
 | transitive        | ∀ a, b, c ∈ T: (a ⨀ b) ∧ (b ⨀ c) ⇒ (a ⨀ c) |
 | connected (total) | ∀ a, b ∈ T: a ≠ b ⇒ (a ⨀ b) ∨ (b ⨀ a)      |
 
-### `<` in JavaScript
+## `<` in JavaScript
 
-In JavaScript, `<` fullfils this requirement for all possible values, which might come as a surprise.
+In JavaScript, `<` fullfils this requirement technically for _almost_ all possible values out-of-the-box, which might
+come as a surprise.
 
 ```ts
-typeof < === (a: unknown, b: unknown) => boolean | undefined
+export type LTComparablePrimitive = number | bigint | string | boolean | Function
+
+export type LTComparable = PrimitivePoint | Object
+
+typeof < === (a: LTComparable, b: LTComparable) => boolean | undefined
 ```
 
-#### Intuitive for `number`, `string`, `Date`
-
-The `<` operator _mostly_ behaves intuitively when comparing:
-
-- a `number` value with another `number` value
-- a `string` value with another `string` value
-- a `Date` value with another `Date` value
-
-and most usages of this library should be restricted to values for points of those types.
-
-JavaScript, however, allows comparison between _any_ 2 values of _any_ type, because of _type coercion_. The algorithm
+JavaScript, allows `<` comparison between _any_ 2 values of _any_ type (except `symbol`s) because of _type coercion_,
+and returns `true` or `false` (except when one of the values is, or is coerced to, `undefined` or `NaN`). The algorithm
 is described at [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Less_than).
 
-In this library, we only compare values of the same type, and the rest of this discussion is limited to that case.
+This library will never compare `null` or `undefined`. In this library, we only compare values of the same type, and the
+rest of this discussion is limited to that case.
 
 - the comparison of two `number` values is intuitive, except for `NaN` values; when either value is `NaN`, the result is
   `undefined`
@@ -75,38 +76,28 @@ In this library, we only compare values of the same type, and the rest of this d
   < (a: boolean, b: boolean) => boolean
   ```
 
-It is a precondition that a point must never be `NaN`. There is no sensible behavior for this library in this case. The
-library throws an exception when it encounters `NaN` as a point.
+What is left, is the comparison of `object`s (including arrays) `function`s, and `symbol`s.
 
-#### Don't know 🤷
-
-This library never compares `undefined`. `null` is coerced to `0`, but this library will never compare `null` values.
-These values represent _don't know 🤷_. We advise to use `undefined`, or not to have a `from` or `until` property
-present in an interval to express this, and leave `null` well alone.
-
-#### Objects and Symbols
-
-What is left, is the comparison of `object`s (including arrays), and `symbol`s.
-
-`object`s and `symbol`s are coerced to `number`s, `bigint`s, or `string`s (by `@@toPrimitive()`, `valueOf()`,
-`toNumber()`, or`toString()` —
+`object`s are coerced to `number`s, `bigint`s, or `string`s (by `@@toPrimitive()`, `valueOf()`, `toNumber()`,
+or`toString()` —
 [ECMAScript®2023 Language Specification; 7.2.13 IsLessThan (x, y, LeftFirst)](https://tc39.es/ecma262/#sec-islessthan)).
 This results in the expected primitive types, which behave intuitively, for wrapper objects (`Number`,
 `BigInt`,`String`, `Boolean`), and in `number` for `Date` (ms since epoch).
 
 All other `object`s do produce a comparison result, but this is hardly intuitive, unless you explicitly code a
-`valueOf()` `toNumber()`, or `toString()` method. As a result of the coercion, all generic `objects`s are considered
-equal (both `a < b` and `b < a` return `false`). Arrays are also objects, and comparison “works”, but via string
-comparison. This gives weird results. E.g., `[1, 3] < [2, 3]` is `true`, but `[2] < [11]` is `false`.
+`@@toPrimitive()`, `valueOf()` `toNumber()`, or `toString()` method. As a result of the coercion, all generic `objects`s
+are considered equal (both `a < b` and `b < a` return `false`). Arrays are also objects, and comparison “works”, but via
+string comparison. This gives weird results. E.g., `[1, 3] < [2, 3]` is `true`, but `[2] < [11]` is `false`.
 
-Generic `symbol`s fail with a `TypeError`. JavaScript tries to convert the `symbol` to a `number`, and that is not
-supported. It is a precondition that a point must never be a `symbol`. The library throws an exception when it
-encounters a `symbol` as a point.
+`function`s are comparable with `<`, and give more reasonable results out-of-the-box, because the source code is
+compared as a string. The coercion can be manipulated by overriding `@@toPrimitive()`, `valueOf()` `toNumber()`, or
+`toString()`.
 
-If you must use non-`Date` `object`s, arrays, or `symbol`s as representations of points, we advise to make the
-comparison explicit with the optional `compareFn` parameter (see below).
+`symbol`s fail with a `TypeError`. JavaScript tries to coerce the `symbol`, and that is not supported. It is not
+possbible to override the `@@toPrimitive()`, `valueOf()` `toNumber()`, or `toString()` method of a `symbol`. `symbols`
+cannot be compared, nor be made to be comparable, with `<`.
 
-### Equality
+## Equality
 
 Comparing primitive values of the same type with `===` or `==` behaves intuitively.
 
@@ -125,13 +116,13 @@ order is connected (total), `object`s are considered equal when ¬(a < b) ∧ ¬
 ⇔ ∀ a, b ∈ T: (¬ (a ⨀ b) ∧ ¬ (b ⨀ a)) ⇒ a = b
 ```
 
-### `compareFn<T>`
+## `compareFn<T>`
 
-Operations that use comparison feature an optional function parameter `compare` that you should supply when the type of
-the points is not `number`, `string`, or `Date` (or `bigint`), that compares two point values, and returns a `number`.
+Operations that use comparison feature an optional function parameter `compareFn` that you _must_ supply when points can
+be `NaN`, or are `symbol`s, and can supply in other cases.
 
 ```ts
-type compareFn<T> = (a: T, b: T) => number
+type Comparator<T> = (t1: T, t2: T) => number
 ```
 
 The `compare` method and function have the traditional semantics, where
@@ -151,3 +142,30 @@ Note that it is the implementation's responsibility to make sure the order is co
 | connected (total) | ∀ `a`, `b` ∈ `T`: `compare(a, b) !== 0` ⇒ `compare(a, b) < 0 &vert;&vert; compare(b, a) < 0` |
 |                   | ∀ `a`, `b` ∈ `T`: `compare(a, b) < 0` ⇔ `compare(b, a) > 0`                                  |
 |                   | ∀ `a`, `b` ∈ `T`: `!Number.isNaN(compare(a, b))`                                             |
+
+## `ltComparator<T>`
+
+This library compares points with `ltComparator<T>` if no explicit `compareFn<T>` is given as parameter.
+
+```ts
+function ltComparator<LTComparable> (t1: T, t2: T): number
+```
+
+`ltComparator<T>` compares 2 points with `<`.
+
+A precondition for this function is that the values cannot be `NaN` or a `symbol`, and that the values must be “of the
+same type”.
+
+This is the right choice in most sensible cases, where points are represented by `number`s, `string`s, or `Date`s.
+
+## Don't know 🤷
+
+`undefined` and `null` represent _don't know 🤷_. We advise to use `undefined`, or not to have a `start` or `end`
+property present in an interval to express this, and leave `null` well alone.
+
+## Advise on points and comparison
+
+We advise to use `number`s (except `NaN`), `string`s (ISO-formatted), or `Date`s to represent points.
+
+If you must use non-`Date` `object`s, arrays, or `function`s as representations of points, consider overriding
+`valueOf`, or make the comparison explicit with the optional `compareFn` parameter.
