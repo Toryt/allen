@@ -62,6 +62,10 @@ const trueCases: Array<Case<unknown>> = [
     elements: [[null, null, 34], undefined, {}]
   },
   {
+    label: 'function and object',
+    elements: [() => 0, undefined, {}]
+  },
+  {
     label: 'array',
     elements: [
       [1, 3],

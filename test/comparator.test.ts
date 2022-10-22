@@ -27,7 +27,8 @@ const cases: Array<Case<unknown>> = [
   { label: 'Boolean', smaller: Boolean(false), larger: Boolean(true) },
   { label: 'array', smaller: [1, 3], larger: [2, 3] },
   { label: 'array', smaller: [11], larger: [2] },
-  { label: 'function', smaller: () => 5, larger: function a () {} }
+  { label: 'function', smaller: () => 5, larger: function a () {} },
+  { label: 'function vs object', smaller: () => 5, larger: {} }
 ]
 
 describe('comparator', function () {

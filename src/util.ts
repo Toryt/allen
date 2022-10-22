@@ -21,7 +21,7 @@ export function arePointsOfSameType (...p: unknown[]): boolean {
       if (typeDefiner === undefined) {
         return { typeDefiner: e, result }
       }
-      if (typeof typeDefiner !== 'object') {
+      if (typeof typeDefiner !== 'object' && typeof typeDefiner !== 'function') {
         return {
           typeDefiner,
           result: typeof e === typeof typeDefiner

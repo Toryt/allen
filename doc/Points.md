@@ -38,7 +38,7 @@ come as a surprise.
 ```ts
 export type LTComparablePrimitive = number | bigint | string | boolean | Function
 
-export type LTComparable = PrimitivePoint | Object
+export type LTComparable = LTComparablePrimitive | Object
 
 typeof < === (a: LTComparable, b: LTComparable) => boolean | undefined
 ```
