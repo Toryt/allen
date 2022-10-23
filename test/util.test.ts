@@ -4,7 +4,7 @@ import 'should'
 import {
   areOfSameType,
   mostSpecializedCommonType,
-  commonType,
+  commonTypeRepresentation,
   TypeRepresentation,
   primitiveTypeRepresentations,
   isTypeRepresentation,
@@ -232,18 +232,18 @@ describe('util', function () {
       })
     })
   })
-  describe('commonType', function () {
+  describe('commonTypeRepresentation', function () {
     describe('true', function () {
       trueCases.forEach(c => {
         it(`returns ${inspect(c.expected)} for ${c.label}`, function () {
-          should(commonType(...c.elements)).equal(c.expected)
+          should(commonTypeRepresentation(...c.elements)).equal(c.expected)
         })
       })
     })
     describe('false', function () {
       falseCases.forEach(c => {
         it(`returns false for ${c.label}`, function () {
-          should(commonType(...c.elements)).be.false()
+          should(commonTypeRepresentation(...c.elements)).be.false()
         })
       })
     })

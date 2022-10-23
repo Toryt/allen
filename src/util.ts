@@ -55,7 +55,7 @@ export function mostSpecializedCommonType (c1: Constructor<Object>, c2: Construc
   return mostSpecializedCommonType(Object.getPrototypeOf(c1.prototype).constructor, c2)
 }
 
-export function commonType (...p: unknown[]): TypeRepresentation | undefined | false {
+export function commonTypeRepresentation (...p: unknown[]): TypeRepresentation | undefined | false {
   const { type, result } = p.reduce(
     ({ type, result }: Acc, e: unknown): Acc => {
       if (!result) {
@@ -92,5 +92,5 @@ export function commonType (...p: unknown[]): TypeRepresentation | undefined | f
 }
 
 export function areOfSameType (...p: unknown[]): boolean {
-  return commonType(...p) !== false
+  return commonTypeRepresentation(...p) !== false
 }
