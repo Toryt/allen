@@ -1,29 +1,39 @@
-import { commonType, mostSpecializedCommonType } from './util'
-import { Indefinite, Point, PointTypeFor, PointTypeRepresentation } from './point'
+import {
+  commonTypeRepresentation,
+  isTypeRepresentation,
+  mostSpecializedCommonType,
+  TypeRepresentation
+} from './typeRepresentation'
+import { Indefinite, TypeFor } from './type'
+import assert from 'assert'
 
-// MUDO why extends Point? to forbid Symbol? but what if user gives a compare?
-export interface Interval<T extends Point> {
+/**
+ * Intervals have `start` and an `end` {@link commonTypeRepresentation _of the same type_}, which can be
+ * {@link Indefinite indefinite}.
+ */
+export interface Interval<T> {
   readonly start?: Indefinite<T>
   readonly end?: Indefinite<T>
 }
 
-export function isInterval (i: unknown): i is Interval<Point>
-export function isInterval<T extends PointTypeRepresentation> (i: unknown, pointType: T): i is Interval<PointTypeFor<T>>
-export function isInterval (i: unknown, pointType?: PointTypeRepresentation): boolean {
-  if (i === undefined || i === null || typeof i !== 'object') {
+// MUDO start before end
+
+export function isInterval<TR extends TypeRepresentation> (i: unknown, pointType: TR): i is Interval<TypeFor<TR>> {
+  assert(isTypeRepresentation(pointType))
+
+  if (i === undefined || i === null || (typeof i !== 'object' && typeof i !== 'function')) {
     return false
   }
 
-  const pI = i as Partial<Interval<Point>>
-  // MUDO will return false for symbol; why? if the user gives a compare, it is ok
-  const cType = commonType(pI.start, pI.end)
+  const cType = commonTypeRepresentation(
+    (i as Partial<Interval<TypeFor<TR>>>).start,
+    (i as Partial<Interval<TypeFor<TR>>>).end
+  )
   return (
-    cType !== false &&
-    (cType === undefined ||
-      pointType === undefined ||
-      cType === pointType ||
-      (typeof cType === 'function' &&
-        typeof pointType === 'function' &&
-        mostSpecializedCommonType(cType, pointType) === pointType))
+    cType === undefined ||
+    cType === pointType ||
+    (typeof cType === 'function' &&
+      typeof pointType === 'function' &&
+      mostSpecializedCommonType(cType, pointType) === pointType)
   )
 }
