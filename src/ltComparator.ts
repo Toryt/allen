@@ -8,7 +8,7 @@ import { Constructor } from './constructor'
  * Note that `number` `NaN` is not an acceptable element. This cannot be expressed in TypeScript.
  * All other values can be compared with {@link ltComparator}, although maybe not intuitively out-of-the-box.
  */
-export const ltComparablePrimitiveRepresentations = ['number', 'bigint', 'string', 'boolean', 'function'] as const
+export const ltComparablePrimitiveTypeRepresentations = ['number', 'bigint', 'string', 'boolean', 'function'] as const
 
 /**
  * _Dynamic representation_ of the type of a definite point.
@@ -18,7 +18,9 @@ export const ltComparablePrimitiveRepresentations = ['number', 'bigint', 'string
  * As a side effect, funtions can be represented both as `'function'` and the `Function` constructor
  * `Constructor<Function>`, which is the representation of the function as an `object`.
  */
-export type LTComparableRepresentation = typeof ltComparablePrimitiveRepresentations[number] | Constructor<Object>
+export type LTComparableTypeRepresentation =
+  | typeof ltComparablePrimitiveTypeRepresentations[number]
+  | Constructor<Object>
 
 export type LTComparablePrimitive = number | bigint | string | boolean | Function
 
