@@ -61,6 +61,14 @@ export function mostSpecializedCommonType (c1: Constructor<Object>, c2: Construc
   return mostSpecializedCommonType(Object.getPrototypeOf(c1.prototype).constructor, c2)
 }
 
+/**
+ * Returns the {@link TypeRepresentation} of the type that all parameters have in common.
+ *
+ * `undefined` and `null` parameters are not taken into account. If all parameters are `undefined` or `null`,
+ * `undefined` is returned.
+ *
+ * If there is no common type between the parameters, `false` is returned.
+ */
 export function commonTypeRepresentation (...p: unknown[]): TypeRepresentation | undefined | false {
   const { type, result } = p.reduce(
     ({ type, result }: Acc, e: unknown): Acc => {
