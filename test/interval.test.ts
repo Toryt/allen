@@ -113,15 +113,23 @@ describe('interval', function () {
         })
       })
     })
+
+    function representsSuperType (
+      superRepresentation: TypeRepresentation,
+      typeRepresentation: TypeRepresentation
+    ): boolean {
+      return (
+        superRepresentation === typeRepresentation ||
+        (typeof superRepresentation === 'function' &&
+          typeof typeRepresentation === 'function' &&
+          mostSpecializedCommonType(superRepresentation, typeRepresentation) === superRepresentation)
+      )
+    }
+
     pointTypeRepresentations.forEach(targetPointType => {
       describe(`pointType ${inspect(targetPointType)}`, function () {
         trueCases.forEach(({ label, pointType, p1, p2 }) => {
-          const expected =
-            targetPointType === pointType ||
-            (typeof targetPointType === 'function' &&
-              typeof pointType === 'function' &&
-              mostSpecializedCommonType(targetPointType, pointType) === targetPointType)
-          const expectedLabel = expected ? 'true' : 'false'
+          const expectedLabel = representsSuperType(targetPointType, pointType) ? 'true' : 'false'
           describe(`${label} -> ${expectedLabel}`, function () {
             it(`returns ${expectedLabel} for [${inspect(p1)}, ${inspect(p2)}[ for point type ${inspect(
               targetPointType
@@ -142,16 +150,8 @@ describe('interval', function () {
             })
 
             const wrongStuff = stuff.filter(s => {
-              if (s === null) {
-                return false
-              }
               const trs = typeRepresentationOf(s)
-              return (
-                trs !== targetPointType &&
-                (typeof targetPointType !== 'function' ||
-                  typeof trs !== 'function' ||
-                  mostSpecializedCommonType(trs, targetPointType) !== targetPointType)
-              )
+              return trs !== undefined && !representsSuperType(targetPointType, trs)
             })
             wrongStuff.forEach(s => {
               it(`returns false for [${inspect(p1)}, ${inspect(s)}[ for point type ${inspect(
