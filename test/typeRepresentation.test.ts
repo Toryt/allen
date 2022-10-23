@@ -15,6 +15,7 @@ import should from 'should'
 import { Constructor } from '../src/constructor'
 import { idiotPointTypeRepresentations, pointTypeRepresentations } from './_pointTypeRepresentationCases'
 import { dontKnowCases, objectCases, primitiveCases } from './_pointCases'
+import { A, B, C } from './_someClasses'
 
 interface Case<T> {
   label: string
@@ -23,31 +24,6 @@ interface Case<T> {
 
 interface TrueCase<T> extends Case<T> {
   expected: TypeRepresentation | undefined
-}
-
-class A {
-  public a: string
-
-  constructor () {
-    this.a = 'an a'
-  }
-}
-
-class B extends A {
-  public b: number
-
-  constructor () {
-    super()
-    this.b = 432
-  }
-}
-
-class C {
-  public c: boolean
-
-  constructor () {
-    this.c = true
-  }
 }
 
 const trueCases: Array<TrueCase<unknown>> = [

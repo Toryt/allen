@@ -1,5 +1,5 @@
 import assert, { notStrictEqual } from 'assert'
-import { areOfSameType } from './util'
+import { areOfSameType } from './typeRepresentation'
 import { Constructor } from './constructor'
 
 /**
