@@ -21,7 +21,7 @@ export type TypeRepresentation = typeof primitiveTypeRepresentations[number] | C
  * {@link primitiveTypeRepresentations}), but we can only determine dynamically in JS that `u` is a function, and not necessarily
  * a constructor according to TS, although we can come close.
  */
-export function isPointTypeRepresentation (u: unknown): boolean {
+export function isTypeRepresentation (u: unknown): boolean {
   return (
     ((primitiveTypeRepresentations as unknown) as unknown[]).includes(u) ||
     (typeof u === 'function' && 'prototype' in u && 'constructor' in u.prototype && u.prototype.constructor === u)

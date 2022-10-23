@@ -1,5 +1,5 @@
 import { Constructor } from './constructor'
-import { isPointTypeRepresentation, pointTypeOf, TypeRepresentation } from './util'
+import { isTypeRepresentation, pointTypeOf, TypeRepresentation } from './util'
 
 export type PrimitivePoint = number | bigint | string | boolean | symbol | Function
 
@@ -56,7 +56,7 @@ export function isPoint (u: unknown): u is Point
 export function isPoint<T extends TypeRepresentation> (u: unknown, pointType: T): u is PointTypeFor<T>
 
 export function isPoint (u: unknown, pointType?: TypeRepresentation): boolean {
-  if (pointType !== undefined && !isPointTypeRepresentation(pointType)) {
+  if (pointType !== undefined && !isTypeRepresentation(pointType)) {
     return false
   }
   const tOfU = pointTypeOf(u)
@@ -88,7 +88,7 @@ export function isIndefinitePoint<T extends TypeRepresentation> (
 ): u is Indefinite<PointTypeFor<T>>
 
 export function isIndefinitePoint (u: unknown, pointType?: TypeRepresentation): boolean {
-  if (pointType !== undefined && !isPointTypeRepresentation(pointType)) {
+  if (pointType !== undefined && !isTypeRepresentation(pointType)) {
     return false
   }
   const tOfU = pointTypeOf(u)

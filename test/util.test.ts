@@ -7,7 +7,7 @@ import {
   commonType,
   TypeRepresentation,
   primitiveTypeRepresentations,
-  isPointTypeRepresentation,
+  isTypeRepresentation,
   pointTypeOf
 } from '../src/util'
 import { inspect } from 'util'
@@ -146,11 +146,11 @@ describe('util', function () {
       })
     })
   })
-  describe('isPointTypeRepresentation', function () {
+  describe('isTypeRepresentation', function () {
     describe('yes', function () {
       pointTypeRepresentations.forEach(ptr => {
         it(`returns true for ${inspect(ptr)}`, function () {
-          isPointTypeRepresentation(ptr).should.be.true()
+          isTypeRepresentation(ptr).should.be.true()
           const typed: TypeRepresentation = ptr
           console.log(typed)
         })
@@ -159,7 +159,7 @@ describe('util', function () {
     describe('idiot point types', function () {
       idiotPointTypeRepresentations.forEach(iptr => {
         it(`returns false for ${inspect(iptr)}`, function () {
-          isPointTypeRepresentation(iptr).should.be.false()
+          isTypeRepresentation(iptr).should.be.false()
           // @ts-expect-error
           const typed: TypeRepresentation = iptr
           console.log(typed)
