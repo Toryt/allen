@@ -121,22 +121,6 @@ const falseCases: Array<Case<unknown>> = [
 ]
 
 describe('util', function () {
-  describe('arePointsOfSameType', function () {
-    describe('true', function () {
-      trueCases.forEach(c => {
-        it(`returns true for ${c.label}`, function () {
-          arePointsOfSameType(...c.elements).should.be.true()
-        })
-      })
-    })
-    describe('false', function () {
-      falseCases.forEach(c => {
-        it(`returns false for ${c.label}`, function () {
-          arePointsOfSameType(...c.elements).should.be.false()
-        })
-      })
-    })
-  })
   describe('mostSpecializedCommonType', function () {
     interface CommonCase {
       c1: Constructor<Object>
@@ -191,6 +175,22 @@ describe('util', function () {
       falseCases.forEach(c => {
         it(`returns false for ${c.label}`, function () {
           should(commonType(...c.elements)).be.false()
+        })
+      })
+    })
+  })
+  describe('arePointsOfSameType', function () {
+    describe('true', function () {
+      trueCases.forEach(c => {
+        it(`returns true for ${c.label}`, function () {
+          arePointsOfSameType(...c.elements).should.be.true()
+        })
+      })
+    })
+    describe('false', function () {
+      falseCases.forEach(c => {
+        it(`returns false for ${c.label}`, function () {
+          arePointsOfSameType(...c.elements).should.be.false()
         })
       })
     })

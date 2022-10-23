@@ -1,4 +1,3 @@
-import assert from 'assert'
 import { pointTypeOf, PointTypeRepresentation } from './point'
 import { Constructor } from './constructor'
 
@@ -6,38 +5,6 @@ interface Acc {
   typeDefiner?: unknown
   type?: PointTypeRepresentation | undefined
   result: boolean
-}
-
-// MUDO what about functions?
-
-export function arePointsOfSameType (...p: unknown[]): boolean {
-  const { result } = p.reduce(
-    ({ typeDefiner, result }: Acc, e: unknown): Acc => {
-      if (!result || Number.isNaN(e) || typeof e === 'symbol') {
-        return { typeDefiner, result: false }
-      }
-      if (e === undefined || e === null) {
-        return { typeDefiner, result }
-      }
-      if (typeDefiner === undefined) {
-        return { typeDefiner: e, result }
-      }
-      if (typeof typeDefiner !== 'object' && typeof typeDefiner !== 'function') {
-        return {
-          typeDefiner,
-          result: typeof e === typeof typeDefiner
-        }
-      }
-      assert(typeDefiner !== null)
-      if (typeDefiner instanceof e.constructor) {
-        // e is a supertype of firstWithType: switch
-        return { typeDefiner: e, result }
-      }
-      return { typeDefiner, result: e instanceof typeDefiner.constructor }
-    },
-    { result: true }
-  )
-  return result
 }
 
 export function mostSpecializedCommonType (c1: Constructor<Object>, c2: Constructor<Object>): Constructor<Object> {
@@ -81,4 +48,8 @@ export function commonType (...p: unknown[]): PointTypeRepresentation | undefine
     { result: true }
   )
   return result && type
+}
+
+export function arePointsOfSameType (...p: unknown[]): boolean {
+  return commonType(...p) !== false
 }
