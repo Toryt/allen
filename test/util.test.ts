@@ -8,7 +8,7 @@ import {
   TypeRepresentation,
   primitiveTypeRepresentations,
   isTypeRepresentation,
-  pointTypeOf
+  typeRepresentationOf
 } from '../src/util'
 import { inspect } from 'util'
 import should from 'should'
@@ -167,25 +167,25 @@ describe('util', function () {
       })
     })
   })
-  describe('pointTypeOf', function () {
+  describe('typeRepresentationOf', function () {
     describe("don't know 🤷", function () {
       dontKnowCases.forEach(c => {
         it(`returns undefined for ${inspect(c)}`, function () {
-          should(pointTypeOf(c)).be.undefined()
+          should(typeRepresentationOf(c)).be.undefined()
         })
       })
     })
     describe('primitive and wrapper types', function () {
       primitiveCases.forEach(c => {
         it(`returns ${typeof c} for ${inspect(c)}`, function () {
-          should(pointTypeOf(c)).equal(typeof c)
+          should(typeRepresentationOf(c)).equal(typeof c)
         })
       })
     })
     describe('objects and functions', function () {
       objectCases.forEach(c => {
         it(`returns the constructor for ${inspect(c)}`, function () {
-          should(pointTypeOf(c)).equal(c.constructor)
+          should(typeRepresentationOf(c)).equal(c.constructor)
         })
       })
     })

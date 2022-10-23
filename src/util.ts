@@ -33,7 +33,7 @@ export function isTypeRepresentation (u: unknown): boolean {
  *
  * Returns `undefined` when `p` is `undefined` or `null`, expressing “don't know 🤷”.
  */
-export function pointTypeOf (u: unknown): TypeRepresentation | undefined {
+export function typeRepresentationOf (u: unknown): TypeRepresentation | undefined {
   if (u === undefined || u === null) {
     return undefined
   }
@@ -62,7 +62,7 @@ export function commonType (...p: unknown[]): TypeRepresentation | undefined | f
         // determined earlier that there is no common type; return false
         return { result }
       }
-      const eType = pointTypeOf(e)
+      const eType = typeRepresentationOf(e)
       if (eType === undefined) {
         // e does not define the common type: continue
         return { type, result }
