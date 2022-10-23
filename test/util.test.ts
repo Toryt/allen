@@ -1,11 +1,20 @@
 /* eslint-env mocha */
 
 import 'should'
-import { areOfSameType, mostSpecializedCommonType, commonType } from '../src/util'
-import { PointTypeRepresentation } from '../src/point'
+import {
+  areOfSameType,
+  mostSpecializedCommonType,
+  commonType,
+  TypeRepresentation,
+  primitiveTypeRepresentations,
+  isPointTypeRepresentation,
+  pointTypeOf
+} from '../src/util'
 import { inspect } from 'util'
 import should from 'should'
 import { Constructor } from '../src/constructor'
+import { idiotPointTypeRepresentations, pointTypeRepresentations } from './_pointTypeRepresentationCases'
+import { dontKnowCases, objectCases, primitiveCases } from './_pointCases'
 
 interface Case<T> {
   label: string
@@ -13,7 +22,7 @@ interface Case<T> {
 }
 
 interface TrueCase<T> extends Case<T> {
-  expected: PointTypeRepresentation | undefined
+  expected: TypeRepresentation | undefined
 }
 
 class A {
@@ -121,6 +130,66 @@ const falseCases: Array<Case<unknown>> = [
 ]
 
 describe('util', function () {
+  describe('primitiveTypeRepresentations', function () {
+    it('is an array of strings', function () {
+      primitiveTypeRepresentations.should.be.an.Array()
+      primitiveTypeRepresentations.forEach(ppt => {
+        ppt.should.be.a.String()
+      })
+    })
+
+    const notPrimitivePointTypes = ['object', 'function', 'undefined']
+    const pptsAsString: string[] = primitiveTypeRepresentations.slice()
+    notPrimitivePointTypes.forEach(nppt => {
+      it(`${nppt} is not a primitive point type`, function () {
+        pptsAsString.includes(nppt).should.be.false()
+      })
+    })
+  })
+  describe('isPointTypeRepresentation', function () {
+    describe('yes', function () {
+      pointTypeRepresentations.forEach(ptr => {
+        it(`returns true for ${inspect(ptr)}`, function () {
+          isPointTypeRepresentation(ptr).should.be.true()
+          const typed: TypeRepresentation = ptr
+          console.log(typed)
+        })
+      })
+    })
+    describe('idiot point types', function () {
+      idiotPointTypeRepresentations.forEach(iptr => {
+        it(`returns false for ${inspect(iptr)}`, function () {
+          isPointTypeRepresentation(iptr).should.be.false()
+          // @ts-expect-error
+          const typed: TypeRepresentation = iptr
+          console.log(typed)
+        })
+      })
+    })
+  })
+  describe('pointTypeOf', function () {
+    describe("don't know 🤷", function () {
+      dontKnowCases.forEach(c => {
+        it(`returns undefined for ${inspect(c)}`, function () {
+          should(pointTypeOf(c)).be.undefined()
+        })
+      })
+    })
+    describe('primitive and wrapper types', function () {
+      primitiveCases.forEach(c => {
+        it(`returns ${typeof c} for ${inspect(c)}`, function () {
+          should(pointTypeOf(c)).equal(typeof c)
+        })
+      })
+    })
+    describe('objects and functions', function () {
+      objectCases.forEach(c => {
+        it(`returns the constructor for ${inspect(c)}`, function () {
+          should(pointTypeOf(c)).equal(c.constructor)
+        })
+      })
+    })
+  })
   describe('mostSpecializedCommonType', function () {
     interface CommonCase {
       c1: Constructor<Object>
