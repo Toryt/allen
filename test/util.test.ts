@@ -1,11 +1,19 @@
 /* eslint-env mocha */
 
 import 'should'
-import { arePointsOfSameType } from '../src/util'
+import { arePointsOfSameType, mostSpecializedCommonType, commonType } from '../src/util'
+import { PointTypeRepresentation } from '../src/point'
+import { inspect } from 'util'
+import should from 'should'
+import { Constructor } from '../src/constructor'
 
 interface Case<T> {
   label: string
   elements: T[]
+}
+
+interface TrueCase<T> extends Case<T> {
+  expected: PointTypeRepresentation | undefined
 }
 
 class A {
@@ -33,58 +41,83 @@ class C {
   }
 }
 
-const trueCases: Array<Case<unknown>> = [
-  { label: 'number', elements: [undefined, undefined, 42, Math.LN2, 42, Number.NEGATIVE_INFINITY, Number.EPSILON] },
-  { label: 'bigint', elements: [80532987634n, undefined, 9509523n, null] },
-  { label: 'string', elements: [null, 'string', '', 'a string'] },
-  { label: 'boolean', elements: [false, null, null, true] },
-  { label: 'Date', elements: [new Date(1996, 3, 24, 12, 34, 56, 897), new Date(2001, 3, 24, 12, 34, 56, 897)] },
-  { label: 'Number', elements: [Number(3), Number(89734)] },
-  { label: 'BigInt', elements: [BigInt(-432), BigInt(897532)] },
-  { label: 'String', elements: [String('a'), String('b')] },
-  { label: 'Boolean', elements: [Boolean(false), undefined, Boolean(true)] },
-  { label: 'object', elements: [{ a: 'a one' }, { b: 'a two' }, null] },
-  { label: 'A', elements: [new A(), new A(), undefined] },
+const trueCases: Array<TrueCase<unknown>> = [
+  {
+    label: 'number',
+    elements: [undefined, undefined, 42, Math.LN2, 42, Number.NEGATIVE_INFINITY, Number.EPSILON],
+    expected: 'number'
+  },
+  { label: 'numbers with NaN', elements: [23, 34, NaN, 43, undefined], expected: 'number' },
+  { label: 'bigint', elements: [80532987634n, undefined, 9509523n, null], expected: 'bigint' },
+  { label: 'string', elements: [null, 'string', '', 'a string'], expected: 'string' },
+  { label: 'boolean', elements: [false, null, null, true], expected: 'boolean' },
+  {
+    label: 'Date',
+    elements: [new Date(1996, 3, 24, 12, 34, 56, 897), new Date(2001, 3, 24, 12, 34, 56, 897)],
+    expected: Date
+  },
+  { label: 'Number', elements: [Number(3), Number(89734)], expected: 'number' },
+  { label: 'BigInt', elements: [BigInt(-432), BigInt(897532)], expected: 'bigint' },
+  { label: 'String', elements: [String('a'), String('b')], expected: 'string' },
+  { label: 'Boolean', elements: [Boolean(false), undefined, Boolean(true)], expected: 'boolean' },
+  { label: 'object', elements: [{ a: 'a one' }, { b: 'a two' }, null], expected: Object },
+  { label: 'A', elements: [new A(), new A(), undefined], expected: A },
   {
     label: 'polymorph',
-    elements: [null, null, null, undefined, new A(), new A(), new B(), new B()]
+    elements: [null, null, null, undefined, new A(), new A(), new B(), new B()],
+    expected: A
   },
   {
     label: 'polymorph in reverse order',
-    elements: [null, null, null, undefined, new B(), new A(), new A(), new B()]
+    elements: [null, null, null, undefined, new B(), new A(), new A(), new B()],
+    expected: A
   },
+  { label: 'mixed objects', elements: [undefined, new A(), new B(), new C()], expected: Object },
   {
     label: 'object and array',
-    elements: [{ a: ' a thing' }, [3]]
+    elements: [{ a: ' a thing' }, [3]],
+    expected: Object
   },
   {
     label: 'array and object',
-    elements: [[null, null, 34], undefined, {}]
+    elements: [[null, null, 34], undefined, {}],
+    expected: Object
+  },
+  {
+    label: 'functions',
+    elements: [
+      () => 0,
+      undefined,
+      function a () {
+        return true
+      }
+    ],
+    expected: Function
   },
   {
     label: 'function and object',
-    elements: [() => 0, undefined, {}]
+    elements: [() => 0, undefined, {}],
+    expected: Object
   },
   {
     label: 'array',
     elements: [
       [1, 3],
       [2, 3]
-    ]
+    ],
+    expected: Array
   },
-  { label: 'mixed array', elements: [[11], ['a string']] },
-  { label: 'undefined', elements: [undefined, undefined, undefined] },
-  { label: 'null', elements: [null, null] },
-  { label: 'null and undefined', elements: [undefined, null, undefined] },
-  { label: 'empty', elements: [] }
+  { label: 'symbols', elements: [undefined, undefined, Symbol('a'), null, Symbol('b')], expected: 'symbol' },
+  { label: 'mixed array', elements: [[11], ['a string']], expected: Array },
+  { label: 'undefined', elements: [undefined, undefined, undefined], expected: undefined },
+  { label: 'null', elements: [null, null], expected: undefined },
+  { label: 'null and undefined', elements: [undefined, null, undefined], expected: undefined },
+  { label: 'empty', elements: [], expected: undefined }
 ]
 
 const falseCases: Array<Case<unknown>> = [
   { label: 'mixed primitives', elements: [undefined, null, 34, 'a string'] },
-  { label: 'mixed objects', elements: [undefined, new A(), new B(), new C()] },
-  { label: 'mixed', elements: [{}, null, 34] },
-  { label: 'NaN', elements: [23, 34, NaN, 43, undefined] },
-  { label: 'symbols', elements: [undefined, undefined, Symbol('a'), null, Symbol('b')] }
+  { label: 'mixed', elements: [{}, null, 34] }
 ]
 
 describe('util', function () {
@@ -142,6 +175,22 @@ describe('util', function () {
         })
         it(`returns ${inspect(c.expected)} when called with (${inspect(c.c2)}, ${inspect(c.c1)})`, function () {
           mostSpecializedCommonType(c.c2, c.c1).should.equal(c.expected)
+        })
+      })
+    })
+  })
+  describe('commonType', function () {
+    describe('true', function () {
+      trueCases.forEach(c => {
+        it(`returns ${inspect(c.expected)} for ${c.label}`, function () {
+          should(commonType(...c.elements)).equal(c.expected)
+        })
+      })
+    })
+    describe('false', function () {
+      falseCases.forEach(c => {
+        it(`returns false for ${c.label}`, function () {
+          should(commonType(...c.elements)).be.false()
         })
       })
     })

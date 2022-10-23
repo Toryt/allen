@@ -54,12 +54,7 @@ export function commonType (...p: unknown[]): PointTypeRepresentation | undefine
         // determined earlier that there is no common type; return false
         return { result }
       }
-      // MUDO will return false for symbol; why? if the user gives a compare, it is ok
       const eType = pointTypeOf(e)
-      if (eType === false) {
-        // there is no common type: override previous results and return false
-        return { result: false }
-      }
       if (eType === undefined) {
         // e does not define the common type: continue
         return { type, result }
