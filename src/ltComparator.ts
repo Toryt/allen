@@ -1,5 +1,5 @@
-import assert, { notStrictEqual } from 'assert'
-import { Constructor, areOfSameType } from './typeRepresentation'
+import { notStrictEqual, ok } from 'assert'
+import { Constructor, commonTypeRepresentation } from './typeRepresentation'
 
 /**
  * The primitive types that are acceptable as points for {@link ltComparator}.
@@ -7,39 +7,37 @@ import { Constructor, areOfSameType } from './typeRepresentation'
  * Note that `number` `NaN` is not an acceptable element. This cannot be expressed in TypeScript.
  * All other values can be compared with {@link ltComparator}, although maybe not intuitively out-of-the-box.
  */
-export const ltComparablePrimitiveTypeRepresentations = ['number', 'bigint', 'string', 'boolean', 'function'] as const
+export const ltComparablePrimitiveTypeRepresentations = ['number', 'bigint', 'string', 'boolean'] as const
 
 /**
  * _Dynamic representation_ of the type of a definite point.
  *
- * For primitive types, this is the `typeof` string. For `objects`, it is the constructor.
- *
- * As a side effect, funtions can be represented both as `'function'` and the `Function` constructor
- * `Constructor<Function>`, which is the representation of the function as an `object`.
+ * For primitive types, this is the `typeof` string. For `object` and `function`, it is the constructor.
  */
 export type LTComparableTypeRepresentation =
   | typeof ltComparablePrimitiveTypeRepresentations[number]
   | Constructor<Object>
 
-export type LTComparablePrimitive = number | bigint | string | boolean | Function
+export type LTComparablePrimitive = number | bigint | string | boolean
 
-export type LTComparable = LTComparablePrimitive | Object
+export type LTComparable = LTComparablePrimitive | Object | Function
 
 const noUndefined: string = 'default ltComparator cannot compare undefined'
 const noNull: string = 'default ltComparator cannot compare null'
 const noNaN: string = 'default ltComparator cannot compare NaN'
 const noSymbol: string = 'default ltComparator cannot compare symbols'
+const haveCommonType: string = 't1 and t2 must be of a common type'
 
 export function ltComparator<T> (t1: T, t2: T): number {
-  assert(t1 !== undefined, noUndefined)
-  assert(t2 !== undefined, noUndefined)
-  assert(t1 !== null, noNull)
-  assert(t2 !== null, noNull)
-  assert(!Number.isNaN(t1), noNaN)
-  assert(!Number.isNaN(t2), noNaN)
+  notStrictEqual(t1, undefined, noUndefined)
+  notStrictEqual(t2, undefined, noUndefined)
+  notStrictEqual(t1, null, noNull)
+  notStrictEqual(t2, null, noNull)
+  ok(!Number.isNaN(t1), noNaN)
+  ok(!Number.isNaN(t2), noNaN)
   notStrictEqual(typeof t1, 'symbol', noSymbol)
   notStrictEqual(typeof t2, 'symbol', noSymbol)
-  assert(areOfSameType(t1, t2))
+  ok(commonTypeRepresentation(t1, t2), haveCommonType)
 
   return t1 < t2 ? -1 : t2 < t1 ? +1 : 0
 }
