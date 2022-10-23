@@ -3,7 +3,6 @@
 import 'should'
 import {
   Constructor,
-  areOfSameType,
   mostSpecializedCommonType,
   commonTypeRepresentation,
   TypeRepresentation,
@@ -220,22 +219,6 @@ describe('util', function () {
       falseCases.forEach(c => {
         it(`returns false for ${c.label}`, function () {
           should(commonTypeRepresentation(...c.elements)).be.false()
-        })
-      })
-    })
-  })
-  describe('areOfSameType', function () {
-    describe('true', function () {
-      trueCases.forEach(c => {
-        it(`returns true for ${c.label}`, function () {
-          areOfSameType(...c.elements).should.be.true()
-        })
-      })
-    })
-    describe('false', function () {
-      falseCases.forEach(c => {
-        it(`returns false for ${c.label}`, function () {
-          areOfSameType(...c.elements).should.be.false()
         })
       })
     })

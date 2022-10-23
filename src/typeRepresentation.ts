@@ -104,7 +104,3 @@ export function commonTypeRepresentation (...p: unknown[]): TypeRepresentation |
   )
   return result && type
 }
-
-export function areOfSameType (...p: unknown[]): boolean {
-  return commonTypeRepresentation(...p) !== false
-}
