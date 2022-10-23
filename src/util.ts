@@ -50,6 +50,6 @@ export function commonType (...p: unknown[]): PointTypeRepresentation | undefine
   return result && type
 }
 
-export function arePointsOfSameType (...p: unknown[]): boolean {
+export function areOfSameType (...p: unknown[]): boolean {
   return commonType(...p) !== false
 }

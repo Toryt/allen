@@ -1,5 +1,5 @@
 import assert, { notStrictEqual } from 'assert'
-import { arePointsOfSameType } from './util'
+import { areOfSameType } from './util'
 import { Constructor } from './constructor'
 
 /**
@@ -40,7 +40,7 @@ export function ltComparator<T> (t1: T, t2: T): number {
   assert(!Number.isNaN(t2), noNaN)
   notStrictEqual(typeof t1, 'symbol', noSymbol)
   notStrictEqual(typeof t2, 'symbol', noSymbol)
-  assert(arePointsOfSameType(t1, t2))
+  assert(areOfSameType(t1, t2))
 
   return t1 < t2 ? -1 : t2 < t1 ? +1 : 0
 }

@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
 import 'should'
-import { arePointsOfSameType, mostSpecializedCommonType, commonType } from '../src/util'
+import { areOfSameType, mostSpecializedCommonType, commonType } from '../src/util'
 import { PointTypeRepresentation } from '../src/point'
 import { inspect } from 'util'
 import should from 'should'
@@ -179,18 +179,18 @@ describe('util', function () {
       })
     })
   })
-  describe('arePointsOfSameType', function () {
+  describe('areOfSameType', function () {
     describe('true', function () {
       trueCases.forEach(c => {
         it(`returns true for ${c.label}`, function () {
-          arePointsOfSameType(...c.elements).should.be.true()
+          areOfSameType(...c.elements).should.be.true()
         })
       })
     })
     describe('false', function () {
       falseCases.forEach(c => {
         it(`returns false for ${c.label}`, function () {
-          arePointsOfSameType(...c.elements).should.be.false()
+          areOfSameType(...c.elements).should.be.false()
         })
       })
     })
