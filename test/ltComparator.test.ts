@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
 import 'should'
-import { ltComparator } from '../src/comparator'
+import { ltComparator } from '../src/ltComparator'
 import { inspect } from 'util'
 import { PrimitivePoint } from '../src/point'
 
@@ -31,7 +31,7 @@ const cases: Array<Case<unknown>> = [
   { label: 'function vs object', smaller: () => 5, larger: {} }
 ]
 
-describe('comparator', function () {
+describe('ltComparator', function () {
   describe('ltComparator', function () {
     cases.forEach((c: Case<unknown>) => {
       describe(c.label, function () {

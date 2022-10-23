@@ -1,5 +1,6 @@
 import assert from 'assert'
-import { Constructor, pointTypeOf, PointTypeRepresentation } from './point'
+import { pointTypeOf, PointTypeRepresentation } from './point'
+import { Constructor } from './constructor'
 
 interface Acc {
   typeDefiner?: unknown

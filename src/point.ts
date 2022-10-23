@@ -1,4 +1,5 @@
 import assert from 'assert'
+import { Constructor } from './constructor'
 
 /**
  * The primitive types that are acceptable as points.
@@ -6,14 +7,7 @@ import assert from 'assert'
  * Note that `number` `NaN` is not an acceptable element. This cannot be expressed in TypeScript.
  * All other values of these types are possible points.
  */
-export const primitivePointTypes = ['number', 'bigint', 'string', 'boolean', 'function'] as const
-
-/**
- * When an `object` is used as point, it's precise type is expressed by its constructor.
- *
- * Any constructor represents a possible point type.
- */
-export type Constructor<T extends Object> = new (...args: never[]) => T
+export const primitivePointTypes = ['number', 'bigint', 'string', 'boolean', 'function', 'symbol'] as const
 
 /**
  * _Dynamic representation_ of the type of a definite point.
