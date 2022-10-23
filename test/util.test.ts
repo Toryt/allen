@@ -104,4 +104,46 @@ describe('util', function () {
       })
     })
   })
+  describe('mostSpecializedCommonType', function () {
+    interface CommonCase {
+      c1: Constructor<Object>
+      c2: Constructor<Object>
+      expected: Constructor<Object>
+    }
+
+    const cases: CommonCase[] = [
+      { c1: Object, c2: Object, expected: Object },
+      { c1: Date, c2: Date, expected: Date },
+      { c1: Function, c2: Function, expected: Function },
+      { c1: A, c2: A, expected: A },
+      { c1: B, c2: B, expected: B },
+      { c1: C, c2: C, expected: C },
+      { c1: Function, c2: Function, expected: Function },
+      { c1: Object, c2: Function, expected: Object },
+      { c1: Object, c2: Date, expected: Object },
+      { c1: Object, c2: A, expected: Object },
+      { c1: Object, c2: B, expected: Object },
+      { c1: Object, c2: C, expected: Object },
+      { c1: A, c2: B, expected: A },
+      { c1: A, c2: C, expected: Object },
+      { c1: B, c2: C, expected: Object },
+      { c1: A, c2: Date, expected: Object },
+      { c1: A, c2: Function, expected: Object },
+      { c1: B, c2: Date, expected: Object },
+      { c1: B, c2: Function, expected: Object },
+      { c1: C, c2: Date, expected: Object },
+      { c1: C, c2: Function, expected: Object }
+    ]
+
+    cases.forEach(c => {
+      describe(`${inspect(c.c1)} — ${inspect(c.c2)} -> ${inspect(c.expected)}`, function () {
+        it(`returns ${inspect(c.expected)} when called with (${inspect(c.c1)}, ${inspect(c.c2)})`, function () {
+          mostSpecializedCommonType(c.c1, c.c2).should.equal(c.expected)
+        })
+        it(`returns ${inspect(c.expected)} when called with (${inspect(c.c2)}, ${inspect(c.c1)})`, function () {
+          mostSpecializedCommonType(c.c2, c.c1).should.equal(c.expected)
+        })
+      })
+    })
+  })
 })

@@ -44,7 +44,7 @@ export function mostSpecializedCommonType (c1: Constructor<Object>, c2: Construc
   if (c1 === c2 || c2.prototype instanceof c1) {
     return c1
   }
-  return mostSpecializedCommonType(c1.prototype.constructor, c2)
+  return mostSpecializedCommonType(Object.getPrototypeOf(c1.prototype).constructor, c2)
 }
 
 export function commonType (...p: unknown[]): PointTypeRepresentation | undefined | false {
