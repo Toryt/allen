@@ -2,6 +2,7 @@
 
 import 'should'
 import {
+  Constructor,
   areOfSameType,
   mostSpecializedCommonType,
   commonTypeRepresentation,
@@ -12,7 +13,6 @@ import {
 } from '../src/typeRepresentation'
 import { inspect } from 'util'
 import should from 'should'
-import { Constructor } from '../src/constructor'
 import { idiotPointTypeRepresentations, pointTypeRepresentations } from './_pointTypeRepresentationCases'
 import { dontKnowCases, objectCases, primitiveCases } from './_pointCases'
 import { A, B, C } from './_someClasses'

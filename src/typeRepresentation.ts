@@ -1,10 +1,16 @@
-import { Constructor } from './constructor'
 import assert from 'assert'
 
 /**
  * Representations of types that are represented as strings.
  */
 export const primitiveTypeRepresentations = ['number', 'bigint', 'string', 'boolean', 'symbol'] as const
+
+/**
+ * An `object` or `function` instances dynamic type is expressed by its constructor.
+ *
+ * Any constructor represents a type.
+ */
+export type Constructor<T extends Object> = new (...args: never[]) => T
 
 /**
  * _Dynamic representation_ of a type.

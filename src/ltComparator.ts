@@ -1,6 +1,5 @@
 import assert, { notStrictEqual } from 'assert'
-import { areOfSameType } from './typeRepresentation'
-import { Constructor } from './constructor'
+import { Constructor, areOfSameType } from './typeRepresentation'
 
 /**
  * The primitive types that are acceptable as points for {@link ltComparator}.

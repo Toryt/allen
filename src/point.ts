@@ -1,5 +1,4 @@
-import { Constructor } from './constructor'
-import { isTypeRepresentation, typeRepresentationOf, TypeRepresentation } from './typeRepresentation'
+import { Constructor, isTypeRepresentation, typeRepresentationOf, TypeRepresentation } from './typeRepresentation'
 
 export type PrimitivePoint = number | bigint | string | boolean | symbol | Function
 
