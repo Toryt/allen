@@ -1,4 +1,5 @@
-import { Constructor, isTypeRepresentation, typeRepresentationOf, TypeRepresentation } from './typeRepresentation'
+import { isTypeRepresentation, typeRepresentationOf, TypeRepresentation } from './typeRepresentation'
+import { TypeFor, Indefinite } from './type'
 
 export type PrimitivePoint = number | bigint | string | boolean | symbol | Function
 
@@ -8,32 +9,6 @@ export type PrimitivePoint = number | bigint | string | boolean | symbol | Funct
  * MUDO this is just anything
  */
 export type Point = PrimitivePoint | Object
-
-export type PointTypeFor<
-  T extends TypeRepresentation
-> = /* prettier-ignore */ T extends 'number'
-  ? number
-  : T extends 'bigint'
-    ? bigint
-    : T extends 'string'
-      ? string
-      : T extends 'symbol'
-        ? symbol
-        : T extends 'boolean'
-          ? boolean
-          : T extends 'function'
-            ? Function
-            : T extends Constructor<Object>
-              ? InstanceType<T>
-              : never
-
-/**
- * The super type of a specific type of {@link Point} `T`, or `undefined` or `null`, to
- * express “don't know 🤷”.
- *
- * We advise against using `null`. Use `undefined` to express “don't know 🤷”.
- */
-export type Indefinite<T extends Point> = T | undefined | null
 
 /**
  * `u` is a {@link Point}.
@@ -52,7 +27,7 @@ export function isPoint (u: unknown): u is Point
  * function behaves as {@link isPoint} in that case, as if the parameter is not given. This does not check
  * whether `u` is `undefined` or `null`, expressing “don't know 🤷”.
  */
-export function isPoint<T extends TypeRepresentation> (u: unknown, pointType: T): u is PointTypeFor<T>
+export function isPoint<T extends TypeRepresentation> (u: unknown, pointType: T): u is TypeFor<T>
 
 export function isPoint (u: unknown, pointType?: TypeRepresentation): boolean {
   if (pointType !== undefined && !isTypeRepresentation(pointType)) {
@@ -81,10 +56,7 @@ export function isIndefinitePoint (u: unknown): u is Indefinite<Point>
  * function behaves as {@link isIndefinitePoint} in that case, as if the parameter is not given. This does not check
  * whether `u` is `undefined` or `null`, expressing “don't know 🤷”.
  */
-export function isIndefinitePoint<T extends TypeRepresentation> (
-  u: unknown,
-  pointType: T
-): u is Indefinite<PointTypeFor<T>>
+export function isIndefinitePoint<T extends TypeRepresentation> (u: unknown, pointType: T): u is Indefinite<TypeFor<T>>
 
 export function isIndefinitePoint (u: unknown, pointType?: TypeRepresentation): boolean {
   if (pointType !== undefined && !isTypeRepresentation(pointType)) {
