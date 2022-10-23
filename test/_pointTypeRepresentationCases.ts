@@ -1,4 +1,4 @@
-import { primitiveTypeRepresentations, TypeRepresentation } from '../src/util'
+import { primitiveTypeRepresentations, TypeRepresentation } from '../src/typeRepresentation'
 import { A, B, C } from './_someClasses'
 
 export const pptsAsDefinitePointTypeRepresentations: readonly TypeRepresentation[] = primitiveTypeRepresentations

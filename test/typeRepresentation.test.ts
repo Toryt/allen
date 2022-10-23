@@ -9,7 +9,7 @@ import {
   primitiveTypeRepresentations,
   isTypeRepresentation,
   typeRepresentationOf
-} from '../src/util'
+} from '../src/typeRepresentation'
 import { inspect } from 'util'
 import should from 'should'
 import { Constructor } from '../src/constructor'
