@@ -7,39 +7,26 @@ import { Constructor } from './constructor'
  * Note that `number` `NaN` is not an acceptable element. This cannot be expressed in TypeScript.
  * All other values of these types are possible points.
  */
-export const primitivePointTypes = ['number', 'bigint', 'string', 'boolean', 'function', 'symbol'] as const
+export const primitivePointTypes = ['number', 'bigint', 'string', 'boolean', 'symbol'] as const
 
 /**
  * _Dynamic representation_ of the type of a definite point.
  *
- * For primitive types, this is the `typeof` string. For `objects`, it is the constructor.
+ * For primitive types, this is the `typeof` string. For `object` and `function`, it is the constructor.
  *
  * As a side effect, funtions can be represented both as `'function'` and the `Function` constructor
  * `Constructor<Function>`, which is the representation of the function as an `object`.
  */
 export type PointTypeRepresentation = typeof primitivePointTypes[number] | Constructor<Object>
 
-export type PrimitivePoint = number | bigint | string | boolean | Function
+export type PrimitivePoint = number | bigint | string | boolean | symbol | Function
 
 /**
  * The super type of all possible definite points, i.e., everything but `symbol`.
+ *
+ * MUDO this is just anything
  */
 export type Point = PrimitivePoint | Object
-
-// TODO remove when not really used
-// export type DefinitePointTypeRepresentationOf<T extends DefinitePoint> = T extends number
-//   ? 'number'
-//   : T extends bigint
-//   ? 'bigint'
-//   : T extends string
-//   ? 'string'
-//   : T extends boolean
-//   ? 'boolean'
-//   : T extends Function
-//   ? 'function'
-//   : T extends Object
-//   ? Constructor<T>
-//   : never
 
 export type PointTypeFor<
   T extends PointTypeRepresentation
@@ -49,22 +36,15 @@ export type PointTypeFor<
     ? bigint
     : T extends 'string'
       ? string
-      : T extends 'boolean'
-        ? boolean
-        : T extends 'function'
-          ? Function
-          : T extends Constructor<Object>
-            ? InstanceType<T>
-            : never
-
-// /**
-//  * _Dynamic representation_ of the type of a point, i.e., {@link PointTypeRepresentation} or
-//  * `undefined`.
-//  *
-//  * When the point is `undefined` or `null`, to express “don't know 🤷”, its point type representation
-//  * is `undefined`.
-//  */
-// export type IndefinitePointTypeRepresentation = PointTypeRepresentation | undefined
+      : T extends 'symbol'
+        ? symbol
+        : T extends 'boolean'
+          ? boolean
+          : T extends 'function'
+            ? Function
+            : T extends Constructor<Object>
+              ? InstanceType<T>
+              : never
 
 /**
  * The super type of a specific type of {@link Point} `T`, or `undefined` or `null`, to
@@ -73,27 +53,6 @@ export type PointTypeFor<
  * We advise against using `null`. Use `undefined` to express “don't know 🤷”.
  */
 export type Indefinite<T extends Point> = T | undefined | null
-
-// /**
-//  * The super type of all possible points, i.e., {@link DefinitePoint}s, or `undefined` or `null`,
-//  * to express “don't know 🤷”.
-//  *
-//  * We advise against using `null`. Use `undefined` to express “don't know 🤷”.
-//  */
-// export type IndefinitePoint = Point | undefined | null
-//
-// // TODO remove when not really used
-// // export type IndefinitePointTypeRepresentationOf<T extends Point> = T extends Point
-// //   ? PointTypeRepresentationOf<T>
-// //   : T extends undefined | null
-// //   ? undefined
-// //   : never
-// //
-// export type IndefinitePointTypeFor<T extends IndefinitePointTypeRepresentation> = T extends PointTypeRepresentation
-//   ? PointTypeFor<T>
-//   : /* prettier-ignore */ T extends undefined
-//     ? undefined | null
-//     : never
 
 /**
  * Approximation of determining whether `u` is a {@link PointTypeRepresentation}.
@@ -113,19 +72,14 @@ export function isPointTypeRepresentation (u: unknown): boolean {
  * The dynamic representation of the precise point type.
  *
  * Returns `undefined` when `p` is `undefined` or `null`, expressing “don't know 🤷”.
- * Returns `false` when `p` is not an acceptable point, i.e., when `p` is `NaN`, or a `symbol`.
  */
-// MUDO will return false for symbol; why? if the user gives a compare, it is ok
-export function pointTypeOf (u: unknown): PointTypeRepresentation | undefined | false {
+export function pointTypeOf (u: unknown): PointTypeRepresentation | undefined {
   if (u === undefined || u === null) {
     return undefined
   }
   const typeOfU = typeof u
   assert(typeOfU !== 'undefined')
-  if (typeOfU === 'symbol' || Number.isNaN(u)) {
-    return false
-  }
-  return typeOfU === 'object' ? (u.constructor as Constructor<Object>) : typeOfU
+  return typeOfU === 'object' || typeOfU === 'function' ? (u.constructor as Constructor<Object>) : typeOfU
 }
 
 /**
@@ -153,7 +107,6 @@ export function isPoint (u: unknown, pointType?: PointTypeRepresentation): boole
   }
   const tOfU = pointTypeOf(u)
   return (
-    tOfU !== false &&
     tOfU !== undefined &&
     (pointType === undefined || tOfU === pointType || (typeof pointType === 'function' && u instanceof pointType))
   )
@@ -186,10 +139,9 @@ export function isIndefinitePoint (u: unknown, pointType?: PointTypeRepresentati
   }
   const tOfU = pointTypeOf(u)
   return (
-    tOfU !== false &&
-    (tOfU === undefined ||
-      pointType === undefined ||
-      tOfU === pointType ||
-      (typeof pointType === 'function' && u instanceof pointType))
+    tOfU === undefined ||
+    pointType === undefined ||
+    tOfU === pointType ||
+    (typeof pointType === 'function' && u instanceof pointType)
   )
 }

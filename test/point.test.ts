@@ -30,6 +30,7 @@ const primitiveCases = [
   Number.MAX_SAFE_INTEGER,
   Number.MAX_VALUE,
   Number.POSITIVE_INFINITY,
+  NaN,
   -895672890643709647309687348967934n,
   -34n,
   -1n,
@@ -41,21 +42,11 @@ const primitiveCases = [
   '',
   true,
   false,
-  function () {
-    return true
-  },
-  (a: string) => a + '!',
   Number(4),
   BigInt(4),
   String('a wrapped string'),
   Boolean(false),
-  Number,
-  BigInt,
-  String,
-  Boolean,
-  Array,
-  Date,
-  Object
+  Symbol('abc')
 ]
 
 class A {
@@ -94,7 +85,18 @@ const objectCases = [
   JSON,
   new A(),
   new B(),
-  new C()
+  new C(),
+  function () {
+    return true
+  },
+  (a: string) => a + '!',
+  Number,
+  BigInt,
+  String,
+  Boolean,
+  Array,
+  Date,
+  Object
 ]
 
 const pointCases = (notAPointCases as unknown[])
@@ -108,7 +110,8 @@ const pointTypeRepresentations: PointTypeRepresentation[] = pptsAsDefinitePointT
   Date,
   A,
   B,
-  C
+  C,
+  Function
 ])
 
 function notAConstructor1 (): string {
@@ -127,7 +130,7 @@ const idiotDefinitePointTypeRepresentations = [
   null,
   'undefined',
   'object',
-  'symbol',
+  'function',
   'another string',
   '',
   43,
@@ -153,7 +156,7 @@ describe('point', function () {
       })
     })
 
-    const notPrimitivePointTypes = ['object', 'symbol', 'undefined']
+    const notPrimitivePointTypes = ['object', 'function', 'undefined']
     const pptsAsString: string[] = primitivePointTypes.slice()
     notPrimitivePointTypes.forEach(nppt => {
       it(`${nppt} is not a primitive point type`, function () {
@@ -183,13 +186,6 @@ describe('point', function () {
     })
   })
   describe('pointTypeOf', function () {
-    describe('false result', function () {
-      notAPointCases.forEach(c => {
-        it(`returns false for ${inspect(c)}`, function () {
-          should(pointTypeOf(c)).be.false()
-        })
-      })
-    })
     describe("don't know 🤷", function () {
       dontKnowCases.forEach(c => {
         it(`returns undefined for ${inspect(c)}`, function () {
@@ -197,39 +193,28 @@ describe('point', function () {
         })
       })
     })
-  })
-  describe('primitive and wrapper types', function () {
-    primitiveCases.forEach(c => {
-      it(`returns ${typeof c} for ${inspect(c)}`, function () {
-        should(pointTypeOf(c)).equal(typeof c)
+    describe('primitive and wrapper types', function () {
+      primitiveCases.forEach(c => {
+        it(`returns ${typeof c} for ${inspect(c)}`, function () {
+          should(pointTypeOf(c)).equal(typeof c)
+        })
       })
     })
-  })
-  describe('objects', function () {
-    objectCases.forEach(c => {
-      it(`returns the constructor for ${inspect(c)}`, function () {
-        should(pointTypeOf(c)).equal(c.constructor)
+    describe('objects and functions', function () {
+      objectCases.forEach(c => {
+        it(`returns the constructor for ${inspect(c)}`, function () {
+          should(pointTypeOf(c)).equal(c.constructor)
+        })
       })
     })
   })
   describe('isPoint', function () {
     describe('without point type', function () {
-      describe('not a point', function () {
-        notAPointCases.forEach(c => {
-          it(`returns false for ${inspect(c)}, because it is not a point`, function () {
-            isPoint(c).should.be.false()
-            // MUDO typescript should forbid this assignment, since `c` can be `symbol`, which is not a `DefinitePoint`
-            //      It cannot help us with NaN, but it should with `symbol`
-            const typed: Point = c
-            console.log(typed)
-          })
-        })
-      })
       describe("don't know", function () {
         dontKnowCases.forEach(c => {
           it(`returns false for ${inspect(c)}, because it is indefinite`, function () {
             isPoint(c).should.be.false()
-            // typescript forbids this assignment, since `c` is `undefined | null`, which is not a `DefinitePoint`
+            // typescript forbids this assignment, since `c` is `undefined | null`, which is not a `Point`
             // @ts-expect-error
             const typed: Point = c
             console.log(typed)
@@ -258,23 +243,6 @@ describe('point', function () {
       })
     })
     describe('with point type', function () {
-      describe('not a point', function () {
-        pointTypeRepresentations.forEach(ptr => {
-          describe(`point type ${inspect(ptr)}`, function () {
-            notAPointCases.forEach(c => {
-              it(`returns false for ${inspect(c)} with point type ${inspect(
-                ptr
-              )}, because it is not a point`, function () {
-                isPoint(c, ptr).should.be.false()
-                // MUDO typescript should forbid this assignment, since `c` can be `symbol`, which is not a `DefinitePoint`
-                //      It cannot help us with NaN, but it should with `symbol`
-                const typed: Point = c
-                console.log(typed)
-              })
-            })
-          })
-        })
-      })
       describe("don't know", function () {
         pointTypeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
@@ -296,10 +264,7 @@ describe('point', function () {
         pointTypeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             primitiveCases.forEach(c => {
-              if (
-                /* eslint-disable-line valid-typeof */ typeof c === ptr ||
-                (typeof c === 'function' && typeof ptr === 'function' && c instanceof ptr)
-              ) {
+              if (/* eslint-disable-line valid-typeof */ typeof c === ptr) {
                 it(`returns true for primitive or wrapped value ${inspect(c)} with point type ${inspect(
                   ptr
                 )}`, function () {
@@ -363,17 +328,7 @@ describe('point', function () {
   })
   describe('isIndefinitePoint', function () {
     describe('without point type', function () {
-      describe('not a point', function () {
-        notAPointCases.forEach(c => {
-          it(`returns false for ${inspect(c)}, because it is not a point`, function () {
-            isIndefinitePoint(c).should.be.false()
-            // MUDO typescript should forbid this assignment, since `c` can be `symbol`, which is not a `DefinitePoint`
-            //      It cannot help us with NaN, but it should with `symbol`
-            const typed: Indefinite<Point> = c
-            console.log(typed)
-          })
-        })
-      })
+      // MUDO makes no sense: always true
       describe("don't know", function () {
         dontKnowCases.forEach(c => {
           it(`returns true for ${inspect(c)}, because it is indefinite`, function () {
@@ -406,23 +361,6 @@ describe('point', function () {
       })
     })
     describe('with point type', function () {
-      describe('not a point', function () {
-        pointTypeRepresentations.forEach(ptr => {
-          describe(`point type ${inspect(ptr)}`, function () {
-            notAPointCases.forEach(c => {
-              it(`returns false for ${inspect(c)} with point type ${inspect(
-                ptr
-              )}, because it is not a point`, function () {
-                isIndefinitePoint(c, ptr).should.be.false()
-                // MUDO typescript should forbid this assignment, since `c` can be `symbol`, which is not a `DefinitePoint`
-                //      It cannot help us with NaN, but it should with `symbol`
-                const typed: Indefinite<PointTypeFor<typeof ptr>> = c
-                console.log(typed)
-              })
-            })
-          })
-        })
-      })
       describe("don't know", function () {
         pointTypeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
@@ -443,10 +381,7 @@ describe('point', function () {
         pointTypeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             primitiveCases.forEach(c => {
-              if (
-                /* eslint-disable-line valid-typeof */ typeof c === ptr ||
-                (typeof c === 'function' && typeof ptr === 'function' && c instanceof ptr)
-              ) {
+              if (/* eslint-disable-line valid-typeof */ typeof c === ptr) {
                 it(`returns true for primitive or wrapped value ${inspect(c)} with point type ${inspect(
                   ptr
                 )}`, function () {
