@@ -126,6 +126,11 @@ describe('interval', function () {
       )
     }
 
+    function represents (typeRepresentation: TypeRepresentation, u: unknown) {
+      const tru = typeRepresentationOf(u)
+      return tru === undefined || tru === null || representsSuperType(typeRepresentation, tru)
+    }
+
     pointTypeRepresentations.forEach(targetPointType => {
       describe(`pointType ${inspect(targetPointType)}`, function () {
         trueCases.forEach(({ label, pointType, p1, p2 }) => {
@@ -137,16 +142,20 @@ describe('interval', function () {
               isInterval({ start: p1, end: p2 }, targetPointType).should.be[expectedLabel]()
             })
             indefinites.forEach(indef => {
-              it(`returns ${expectedLabel} for [${inspect(p1)}, ${inspect(indef)}[ for point type ${inspect(
-                targetPointType
-              )}`, function () {
-                isInterval({ start: p1, end: indef }, targetPointType).should.be[expectedLabel]()
-              })
-              it(`returns ${expectedLabel} for [${inspect(indef)}, ${inspect(p2)}[ for point type ${inspect(
-                targetPointType
-              )}`, function () {
-                isInterval({ start: indef, end: p2 }, targetPointType).should.be[expectedLabel]()
-              })
+              if (!represents(targetPointType, p1)) {
+                it(`returns ${expectedLabel} for [${inspect(p1)}, ${inspect(indef)}[ for point type ${inspect(
+                  targetPointType
+                )}`, function () {
+                  isInterval({ start: p1, end: indef }, targetPointType).should.be[expectedLabel]()
+                })
+              }
+              if (!represents(targetPointType, p2)) {
+                it(`returns ${expectedLabel} for [${inspect(indef)}, ${inspect(p2)}[ for point type ${inspect(
+                  targetPointType
+                )}`, function () {
+                  isInterval({ start: indef, end: p2 }, targetPointType).should.be[expectedLabel]()
+                })
+              }
             })
 
             const wrongStuff = stuff.filter(s => {
