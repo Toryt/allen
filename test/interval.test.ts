@@ -4,8 +4,8 @@ import 'should'
 import { inspect } from 'util'
 import { stuff, stuffWithUndefined } from './stuff'
 import { isInterval } from '../src/Interval'
-import { pointTypeRepresentations } from './_pointTypeRepresentationCases'
-import { mostSpecializedCommonType, TypeRepresentation, typeRepresentationOf } from '../src/typeRepresentation'
+import { typeRepresentations } from './_typeRepresentationCases'
+import { TypeRepresentation, typeRepresentationOf, representsSuperType } from '../src/typeRepresentation'
 import { TypeFor } from '../src/type'
 import { A, B, C } from './_someClasses'
 
@@ -90,7 +90,7 @@ const notAnIntervalCandidate = stuffWithUndefined.filter(s => typeof s !== 'obje
 describe('interval', function () {
   describe('isInterval', function () {
     describe('not an object', function () {
-      pointTypeRepresentations.forEach(ptr => {
+      typeRepresentations.forEach(ptr => {
         describe(inspect(ptr), function () {
           notAnIntervalCandidate.forEach(s => {
             it(`returns false for ${inspect(s)}`, function () {
@@ -101,7 +101,7 @@ describe('interval', function () {
       })
     })
     describe('complete indefinite', function () {
-      pointTypeRepresentations.forEach(ptr => {
+      typeRepresentations.forEach(ptr => {
         describe(inspect(ptr), function () {
           indefinites.forEach(p1 => {
             indefinites.forEach(p2 => {
@@ -114,24 +114,12 @@ describe('interval', function () {
       })
     })
 
-    function representsSuperType (
-      superRepresentation: TypeRepresentation,
-      typeRepresentation: TypeRepresentation
-    ): boolean {
-      return (
-        superRepresentation === typeRepresentation ||
-        (typeof superRepresentation === 'function' &&
-          typeof typeRepresentation === 'function' &&
-          mostSpecializedCommonType(superRepresentation, typeRepresentation) === superRepresentation)
-      )
-    }
-
     function represents (typeRepresentation: TypeRepresentation, u: unknown) {
       const tru = typeRepresentationOf(u)
       return tru === undefined || tru === null || representsSuperType(typeRepresentation, tru)
     }
 
-    pointTypeRepresentations.forEach(targetPointType => {
+    typeRepresentations.forEach(targetPointType => {
       describe(`pointType ${inspect(targetPointType)}`, function () {
         trueCases.forEach(({ label, pointType, p1, p2 }) => {
           const expectedLabel = representsSuperType(targetPointType, pointType) ? 'true' : 'false'
@@ -140,6 +128,11 @@ describe('interval', function () {
               targetPointType
             )}`, function () {
               isInterval({ start: p1, end: p2 }, targetPointType).should.be[expectedLabel]()
+            })
+            it(`returns false for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
+              targetPointType
+            )}`, function () {
+              isInterval({ start: p2, end: p1 }, targetPointType).should.be.false()
             })
             indefinites.forEach(indef => {
               if (!represents(targetPointType, p1)) {
