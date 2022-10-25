@@ -50,16 +50,21 @@ export function isInterval<TR extends TypeRepresentation> (
   }
 
   const pi = i as Partial<Interval<TypeFor<TR>>>
+  const cType = commonTypeRepresentation(pi.start, pi.end)
+  if (cType === false) {
+    return false
+  }
+  if (cType === undefined) {
+    return true
+  }
+  if (!representsSuperType(pointType, cType)) {
+    return false
+  }
+
   assert(
     (isLTComparableOrIndefinite(pi.start) && isLTComparableOrIndefinite(pi.end)) || compareFn !== undefined,
     '`compareFn` is mandatory when `i.start` or `i.end` is a `symbol` or `NaN`'
   )
 
-  const cType = commonTypeRepresentation(pi.start, pi.end)
-
-  return (
-    cType !== false &&
-    (cType === undefined ||
-      (representsSuperType(pointType, cType) && startBeforeEnd(pi.start, pi.end, compareFn ?? ltCompare)))
-  )
+  return startBeforeEnd(pi.start, pi.end, compareFn ?? ltCompare)
 }
