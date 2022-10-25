@@ -112,6 +112,9 @@ export function representsSuperType (
   superRepresentation: TypeRepresentation,
   typeRepresentation: TypeRepresentation
 ): boolean {
+  assert(isTypeRepresentation(superRepresentation))
+  assert(isTypeRepresentation(typeRepresentation))
+
   return (
     superRepresentation === typeRepresentation ||
     (typeof superRepresentation === 'function' &&

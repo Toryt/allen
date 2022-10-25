@@ -245,12 +245,12 @@ describe('util', function () {
           })
           it(`${inspect(ptr1)} does not represent 'function'`, function () {
             // @ts-expect-error
-            representsSuperType(ptr1, 'function').should.be.false()
+            representsSuperType.bind(undefined, ptr1, 'function').should.throw()
           })
           idiotPointTypeRepresentations.forEach(s => {
-            it(`${inspect(ptr1)} does not represent ${inspect(s)}`, function () {
+            it(`${inspect(ptr1)} — ${inspect(s)} throws`, function () {
               // @ts-expect-error
-              representsSuperType(ptr1, s).should.be.false()
+              representsSuperType.bind(undefined, ptr1, s).should.throw()
             })
           })
         })
@@ -260,35 +260,19 @@ describe('util', function () {
       idiotPointTypeRepresentations.forEach(s1 => {
         describe(inspect(s1), function () {
           pointTypeRepresentations.forEach(ptr2 => {
-            it(`${inspect(s1)} does not represent ${ptr2}`, function () {
+            it(`${inspect(s1)} — ${inspect(ptr2)} throws`, function () {
               // @ts-expect-error
-              representsSuperType(s1, ptr2).should.be.false()
+              representsSuperType.bind(undefined, s1, ptr2).should.throw()
             })
           })
-          it(`${inspect(s1)} does not represent Object`, function () {
+          it(`${inspect(s1)} — 'function' throws`, function () {
             // @ts-expect-error
-            representsSuperType(s1, Object).should.be.false()
-          })
-          it(`${inspect(s1)} does not represent Date`, function () {
-            // @ts-expect-error
-            representsSuperType(s1, Date).should.be.false()
-          })
-          it(`${inspect(s1)} does not represent A`, function () {
-            // @ts-expect-error
-            representsSuperType(s1, A).should.be.false()
-          })
-          it(`${inspect(s1)} does not represent a function`, function () {
-            // @ts-expect-error
-            representsSuperType(s1, Function).should.be.false()
-          })
-          it(`${inspect(s1)} does not represent 'function'`, function () {
-            // @ts-expect-error
-            representsSuperType(s1, 'function').should.be.false()
+            representsSuperType.bind(undefined, s1, 'function').should.throw()
           })
           idiotPointTypeRepresentations.forEach(s => {
             it(`${inspect(s1)} does not represent ${inspect(s)}`, function () {
               // @ts-expect-error
-              representsSuperType(s1, s).should.be.false()
+              representsSuperType.bind(undefined, s1, s).should.throw()
             })
           })
         })
