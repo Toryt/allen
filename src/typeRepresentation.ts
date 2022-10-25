@@ -104,3 +104,18 @@ export function commonTypeRepresentation (...p: unknown[]): TypeRepresentation |
   )
   return result && type
 }
+
+/**
+ * `superRepresentation` is, or is a super type of `typeRepresentation`
+ */
+export function representsSuperType (
+  superRepresentation: TypeRepresentation,
+  typeRepresentation: TypeRepresentation
+): boolean {
+  return (
+    superRepresentation === typeRepresentation ||
+    (typeof superRepresentation === 'function' &&
+      typeof typeRepresentation === 'function' &&
+      mostSpecializedCommonType(superRepresentation, typeRepresentation) === superRepresentation)
+  )
+}
