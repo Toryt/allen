@@ -1,11 +1,10 @@
 /* eslint-env mocha */
 
 import 'should'
-import { ltCompare } from '../src/ltCompare'
+import { ltCompare, isLTComparableOrIndefinite } from '../src/ltCompare'
 import { inspect } from 'util'
 import { PrimitivePoint } from '../src/point'
 import { stuffWithUndefined } from './stuff'
-import { isLTComparableOrIndefinite } from '../lib2/ltComparator'
 
 interface Case<T> {
   label: string
