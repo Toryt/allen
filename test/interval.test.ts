@@ -60,12 +60,6 @@ const trueCases: Array<Case<TypeRepresentation>> = [
   { label: 'polymorph in reverse order', pointType: A, p1: new B(), p2: new A() },
   { label: 'mixed objects', pointType: Object, p1: new B(), p2: new C() },
   {
-    label: 'object and array',
-    pointType: Object,
-    p1: { a: ' a thing' },
-    p2: [3]
-  },
-  {
     label: 'array and object',
     pointType: Object,
     p1: [null, null, 34],
@@ -151,16 +145,29 @@ describe('interval', function () {
               )}`, function () {
                 isInterval({ start: p1, end: p2 }, targetPointType).should.be[expectedLabel]()
               })
-              it(`returns false for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
-                targetPointType
-              )}`, function () {
-                isInterval({ start: p2, end: p1 }, targetPointType).should.be.false()
-              })
-              it(`returns true for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
-                targetPointType
-              )} with a reverse comparator`, function () {
-                isInterval({ start: p2, end: p1, reverseCompareFn }, targetPointType).should.be.false()
-              })
+              if (typeof p1 !== 'object' || p1 instanceof Date || Array.isArray(p1) || Array.isArray(p2)) {
+                it(`returns false for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
+                  targetPointType
+                )}`, function () {
+                  isInterval({ start: p2, end: p1 }, targetPointType).should.be.false()
+                })
+                it(`returns true for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
+                  targetPointType
+                )} with a reverse comparator`, function () {
+                  isInterval({ start: p2, end: p1, reverseCompareFn }, targetPointType).should.be.false() // MUDO wrong
+                })
+              } else {
+                it(`returns ${expectedLabel} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
+                  targetPointType
+                )}`, function () {
+                  isInterval({ start: p2, end: p1 }, targetPointType).should.be[expectedLabel]()
+                })
+                it(`returns ${expectedLabel} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
+                  targetPointType
+                )} with a reverse comparator`, function () {
+                  isInterval({ start: p2, end: p1, reverseCompareFn }, targetPointType).should.be[expectedLabel]()
+                })
+              }
             } else {
               it(`[${inspect(p1)}, ${inspect(p2)}[ throws`, function () {
                 isInterval.bind(undefined, { start: p1, end: p2 }, targetPointType).should.throw()
