@@ -8,19 +8,34 @@ import { typeRepresentations } from './_typeRepresentationCases'
 import { TypeRepresentation, typeRepresentationOf, representsSuperType } from '../src/typeRepresentation'
 import { TypeFor } from '../src/type'
 import { A, B, C } from './_someClasses'
+import { Comparator } from '../src/comparator'
+import { ltCompare } from '../src/ltCompare'
 
 interface Case<T extends TypeRepresentation> {
   label: string
   pointType: T
   p1: TypeFor<T>
   p2: TypeFor<T>
+  compareFn?: Comparator<TypeFor<T>>
+}
+
+function reverseCompareFn<T> (t1: T, t2: T): number {
+  return -1 * ltCompare(t1, t2)
 }
 
 const indefinites = [undefined, null]
 
 const trueCases: Array<Case<TypeRepresentation>> = [
   { label: 'number', pointType: 'number', p1: -4, p2: Math.PI },
-  { label: 'number with NaN', pointType: 'number', p1: 0, p2: NaN },
+  {
+    label: 'number with NaN',
+    pointType: 'number',
+    p1: 0,
+    p2: NaN,
+    compareFn: (t1: number, t2: number): number =>
+      // NaN is largest
+      Number.isNaN(t1) ? (Number.isNaN(t2) ? 0 : +1) : Number.isNaN(t2) ? -1 : ltCompare(t1, t2)
+  },
   {
     label: 'bigint',
     pointType: 'bigint',
@@ -121,19 +136,40 @@ describe('interval', function () {
 
     typeRepresentations.forEach(targetPointType => {
       describe(`pointType ${inspect(targetPointType)}`, function () {
-        trueCases.forEach(({ label, pointType, p1, p2 }) => {
+        trueCases.forEach(({ label, pointType, p1, p2, compareFn }) => {
           const expectedLabel = representsSuperType(targetPointType, pointType) ? 'true' : 'false'
           describe(`${label} -> ${expectedLabel}`, function () {
-            it(`returns ${expectedLabel} for [${inspect(p1)}, ${inspect(p2)}[ for point type ${inspect(
-              targetPointType
-            )}`, function () {
-              isInterval({ start: p1, end: p2 }, targetPointType).should.be[expectedLabel]()
-            })
-            it(`returns false for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
-              targetPointType
-            )}`, function () {
-              isInterval({ start: p2, end: p1 }, targetPointType).should.be.false()
-            })
+            if (compareFn === undefined) {
+              it(`returns ${expectedLabel} for [${inspect(p1)}, ${inspect(p2)}[ for point type ${inspect(
+                targetPointType
+              )}`, function () {
+                isInterval({ start: p1, end: p2 }, targetPointType).should.be[expectedLabel]()
+              })
+              it(`returns false for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
+                targetPointType
+              )}`, function () {
+                isInterval({ start: p2, end: p1 }, targetPointType).should.be.false()
+              })
+              it(`returns true for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
+                targetPointType
+              )} with a reverse comparator`, function () {
+                isInterval({ start: p2, end: p1, reverseCompareFn }, targetPointType).should.be.false()
+              })
+            } else {
+              it(`[${inspect(p1)}, ${inspect(p2)}[ throws`, function () {
+                isInterval.bind(undefined, { start: p1, end: p2 }, targetPointType).should.throw()
+              })
+              it(`returns ${expectedLabel} for [${inspect(p1)}, ${inspect(p2)}[ for point type ${inspect(
+                targetPointType
+              )} with compareFn`, function () {
+                isInterval({ start: p1, end: p2 }, targetPointType, compareFn).should.be[expectedLabel]()
+              })
+              it(`returns false for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
+                targetPointType
+              )} with compareFn`, function () {
+                isInterval({ start: p2, end: p1 }, targetPointType, compareFn).should.be.false()
+              })
+            }
             indefinites.forEach(indef => {
               if (!represents(targetPointType, p1)) {
                 it(`returns ${expectedLabel} for [${inspect(p1)}, ${inspect(indef)}[ for point type ${inspect(
@@ -161,7 +197,7 @@ describe('interval', function () {
               )}`, function () {
                 isInterval({ start: p1, end: s }, targetPointType).should.be.false()
               })
-              it(`returns ${expectedLabel} for [${inspect(s)}, ${inspect(p2)}[ for point type ${inspect(
+              it(`returns false for [${inspect(s)}, ${inspect(p2)}[ for point type ${inspect(
                 targetPointType
               )}`, function () {
                 isInterval({ start: s, end: p2 }, targetPointType).should.be.false()
