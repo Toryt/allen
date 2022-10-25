@@ -3,10 +3,10 @@ import { Constructor, commonTypeRepresentation } from './typeRepresentation'
 import { Indefinite } from './type'
 
 /**
- * The primitive types that are acceptable as points for {@link ltComparator}.
+ * The primitive types that are acceptable as points for {@link ltCompare}.
  *
  * Note that `number` `NaN` is not an acceptable element. This cannot be expressed in TypeScript.
- * All other values can be compared with {@link ltComparator}, although maybe not intuitively out-of-the-box.
+ * All other values can be compared with {@link ltCompare}, although maybe not intuitively out-of-the-box.
  */
 export const ltComparablePrimitiveTypeRepresentations = ['number', 'bigint', 'string', 'boolean'] as const
 
@@ -33,7 +33,7 @@ const noNaN: string = 'default ltComparator cannot compare NaN'
 const noSymbol: string = 'default ltComparator cannot compare symbols'
 const haveCommonType: string = 't1 and t2 must be of a common type'
 
-export function ltComparator<T> (t1: T, t2: T): number {
+export function ltCompare<T> (t1: T, t2: T): number {
   notStrictEqual(t1, undefined, noUndefined)
   notStrictEqual(t2, undefined, noUndefined)
   notStrictEqual(t1, null, noNull)

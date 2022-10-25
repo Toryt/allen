@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
 import 'should'
-import { ltComparator } from '../src/ltComparator'
+import { ltCompare } from '../src/ltCompare'
 import { inspect } from 'util'
 import { PrimitivePoint } from '../src/point'
 import { stuffWithUndefined } from './stuff'
@@ -40,7 +40,7 @@ describe('ltComparator', function () {
         it(`returns a negative number when the first argument (${inspect(
           c.smaller
         )}) is smaller than the second (${inspect(c.larger)})`, function () {
-          ltComparator(c.smaller, c.larger).should.be.lessThan(0)
+          ltCompare(c.smaller, c.larger).should.be.lessThan(0)
         })
         it(`returns zero when the first argument is equal to the second (${inspect(c.smaller)})`, function () {
           /* prettier-ignore */
@@ -58,18 +58,18 @@ describe('ltComparator', function () {
                       : typeof c.smaller === 'object'
                         ? { ...c.smaller }
                         : c.smaller
-          ltComparator(t, t).should.equal(0)
+          ltCompare(t, t).should.equal(0)
         })
         it(`returns a positive number when the first argument (${inspect(
           c.smaller
         )}) is larger than the second (${inspect(c.larger)})`, function () {
-          ltComparator(c.larger, c.smaller).should.be.greaterThan(0)
+          ltCompare(c.larger, c.smaller).should.be.greaterThan(0)
         })
       })
     })
     describe('object', function () {
       it('always returns zero for objects (all objects are the same)', function () {
-        ltComparator({ a: 'an object' }, { b: 43 }).should.equal(0)
+        ltCompare({ a: 'an object' }, { b: 43 }).should.equal(0)
       })
     })
     describe('tweaked objects', function () {
@@ -89,9 +89,9 @@ describe('ltComparator', function () {
         const a1 = new A(1)
         const a2 = new A(2)
 
-        ltComparator(a1, a2).should.be.lessThan(0)
-        ltComparator(a1, a1).should.be.equal(0)
-        ltComparator(a2, a1).should.be.greaterThan(0)
+        ltCompare(a1, a2).should.be.lessThan(0)
+        ltCompare(a1, a1).should.be.equal(0)
+        ltCompare(a2, a1).should.be.greaterThan(0)
       })
 
       it('uses valueOf to coerce objects', function () {
@@ -110,9 +110,9 @@ describe('ltComparator', function () {
         const a1 = new A(1)
         const a2 = new A(2)
 
-        ltComparator(a1, a2).should.be.lessThan(0)
-        ltComparator(a1, a1).should.be.equal(0)
-        ltComparator(a2, a1).should.be.greaterThan(0)
+        ltCompare(a1, a2).should.be.lessThan(0)
+        ltCompare(a1, a1).should.be.equal(0)
+        ltCompare(a2, a1).should.be.greaterThan(0)
       })
 
       it('uses toString to coerce objects', function () {
@@ -131,9 +131,9 @@ describe('ltComparator', function () {
         const a1 = new A(1)
         const a2 = new A(2)
 
-        ltComparator(a1, a2).should.be.lessThan(0)
-        ltComparator(a1, a1).should.be.equal(0)
-        ltComparator(a2, a1).should.be.greaterThan(0)
+        ltCompare(a1, a2).should.be.lessThan(0)
+        ltCompare(a1, a1).should.be.equal(0)
+        ltCompare(a2, a1).should.be.greaterThan(0)
       })
     })
   })

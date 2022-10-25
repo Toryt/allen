@@ -6,7 +6,7 @@ import {
 } from './typeRepresentation'
 import { Indefinite, TypeFor } from './type'
 import assert from 'assert'
-import { isLTComparableOrIndefinite, LTComparable, ltComparator } from './ltComparator'
+import { isLTComparableOrIndefinite, LTComparable, ltCompare } from './ltCompare'
 import { Comparator } from './comparator'
 
 /**
@@ -27,7 +27,7 @@ export interface Interval<T> {
  * - `start` and `end` must be “of the same type”
  * - `start` must be before, or equal to `end`
  *
- * To compare `start` and `end`, the optional `compareFn` is used when given, or {@link ltComparator} when not. When
+ * To compare `start` and `end`, the optional `compareFn` is used when given, or {@link ltCompare} when not. When
  * `start` and `end` are `symbols`, or one of the values is `NaN`, a `compareFn` parameter is mandatory.
  */
 export function isInterval<TR extends TypeRepresentation> (
@@ -60,6 +60,6 @@ export function isInterval<TR extends TypeRepresentation> (
   return (
     cType !== false &&
     (cType === undefined ||
-      (representsSuperType(pointType, cType) && startBeforeEnd(pi.start, pi.end, compareFn ?? ltComparator)))
+      (representsSuperType(pointType, cType) && startBeforeEnd(pi.start, pi.end, compareFn ?? ltCompare)))
   )
 }
