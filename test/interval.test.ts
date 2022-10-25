@@ -51,7 +51,7 @@ const trueCases: Array<Case<TypeRepresentation>> = [
     p2: new Date(2024, 4, 18, 6, 5, 36, 388)
   },
   { label: 'Number', pointType: 'number', p1: Number(3), p2: Number(89734) },
-  { label: 'BigInt', pointType: 'bigint', p1: BigInt(-432), p2: BigInt(8975322352525252662626662677222727) },
+  { label: 'BigInt', pointType: 'bigint', p1: BigInt(-432), p2: BigInt(8975322352525252662626662677222727n) },
   { label: 'String', pointType: 'string', p1: String('a'), p2: String('b') },
   { label: 'Boolean', pointType: 'boolean', p1: Boolean(false), p2: Boolean(true) },
   { label: 'object', pointType: Object, p1: { a: 'a one' }, p2: { b: 'a two' } },
@@ -129,7 +129,7 @@ describe('interval', function () {
       })
     })
 
-    function represents (typeRepresentation: TypeRepresentation, u: unknown) {
+    function represents (typeRepresentation: TypeRepresentation, u: unknown): boolean {
       const tru = typeRepresentationOf(u)
       return tru === undefined || tru === null || representsSuperType(typeRepresentation, tru)
     }

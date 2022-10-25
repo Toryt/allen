@@ -1,6 +1,5 @@
 /* eslint-env mocha */
 
-import 'should'
 import {
   Constructor,
   mostSpecializedCommonType,
@@ -8,14 +7,14 @@ import {
   TypeRepresentation,
   primitiveTypeRepresentations,
   isTypeRepresentation,
-  typeRepresentationOf
+  typeRepresentationOf,
+  representsSuperType
 } from '../src/typeRepresentation'
 import { inspect } from 'util'
 import should from 'should'
 import { idiotTypeRepresentations, typeRepresentations } from './_typeRepresentationCases'
 import { dontKnowCases, objectCases, primitiveCases } from './_pointCases'
 import { A, B, C } from './_someClasses'
-import { representsSuperType } from '../src/typeRepresentation'
 
 interface Case<T> {
   label: string
