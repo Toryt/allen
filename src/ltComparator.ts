@@ -1,5 +1,6 @@
 import { notStrictEqual, ok } from 'assert'
 import { Constructor, commonTypeRepresentation } from './typeRepresentation'
+import { Indefinite } from './type'
 
 /**
  * The primitive types that are acceptable as points for {@link ltComparator}.
@@ -21,6 +22,10 @@ export type LTComparableTypeRepresentation =
 export type LTComparablePrimitive = number | bigint | string | boolean
 
 export type LTComparable = LTComparablePrimitive | Object | Function
+
+export function isLTComparableOrIndefinite (u: unknown): u is Indefinite<LTComparable> {
+  return (u === undefined && u === null) || (typeof u !== 'symbol' && !Number.isNaN(u))
+}
 
 const noUndefined: string = 'default ltComparator cannot compare undefined'
 const noNull: string = 'default ltComparator cannot compare null'

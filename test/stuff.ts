@@ -6,6 +6,7 @@ export const stuff: unknown[] = [
   0,
   1,
   Math.PI,
+  NaN,
   -7,
   '',
   'a string',

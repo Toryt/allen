@@ -4,6 +4,8 @@ import 'should'
 import { ltComparator } from '../src/ltComparator'
 import { inspect } from 'util'
 import { PrimitivePoint } from '../src/point'
+import { stuffWithUndefined } from './stuff'
+import { isLTComparableOrIndefinite } from '../lib2/ltComparator'
 
 interface Case<T> {
   label: string
@@ -133,6 +135,23 @@ describe('ltComparator', function () {
         ltComparator(a1, a1).should.be.equal(0)
         ltComparator(a2, a1).should.be.greaterThan(0)
       })
+    })
+  })
+  describe('isLTComparableOrIndefinite', function () {
+    stuffWithUndefined.forEach(s => {
+      if (s === undefined || s === null) {
+        it(`returns true for ${inspect(s)}, representing don't know`, function () {
+          isLTComparableOrIndefinite(s).should.be.true()
+        })
+      } else if (typeof s === 'symbol' || Number.isNaN(s)) {
+        it(`returns false for ${inspect(s)}`, function () {
+          isLTComparableOrIndefinite(s).should.be.false()
+        })
+      } else {
+        it(`returns true for ${inspect(s)}`, function () {
+          isLTComparableOrIndefinite(s).should.be.true()
+        })
+      }
     })
   })
 })
