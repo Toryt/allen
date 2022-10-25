@@ -330,7 +330,7 @@ describe('PointIntervalRelations', function () {
       }
 
       function intervalToString (i: Interval<T>): string {
-        function valueToString (v: T | undefined): string {
+        function valueToString (v: T | undefined | null): string {
           if (typeof v === 'string') {
             return v
           }

@@ -11,8 +11,11 @@ import {
 } from './pointIntervalRelationBitPattern'
 import assert, { ok } from 'assert'
 import { Interval, isInterval } from './Interval'
-import { Comparator, ltComparator } from './comparator'
-import { arePointsOfSameType } from './util'
+import { Comparator } from './comparator'
+import { commonTypeRepresentation } from './typeRepresentation'
+import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
+
+const haveCommonType: string = 't, i.start and i.end must be of a common type'
 
 /**
  * Support for reasoning about relations between time points and time intervals, and constraints on those
@@ -39,7 +42,7 @@ import { arePointsOfSameType } from './util'
  *   - {@link compose}, and // MUDO make instance method?
  * - the unary method {@link complement}.
  *
- * A `PointIntervalRelation` can be determined based on a point in time and a time interval with {@link pointInterRelation}. // MUDO move to AllenRelation?
+ * A `PointIntervalRelation` can be determined based on a point in time and a time interval with {@link pointIntervalRelation}. // MUDO move to AllenRelation?
  *
  * {@link VALUES} lists all possible point – interval relations.
  *
@@ -177,16 +180,25 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
    * leaving it with more {@link uncertainty}.
    */
   static pointIntervalRelation<T> (t: T | undefined, i: Interval<T>, compareFn?: Comparator<T>): PointIntervalRelation {
-    assert(isInterval(i))
-    assert(arePointsOfSameType(t, i.start, i.end))
+    assert(
+      (isLTComparableOrIndefinite(t) && isLTComparableOrIndefinite(i.start) && isLTComparableOrIndefinite(i.end)) ||
+        compareFn !== undefined,
+      '`compareFn` is mandatory when `t`, `i.start` or `i.end` is a `symbol` or `NaN`'
+    )
+
+    const cType = commonTypeRepresentation(t, i.start, i.end)
+
+    assert(cType !== false, haveCommonType)
+    assert(cType === undefined || isInterval(i, cType, compareFn))
 
     if (t === undefined || t === null) {
       return FULL
     }
-    const comparator: Comparator<T> = compareFn ?? ltComparator
+
+    const compare: Comparator<T> = compareFn ?? ltCompare
     let result = FULL
-    if (i.start !== undefined) {
-      const tToStart = comparator(t, i.start)
+    if (i.start !== undefined && i.start !== null) {
+      const tToStart = compare(t, i.start)
       if (tToStart < 0) {
         return BEFORE
       } else if (tToStart === 0) {
@@ -196,8 +208,8 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
         result = result.min(BEFORE).min(BEGINS)
       }
     }
-    if (i.end !== undefined) {
-      const tToEnd = comparator(t, i.end)
+    if (i.end !== undefined && i.end !== null) {
+      const tToEnd = compare(t, i.end)
       if (tToEnd < 0) {
         result = result.min(ENDS).min(AFTER)
       } else if (tToEnd === 0) {
