@@ -53,7 +53,7 @@ const trueCases: Array<Case<TypeRepresentation>> = [
   { label: 'Number', pointType: 'number', p1: Number(3), p2: Number(89734) },
   { label: 'BigInt', pointType: 'bigint', p1: BigInt(-432), p2: BigInt(8975322352525252662626662677222727) },
   { label: 'String', pointType: 'string', p1: String('a'), p2: String('b') },
-  { label: 'Boolean', pointType: 'boolean', p1: Boolean(true), p2: Boolean(false) },
+  { label: 'Boolean', pointType: 'boolean', p1: Boolean(false), p2: Boolean(true) },
   { label: 'object', pointType: Object, p1: { a: 'a one' }, p2: { b: 'a two' } },
   { label: 'A', pointType: A, p1: new A(), p2: new A() },
   { label: 'polymorph', pointType: A, p1: new A(), p2: new B() },
@@ -91,7 +91,13 @@ const trueCases: Array<Case<TypeRepresentation>> = [
     p1: [1, 3],
     p2: [2, 3]
   },
-  { label: 'symbols', pointType: 'symbol', p1: Symbol('a'), p2: Symbol('b') },
+  {
+    label: 'symbols',
+    pointType: 'symbol',
+    p1: Symbol('a'),
+    p2: Symbol('b'),
+    compareFn: (p1: symbol, p2: symbol): number => ltCompare(p1.toString(), p2.toString())
+  },
   { label: 'mixed array', pointType: Array, p1: [11], p2: ['a string'] }
 ]
 //
@@ -139,7 +145,7 @@ describe('interval', function () {
         trueCases.forEach(({ label, pointType, p1, p2, compareFn }) => {
           const expectedLabel = representsSuperType(targetPointType, pointType) ? 'true' : 'false'
           describe(`${label} -> ${expectedLabel}`, function () {
-            if (compareFn === undefined) {
+            if (compareFn === undefined || expectedLabel === 'false') {
               it(`returns ${expectedLabel} for [${inspect(p1)}, ${inspect(p2)}[ for point type ${inspect(
                 targetPointType
               )}`, function () {
