@@ -1,10 +1,11 @@
 /* eslint-env mocha */
 
 import 'should'
-import { Point, Indefinite, PointTypeFor, isPoint, isIndefinitePoint } from '../src/point'
+import { Point, isPoint, isIndefinitePoint } from '../src/point'
 import { inspect } from 'util'
-import { idiotPointTypeRepresentations, pointTypeRepresentations } from './_pointTypeRepresentationCases'
+import { idiotTypeRepresentations, typeRepresentations } from './_typeRepresentationCases'
 import { dontKnowCases, objectCases, pointCases, primitiveCases } from './_pointCases'
+import { TypeFor, Indefinite } from '../src/type'
 
 describe('point', function () {
   describe('isPoint', function () {
@@ -43,7 +44,7 @@ describe('point', function () {
     })
     describe('with point type', function () {
       describe("don't know", function () {
-        pointTypeRepresentations.forEach(ptr => {
+        typeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             dontKnowCases.forEach(c => {
               it(`returns false for ${inspect(c)} with point type ${inspect(
@@ -60,7 +61,7 @@ describe('point', function () {
         })
       })
       describe('primitive or wrapped value', function () {
-        pointTypeRepresentations.forEach(ptr => {
+        typeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             primitiveCases.forEach(c => {
               if (/* eslint-disable-line valid-typeof */ typeof c === ptr) {
@@ -69,7 +70,7 @@ describe('point', function () {
                 )}`, function () {
                   isPoint(c, ptr).should.be.true()
                   // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint`
-                  const typed: PointTypeFor<typeof ptr> = c
+                  const typed: TypeFor<typeof ptr> = c
                   console.log(typed)
                 })
               } else {
@@ -88,14 +89,14 @@ describe('point', function () {
         })
       })
       describe('object', function () {
-        pointTypeRepresentations.forEach(ptr => {
+        typeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             objectCases.forEach(c => {
               if (typeof ptr === 'function' && c instanceof ptr) {
                 it(`returns true for object ${inspect(c)} with point type ${inspect(ptr)}`, function () {
                   isPoint(c, ptr).should.be.true()
                   // typescript allows this assignment, since `c` is an object, which is a `DefinitePoint`
-                  const typed: PointTypeFor<typeof ptr> = c
+                  const typed: TypeFor<typeof ptr> = c
                   console.log(typed)
                 })
               } else {
@@ -112,7 +113,7 @@ describe('point', function () {
         })
       })
       describe('idiot definite point types', function () {
-        idiotPointTypeRepresentations.forEach(iptr => {
+        idiotTypeRepresentations.forEach(iptr => {
           describe(`with ${inspect(iptr)} as point type`, function () {
             pointCases.forEach(c => {
               it(`returns false for ${inspect(c)} with point type ${inspect(iptr)}`, function () {
@@ -161,7 +162,7 @@ describe('point', function () {
     })
     describe('with point type', function () {
       describe("don't know", function () {
-        pointTypeRepresentations.forEach(ptr => {
+        typeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             dontKnowCases.forEach(c => {
               it(`returns true for ${inspect(c)} with point type ${inspect(
@@ -169,7 +170,7 @@ describe('point', function () {
               )}, because it is indefinite`, function () {
                 isIndefinitePoint(c, ptr).should.be.true()
                 // typescript allows this assignment, since `c` is `undefined | null`, which is a `Point`
-                const typed: Indefinite<PointTypeFor<typeof ptr>> = c
+                const typed: Indefinite<TypeFor<typeof ptr>> = c
                 console.log(typed)
               })
             })
@@ -177,7 +178,7 @@ describe('point', function () {
         })
       })
       describe('primitive or wrapped value', function () {
-        pointTypeRepresentations.forEach(ptr => {
+        typeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             primitiveCases.forEach(c => {
               if (/* eslint-disable-line valid-typeof */ typeof c === ptr) {
@@ -186,7 +187,7 @@ describe('point', function () {
                 )}`, function () {
                   isIndefinitePoint(c, ptr).should.be.true()
                   // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint`
-                  const typed: Indefinite<PointTypeFor<typeof ptr>> = c
+                  const typed: Indefinite<TypeFor<typeof ptr>> = c
                   console.log(typed)
                 })
               } else {
@@ -196,7 +197,7 @@ describe('point', function () {
                   isIndefinitePoint(c, ptr).should.be.false()
                   // typescript allows this assignment, since `c` is of a type that is a `DefinitePoint` (although not of the expected type)
                   // if we do not add more static information about `ptr`, TS cannot do better
-                  const typed: Indefinite<PointTypeFor<typeof ptr>> = c
+                  const typed: Indefinite<TypeFor<typeof ptr>> = c
                   console.log(typed)
                 })
               }
@@ -205,21 +206,21 @@ describe('point', function () {
         })
       })
       describe('object', function () {
-        pointTypeRepresentations.forEach(ptr => {
+        typeRepresentations.forEach(ptr => {
           describe(`point type ${inspect(ptr)}`, function () {
             objectCases.forEach(c => {
               if (typeof ptr === 'function' && c instanceof ptr) {
                 it(`returns true for object ${inspect(c)} with point type ${inspect(ptr)}`, function () {
                   isIndefinitePoint(c, ptr).should.be.true()
                   // typescript allows this assignment, since `c` is an object, which is a `DefinitePoint`
-                  const typed: Indefinite<PointTypeFor<typeof ptr>> = c
+                  const typed: Indefinite<TypeFor<typeof ptr>> = c
                   console.log(typed)
                 })
               } else {
                 it(`returns false for object ${inspect(c)} with point type ${inspect(ptr)}`, function () {
                   isIndefinitePoint(c, ptr).should.be.false()
                   // typescript allows this assignment, since `c` is an object, which is a `DefinitePoint`
-                  const typed: Indefinite<PointTypeFor<typeof ptr>> = c
+                  const typed: Indefinite<TypeFor<typeof ptr>> = c
                   console.log(typed)
                 })
               }
@@ -228,7 +229,7 @@ describe('point', function () {
         })
       })
       describe('idiot definite point types', function () {
-        idiotPointTypeRepresentations.forEach(iptr => {
+        idiotTypeRepresentations.forEach(iptr => {
           describe(`with ${inspect(iptr)} as point type`, function () {
             pointCases.forEach(c => {
               it(`returns false for ${inspect(c)} with point type ${inspect(iptr)}`, function () {

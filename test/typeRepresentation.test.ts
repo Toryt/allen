@@ -12,10 +12,10 @@ import {
 } from '../src/typeRepresentation'
 import { inspect } from 'util'
 import should from 'should'
-import { idiotPointTypeRepresentations, pointTypeRepresentations } from './_pointTypeRepresentationCases'
+import { idiotTypeRepresentations, typeRepresentations } from './_typeRepresentationCases'
 import { dontKnowCases, objectCases, primitiveCases } from './_pointCases'
 import { A, B, C } from './_someClasses'
-import { representsSuperType } from '../lib2/typeRepresentation'
+import { representsSuperType } from '../src/typeRepresentation'
 
 interface Case<T> {
   label: string
@@ -124,7 +124,7 @@ describe('util', function () {
   })
   describe('isTypeRepresentation', function () {
     describe('yes', function () {
-      pointTypeRepresentations.forEach(ptr => {
+      typeRepresentations.forEach(ptr => {
         it(`returns true for ${inspect(ptr)}`, function () {
           isTypeRepresentation(ptr).should.be.true()
           const typed: TypeRepresentation = ptr
@@ -133,7 +133,7 @@ describe('util', function () {
       })
     })
     describe('idiot point types', function () {
-      idiotPointTypeRepresentations.forEach(iptr => {
+      idiotTypeRepresentations.forEach(iptr => {
         it(`returns false for ${inspect(iptr)}`, function () {
           isTypeRepresentation(iptr).should.be.false()
           // @ts-expect-error
@@ -226,9 +226,9 @@ describe('util', function () {
   })
   describe('representsSuperType', function () {
     describe('primitive', function () {
-      pointTypeRepresentations.forEach(ptr1 => {
+      typeRepresentations.forEach(ptr1 => {
         describe(inspect(ptr1), function () {
-          pointTypeRepresentations.forEach(ptr2 => {
+          typeRepresentations.forEach(ptr2 => {
             if (ptr1 === ptr2) {
               it(`${inspect(ptr1)} represents itself`, function () {
                 representsSuperType(ptr1, ptr1).should.be.true()
@@ -247,7 +247,7 @@ describe('util', function () {
             // @ts-expect-error
             representsSuperType.bind(undefined, ptr1, 'function').should.throw()
           })
-          idiotPointTypeRepresentations.forEach(s => {
+          idiotTypeRepresentations.forEach(s => {
             it(`${inspect(ptr1)} — ${inspect(s)} throws`, function () {
               // @ts-expect-error
               representsSuperType.bind(undefined, ptr1, s).should.throw()
@@ -257,9 +257,9 @@ describe('util', function () {
       })
     })
     describe('idiot super type', function () {
-      idiotPointTypeRepresentations.forEach(s1 => {
+      idiotTypeRepresentations.forEach(s1 => {
         describe(inspect(s1), function () {
-          pointTypeRepresentations.forEach(ptr2 => {
+          typeRepresentations.forEach(ptr2 => {
             it(`${inspect(s1)} — ${inspect(ptr2)} throws`, function () {
               // @ts-expect-error
               representsSuperType.bind(undefined, s1, ptr2).should.throw()
@@ -269,7 +269,7 @@ describe('util', function () {
             // @ts-expect-error
             representsSuperType.bind(undefined, s1, 'function').should.throw()
           })
-          idiotPointTypeRepresentations.forEach(s => {
+          idiotTypeRepresentations.forEach(s => {
             it(`${inspect(s1)} does not represent ${inspect(s)}`, function () {
               // @ts-expect-error
               representsSuperType.bind(undefined, s1, s).should.throw()

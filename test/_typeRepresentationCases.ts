@@ -1,9 +1,9 @@
 import { primitiveTypeRepresentations, TypeRepresentation } from '../src/typeRepresentation'
 import { A, B, C } from './_someClasses'
 
-export const pptsAsDefinitePointTypeRepresentations: readonly TypeRepresentation[] = primitiveTypeRepresentations
+const pptsAsTypeRepresentations: readonly TypeRepresentation[] = primitiveTypeRepresentations
 
-export const pointTypeRepresentations: TypeRepresentation[] = pptsAsDefinitePointTypeRepresentations.concat([
+export const typeRepresentations: TypeRepresentation[] = pptsAsTypeRepresentations.concat([
   Object,
   Date,
   A,
@@ -24,7 +24,7 @@ export function notAConstructor2 (): string {
 
 notAConstructor2.prototype = Object.prototype
 
-export const idiotPointTypeRepresentations = [
+export const idiotTypeRepresentations = [
   null,
   'undefined',
   'object',
