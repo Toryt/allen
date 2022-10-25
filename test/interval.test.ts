@@ -151,10 +151,10 @@ describe('interval', function () {
                 )}`, function () {
                   isInterval({ start: p2, end: p1 }, targetPointType).should.be.false()
                 })
-                it(`returns true for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
+                it(`returns ${expectedLabel} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
                   targetPointType
                 )} with a reverse comparator`, function () {
-                  isInterval({ start: p2, end: p1, reverseCompareFn }, targetPointType).should.be.false() // MUDO wrong
+                  isInterval({ start: p2, end: p1 }, targetPointType, reverseCompareFn).should.be[expectedLabel]()
                 })
               } else {
                 it(`returns ${expectedLabel} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
