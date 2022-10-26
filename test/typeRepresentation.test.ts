@@ -208,11 +208,17 @@ describe('util', function () {
     })
   })
   describe('commonTypeRepresentation', function () {
+    it('returns undefined when called without arguments', function () {
+      should(commonTypeRepresentation()).be.undefined()
+    })
     describe('true', function () {
       trueCases.forEach(c => {
         it(`returns ${inspect(c.expected)} for ${c.label}`, function () {
           should(commonTypeRepresentation(...c.elements)).equal(c.expected)
         })
+      })
+      it('can deal with 1 argument', function () {
+        should(commonTypeRepresentation(32)).equal('number')
       })
     })
     describe('false', function () {
@@ -220,6 +226,9 @@ describe('util', function () {
         it(`returns false for ${c.label}`, function () {
           should(commonTypeRepresentation(...c.elements)).be.false()
         })
+      })
+      it('can deal with early false detection (coverage)', function () {
+        should(commonTypeRepresentation(32, 'not a number', 14, true, 18)).be.false()
       })
     })
   })
