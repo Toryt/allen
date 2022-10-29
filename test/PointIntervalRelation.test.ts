@@ -259,13 +259,13 @@ describe('PointIntervalRelation', function () {
     })
   })
   describe('#min', function () {
-    BasicPointIntervalRelation.RELATIONS.forEach(pir1 => {
-      BasicPointIntervalRelation.RELATIONS.forEach(pir2 => {
-        it(`${pir1.toString()}.min(${pir2.toString()}) has the basic relations of ${pir1.toString()} that are not implied by ${pir2.toString()}`, function () {
-          const result = pir1.min(pir2)
+    BasicPointIntervalRelation.RELATIONS.forEach(gr1 => {
+      BasicPointIntervalRelation.RELATIONS.forEach(gr2 => {
+        it(`${gr1.toString()}.min(${gr2.toString()}) has the basic relations of ${gr1.toString()} that are not implied by ${gr2.toString()}`, function () {
+          const result = gr1.min(gr2)
           console.log(result.toString())
           BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br =>
-            result.impliedBy(br).should.equal(pir1.impliedBy(br) && !pir2.impliedBy(br))
+            result.impliedBy(br).should.equal(gr1.impliedBy(br) && !gr2.impliedBy(br))
           )
         })
       })
