@@ -19,12 +19,10 @@ import {
   EMPTY_BIT_PATTERN,
   FULL_BIT_PATTERN,
   isBasicIntervalIntervalRelationBitPattern,
-  BitPatternSchema,
   isIntervalIntervalRelationBitPattern
 } from '../src/intervalIntervalRelationBitPattern'
-import Joi from 'joi'
 import should from 'should'
-import { stuff, stuffWithUndefined } from './_stuff'
+import { stuffWithUndefined } from './_stuff'
 import { inspect } from 'util'
 
 interface PatternCase {
@@ -83,24 +81,6 @@ describe('intervalIntervalRelationBitPattern', function () {
         should(intervalIntervalRelationBitPatterns[i]).equal(i)
       })
     })
-  })
-  describe('BitPattern', function () {
-    it('is a schema', function () {
-      Joi.isSchema(BitPatternSchema).should.be.true()
-    })
-    it('passes for all bit patterns', function () {
-      intervalIntervalRelationBitPatterns.forEach(bp => {
-        Joi.assert(bp, BitPatternSchema)
-      })
-    })
-
-    stuff
-      .filter(s => !isIntervalIntervalRelationBitPattern(s))
-      .forEach(s => {
-        it(`fails for ${JSON.stringify(s)}`, function () {
-          BitPatternSchema.validate(s).should.have.property('error')
-        })
-      })
   })
   describe('isIntervalIntervalRelationBitPattern', function () {
     it('returns true for all bit patterns', function () {

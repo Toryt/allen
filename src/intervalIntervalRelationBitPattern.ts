@@ -1,4 +1,3 @@
-import Joi from 'joi'
 import assert from 'assert'
 
 /**
@@ -26,11 +25,6 @@ export function isIntervalIntervalRelationBitPattern (
     typeof candidate === 'number' && Number.isInteger(candidate) && candidate >= 0 && candidate <= NR_OF_RELATIONS - 1
   )
 }
-
-export const BitPatternSchema: Joi.Schema<IntervalIntervalRelationBitPattern> = Joi.number()
-  .integer()
-  .min(0)
-  .max(NR_OF_RELATIONS - 1)
 
 function numberToIntervalIntervalRelationBitPattern (n: number): IntervalIntervalRelationBitPattern {
   assert(isIntervalIntervalRelationBitPattern(n))
