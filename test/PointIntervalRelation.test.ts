@@ -59,6 +59,9 @@ function testBasicRelation (
     it(`has ${BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[ordinal]} as representation`, function () {
       pir.representation.should.equal(BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[ordinal])
     })
+    it('is in BASIC_RELATIONS at the position of its ordinal', function () {
+      BasicPointIntervalRelation.BASIC_RELATIONS[pir.ordinal()].should.equal(pir)
+    })
   })
 }
 
@@ -80,6 +83,13 @@ describe('PointIntervalRelations', function () {
         br.ordinal().should.equal(i)
       })
     })
+  })
+  describe('basic relations', function () {
+    testBasicRelation('BEFORE', BEFORE, BEFORE_BIT_PATTERN, 0)
+    testBasicRelation('BEGINS', BEGINS, BEGINS_BIT_PATTERN, 1)
+    testBasicRelation('IN', IN, IN_BIT_PATTERN, 2)
+    testBasicRelation('ENDS', ENDS, ENDS_BIT_PATTERN, 3)
+    testBasicRelation('AFTER', AFTER, AFTER_BIT_PATTERN, 4)
   })
   describe('NR_OF_RELATIONS', function () {
     it('should pass through pointIntervalRelationBitPattern.NR_OF_RELATIONS', function () {
@@ -132,13 +142,6 @@ describe('PointIntervalRelations', function () {
       //   })
       // })
     })
-  })
-  describe('basic relations', function () {
-    testBasicRelation('BEFORE', BEFORE, BEFORE_BIT_PATTERN, 0)
-    testBasicRelation('BEGINS', BEGINS, BEGINS_BIT_PATTERN, 1)
-    testBasicRelation('IN', IN, IN_BIT_PATTERN, 2)
-    testBasicRelation('ENDS', ENDS, ENDS_BIT_PATTERN, 3)
-    testBasicRelation('AFTER', AFTER, AFTER_BIT_PATTERN, 4)
   })
   describe('#uncertainty', function () {
     it('returns NaN for EMPTY', function () {
