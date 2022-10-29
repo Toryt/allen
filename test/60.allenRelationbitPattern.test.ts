@@ -20,7 +20,7 @@ import {
   FULL_BIT_PATTERN,
   isBasicIntervalIntervalRelationBitPattern,
   isIntervalIntervalRelationBitPattern
-} from '../src/intervalIntervalRelationBitPattern'
+} from '../src/allenRelationBitPattern'
 import should from 'should'
 import { stuffWithUndefined } from './_stuff'
 import { inspect } from 'util'
@@ -46,7 +46,7 @@ const basicPatterns: PatternCase[] = [
   { name: 'PRECEDED_BY_BIT_PATTERN', value: PRECEDED_BY_BIT_PATTERN }
 ]
 
-describe('intervalIntervalRelationBitPattern', function () {
+describe('allenRelationBitPattern', function () {
   describe('NR_OF_RELATIONS', function () {
     it('is an integer', function () {
       NR_OF_RELATIONS.should.be.a.Number()

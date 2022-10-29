@@ -1,5 +1,5 @@
 import {
-  IntervalIntervalRelationBitPattern,
+  AllenRelationBitPattern,
   intervalIntervalRelationBitPatterns,
   CONTAINS_BIT_PATTERN,
   DURING_BIT_PATTERN,
@@ -17,7 +17,7 @@ import {
   PRECEDES_BIT_PATTERN,
   STARTED_BY_BIT_PATTERN,
   STARTS_BIT_PATTERN
-} from './intervalIntervalRelationBitPattern'
+} from './allenRelationBitPattern'
 import assert from 'assert'
 
 export type LetterAlias = 'p' | 'm' | 'o' | 'F' | 'D' | 's' | 'e' | 'S' | 'd' | 'f' | 'O' | 'M' | 'P'
@@ -407,9 +407,9 @@ export class TimeIntervalRelation {
     TimeIntervalRelation.PRECEDED_BY
   ]
 
-  public readonly bitPattern: IntervalIntervalRelationBitPattern
+  public readonly bitPattern: AllenRelationBitPattern
 
-  private constructor (bitpattern: IntervalIntervalRelationBitPattern) {
+  private constructor (bitpattern: AllenRelationBitPattern) {
     /**
      * Only the 13 lowest bits are used. The other (32 - 13 = 19 bits) are 0.
      */

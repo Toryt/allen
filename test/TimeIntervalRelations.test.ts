@@ -2,7 +2,7 @@
 
 import { LetterAlias, TimeIntervalRelation } from '../src/TimeIntervalRelation'
 import {
-  IntervalIntervalRelationBitPattern,
+  AllenRelationBitPattern,
   CONTAINS_BIT_PATTERN,
   DURING_BIT_PATTERN,
   EMPTY_BIT_PATTERN,
@@ -19,13 +19,13 @@ import {
   PRECEDES_BIT_PATTERN,
   STARTED_BY_BIT_PATTERN,
   STARTS_BIT_PATTERN
-} from '../src/intervalIntervalRelationBitPattern'
+} from '../src/allenRelationBitPattern'
 import 'should'
 
 function testBasicRelation (
   name: string,
   br: TimeIntervalRelation,
-  bp: IntervalIntervalRelationBitPattern,
+  bp: AllenRelationBitPattern,
   visualAlias: TimeIntervalRelation,
   letterAlias: LetterAlias
 ): void {
