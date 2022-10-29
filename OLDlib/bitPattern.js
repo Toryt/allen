@@ -1,5 +1,3 @@
-const Joi = require('joi')
-
 /**
  * The total number of possible time interval relations <strong>= {@value}</strong>
  * (i.e., <code>2<sup>13</sup></code>).
@@ -25,11 +23,6 @@ const PRECEDED_BY_BIT_PATTERN = 4096 // 1000000000000 P
 const FULL_BIT_PATTERN = 8191 // 1111111111111 pmoFDseSdfOMP
 
 const bitPatterns = [...Array(NR_OF_RELATIONS).keys()]
-
-const BitPattern = Joi.number()
-  .integer()
-  .min(EMPTY_BIT_PATTERN)
-  .max(FULL_BIT_PATTERN)
 
 /**
  * A basic relation is expressed by a single bit in the bit pattern.
@@ -65,6 +58,5 @@ module.exports = {
   PRECEDED_BY_BIT_PATTERN,
   FULL_BIT_PATTERN,
   bitPatterns,
-  BitPattern,
   isBasicBitPattern
 }

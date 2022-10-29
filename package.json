@@ -57,8 +57,5 @@
       "html",
       "text"
     ]
-  },
-  "dependencies": {
-    "joi": "^17.6.4"
   }
 }
