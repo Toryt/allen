@@ -191,15 +191,17 @@ describe('PointIntervalRelation', function () {
     })
     BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br1 => {
       BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br2 => {
-        if (br1 === br2) {
-          it(`${br1.representation} is implied by itself`, function () {
-            br1.impliedBy(br2).should.be.true()
-          })
-        } else {
+        if (br1 !== br2) {
           it(`${br1.representation} is not implied by ${br2.representation}`, function () {
             br1.impliedBy(br2).should.be.false()
           })
         }
+      })
+      it(`${br1.representation} is implied by EMPTY`, function () {
+        br1.impliedBy(EMPTY).should.be.true()
+      })
+      it(`${br1.representation} is not implied by FULL`, function () {
+        br1.impliedBy(FULL).should.be.false()
       })
     })
     BasicPointIntervalRelation.RELATIONS.forEach(gr1 => {
@@ -220,11 +222,7 @@ describe('PointIntervalRelation', function () {
     })
     BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br1 => {
       BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br2 => {
-        if (br1 === br2) {
-          it(`${br1.representation} implies itself`, function () {
-            br1.implies(br2).should.be.true()
-          })
-        } else {
+        if (br1 !== br2) {
           it(`${br1.representation} does not imply ${br2.representation}`, function () {
             br1.implies(br2).should.be.false()
           })

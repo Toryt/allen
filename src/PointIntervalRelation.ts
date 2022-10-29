@@ -123,6 +123,8 @@ export class PointIntervalRelation {
    * ### Invariants
    *
    * ```
+   * this.impliedBy(EMPTY)
+   * FULL.impliedBy(this)
    * this.impliedBy(this)
    * !this.isBasic() || BASIC_RELATIONS.every(br => br === this || !this.impliedBy(br))
    * ```
@@ -142,8 +144,22 @@ export class PointIntervalRelation {
    * In other words, when considering the relations as a set of basic relations, is `this` a subset of `gr` (considering
    * equality as also acceptable)?
    *
-   * @pre !!gr
-   * @returns gr.impliedBy(this)
+   * ### Preconditions
+   *
+   * ```
+   * gr instanceof PointIntervalRelation
+   * ```
+   *
+   * ### Invariants
+   *
+   * ```
+   * EMPTY.implies(this)
+   * this.implies(FULL)
+   * this.implies(this)
+   * !this.isBasic() || BASIC_RELATIONS.every(br => br === this || !this.implies(br))
+   * ```
+   *
+   * @returns `gr.impliedBy(this)`
    */
   implies (gr: PointIntervalRelation): boolean {
     // noinspection SuspiciousTypeOfGuard
