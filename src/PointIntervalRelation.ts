@@ -18,22 +18,21 @@ import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 const haveCommonType: string = 't, i.start and i.end must be of a common type'
 
 /**
- * Support for reasoning about relations between time points and time intervals, and constraints on those
- * relationships.
+ * Support for reasoning about relations between points and intervals, and constraints on those relations.
  *
- * **We strongly advise to use this class when working with relations between time points and time
- * intervals. Reasoning about relations between time points and time intervals is treacherously difficult.**
+ * **We strongly advise to use this class when working with relations between points and intervals. Reasoning about
+ * relations between points and intervals is treacherously difficult.**
  *
  * ### About the code
  *
  * We have chosen to introduce a full-featured type for working with point – interval relations, to make encapsulation
  * as good as possible. This has a slight performance overhead, but we believe that this is worth it, considering the
- * immense complexity of reasoning about relations between points in time and time intervals.
+ * immense complexity of reasoning about relations between points and intervals.
  *
- * Point – interval relations follow the ‘32-fold singleton pattern’. All possible instances are created when this module
- * is loaded, and it is impossible for a user to create new instances. This means that reference equality (‘`===`’) can
- * be used to compare point – interval relations, Instances are obtained using the constants this module offers, or
- * using
+ * Point – interval relations follow the ‘32-fold enumeration pattern’. All possible instances are created when this
+ * module is loaded, and it is impossible for a user to create new instances. This means that reference equality
+ * (‘`===`’) can be used to compare point – interval relations, Instances are obtained using the constants this module
+ * offers, or using
  *
  * - the combination methods
  *   - {@link or},
@@ -42,12 +41,14 @@ const haveCommonType: string = 't, i.start and i.end must be of a common type'
  *   - {@link compose}, and // MUDO make instance method?
  * - the unary method {@link complement}.
  *
- * A `PointIntervalRelation` can be determined based on a point in time and a time interval with {@link pointIntervalRelation}. // MUDO move to AllenRelation?
+ * A `PointIntervalRelation` can be determined based on a point and an interval with {@link pointIntervalRelation}. // MUDO move to AllenRelation?
  *
- * {@link VALUES} lists all possible point – interval relations.
+ * Basic point — interval relations are instances of the subclass {@link BasicPointIntervalRelation}. For technical
+ * reasons, {@link BasicPointIntervalRelation.VALUES}, the lists all possible point – interval relations, is a static
+ * property of that class, not this.
  *
- * All methods in this class are _O(n)_, i.e., work in constant time, although
- * {@link compose} takes a significant longer constant time than the other methods.
+ * All methods in this class are _O(n)_, i.e., work in constant time, although {@link compose} takes a significant
+ * longer constant time than the other methods.
  */
 export class PointIntervalRelation {
   /* Implementation note:
