@@ -578,16 +578,16 @@ export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_R
 export const TERMINATES: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[3]
 
 /**
- * A _basic_ point – interval relation that says that a point in time `t` _comes after_ an interval `I`, i.e., `t` is
- * after the end of `I`:
+ * A _basic_ point – interval relation that says that a point `t` _comes after_ an interval `I`, i.e., `t` is after the
+ * end of `I`:
  *
  * ```
- * (I.until != undefined) && (t > I.until)
+ * (t ≠ undefined) && (I.until ≠ undefined) && (t > I.end)
  * ```
  *
- * ![after](https://github.com/jandppw/ppwcode-recovered-from-google-code/blob/master/java/value/trunk/src/main/java/org/ppwcode/value_III/time/interval/doc-files/PointIntervalRelation-after.png?raw=true)
+ * ![after](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-after.png)
  *
- * The short representation of this point – interval relation is `'>'`.
+ * The short representation of this point – interval relation is `a`.
  */
 export const AFTER: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[4]
 
