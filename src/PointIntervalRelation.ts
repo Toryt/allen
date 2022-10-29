@@ -63,170 +63,6 @@ export class PointIntervalRelation {
      involved. */
 
   /**
-   * The main factory method for `PointIntervalRelations`.
-   *
-   * This is the union of all point – interval relations in {@code gr}, when they are considered as sets of basic
-   *
-   * relations.
-   * Although this is intended to create any disjunction of the basic relations, you can use any relation in the
-   * argument list.
-   *
-   * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.some(gr => gr.impliedBy(br)))
-   */
-  public static or (...gr: PointIntervalRelation[]): PointIntervalRelation {
-    return BasicPointIntervalRelation.VALUES[
-      gr.reduce(
-        (acc: PointIntervalRelationBitPattern, grr): PointIntervalRelationBitPattern =>
-          numberToPointIntervalRelationBitPattern(acc | grr.bitPattern),
-        EMPTY_BIT_PATTERN
-      )
-    ]
-  }
-
-  /**
-   * The conjunction of the point – interval relations in `gr`.
-   * This is the intersection of all point – interval relations in `gr`, when they are considered as sets of basic
-   * relations.
-   *
-   * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
-   */
-  public static and (...gr: PointIntervalRelation[]): PointIntervalRelation {
-    return BasicPointIntervalRelation.VALUES[
-      gr.reduce(
-        (acc: PointIntervalRelationBitPattern, grr: PointIntervalRelation): PointIntervalRelationBitPattern =>
-          numberToPointIntervalRelationBitPattern(acc & grr.bitPattern),
-        FULL_BIT_PATTERN
-      )
-    ]
-  }
-
-  /**
-   * Pick the PointIntervalRelation described by the string.
-   *
-   * The letters do not need to be in order. There can be meaningless letters. Letters can be duplicated.
-   *
-   * @returns VALUES.find(pir =>
-   *            pir.toString()
-   *               .filter(l => BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS.includes(l))
-   *               .every(l => s.includes(l))
-   */
-  public static relation (s: string): PointIntervalRelation {
-    let result = EMPTY
-    if (s.includes('b')) {
-      result = or(result, BEFORE)
-    }
-    if (s.includes('c')) {
-      result = or(result, BEGINS)
-    }
-    if (s.includes('i')) {
-      result = or(result, IN)
-    }
-    if (s.includes('t')) {
-      result = or(result, ENDS)
-    }
-    if (s.includes('a')) {
-      result = or(result, AFTER)
-    }
-    return result
-  }
-
-  /*
-/!**
- * This matrix holds the compositions of basic point – interval relations with Allen relations. These are part
- * of the given semantics, and cannot be calculated. See {@link #compose(PointIntervalRelation, TimeIntervalRelation)}.
- *!/
-public final static PointIntervalRelation[][] BASIC_COMPOSITIONS =
-    {
-{BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEFORE_END, BEFORE_END, BEFORE_END, BEFORE_END, FULL},
-{BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEGINS, BEGINS, BEGINS, IN, IN, IN, ENDS, AFTER},
-{BEFORE, BEFORE, BEFORE_END, BEFORE_END, FULL, IN, IN, AFTER_BEGIN, IN, IN, AFTER_BEGIN, AFTER, AFTER},
-{BEFORE, BEGINS, IN, ENDS, AFTER, IN, ENDS, AFTER, IN, ENDS, AFTER, AFTER, AFTER},
-{FULL, AFTER_BEGIN, AFTER_BEGIN, AFTER, AFTER, AFTER_BEGIN, AFTER, AFTER, AFTER_BEGIN, AFTER, AFTER, AFTER, AFTER}
-};
-
-/!**
- * <p>Given a point in time <code><var>t</var></code> and 2 time intervals <code><var>I1</var></code>, <code><var>I2</var></code>,
- *   given <code>tpir = timePointIntervalRelation(<var>t</var>, <var>I1</var>)</code> and
- *   <code>ar == allenRelation(<var>I1</var>, <var>I2</var>)</code>,
- *   <code>compose(tpir, ar) == timePointIntervalRelation(<var>t</var>, <var>I2</var>)</code>.</p>
- *!/
-@MethodContract(
-    pre  = {
-        @Expression("_tpir != null"),
-        @Expression("_ar != null")
-    },
-    post = {
-        @Expression("for (PointIntervalRelation bTpir : BASIC_RELATIONS) {for (TimeIntervalRelation bAr: TimeIntervalRelation.BASIC_RELATIONS) {" +
-            "bTpir.implies(_tpir) && bAr.implies(_ar) ? result.impliedBy(BASIC_COMPOSITIONS[btPir.basicRelationOrdinal()][bAr.basicRelationOrdinal()])" +
-            "}}")
-    })
-public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeIntervalRelation ar) {
-    assert preArgumentNotNull(tpir, "tpir");
-    assert preArgumentNotNull(ar, "ar");
-    PointIntervalRelation acc = EMPTY;
-    for (PointIntervalRelation bTpir : BASIC_RELATIONS) {
-        if (tpir.impliedBy(tpir)) {
-            for (TimeIntervalRelation bAr : TimeIntervalRelation.BASIC_RELATIONS) {
-                if (ar.impliedBy(bAr)) {
-                    acc = or(acc, BASIC_COMPOSITIONS[bTpir.basicRelationOrdinal()][bAr.basicRelationOrdinal()]);
-                }
-            }
-        }
-    }
-    return acc;
-}
-*/
-
-  /**
-   * The relation of `t` with `i` with the lowest possible {@link uncertainty}.
-   *
-   * `undefined` as start or end of `i` is considered as ‘unknown’, and thus is not used to restrict the relation more,
-   * leaving it with more {@link uncertainty}.
-   */
-  static pointIntervalRelation<T> (t: T | undefined, i: Interval<T>, compareFn?: Comparator<T>): PointIntervalRelation {
-    assert(
-      (isLTComparableOrIndefinite(t) && isLTComparableOrIndefinite(i.start) && isLTComparableOrIndefinite(i.end)) ||
-        compareFn !== undefined,
-      '`compareFn` is mandatory when `t`, `i.start` or `i.end` is a `symbol` or `NaN`'
-    )
-
-    const cType = commonTypeRepresentation(t, i.start, i.end)
-
-    assert(cType !== false, haveCommonType)
-    assert(cType === undefined || isInterval(i, cType, compareFn))
-
-    if (t === undefined || t === null) {
-      return FULL
-    }
-
-    const compare: Comparator<T> = compareFn ?? ltCompare
-    let result = FULL
-    if (i.start !== undefined && i.start !== null) {
-      const tToStart = compare(t, i.start)
-      if (tToStart < 0) {
-        return BEFORE
-      } else if (tToStart === 0) {
-        return BEGINS
-      } else {
-        // assert(tToStart > 0)
-        result = result.min(BEFORE).min(BEGINS)
-      }
-    }
-    if (i.end !== undefined && i.end !== null) {
-      const tToEnd = compare(t, i.end)
-      if (tToEnd < 0) {
-        result = result.min(ENDS).min(AFTER)
-      } else if (tToEnd === 0) {
-        return ENDS
-      } else {
-        // assert(tToEnd > 0)
-        return AFTER
-      }
-    }
-    return result
-  }
-
-  /**
    * Only the 5 lowest bits are used. The other (32 - 5 = 27 bits) are 0.
    *
    * @private
@@ -445,36 +281,176 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
       return acc
     }, []).join('')})`
   }
+
+  /**
+   * The main factory method for `PointIntervalRelations`.
+   *
+   * This is the union of all point – interval relations in {@code gr}, when they are considered as sets of basic
+   *
+   * relations.
+   * Although this is intended to create any disjunction of the basic relations, you can use any relation in the
+   * argument list.
+   *
+   * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.some(gr => gr.impliedBy(br)))
+   */
+  public static or (...gr: PointIntervalRelation[]): PointIntervalRelation {
+    return BasicPointIntervalRelation.VALUES[
+      gr.reduce(
+        (acc: PointIntervalRelationBitPattern, grr): PointIntervalRelationBitPattern =>
+          numberToPointIntervalRelationBitPattern(acc | grr.bitPattern),
+        EMPTY_BIT_PATTERN
+      )
+    ]
+  }
+
+  /**
+   * The conjunction of the point – interval relations in `gr`.
+   * This is the intersection of all point – interval relations in `gr`, when they are considered as sets of basic
+   * relations.
+   *
+   * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
+   */
+  public static and (...gr: PointIntervalRelation[]): PointIntervalRelation {
+    return BasicPointIntervalRelation.VALUES[
+      gr.reduce(
+        (acc: PointIntervalRelationBitPattern, grr: PointIntervalRelation): PointIntervalRelationBitPattern =>
+          numberToPointIntervalRelationBitPattern(acc & grr.bitPattern),
+        FULL_BIT_PATTERN
+      )
+    ]
+  }
+
+  /**
+   * Pick the PointIntervalRelation described by the string.
+   *
+   * The letters do not need to be in order. There can be meaningless letters. Letters can be duplicated.
+   *
+   * @returns VALUES.find(pir =>
+   *            pir.toString()
+   *               .filter(l => BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS.includes(l))
+   *               .every(l => s.includes(l))
+   */
+  public static relation (s: string): PointIntervalRelation {
+    let result = EMPTY
+    if (s.includes('b')) {
+      result = or(result, BEFORE)
+    }
+    if (s.includes('c')) {
+      result = or(result, BEGINS)
+    }
+    if (s.includes('i')) {
+      result = or(result, IN)
+    }
+    if (s.includes('t')) {
+      result = or(result, ENDS)
+    }
+    if (s.includes('a')) {
+      result = or(result, AFTER)
+    }
+    return result
+  }
+
+  /*
+/!**
+ * This matrix holds the compositions of basic point – interval relations with Allen relations. These are part
+ * of the given semantics, and cannot be calculated. See {@link #compose(PointIntervalRelation, TimeIntervalRelation)}.
+ *!/
+public final static PointIntervalRelation[][] BASIC_COMPOSITIONS =
+    {
+{BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEFORE_END, BEFORE_END, BEFORE_END, BEFORE_END, FULL},
+{BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEGINS, BEGINS, BEGINS, IN, IN, IN, ENDS, AFTER},
+{BEFORE, BEFORE, BEFORE_END, BEFORE_END, FULL, IN, IN, AFTER_BEGIN, IN, IN, AFTER_BEGIN, AFTER, AFTER},
+{BEFORE, BEGINS, IN, ENDS, AFTER, IN, ENDS, AFTER, IN, ENDS, AFTER, AFTER, AFTER},
+{FULL, AFTER_BEGIN, AFTER_BEGIN, AFTER, AFTER, AFTER_BEGIN, AFTER, AFTER, AFTER_BEGIN, AFTER, AFTER, AFTER, AFTER}
+};
+
+/!**
+ * <p>Given a point in time <code><var>t</var></code> and 2 time intervals <code><var>I1</var></code>, <code><var>I2</var></code>,
+ *   given <code>tpir = timePointIntervalRelation(<var>t</var>, <var>I1</var>)</code> and
+ *   <code>ar == allenRelation(<var>I1</var>, <var>I2</var>)</code>,
+ *   <code>compose(tpir, ar) == timePointIntervalRelation(<var>t</var>, <var>I2</var>)</code>.</p>
+ *!/
+@MethodContract(
+    pre  = {
+        @Expression("_tpir != null"),
+        @Expression("_ar != null")
+    },
+    post = {
+        @Expression("for (PointIntervalRelation bTpir : BASIC_RELATIONS) {for (TimeIntervalRelation bAr: TimeIntervalRelation.BASIC_RELATIONS) {" +
+            "bTpir.implies(_tpir) && bAr.implies(_ar) ? result.impliedBy(BASIC_COMPOSITIONS[btPir.basicRelationOrdinal()][bAr.basicRelationOrdinal()])" +
+            "}}")
+    })
+public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeIntervalRelation ar) {
+    assert preArgumentNotNull(tpir, "tpir");
+    assert preArgumentNotNull(ar, "ar");
+    PointIntervalRelation acc = EMPTY;
+    for (PointIntervalRelation bTpir : BASIC_RELATIONS) {
+        if (tpir.impliedBy(tpir)) {
+            for (TimeIntervalRelation bAr : TimeIntervalRelation.BASIC_RELATIONS) {
+                if (ar.impliedBy(bAr)) {
+                    acc = or(acc, BASIC_COMPOSITIONS[bTpir.basicRelationOrdinal()][bAr.basicRelationOrdinal()]);
+                }
+            }
+        }
+    }
+    return acc;
+}
+*/
+
+  /**
+   * The relation of `t` with `i` with the lowest possible {@link uncertainty}.
+   *
+   * `undefined` as start or end of `i` is considered as ‘unknown’, and thus is not used to restrict the relation more,
+   * leaving it with more {@link uncertainty}.
+   */
+  static pointIntervalRelation<T> (t: T | undefined, i: Interval<T>, compareFn?: Comparator<T>): PointIntervalRelation {
+    assert(
+      (isLTComparableOrIndefinite(t) && isLTComparableOrIndefinite(i.start) && isLTComparableOrIndefinite(i.end)) ||
+        compareFn !== undefined,
+      '`compareFn` is mandatory when `t`, `i.start` or `i.end` is a `symbol` or `NaN`'
+    )
+
+    const cType = commonTypeRepresentation(t, i.start, i.end)
+
+    assert(cType !== false, haveCommonType)
+    assert(cType === undefined || isInterval(i, cType, compareFn))
+
+    if (t === undefined || t === null) {
+      return FULL
+    }
+
+    const compare: Comparator<T> = compareFn ?? ltCompare
+    let result = FULL
+    if (i.start !== undefined && i.start !== null) {
+      const tToStart = compare(t, i.start)
+      if (tToStart < 0) {
+        return BEFORE
+      } else if (tToStart === 0) {
+        return BEGINS
+      } else {
+        // assert(tToStart > 0)
+        result = result.min(BEFORE).min(BEGINS)
+      }
+    }
+    if (i.end !== undefined && i.end !== null) {
+      const tToEnd = compare(t, i.end)
+      if (tToEnd < 0) {
+        result = result.min(ENDS).min(AFTER)
+      } else if (tToEnd === 0) {
+        return ENDS
+      } else {
+        // assert(tToEnd > 0)
+        return AFTER
+      }
+    }
+    return result
+  }
 }
 
 export const BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
 export type BasicPointIntervalRelationRepresentation = typeof BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[number]
 
 export class BasicPointIntervalRelation extends PointIntervalRelation {
-  /**
-   * All possible basic point interval relations
-   */
-  public static readonly BASIC_RELATIONS_VALUES: readonly BasicPointIntervalRelation[] = Object.freeze(
-    basicPointIntervalRelationBitPatterns.map(bitPattern => new BasicPointIntervalRelation(bitPattern))
-  )
-
-  /**
-   * All possible point – interval relations.
-   @Invars({
-    @Expression("VALUES != null"),
-    @Expression("for (PointIntervalRelation tir : VALUES) {tir != null}"),
-    @Expression("for (int i : 0 .. VALUES.length) {for (int j : i + 1 .. VALUES.length) {VALUES[i] != VALUES[j]}}"),
-    @Expression("for (PointIntervalRelation tir) {VALUES.contains(tir)}")
-})
-   */
-  public static readonly VALUES: readonly PointIntervalRelation[] = Object.freeze(
-    pointIntervalRelationBitPatterns.map(bitPattern =>
-      isBasicPointIntervalRelationBitPattern(bitPattern)
-        ? BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[Math.log2(bitPattern & -bitPattern)]
-        : new PointIntervalRelation(bitPattern)
-    )
-  )
-
   public readonly representation: BasicPointIntervalRelationRepresentation
 
   /**
@@ -501,6 +477,30 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
      */
     return Math.log2(this.bitPattern & -this.bitPattern)
   }
+
+  /**
+   * All possible basic point interval relations
+   */
+  public static readonly BASIC_RELATIONS_VALUES: readonly BasicPointIntervalRelation[] = Object.freeze(
+    basicPointIntervalRelationBitPatterns.map(bitPattern => new BasicPointIntervalRelation(bitPattern))
+  )
+
+  /**
+   * All possible point – interval relations.
+   @Invars({
+    @Expression("VALUES != null"),
+    @Expression("for (PointIntervalRelation tir : VALUES) {tir != null}"),
+    @Expression("for (int i : 0 .. VALUES.length) {for (int j : i + 1 .. VALUES.length) {VALUES[i] != VALUES[j]}}"),
+    @Expression("for (PointIntervalRelation tir) {VALUES.contains(tir)}")
+})
+   */
+  public static readonly VALUES: readonly PointIntervalRelation[] = Object.freeze(
+    pointIntervalRelationBitPatterns.map(bitPattern =>
+      isBasicPointIntervalRelationBitPattern(bitPattern)
+        ? BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[Math.log2(bitPattern & -bitPattern)]
+        : new PointIntervalRelation(bitPattern)
+    )
+  )
 }
 
 /**
