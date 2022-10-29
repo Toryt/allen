@@ -7,9 +7,7 @@ import {
   BasicPointIntervalRelation,
   EMPTY,
   FULL,
-  BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS,
-  or,
-  and
+  BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS
 } from '../src/PointIntervalRelation'
 import 'should'
 import { Interval } from '../src/Interval'
@@ -276,7 +274,7 @@ describe('PointIntervalRelation', function () {
       BasicPointIntervalRelation.RELATIONS.forEach(pir2 => {
         it(`or(${pir1.toString()}, ${pir2.toString()}) has the basic relations of both`, function () {
           const args = [pir1, pir2]
-          const result = or(...args)
+          const result = PointIntervalRelation.or(...args)
           console.log(result.toString())
           BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br =>
             result.impliedBy(br).should.equal(args.some(gr => gr.impliedBy(br)))
@@ -285,11 +283,11 @@ describe('PointIntervalRelation', function () {
       })
     })
     it('the or of all basic point relations is FULL', function () {
-      const result = or(...BasicPointIntervalRelation.BASIC_RELATIONS)
+      const result = PointIntervalRelation.or(...BasicPointIntervalRelation.BASIC_RELATIONS)
       result.should.equal(FULL)
     })
     it('the or of all point relations is FULL', function () {
-      const result = or(...BasicPointIntervalRelation.RELATIONS)
+      const result = PointIntervalRelation.or(...BasicPointIntervalRelation.RELATIONS)
       result.should.equal(FULL)
     })
   })
@@ -298,7 +296,7 @@ describe('PointIntervalRelation', function () {
       BasicPointIntervalRelation.RELATIONS.forEach(pir2 => {
         it(`and(${pir1.toString()}, ${pir2.toString()}) has the common basic relations`, function () {
           const args = [pir1, pir2]
-          const result = and(...args)
+          const result = PointIntervalRelation.and(...args)
           console.log(result.toString())
           BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br =>
             result.impliedBy(br).should.equal(args.every(gr => gr.impliedBy(br)))
@@ -307,11 +305,11 @@ describe('PointIntervalRelation', function () {
       })
     })
     it('the and of all basic point relations is EMPTY', function () {
-      const result = and(...BasicPointIntervalRelation.BASIC_RELATIONS)
+      const result = PointIntervalRelation.and(...BasicPointIntervalRelation.BASIC_RELATIONS)
       result.should.equal(EMPTY)
     })
     it('the and of all point relations is FULL', function () {
-      const result = and(...BasicPointIntervalRelation.RELATIONS)
+      const result = PointIntervalRelation.and(...BasicPointIntervalRelation.RELATIONS)
       result.should.equal(EMPTY)
     })
   })

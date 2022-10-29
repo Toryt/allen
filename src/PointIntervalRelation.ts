@@ -657,6 +657,3 @@ export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS
  * ```
  */
 export const FULL: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS[FULL_BIT_PATTERN]
-
-export const or = PointIntervalRelation.or
-export const and = PointIntervalRelation.and
