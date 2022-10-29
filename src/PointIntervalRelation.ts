@@ -274,7 +274,7 @@ export class PointIntervalRelation {
    * A representation of the point – interval relation in the used short notation (`'b'`, `'c'`,`'i'`, `'t'`, `'a'`).
    */
   toString (): string {
-    return `(${BASIC_RELATIONS.reduce((acc: string[], br) => {
+    return `(${BasicPointIntervalRelation.BASIC_RELATIONS.reduce((acc: string[], br) => {
       if (this.impliedBy(br)) {
         acc.push(br.representation)
       }
