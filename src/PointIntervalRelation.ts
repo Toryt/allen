@@ -57,16 +57,19 @@ export class PointIntervalRelation {
      integer number.
 
      Each of those 5 bits represents a basic relation, being in the general relation (`1`) or not being in the general
-     relation (`0`).
+     relation (`0`), where the relation is thought of as a set of basic relations.
 
      The order of the basic relations in the bit pattern is important for some algorithms. There is some trickery
      involved. */
 
   /**
-   * The main factory method for PointIntervalRelations. Although this is intended to create
-   * any disjunction of the basic relations, you can use any relation in the argument
-   * list. This is the union of all point – interval relations in {@code gr}, when they are considered
-   * as sets of basic relations.
+   * The main factory method for `PointIntervalRelations`.
+   *
+   * This is the union of all point – interval relations in {@code gr}, when they are considered as sets of basic
+   *
+   * relations.
+   * Although this is intended to create any disjunction of the basic relations, you can use any relation in the
+   * argument list.
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.some(gr => gr.impliedBy(br)))
    */
