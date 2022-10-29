@@ -47,8 +47,8 @@ const haveCommonType: string = 't, i.start and i.end must be of a common type'
  * reasons, {@link BasicPointIntervalRelation.RELATIONS}, the lists all possible point – interval relations, is a static
  * property of that class, not this.
  *
- * All methods in this class are _O(n)_, i.e., work in constant time, although {@link compose} takes a significant
- * longer constant time than the other methods.
+ * All instance methods in this class are _O(1)_, i.e., work in constant time, and all static methods are _O(n)_, i.e.,
+ * work in linear time.
  */
 export class PointIntervalRelation {
   /* Implementation note:
@@ -288,8 +288,8 @@ export class PointIntervalRelation {
    * The main factory method for `PointIntervalRelations`.
    *
    * This is the union of all point – interval relations in {@code gr}, when they are considered as sets of basic
-   *
    * relations.
+   *
    * Although this is intended to create any disjunction of the basic relations, you can use any relation in the
    * argument list.
    *
