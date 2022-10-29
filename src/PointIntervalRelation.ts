@@ -173,26 +173,11 @@ export class PointIntervalRelation {
   }
 
   /**
-   * The complement of a point – interval relation is the logic negation of the condition the point – interval relation
-   * expresses.
+   * The complement of a general point – interval relation is the disjunction of all basic point – interval relations
+   * that are not implied by the general point – interval relation.
    *
    * The complement of a basic point – interval relation is the disjunction of all the other basic point – interval
-   * relations. The complement of a general point – interval relation is the disjunction of all basic point – interval
-   * relations that are not implied by the general point – interval relation.
-   *
-   * This method is key to validating semantic constraints on time intervals, using the following idiom:
-   *
-   * ```ts
-   * ...
-   * T t = ...;
-   * Interval<T> i = ...;
-   * PointIntervalRelation condition = ...;
-   * PointIntervalRelation actual = pointIntervalRelation(t, i);
-   * if (!actual.implies(condition)) {
-   *   throw new ....
-   * }
-   * ...
-   * ```
+   * relations.
    *
    * The complement of the complement of a general point – interval relation is the orginal general point – interval
    * relation.
@@ -205,67 +190,57 @@ export class PointIntervalRelation {
    * `br` and a general point – interval relation `condition`, it is true that
    *
    * ```
-   * (br ⇒ condition) ⇔ ¬ (br.implies(condition.complement())
+   * (br ⊆ condition) ⇔ (br ⊈ condition.complement)
    * ```
    *
    * **This is however not so for non-basic, and thus general point – interval relations**, as the following
    * counterexample proofs. Suppose a condition is that, for a general relation `gr`:
    *
    * ```
-   * gr.implies(condition)
-   * ```
-   *
-   * Suppose `gr = (bi)`. Then we can rewrite in the following way:
-   *
-   * ```
-   *   gr ⇒ condition
-   * ⇔ (bi) ⇒ condition
-   * ⇔ {b, i} ⊆ condition
-   * ⇔ b ∈ condition ∧ i ∈ condition
+   * gr ⊆ condition
    * ```
    *
    * From the definition of the complement, it follows that, for a basic relation `br` and a general relation `gr` as
    * set
    *
    * ```
-   * br ∈ gr ⇔ br ∉ gr.complement()
+   * br ∈ gr ⇔ br ∉ gr.complement
    * ```
    *
-   * Thus:
+   * Suppose `gr = (bi)`. Then we can rewrite in the following way:
    *
    * ```
-   * ⇔ b ∉ condition.complement() ∧ i ∉ condition.complement()
-   * ⇔ ¬(b ∈ condition.complement() ∨ i ∈ condition.complement()) (1)
+   *   gr ⊆ condition
+   * ⇔ (bi) ⊆ condition
+   * ⇔ b ∈ condition ∧ i ∈ condition
+   * ⇔ b ∉ condition.complement ∧ i ∉ condition.complement (1)
    * ```
    *
    * While, from the other side:
    *
    * ```
-   *   ¬(gr ⇒ condition.complement())
-   * ⇔ ¬((bi) ⇒ condition.complement())
-   * ⇔ ¬({b, i} ⊆ condition.complement())
-   * ⇔ ¬(b ∈ condition.complement() ∧ i ∈ condition.complement()) (2)
+   *   gr ⊈ condition.complement
+   * ⇔ (bi) ⊈ condition.complement
+   * ⇔ ¬(b ∈ condition.complement ∧ i ∈ condition.complement)
+   * ⇔ b ∉ condition.complement ∨ i ∉ condition.complement (2)
    * ```
    *
    * It is clear that _(1)_ is incompatible with _(2)_, except for the case where the initial relation is basic.
    *
-   * In the reverse case, for a basic relation `br` and a general point – interval relation `actual`, nothing special can
-   * be said about the complement of `actual`, as the following reasoning illustrates:
+   * In the reverse case, for a basic relation `br` and a general point – interval relation `actual`, nothing special
+   * can be said about the complement of `actual`, as the following reasoning illustrates:
    *
    * ```
-   *   actual ⇒ br
-   * ⇔ actual ⊆ br
-   * ⇔ actual = br || actual = ∅
-   * ⇔ actual.complement() = br.complement() ∨ actual.complement() = FULL (3)
+   *   actual ⊆ br
+   * ⇔ actual = br ∧ actual = ∅
+   * ⇔ actual.complement = br.complement ∨ actual.complement = FULL (3)
    * ```
    *
    * From the other side:
    *
    * ```
-   *   ¬(actual.complement() ⇒ br)
-   * ⇔ ¬(actual.complement() ⊆ br)
-   * ⇔ ¬(actual.complement() = br ∨ actual.complement = ∅)
-   * ⇔ actual.complement() ≠ br ∧ actual.complement ≠ ∅ (4)
+   *   actual.complement ⊈ br
+   * ⇔ actual.complement ≠ br ∧ actual.complement ≠ ∅ (4)
    * ```
    *
    * It is clear that _(3)_ expresses something completely different from _(4)_, and this effect is even stronger with
@@ -429,6 +404,20 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
    *
    * `undefined` as start or end of `i` is considered as ‘unknown’, and thus is not used to restrict the relation more,
    * leaving it with more {@link uncertainty}.
+   *
+   * This method is key to validating semantic constraints on time intervals, using the following idiom:
+   *
+   * ```ts
+   * ...
+   * T t = ...;
+   * Interval<T> i = ...;
+   * PointIntervalRelation condition = ...;
+   * PointIntervalRelation actual = pointIntervalRelation(t, i);
+   * if (!actual.implies(condition)) {
+   *   throw new ....
+   * }
+   * ...
+   * ```
    */
   static pointIntervalRelation<T> (t: T | undefined, i: Interval<T>, compareFn?: Comparator<T>): PointIntervalRelation {
     assert(

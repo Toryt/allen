@@ -244,17 +244,17 @@ describe('PointIntervalRelation', function () {
     })
   })
   describe('#complement', function () {
-    BasicPointIntervalRelation.RELATIONS.forEach(pir => {
-      it(`the complement of ${pir.toString()} is implied by the basic relations that are not implied by it`, function () {
-        const result = pir.complement()
+    BasicPointIntervalRelation.RELATIONS.forEach(gr => {
+      it(`the complement of ${gr.toString()} is implied by the basic relations that are not implied by it`, function () {
+        const result = gr.complement()
         console.log(result.toString())
         BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br => {
-          pir.impliedBy(br).should.equal(!result.impliedBy(br))
+          gr.impliedBy(br).should.equal(!result.impliedBy(br))
         })
       })
-      it(`the complement of the complement if ${pir.toString()} is ${pir.toString()}`, function () {
-        const result = pir.complement().complement()
-        result.should.equal(pir)
+      it(`the complement of the complement if ${gr.toString()} is ${gr.toString()}`, function () {
+        const result = gr.complement().complement()
+        result.should.equal(gr)
       })
     })
   })
