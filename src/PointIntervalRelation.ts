@@ -450,6 +450,12 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
 export const BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
 export type BasicPointIntervalRelationRepresentation = typeof BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[number]
 
+/**
+ * The total number of possible point – interval relations **= 32**
+ * (i.e., <code>2<sup>5</sup></code>).
+ */
+export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
+
 export class BasicPointIntervalRelation extends PointIntervalRelation {
   public readonly representation: BasicPointIntervalRelationRepresentation
 
@@ -502,12 +508,6 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
     )
   )
 }
-
-/**
- * The total number of possible point – interval relations **= 32**
- * (i.e., <code>2<sup>5</sup></code>).
- */
-export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
 
 /**
  * This empty relation is not a true point – interval relation. It does not express a relational condition between
