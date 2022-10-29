@@ -495,6 +495,13 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
   }
 
   /**
+   * @inheritDoc
+   */
+  public toString (): string {
+    return `(${this.representation})`
+  }
+
+  /**
    * All possible basic point – interval relations.
    *
    * This is a basis for all point – interval relation.
