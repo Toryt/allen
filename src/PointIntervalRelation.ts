@@ -526,12 +526,12 @@ export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EM
  * the start of `I`:
  *
  * ```
- * (I.from != undefined) && (t < I.from)
+ * (t !== undefined) && (I.start != undefined) && (t < I.start)
  * ```
  *
- * ![before](https://github.com/jandppw/ppwcode-recovered-from-google-code/blob/master/java/value/trunk/src/main/java/org/ppwcode/value_III/time/interval/doc-files/PointIntervalRelation-before.png?raw=true)
+ * ![before](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-before.png)
  *
- * The short representation of this point – interval relation is `'<'`.
+ * The short representation of this point – interval relation is `b`.
  */
 export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[0]
 
