@@ -376,14 +376,14 @@ describe('PointIntervalRelation', function () {
           compare
         )
         generatePointIntervalRelationTests(
-          'unkown until',
+          'unkown end',
           { start: points[1], end: undefined },
           points,
           [BasicPointIntervalRelation.BEFORE, BasicPointIntervalRelation.COMMENCES, ita, ita, ita],
           compare
         )
         generatePointIntervalRelationTests(
-          'unknown from',
+          'unknown start',
           { start: undefined, end: points[3] },
           points,
           [bci, bci, bci, BasicPointIntervalRelation.TERMINATES, BasicPointIntervalRelation.AFTER],
