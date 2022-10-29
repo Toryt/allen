@@ -268,10 +268,10 @@ describe('PointIntervalRelation', function () {
     })
   })
   describe('or', function () {
-    BasicPointIntervalRelation.RELATIONS.forEach(pir1 => {
-      BasicPointIntervalRelation.RELATIONS.forEach(pir2 => {
-        it(`or(${pir1.toString()}, ${pir2.toString()}) has the basic relations of both`, function () {
-          const args = [pir1, pir2]
+    BasicPointIntervalRelation.RELATIONS.forEach(gr1 => {
+      BasicPointIntervalRelation.RELATIONS.forEach(gr2 => {
+        it(`or(${gr1.toString()}, ${gr2.toString()}) has the basic relations of both`, function () {
+          const args = [gr1, gr2]
           const result = PointIntervalRelation.or(...args)
           BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br =>
             result.impliedBy(br).should.equal(args.some(gr => gr.impliedBy(br)))
@@ -289,10 +289,10 @@ describe('PointIntervalRelation', function () {
     })
   })
   describe('and', function () {
-    BasicPointIntervalRelation.RELATIONS.forEach(pir1 => {
-      BasicPointIntervalRelation.RELATIONS.forEach(pir2 => {
-        it(`and(${pir1.toString()}, ${pir2.toString()}) has the common basic relations`, function () {
-          const args = [pir1, pir2]
+    BasicPointIntervalRelation.RELATIONS.forEach(gr1 => {
+      BasicPointIntervalRelation.RELATIONS.forEach(gr2 => {
+        it(`and(${gr1.toString()}, ${gr2.toString()}) has the common basic relations`, function () {
+          const args = [gr1, gr2]
           const result = PointIntervalRelation.and(...args)
           BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br =>
             result.impliedBy(br).should.equal(args.every(gr => gr.impliedBy(br)))
