@@ -41,7 +41,7 @@ const haveCommonType: string = 't, i.start and i.end must be of a common type'
  *   - {@link compose}, and // MUDO make instance method?
  * - the unary method {@link complement}.
  *
- * A `PointIntervalRelation` can be determined based on a point and an interval with {@link pointIntervalRelation}. // MUDO move to AllenRelation?
+ * A `PointIntervalRelation` can be determined based on a point and an interval with {@link relation}. // MUDO move to AllenRelation?
  *
  * Basic point — interval relations are instances of the subclass {@link BasicPointIntervalRelation}. For technical
  * reasons, {@link BasicPointIntervalRelation.RELATIONS}, the lists all possible point – interval relations, is a static
@@ -402,8 +402,8 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
   /**
    * The relation of `t` with `i` with the lowest possible {@link uncertainty}.
    *
-   * `undefined` as start or end of `i` is considered as ‘unknown’, and thus is not used to restrict the relation more,
-   * leaving it with more {@link uncertainty}.
+   * `undefined` as `i.start` or `i.end` is considered as ‘unknown’ 🤷, and thus is not used to restrict the relation
+   * more, leaving it with more {@link uncertainty}.
    *
    * This method is key to validating semantic constraints on time intervals, using the following idiom:
    *
@@ -412,14 +412,14 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
    * T t = ...;
    * Interval<T> i = ...;
    * PointIntervalRelation condition = ...;
-   * PointIntervalRelation actual = pointIntervalRelation(t, i);
+   * PointIntervalRelation actual = relation(t, i);
    * if (!actual.implies(condition)) {
    *   throw new ....
    * }
    * ...
    * ```
    */
-  static pointIntervalRelation<T> (t: T | undefined, i: Interval<T>, compareFn?: Comparator<T>): PointIntervalRelation {
+  static relation<T> (t: T | undefined, i: Interval<T>, compareFn?: Comparator<T>): PointIntervalRelation {
     assert(
       (isLTComparableOrIndefinite(t) && isLTComparableOrIndefinite(i.start) && isLTComparableOrIndefinite(i.end)) ||
         compareFn !== undefined,

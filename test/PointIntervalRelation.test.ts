@@ -318,7 +318,7 @@ describe('PointIntervalRelation', function () {
       })
     })
   })
-  describe('pointIntervalRelation', function () {
+  describe('relation', function () {
     const fivePoints = [-6, -4.983458, -1, 2, Math.PI]
 
     function generatePointIntervalRelationTests<T> (
@@ -330,12 +330,12 @@ describe('PointIntervalRelation', function () {
     ): void {
       function callIt<T> (t: T | undefined, i: Interval<T>): PointIntervalRelation {
         return compare != null
-          ? /* prettier-ignore */ PointIntervalRelation.pointIntervalRelation(
+          ? /* prettier-ignore */ PointIntervalRelation.relation(
             t as Parameters<typeof compare>[0],
             (i as unknown) as Interval<Parameters<typeof compare>[0]>,
             compare
           )
-          : PointIntervalRelation.pointIntervalRelation(t, i)
+          : PointIntervalRelation.relation(t, i)
       }
 
       function intervalToString (i: Interval<T>): string {

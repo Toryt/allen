@@ -61,13 +61,12 @@ condition = (bc)
 Next, we want to determine the relationship between `t` and `I` as precisely as possible. If `I` is completely
 determined, i.e., neither its `start` nor its `end` is `undefined`, the result will be a _basic relation_ (i.e.,
 `(b)`,`(c)`, `(i)`, `(t)`, or `(a)`). Otherwise, the result will be a less certain relation. To determine this
-relationship, use
-`pointIntervalRelation<T> (t: T | undefined, i: Interval<T>, compareFn?: Comparator<T>): PointIntervalRelation`.
+relationship, use `relation<T> (t: T | undefined, i: Interval<T>, compareFn?: Comparator<T>): PointIntervalRelation`.
 
 The idiom for the assertion we want to express is then:
 
 ```ts
-pointIntervalRelation(t, I).implies(condition)
+relation(t, I).implies(condition)
 ```
 
 Note that this can fail, on the one hand because the actual relation violates the `condition`, but also because _we
@@ -76,7 +75,7 @@ cannot be 100% sure that the actual relationship satisfies the `condition`_.
 In our example, we would have:
 
 ```ts
-pointIntervalRelation(t, I).implies(or(BEFORE, COMMENCES))
+relation(t, I).implies(or(BEFORE, COMMENCES))
 ```
 
 If the actual relation results in `IN` (`(i)`), for example, the constraint is clearly not satisfied. If the actual
@@ -91,7 +90,7 @@ idiom for this is usually of the form:
 T t = ...;
 Interval<T> i = ...;
 PointIntervalRelation condition = ...;
-PointIntervalRelation actual = pointIntervalRelation(t, i);
+PointIntervalRelation actual = relation(t, i);
 if (!actual.implies(condition)) {
   throw new ....
 }
@@ -104,7 +103,7 @@ In our example, this would become
 ...
 Date t = ...;
 TimeInterval<Date> i = ...;
-if (!pointIntervalRelation(t, i).implies(or(BEFORE, COMMENCES)) {
+if (!relation(t, i).implies(or(BEFORE, COMMENCES)) {
   throw new ....
 }
 ...
@@ -115,11 +114,11 @@ if (!pointIntervalRelation(t, i).implies(or(BEFORE, COMMENCES)) {
 In our example this is already clear. If the actual relation results in `(i)`, both expressions evaluate to `true`:
 
 ```
-  pointIntervalRelation(t, I) ⊈ (bc)
+  relation(t, I) ⊈ (bc)
 ⇔ (i) ⊈ (bc)
 ⇔ true
 
-  pointIntervalRelation(t, I) ⊆ (bc).complement
+  relation(t, I) ⊆ (bc).complement
 ⇔ (i) ⊆ (bc).complement)
 ⇔ (i) ⊆ (ita)
 ⇔ true
@@ -128,36 +127,35 @@ In our example this is already clear. If the actual relation results in `(i)`, b
 But in the case where the actual relation results in `(bi)`, they do not:
 
 ```
-  pointIntervalRelation(t, I) ⊈ (bc)
+  relation(t, I) ⊈ (bc)
 ⇔ (bi) ⊈ (bc)
 ⇔ true
 
-  pointIntervalRelation(t, I) ⊆ (bc).complement
+  relation(t, I) ⊆ (bc).complement
 ⇔ (bi) ⊆ (bc).complement
 ⇔ (bi) ⊆ (ita)
 ⇔ false
 ```
 
-`pointIntervalRelation(t, I) ⊈ (bc)` (`!pointIntervalRelation(t, i).implies(or(BEFORE, COMMENCES))`) expresses that [we
-want to throw an exception if] _it is not guaranteed that `t` is before `i` is fully started_.
-`pointIntervalRelation(t, I) ⊆ (bc).complement`
-(`pointIntervalRelation(t, i).implies(or(BEFORE, COMMENCES).complement())`) expresses that [we want to throw an
-exception if] _it is guaranteed that `t` is after `i` is fully started_. **These 2 phrases are not equivalent.**
+`relation(t, I) ⊈ (bc)` (`!relation(t, i).implies(or(BEFORE, COMMENCES))`) expresses that [we want to throw an exception
+if] _it is not guaranteed that `t` is before `i` is fully started_. `relation(t, I) ⊆ (bc).complement`
+(`relation(t, i).implies(or(BEFORE, COMMENCES).complement())`) expresses that [we want to throw an exception if] _it is
+guaranteed that `t` is after `i` is fully started_. **These 2 phrases are not equivalent.**
 
 Consider an `undefined` start for `I`. When `t` is before the `end` of `I`, we cannot know whether `t` is before, equal
 to, or after the `start` of `I`.
 
 ```
-pointIntervalRelation(t, I) = (bci)
+relation(t, I) = (bci)
 ```
 
-With `pointIntervalRelation(t, I) ⊈ (bc)` we would throw an exception. `t` could be `BEFORE` `I`, or commence `I`, which
-would be ok, but `t` could also be `IN` `I`, which is not ok. It is not guaranteed that `t` is before `I` is fully
-started, so `pointIntervalRelation(t, I) ⊆ (bc)` is `false`, and `pointIntervalRelation(t, I) ⊈ (bc)` is `true`.
+With `relation(t, I) ⊈ (bc)` we would throw an exception. `t` could be `BEFORE` `I`, or commence `I`, which would be ok,
+but `t` could also be `IN` `I`, which is not ok. It is not guaranteed that `t` is before `I` is fully started, so
+`relation(t, I) ⊆ (bc)` is `false`, and `relation(t, I) ⊈ (bc)` is `true`.
 
-With `pointIntervalRelation(t, I) ⊆ (bc).complement` we would not throw an exception. `t` could be `IN` `I`, which would
-not be ok, but it could also be `BEFORE` `I`, or commence `I`, and so it is _not guaranteed_ that `t` is after `I` is
-fully started. `pointIntervalRelation(t, I) ⊆ (bc).complement` is `false`.
+With `relation(t, I) ⊆ (bc).complement` we would not throw an exception. `t` could be `IN` `I`, which would not be ok,
+but it could also be `BEFORE` `I`, or commence `I`, and so it is _not guaranteed_ that `t` is after `I` is fully
+started. `relation(t, I) ⊆ (bc).complement` is `false`.
 
 ## Reasoning with unknown but constrained start and end point
 
@@ -174,42 +172,42 @@ contracts that will `start` once payment is received. Since it is not received y
 know that the `start` date is at least later than or equal to `now`.
 
 In such cases, the interval object `I` we are focusing on can be interpreted in another way. Suppose we are comparing
-`I` with a point in time `t`. We are actually not interested in `pointIntervalRelation(t, I)`, but rather in
-<code>pointIntervalRelation(t, I<sub>constrained</sub>)</code>. Sadly, there is no easy syntax (or code) to express
+`I` with a point in time `t`. We are actually not interested in `relation(t, I)`, but rather in <code>relation(t,
+I<sub>constrained</sub>)</code>. Sadly, there is no easy syntax (or code) to express
 <code>I<sub>constrained</sub></code>. What we can express is an <code>I<sub>determinate</sub></code>, where _the border
-times are filled out in place of the unknown `start` or `end`_. <code>pointIntervalRelation(t,
-I<sub>determinate</sub>)</code> can be calculated, and will be much less uncertain than `pointIntervalRelation(t, I)`.
-If we now can determine the Allen relation from <code>I<sub>determinate</sub></code> to
-<code>I<sub>constrained</sub></code>, we can find <code>pointIntervalRelation(t, I<sub>constrained</sub>)</code> as:
+times are filled out in place of the unknown `start` or `end`_. <code>relation(t, I<sub>determinate</sub>)</code> can be
+calculated, and will be much less uncertain than `relation(t, I)`. If we now can determine the Allen relation from
+<code>I<sub>determinate</sub></code> to <code>I<sub>constrained</sub></code>, we can find <code>relation(t,
+I<sub>constrained</sub>)</code> as:
 
 ```
-pointIntervalRelation(t, IConstrained) =
-  compose(pointIntervalRelation(t, IDeterminate), allenRelation(IDeterminate, IConstrained))
+relation(t, IConstrained) =
+  compose(relation(t, IDeterminate), allenRelation(IDeterminate, IConstrained))
 ```
 
 The Allen relation from an interval we are focusing on with constrained semantics to a determinate interval is a
 constant that can be determined by reasoning. E.g., for our open-ended contract, that lasts at least longer than today
 (<code>I<sub>constrained</sub> = [I.start, > now[</code>, supposing`I.start ≤ yesterday`), we can say that its relation
-to the determinate interval <code>I<sub>determinate</sub> = [I.start, now[</code> is `(s)`. Suppose
-<code>pointIntervalRelation(t, I<sub>determinate</sub>)</code> is `(i)` (say`t`is`yesterday`). We can now say that
-<code>pointIntervalRelation(t, I<sub>constrained</sub>) = (s).(i) = (i)</code>. The comparison of the indeterminate
-interval with `t`, `pointIntervalRelation(t, I)`, would have resulted in:
+to the determinate interval <code>I<sub>determinate</sub> = [I.start, now[</code> is `(s)`. Suppose <code>relation(t,
+I<sub>determinate</sub>)</code> is `(i)` (say`t`is`yesterday`). We can now say that <code>relation(t,
+I<sub>constrained</sub>) = (s).(i) = (i)</code>. The comparison of the indeterminate interval with `t`,
+`relation(t, I)`, would have resulted in:
 
 ```
-  pointIntervalRelation(t, I)
-= pointIntervalRelation(yesterday, [I.start, undefined[)
+  relation(t, I)
+= relation(yesterday, [I.start, undefined[)
 = (ita)
 ```
 
 which is much less certain than `(i)`.
 
 Be aware that in a number of cases, the non-determinate character of `I` doesn't matter. If you suppose in the previous
-example that <code>pointIntervalRelation(t, I<sub>constrained</sub>) = (a)</code> (say `t` is next year),
-<code>pointIntervalRelation(t, I<sub>constrained</sub>) = (s).(a) = (ita)</code>. The comparison of the indeterminate
-interval with `t`, `pointIntervalRelation(t, I)`, in this case, results in the same point-interval relation:
+example that <code>relation(t, I<sub>constrained</sub>) = (a)</code> (say `t` is next year), <code>relation(t,
+I<sub>constrained</sub>) = (s).(a) = (ita)</code>. The comparison of the indeterminate interval with `t`,
+`relation(t, I)`, in this case, results in the same point-interval relation:
 
 ```
-  pointIntervalRelation(t, I)
-= pointIntervalRelation(nextYear, [I.start, undefined[)
+  relation(t, I)
+= relation(nextYear, [I.start, undefined[)
 = (ita)
 ```
