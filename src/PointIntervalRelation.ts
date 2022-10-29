@@ -445,16 +445,22 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
   }
 }
 
-export const BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
-export type BasicPointIntervalRelationRepresentation = typeof BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[number]
-
 /**
  * The total number of possible point – interval relations **= 32**
  * (i.e., <code>2<sup>5</sup></code>).
  */
 export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
 
+export const BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
+export type BasicPointIntervalRelationRepresentation = typeof BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[number]
+
 export class BasicPointIntervalRelation extends PointIntervalRelation {
+  /**
+   * ### Invariants
+   *
+   * ```
+   * this.representation === BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[this.ordinal()]
+   */
   public readonly representation: BasicPointIntervalRelationRepresentation
 
   /**
