@@ -310,11 +310,11 @@ describe('PointIntervalRelation', function () {
     })
   })
   describe('relation', function () {
-    BasicPointIntervalRelation.RELATIONS.forEach(pir => {
-      const representation = pir.toString()
+    BasicPointIntervalRelation.RELATIONS.forEach(gr => {
+      const representation = gr.toString()
       it(`recognizes ${representation} correctly`, function () {
         const result = PointIntervalRelation.relation(representation)
-        result.should.equal(pir)
+        result.should.equal(gr)
       })
     })
   })

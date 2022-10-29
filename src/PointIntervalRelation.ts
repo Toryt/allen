@@ -323,31 +323,31 @@ export class PointIntervalRelation {
   }
 
   /**
-   * Pick the PointIntervalRelation described by the string.
+   * Pick the `PointIntervalRelation` described by the string.
    *
    * The letters do not need to be in order. There can be meaningless letters. Letters can be duplicated.
    *
-   * @returns VALUES.find(pir =>
-   *            pir.toString()
+   * @returns VALUES.find(gr =>
+   *            gr.toString()
    *               .filter(l => BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS.includes(l))
    *               .every(l => s.includes(l))
    */
   public static relation (s: string): PointIntervalRelation {
     let result = EMPTY
     if (s.includes('b')) {
-      result = or(result, BasicPointIntervalRelation.BEFORE)
+      result = PointIntervalRelation.or(result, BasicPointIntervalRelation.BEFORE)
     }
     if (s.includes('c')) {
-      result = or(result, BasicPointIntervalRelation.COMMENCES)
+      result = PointIntervalRelation.or(result, BasicPointIntervalRelation.COMMENCES)
     }
     if (s.includes('i')) {
-      result = or(result, BasicPointIntervalRelation.IN)
+      result = PointIntervalRelation.or(result, BasicPointIntervalRelation.IN)
     }
     if (s.includes('t')) {
-      result = or(result, BasicPointIntervalRelation.TERMINATES)
+      result = PointIntervalRelation.or(result, BasicPointIntervalRelation.TERMINATES)
     }
     if (s.includes('a')) {
-      result = or(result, BasicPointIntervalRelation.AFTER)
+      result = PointIntervalRelation.or(result, BasicPointIntervalRelation.AFTER)
     }
     return result
   }
