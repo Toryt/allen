@@ -64,10 +64,8 @@ export class PointIntervalRelation {
 
   /**
    * Only the 5 lowest bits are used. The other (32 - 5 = 27 bits) are 0.
-   *
-   * @private
    */
-  public readonly bitPattern: PointIntervalRelationBitPattern
+  protected readonly bitPattern: PointIntervalRelationBitPattern
 
   /**
    * There is only 1 constructor, that constructs the wrapper object

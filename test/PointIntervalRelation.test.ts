@@ -1,17 +1,6 @@
 /* eslint-env mocha */
 
-import {
-  NR_OF_BITS,
-  NR_OF_RELATIONS as BITPATTERN_NR_OF_RELATIONS,
-  PointIntervalRelationBitPattern,
-  EMPTY_BIT_PATTERN,
-  BEFORE_BIT_PATTERN,
-  COMMENCES_BIT_PATTERN,
-  IN_BIT_PATTERN,
-  TERMINATES_BIT_PATTERN,
-  AFTER_BIT_PATTERN,
-  FULL_BIT_PATTERN
-} from '../src/pointIntervalRelationBitPattern'
+import { NR_OF_BITS, NR_OF_RELATIONS as BITPATTERN_NR_OF_RELATIONS } from '../src/pointIntervalRelationBitPattern'
 import {
   NR_OF_RELATIONS,
   PointIntervalRelation,
@@ -26,18 +15,10 @@ import 'should'
 import { Interval } from '../src/Interval'
 import { inspect } from 'util'
 
-function testBasicRelation (
-  name: string,
-  pir: BasicPointIntervalRelation,
-  pirbp: PointIntervalRelationBitPattern,
-  ordinal: number
-): void {
+function testBasicRelation (name: string, pir: BasicPointIntervalRelation, ordinal: number): void {
   describe(name, function () {
     it('is a BasicPointIntervalRelation', function () {
       pir.should.be.instanceof(BasicPointIntervalRelation)
-    })
-    it('has the expected bit pattern', function () {
-      pir.bitPattern.should.equal(pirbp)
     })
     it(`has ${ordinal} as ordinal`, function () {
       pir.ordinal().should.equal(ordinal)
@@ -96,11 +77,11 @@ describe('PointIntervalRelations', function () {
         })
       })
     })
-    testBasicRelation('BEFORE', BasicPointIntervalRelation.BEFORE, BEFORE_BIT_PATTERN, 0)
-    testBasicRelation('COMMENCES', BasicPointIntervalRelation.COMMENCES, COMMENCES_BIT_PATTERN, 1)
-    testBasicRelation('IN', BasicPointIntervalRelation.IN, IN_BIT_PATTERN, 2)
-    testBasicRelation('TERMINATES', BasicPointIntervalRelation.TERMINATES, TERMINATES_BIT_PATTERN, 3)
-    testBasicRelation('AFTER', BasicPointIntervalRelation.AFTER, AFTER_BIT_PATTERN, 4)
+    testBasicRelation('BEFORE', BasicPointIntervalRelation.BEFORE, 0)
+    testBasicRelation('COMMENCES', BasicPointIntervalRelation.COMMENCES, 1)
+    testBasicRelation('IN', BasicPointIntervalRelation.IN, 2)
+    testBasicRelation('TERMINATES', BasicPointIntervalRelation.TERMINATES, 3)
+    testBasicRelation('AFTER', BasicPointIntervalRelation.AFTER, 4)
     describe('RELATIONS', function () {
       it('is an array', function () {
         BasicPointIntervalRelation.RELATIONS.should.be.an.Array()
@@ -134,9 +115,6 @@ describe('PointIntervalRelations', function () {
       it('is a PointIntervalRelation', function () {
         EMPTY.should.be.instanceof(PointIntervalRelation)
       })
-      it('has bit pattern 0', function () {
-        EMPTY.bitPattern.should.equal(EMPTY_BIT_PATTERN)
-      })
       it('is not implied by anything', function () {
         BasicPointIntervalRelation.RELATIONS.filter(gr => gr !== EMPTY).forEach(gr => {
           EMPTY.impliedBy(gr).should.be.false()
@@ -146,9 +124,6 @@ describe('PointIntervalRelations', function () {
     describe('FULL', function () {
       it('is a PointIntervalRelation', function () {
         FULL.should.be.instanceof(PointIntervalRelation)
-      })
-      it('has bit pattern 5 1‘s', function () {
-        FULL.bitPattern.should.equal(FULL_BIT_PATTERN)
       })
       it('is implied by everything', function () {
         BasicPointIntervalRelation.RELATIONS.forEach(gr => {
