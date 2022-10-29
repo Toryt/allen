@@ -104,7 +104,7 @@ const falseCases: Array<Case<unknown>> = [
   { label: 'mixed', elements: [{}, null, 34] }
 ]
 
-describe('util', function () {
+describe('typeRepresentation', function () {
   describe('primitiveTypeRepresentations', function () {
     it('is an array of strings', function () {
       primitiveTypeRepresentations.should.be.an.Array()
