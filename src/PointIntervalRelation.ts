@@ -592,10 +592,14 @@ export const TERMINATES: BasicPointIntervalRelation = BasicPointIntervalRelation
 export const AFTER: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[4]
 
 /**
- * The full point – interval relation, which expresses that nothing definite can be said about the relationship
- * between a time point and a time interval.
+ * The full point – interval relation, which expresses that nothing definite can be said about the relation between a
+ * point and an interval.
  *
- * @Invars(@Expression("FULL == or(BEFORE, BEGINS, IN, ENDS, AFTER"))
+ * ### Invariants
+ *
+ * ```
+ * BasicPointIntervalRelation.BASIC_RELATIONS.every(basic => FULL.impliedBy(basic))
+ * ```
  */
 export const FULL: PointIntervalRelation = BasicPointIntervalRelation.VALUES[FULL_BIT_PATTERN]
 
