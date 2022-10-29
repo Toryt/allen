@@ -44,7 +44,7 @@ const haveCommonType: string = 't, i.start and i.end must be of a common type'
  * A `PointIntervalRelation` can be determined based on a point and an interval with {@link pointIntervalRelation}. // MUDO move to AllenRelation?
  *
  * Basic point — interval relations are instances of the subclass {@link BasicPointIntervalRelation}. For technical
- * reasons, {@link BasicPointIntervalRelation.VALUES}, the lists all possible point – interval relations, is a static
+ * reasons, {@link BasicPointIntervalRelation.RELATIONS}, the lists all possible point – interval relations, is a static
  * property of that class, not this.
  *
  * All methods in this class are _O(n)_, i.e., work in constant time, although {@link compose} takes a significant
@@ -253,7 +253,7 @@ export class PointIntervalRelation {
      * implemented as the XOR of the FULL bit pattern with this bit pattern;
      * this simply replaces 0 with 1 and 1 with 0.
      */
-    return BasicPointIntervalRelation.VALUES[FULL_BIT_PATTERN ^ this.bitPattern]
+    return BasicPointIntervalRelation.RELATIONS[FULL_BIT_PATTERN ^ this.bitPattern]
   }
 
   /**
@@ -267,7 +267,7 @@ export class PointIntervalRelation {
         and 00000 01000 */
     const xor = this.bitPattern ^ gr.bitPattern
     const min = this.bitPattern & xor
-    return BasicPointIntervalRelation.VALUES[min]
+    return BasicPointIntervalRelation.RELATIONS[min]
   }
 
   /**
@@ -294,7 +294,7 @@ export class PointIntervalRelation {
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.some(gr => gr.impliedBy(br)))
    */
   public static or (...gr: PointIntervalRelation[]): PointIntervalRelation {
-    return BasicPointIntervalRelation.VALUES[
+    return BasicPointIntervalRelation.RELATIONS[
       gr.reduce(
         (acc: PointIntervalRelationBitPattern, grr): PointIntervalRelationBitPattern =>
           numberToPointIntervalRelationBitPattern(acc | grr.bitPattern),
@@ -311,7 +311,7 @@ export class PointIntervalRelation {
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
    */
   public static and (...gr: PointIntervalRelation[]): PointIntervalRelation {
-    return BasicPointIntervalRelation.VALUES[
+    return BasicPointIntervalRelation.RELATIONS[
       gr.reduce(
         (acc: PointIntervalRelationBitPattern, grr: PointIntervalRelation): PointIntervalRelationBitPattern =>
           numberToPointIntervalRelationBitPattern(acc & grr.bitPattern),
@@ -502,8 +502,10 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
    * BASIC_RELATIONS.length === 5
    * BASIC_RELATIONS.every(br => br instanceof BasicPointIntervalRelation)
    * BASIC_RELATIONS.every((br1, i1) =>
-   *   BASIC_RELATIONS.every((br2, i2) => i2 < i1 || br1 !== br2 && !br1.implies(br2) && !br2.implies(br1)))
+   *   BASIC_RELATIONS.every((br2, i2) => i2 <= i1 || br1 !== br2 && !br1.implies(br2) && !br2.implies(br1)))
    * ```
+   *
+   * There are no other `BasicPointIntervalRelation`s than the instances of this array.
    */
   public static readonly BASIC_RELATIONS: readonly BasicPointIntervalRelation[] = Object.freeze(
     basicPointIntervalRelationBitPatterns.map(bitPattern => new BasicPointIntervalRelation(bitPattern))
@@ -581,14 +583,20 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
 
   /**
    * All possible point – interval relations.
-   @Invars({
-    @Expression("VALUES != null"),
-    @Expression("for (PointIntervalRelation tir : VALUES) {tir != null}"),
-    @Expression("for (int i : 0 .. VALUES.length) {for (int j : i + 1 .. VALUES.length) {VALUES[i] != VALUES[j]}}"),
-    @Expression("for (PointIntervalRelation tir) {VALUES.contains(tir)}")
-})
+   *
+   * ### Invariants
+   *
+   * ```
+   * Array.isArray(RELATIONS)
+   * RELATIONS.length === NR_OF_RELATIONS
+   * RELATIONS.every(gr => gr instanceof PointIntervalRelation)
+   * RELATIONS.every((gr1, i1) => RELATIONS.every((gr2, i2) => i2 <= i1 || gr1 !== gr2))
+   * BASIC_RELATIONS.every(br => RELATIONS.includes(br))
+   * ```
+   *
+   * There are no other `PointIntervalRelation`s than the instances of this array.
    */
-  public static readonly VALUES: readonly PointIntervalRelation[] = Object.freeze(
+  public static readonly RELATIONS: readonly PointIntervalRelation[] = Object.freeze(
     pointIntervalRelationBitPatterns.map(bitPattern =>
       isBasicPointIntervalRelationBitPattern(bitPattern)
         ? BasicPointIntervalRelation.BASIC_RELATIONS[Math.log2(bitPattern & -bitPattern)]
@@ -607,7 +615,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
  * BasicPointIntervalRelation.BASIC_RELATIONS.every(basic => !EMPTY.impliedBy(basic))
  * ```
  */
-export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EMPTY_BIT_PATTERN]
+export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS[EMPTY_BIT_PATTERN]
 
 /**
  * The full point – interval relation, which expresses that nothing definite can be said about the relation between a
@@ -619,7 +627,7 @@ export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EM
  * BasicPointIntervalRelation.BASIC_RELATIONS.every(basic => FULL.impliedBy(basic))
  * ```
  */
-export const FULL: PointIntervalRelation = BasicPointIntervalRelation.VALUES[FULL_BIT_PATTERN]
+export const FULL: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS[FULL_BIT_PATTERN]
 
 export const or = PointIntervalRelation.or
 export const and = PointIntervalRelation.and
