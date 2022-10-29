@@ -455,7 +455,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
 
   /**
    * There is only 1 constructor, that constructs the wrapper object
-   * around the bitpattern. This is used exclusively in {@link VALUES} initialization code.
+   * around the bitpattern. This is used exclusively in {@link BASIC_RELATIONS} initialization code.
    */
   private constructor (bitPattern: PointIntervalRelationBitPattern) {
     assert(bitPattern >= EMPTY_BIT_PATTERN)
@@ -481,7 +481,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
   /**
    * All possible basic point interval relations
    */
-  public static readonly BASIC_RELATIONS_VALUES: readonly BasicPointIntervalRelation[] = Object.freeze(
+  public static readonly BASIC_RELATIONS: readonly BasicPointIntervalRelation[] = Object.freeze(
     basicPointIntervalRelationBitPatterns.map(bitPattern => new BasicPointIntervalRelation(bitPattern))
   )
 
@@ -497,7 +497,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
   public static readonly VALUES: readonly PointIntervalRelation[] = Object.freeze(
     pointIntervalRelationBitPatterns.map(bitPattern =>
       isBasicPointIntervalRelationBitPattern(bitPattern)
-        ? BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[Math.log2(bitPattern & -bitPattern)]
+        ? BasicPointIntervalRelation.BASIC_RELATIONS[Math.log2(bitPattern & -bitPattern)]
         : new PointIntervalRelation(bitPattern)
     )
   )
@@ -529,7 +529,7 @@ export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EM
  *
  * The short representation of this point – interval relation is `'<'`.
  */
-export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[0]
+export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[0]
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _begins_ an interval `I`, i.e., `t` is the
@@ -543,7 +543,7 @@ export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BAS
  *
  * The short representation of this point – interval relation is `'=[<'`.
  */
-export const BEGINS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[1]
+export const BEGINS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[1]
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _is in_ an interval `I`, i.e., `t` is after
@@ -557,7 +557,7 @@ export const BEGINS: BasicPointIntervalRelation = BasicPointIntervalRelation.BAS
  *
  * The short representation of this point – interval relation is `'><'`.
  */
-export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[2]
+export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[2]
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _ends_ an interval `I`, i.e., `t` is the end
@@ -571,7 +571,7 @@ export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_R
  *
  * The short representation of this point – interval relation is `'=[>'`.
  */
-export const ENDS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[3]
+export const ENDS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[3]
 
 /**
  * A **basic** point-interval relation that says that a point in time `t` _comes after_ an interval `I`, i.e., `t` is
@@ -585,7 +585,7 @@ export const ENDS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC
  *
  * The short representation of this point – interval relation is `'>'`.
  */
-export const AFTER: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES[4]
+export const AFTER: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[4]
 
 /**
  * The full point – interval relation, which expresses that nothing definite can be said about the relationship
@@ -594,21 +594,6 @@ export const AFTER: BasicPointIntervalRelation = BasicPointIntervalRelation.BASI
  * @Invars(@Expression("FULL == or(BEFORE, BEGINS, IN, ENDS, AFTER"))
  */
 export const FULL: PointIntervalRelation = BasicPointIntervalRelation.VALUES[FULL_BIT_PATTERN]
-
-/**
- * The set of all 5 basic point – interval relations. That they are presented here in a particular order, is a
- * pleasant side note, but in general not relevant for the user.
- *
-@Invars({
-    @Expression("for (BasicRelation br : BASIC_RELATIONS) {BASIC_RELATIONS[br.basicRelationOrdinal()] == br}"),
-    @Expression("BASIC_RELATIONS[ 0] == BEFORE"),
-    @Expression("BASIC_RELATIONS[ 1] == BEGINS"),
-    @Expression("BASIC_RELATIONS[ 2] == IN"),
-    @Expression("BASIC_RELATIONS[ 3] == ENDS"),
-    @Expression("BASIC_RELATIONS[ 4] == AFTER")
-})
- */
-export const BASIC_RELATIONS: readonly BasicPointIntervalRelation[] = BasicPointIntervalRelation.BASIC_RELATIONS_VALUES
 
 export const or = PointIntervalRelation.or
 export const and = PointIntervalRelation.and

@@ -24,7 +24,6 @@ import {
   AFTER,
   FULL,
   BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS,
-  BASIC_RELATIONS,
   or,
   and
 } from '../src/PointIntervalRelation'
@@ -64,6 +63,24 @@ function testBasicRelation (
 }
 
 describe('PointIntervalRelations', function () {
+  describe('BasicPointIntervalRelation.BASIC_RELATIONS', function () {
+    it('is an array', function () {
+      BasicPointIntervalRelation.BASIC_RELATIONS.should.be.an.Array()
+    })
+    it('has 5 entries', function () {
+      BasicPointIntervalRelation.BASIC_RELATIONS.length.should.equal(5)
+    })
+    it('contains only BasicPointIntervalRelation', function () {
+      BasicPointIntervalRelation.BASIC_RELATIONS.forEach(ar => {
+        ar.should.be.instanceof(BasicPointIntervalRelation)
+      })
+    })
+    it('has the basic relation at the position of its ordinal', function () {
+      BasicPointIntervalRelation.BASIC_RELATIONS.forEach((br, i) => {
+        br.ordinal().should.equal(i)
+      })
+    })
+  })
   describe('NR_OF_RELATIONS', function () {
     it('should pass through pointIntervalRelationBitPattern.NR_OF_RELATIONS', function () {
       NR_OF_RELATIONS.should.equal(BITPATTERN_NR_OF_RELATIONS)
@@ -116,27 +133,6 @@ describe('PointIntervalRelations', function () {
       // })
     })
   })
-  describe('BASIC_RELATIONS', function () {
-    it('is an array', function () {
-      BASIC_RELATIONS.should.be.an.Array()
-    })
-    it('has 5 entries', function () {
-      BASIC_RELATIONS.length.should.equal(5)
-    })
-    it('contains only BasicPointIntervalRelation', function () {
-      BASIC_RELATIONS.forEach(ar => {
-        ar.should.be.instanceof(BasicPointIntervalRelation)
-      })
-    })
-    it('is the exported static', function () {
-      BASIC_RELATIONS.should.equal(BasicPointIntervalRelation.BASIC_RELATIONS_VALUES)
-    })
-    it('has the basic relation at the position of its ordinal', function () {
-      BASIC_RELATIONS.forEach((br, i) => {
-        br.ordinal().should.equal(i)
-      })
-    })
-  })
   describe('basic relations', function () {
     testBasicRelation('BEFORE', BEFORE, BEFORE_BIT_PATTERN, 0)
     testBasicRelation('BEGINS', BEGINS, BEGINS_BIT_PATTERN, 1)
@@ -148,7 +144,7 @@ describe('PointIntervalRelations', function () {
     it('returns NaN for EMPTY', function () {
       EMPTY.uncertainty().should.be.NaN()
     })
-    BASIC_RELATIONS.forEach(br => {
+    BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br => {
       it(`returns 0 for ${br.representation}`, function () {
         br.uncertainty().should.equal(0)
       })
@@ -159,7 +155,8 @@ describe('PointIntervalRelations', function () {
 
     BasicPointIntervalRelation.VALUES.forEach(pir => {
       if (pir !== EMPTY) {
-        const expected = BASIC_RELATIONS.reduce((acc, br) => (br.implies(pir) ? acc + 1 : acc), -1) / 4
+        const expected =
+          BasicPointIntervalRelation.BASIC_RELATIONS.reduce((acc, br) => (br.implies(pir) ? acc + 1 : acc), -1) / 4
         it(`${pir.toString()} has uncertainty ${expected}`, function () {
           pir.uncertainty().should.equal(expected)
         })
@@ -178,8 +175,8 @@ describe('PointIntervalRelations', function () {
         })
       }
     })
-    BASIC_RELATIONS.forEach(br1 => {
-      BASIC_RELATIONS.forEach(br2 => {
+    BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br1 => {
+      BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br2 => {
         if (br1 === br2) {
           it(`${br1.representation} is implied by itself`, function () {
             br1.impliedBy(br2).should.be.true()
@@ -193,7 +190,7 @@ describe('PointIntervalRelations', function () {
     })
     BasicPointIntervalRelation.VALUES.forEach(gr1 => {
       BasicPointIntervalRelation.VALUES.forEach(gr2 => {
-        const expected = BASIC_RELATIONS.every(br => !gr2.impliedBy(br) || gr1.impliedBy(br))
+        const expected = BasicPointIntervalRelation.BASIC_RELATIONS.every(br => !gr2.impliedBy(br) || gr1.impliedBy(br))
 
         it(`should return ${gr1.toString()}.impliedBy(${gr2.toString()}) as ${expected.toString()}`, function () {
           gr1.impliedBy(gr2).should.equal(expected)
@@ -207,8 +204,8 @@ describe('PointIntervalRelations', function () {
         EMPTY.implies(gr).should.be.true()
       })
     })
-    BASIC_RELATIONS.forEach(br1 => {
-      BASIC_RELATIONS.forEach(br2 => {
+    BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br1 => {
+      BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br2 => {
         if (br1 === br2) {
           it(`${br1.representation} implies itself`, function () {
             br1.implies(br2).should.be.true()
@@ -239,7 +236,7 @@ describe('PointIntervalRelations', function () {
       it(`the complement of ${pir.toString()} is implied by the basic relations that are not implied by it`, function () {
         const result = pir.complement()
         console.log(result.toString())
-        BASIC_RELATIONS.forEach(br => {
+        BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br => {
           pir.impliedBy(br).should.equal(!result.impliedBy(br))
         })
       })
@@ -255,7 +252,9 @@ describe('PointIntervalRelations', function () {
         it(`${pir1.toString()}.min(${pir2.toString()}) has the basic relations of ${pir1.toString()} that are not implied by ${pir2.toString()}`, function () {
           const result = pir1.min(pir2)
           console.log(result.toString())
-          BASIC_RELATIONS.forEach(br => result.impliedBy(br).should.equal(pir1.impliedBy(br) && !pir2.impliedBy(br)))
+          BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br =>
+            result.impliedBy(br).should.equal(pir1.impliedBy(br) && !pir2.impliedBy(br))
+          )
         })
       })
     })
@@ -267,12 +266,14 @@ describe('PointIntervalRelations', function () {
           const args = [pir1, pir2]
           const result = or(...args)
           console.log(result.toString())
-          BASIC_RELATIONS.forEach(br => result.impliedBy(br).should.equal(args.some(gr => gr.impliedBy(br))))
+          BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br =>
+            result.impliedBy(br).should.equal(args.some(gr => gr.impliedBy(br)))
+          )
         })
       })
     })
     it('the or of all basic point relations is FULL', function () {
-      const result = or(...BASIC_RELATIONS)
+      const result = or(...BasicPointIntervalRelation.BASIC_RELATIONS)
       result.should.equal(FULL)
     })
     it('the or of all point relations is FULL', function () {
@@ -287,12 +288,14 @@ describe('PointIntervalRelations', function () {
           const args = [pir1, pir2]
           const result = and(...args)
           console.log(result.toString())
-          BASIC_RELATIONS.forEach(br => result.impliedBy(br).should.equal(args.every(gr => gr.impliedBy(br))))
+          BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br =>
+            result.impliedBy(br).should.equal(args.every(gr => gr.impliedBy(br)))
+          )
         })
       })
     })
     it('the and of all basic point relations is EMPTY', function () {
-      const result = and(...BASIC_RELATIONS)
+      const result = and(...BasicPointIntervalRelation.BASIC_RELATIONS)
       result.should.equal(EMPTY)
     })
     it('the and of all point relations is FULL', function () {
