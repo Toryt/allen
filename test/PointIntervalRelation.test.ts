@@ -351,6 +351,10 @@ describe('PointIntervalRelation', function () {
           const result = callIt(undefined, interval)
           result.should.equal(FULL)
         })
+        it('returns FULL for `null`', function () {
+          const result = callIt(null, interval)
+          result.should.equal(FULL)
+        })
       })
     }
 
