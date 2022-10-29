@@ -114,6 +114,8 @@ export class PointIntervalRelation {
    * In other words, when considering the relations as a set of basic relations, is `this` a superset of `gr`
    * (considering equality as also acceptable)?
    *
+   * Represented in documentation as `this ⊇ gr`.
+   *
    * ### Preconditions
    *
    * ```
@@ -143,6 +145,8 @@ export class PointIntervalRelation {
    *
    * In other words, when considering the relations as a set of basic relations, is `this` a subset of `gr` (considering
    * equality as also acceptable)?
+   *
+   * Represented in documentation as `this ⊆ gr`.
    *
    * ### Preconditions
    *
