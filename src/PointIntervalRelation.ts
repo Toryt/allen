@@ -9,7 +9,7 @@ import {
   NR_OF_BITS,
   numberToPointIntervalRelationBitPattern
 } from './pointIntervalRelationBitPattern'
-import assert, { ok } from 'assert'
+import assert from 'assert'
 import { Interval, isInterval } from './Interval'
 import { Comparator } from './comparator'
 import { commonTypeRepresentation } from './typeRepresentation'
@@ -114,14 +114,23 @@ export class PointIntervalRelation {
    * In other words, when considering the relations as a set of basic relations, is `this` a superset of `gr`
    * (considering equality as also acceptable)?
    *
-   * @basic
-   * @pre !!gr
-   * @invar this.impliedBy(this)
-   * @invar !this.isBasic() || BASIC_RELATIONS.every(br => br === this || !this.impliedBy(br)),
-   * @returns BASIC_RELATIONS.every(br => !gr.impliedBy(br) || this.impliedBy(br))
+   * ### Preconditions
+   *
+   * ```
+   * gr instanceof PointIntervalRelation
+   * ```
+   *
+   * ### Invariants
+   *
+   * ```
+   * this.impliedBy(this)
+   * !this.isBasic() || BASIC_RELATIONS.every(br => br === this || !this.impliedBy(br))
+   * ```
+   *
+   * @returns `BASIC_RELATIONS.every(br => !gr.impliedBy(br) || this.impliedBy(br))`
    */
   impliedBy (gr: PointIntervalRelation): boolean {
-    ok(gr)
+    // noinspection SuspiciousTypeOfGuard
     assert(gr instanceof PointIntervalRelation)
 
     return (this.bitPattern & gr.bitPattern) === gr.bitPattern
@@ -137,7 +146,7 @@ export class PointIntervalRelation {
    * @returns gr.impliedBy(this)
    */
   implies (gr: PointIntervalRelation): boolean {
-    ok(gr)
+    // noinspection SuspiciousTypeOfGuard
     assert(gr instanceof PointIntervalRelation)
 
     return (gr.bitPattern & this.bitPattern) === this.bitPattern
