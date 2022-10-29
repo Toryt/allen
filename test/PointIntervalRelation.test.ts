@@ -137,11 +137,11 @@ describe('PointIntervalRelations', function () {
       it('has bit pattern 0', function () {
         EMPTY.bitPattern.should.equal(EMPTY_BIT_PATTERN)
       })
-      // it('is not implied by anything', function () {
-      //   PointIntervalRelation.VALUES.filter(ar => ar !== EMPTY).forEach(ar => {
-      //     EMPTY.impliedBy(ar).should.be.false()
-      //   })
-      // })
+      it('is not implied by anything', function () {
+        BasicPointIntervalRelation.RELATIONS.filter(gr => gr !== EMPTY).forEach(gr => {
+          EMPTY.impliedBy(gr).should.be.false()
+        })
+      })
     })
     describe('FULL', function () {
       it('is a PointIntervalRelation', function () {
@@ -150,11 +150,11 @@ describe('PointIntervalRelations', function () {
       it('has bit pattern 5 1‘s', function () {
         FULL.bitPattern.should.equal(FULL_BIT_PATTERN)
       })
-      // it('is implied by everything', function () {
-      //   PointIntervalRelation.VALUES.forEach(ar => {
-      //     FULL.impliedBy(ar).should.be.true()
-      //   })
-      // })
+      it('is implied by everything', function () {
+        BasicPointIntervalRelation.RELATIONS.forEach(gr => {
+          FULL.impliedBy(gr).should.be.true()
+        })
+      })
     })
   })
   describe('#uncertainty', function () {

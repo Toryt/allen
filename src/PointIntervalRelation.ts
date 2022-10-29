@@ -612,7 +612,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
  * ### Invariants
  *
  * ```
- * BasicPointIntervalRelation.BASIC_RELATIONS.every(basic => !EMPTY.impliedBy(basic))
+ * BasicPointIntervalRelation.RELATIONS.every(gr => gr === EMPTY || !EMPTY.impliedBy(gr))
  * ```
  */
 export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS[EMPTY_BIT_PATTERN]
@@ -624,7 +624,7 @@ export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS
  * ### Invariants
  *
  * ```
- * BasicPointIntervalRelation.BASIC_RELATIONS.every(basic => FULL.impliedBy(basic))
+ * BasicPointIntervalRelation.RELATIONS.every(gr => FULL.impliedBy(gr))
  * ```
  */
 export const FULL: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS[FULL_BIT_PATTERN]
