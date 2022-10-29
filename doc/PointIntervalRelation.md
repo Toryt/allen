@@ -166,7 +166,7 @@ relation, expressing an amount of uncertainty.
 In several use cases however, we do not know a _definite_ `start` or `end`, but we do know that the `start` or `end`
 have constraints. E.g., consider contracts that have a definite `start` date, but are open-ended. The contract interval
 thus is incompletely known. However, since at the moment of our reasoning no definite `end` date is set, we know that
-the `end` date is at least later than `now`. In comparing this contract interval with a point in time, this constraint
+the `end` date is at least not before `now`. In comparing this contract interval with a point in time, this constraint
 can be of use to limit the extent, i.e., the uncertainty, of the point – interval relation. The same applies, e.g., with
 contracts that will `start` once payment is received. Since it is not received yet at the moment of our evaluation, we
 know that the `start` date is at least later than or equal to `now`.
@@ -186,11 +186,11 @@ relation(t, IConstrained) =
 ```
 
 The Allen relation from an interval we are focusing on with constrained semantics to a determinate interval is a
-constant that can be determined by reasoning. E.g., for our open-ended contract, that lasts at least longer than today
-(<code>I<sub>constrained</sub> = [I.start, > now[</code>, supposing`I.start ≤ yesterday`), we can say that its relation
-to the determinate interval <code>I<sub>determinate</sub> = [I.start, now[</code> is `(s)`. Suppose <code>relation(t,
-I<sub>determinate</sub>)</code> is `(i)` (say`t`is`yesterday`). We can now say that <code>relation(t,
-I<sub>constrained</sub>) = (s).(i) = (i)</code>. The comparison of the indeterminate interval with `t`,
+constant that can be determined by reasoning. E.g., for our open-ended contract, that lasts at least longer than before
+today (<code>I<sub>constrained</sub> = [I.start, ≥ now[</code>, supposing`I.start ≤ yesterday`), we can say that its
+relation to the determinate interval <code>I<sub>determinate</sub> = [I.start, now[</code> is `(se)`. Suppose
+<code>relation(t, I<sub>determinate</sub>)</code> is `(i)` (say`t`is`yesterday`). We can now say that <code>relation(t,
+I<sub>constrained</sub>) = (i).(se) = (i)</code>. The comparison of the indeterminate interval with `t`,
 `relation(t, I)`, would have resulted in:
 
 ```
@@ -203,7 +203,7 @@ which is much less certain than `(i)`.
 
 Be aware that in a number of cases, the non-determinate character of `I` doesn't matter. If you suppose in the previous
 example that <code>relation(t, I<sub>constrained</sub>) = (a)</code> (say `t` is next year), <code>relation(t,
-I<sub>constrained</sub>) = (s).(a) = (ita)</code>. The comparison of the indeterminate interval with `t`,
+I<sub>constrained</sub>) = (se).(a) = (ita)</code>. The comparison of the indeterminate interval with `t`,
 `relation(t, I)`, in this case, results in the same point-interval relation:
 
 ```
@@ -211,3 +211,6 @@ I<sub>constrained</sub>) = (s).(a) = (ita)</code>. The comparison of the indeter
 = relation(nextYear, [I.start, undefined[)
 = (ita)
 ```
+
+For `t = now`, we get <code>relation(t, I<sub>determinate</sub>) = (t)</code>, so <code>relation(t,
+I<sub>constrained</sub>) = (t).(se) = (it)</code>, which is still less uncertain than `(ita)`.
