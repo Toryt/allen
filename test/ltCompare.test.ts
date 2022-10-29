@@ -3,7 +3,6 @@
 import 'should'
 import { ltCompare, isLTComparableOrIndefinite } from '../src/ltCompare'
 import { inspect } from 'util'
-import { PrimitivePoint } from '../src/point'
 import { stuffWithUndefined } from './stuff'
 
 interface Case<T> {
@@ -80,7 +79,7 @@ describe('ltComparator', function () {
             this.i = i
           }
 
-          [Symbol.toPrimitive] (): PrimitivePoint {
+          [Symbol.toPrimitive] (): number {
             return this.i
           }
         }
@@ -101,7 +100,7 @@ describe('ltComparator', function () {
             this.i = i
           }
 
-          valueOf (): PrimitivePoint {
+          valueOf (): number {
             return this.i
           }
         }
