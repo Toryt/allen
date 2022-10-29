@@ -550,16 +550,16 @@ export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BAS
 export const COMMENCES: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[1]
 
 /**
- * A _basic_ point – interval relation that says that a point in time `t` _is in_ an interval `I`, i.e., `t` is after
- * the start of `I` and before the end of `I`:
+ * A _basic_ point – interval relation that says that a point `t` _is in_ an interval `I`, i.e., `t` is after the start
+ * of `I` and before the end of `I`:
  *
  * ```
- * (I.from != undefined) && (I.until != undefined) && (t > I.from) && (t < I.until)
+ * (t !== undefined) && (I.start != undefined) && (I.end != undefined) && (I.start < t) && (t < I.end)
  * ```
  *
- * ![in](https://github.com/jandppw/ppwcode-recovered-from-google-code/blob/master/java/value/trunk/src/main/java/org/ppwcode/value_III/time/interval/doc-files/PointIntervalRelation-in.png?raw=true)
+ * ![in](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-in.png)
  *
- * The short representation of this point – interval relation is `'><'`.
+ * The short representation of this point – interval relation is `i`.
  */
 export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[2]
 
