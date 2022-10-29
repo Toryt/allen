@@ -513,7 +513,11 @@ export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
  * This empty relation is not a true point – interval relation. It does not express a relational condition between
  * intervals. Yet, it is needed for consistency with some operations on point – interval relations.
  *
- * @Invars(@Expression("for (PointIntervalRelation basic : BASIC_RELATIONS) {! EMPTY.impliedBy(basic)}"))
+ * ### Invariants
+ *
+ * ```
+ * BasicPointIntervalRelation.BASIC_RELATIONS.every(basic => !EMPTY.impliedBy(basic))
+ * ```
  */
 export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EMPTY_BIT_PATTERN]
 
