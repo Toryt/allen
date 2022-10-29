@@ -245,7 +245,6 @@ describe('PointIntervalRelation', function () {
     BasicPointIntervalRelation.RELATIONS.forEach(gr => {
       it(`the complement of ${gr.toString()} is implied by the basic relations that are not implied by it`, function () {
         const result = gr.complement()
-        console.log(result.toString())
         BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br => {
           gr.impliedBy(br).should.equal(!result.impliedBy(br))
         })
@@ -261,7 +260,6 @@ describe('PointIntervalRelation', function () {
       BasicPointIntervalRelation.RELATIONS.forEach(gr2 => {
         it(`${gr1.toString()}.min(${gr2.toString()}) has the basic relations of ${gr1.toString()} that are not implied by ${gr2.toString()}`, function () {
           const result = gr1.min(gr2)
-          console.log(result.toString())
           BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br =>
             result.impliedBy(br).should.equal(gr1.impliedBy(br) && !gr2.impliedBy(br))
           )
@@ -275,7 +273,6 @@ describe('PointIntervalRelation', function () {
         it(`or(${pir1.toString()}, ${pir2.toString()}) has the basic relations of both`, function () {
           const args = [pir1, pir2]
           const result = PointIntervalRelation.or(...args)
-          console.log(result.toString())
           BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br =>
             result.impliedBy(br).should.equal(args.some(gr => gr.impliedBy(br)))
           )
@@ -297,7 +294,6 @@ describe('PointIntervalRelation', function () {
         it(`and(${pir1.toString()}, ${pir2.toString()}) has the common basic relations`, function () {
           const args = [pir1, pir2]
           const result = PointIntervalRelation.and(...args)
-          console.log(result.toString())
           BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br =>
             result.impliedBy(br).should.equal(args.every(gr => gr.impliedBy(br)))
           )
