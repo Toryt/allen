@@ -70,8 +70,19 @@ describe('PointIntervalRelations', function () {
         BasicPointIntervalRelation.BASIC_RELATIONS.length.should.equal(5)
       })
       it('contains only BasicPointIntervalRelation', function () {
-        BasicPointIntervalRelation.BASIC_RELATIONS.forEach(ar => {
-          ar.should.be.instanceof(BasicPointIntervalRelation)
+        BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br => {
+          br.should.be.instanceof(BasicPointIntervalRelation)
+        })
+      })
+      it('has no duplicates, and this is a basis', function () {
+        BasicPointIntervalRelation.BASIC_RELATIONS.forEach((br1, i1) => {
+          BasicPointIntervalRelation.BASIC_RELATIONS.forEach((br2, i2) => {
+            if (i1 <= i2) {
+              br1.should.not.equal(br2)
+              br1.implies(br2).should.be.false()
+              br2.implies(br1).should.be.false()
+            }
+          })
         })
       })
       it('has the basic relation at the position of its ordinal', function () {

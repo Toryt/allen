@@ -473,6 +473,12 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
 
   /**
    * An ordinal for basic relations (zero-based).
+   *
+   * ### Invariants
+   *
+   * ```
+   * BASIC_RELATIONS[this.ordinal()] === this
+   * ```
    */
   public ordinal (): number {
     /*
@@ -485,7 +491,19 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
   }
 
   /**
-   * All possible basic point interval relations
+   * All possible basic point – interval relations.
+   *
+   * This is a basis for all point – interval relation.
+   *
+   * ### Invariants
+   *
+   * ```
+   * Array.isArray(BASIC_RELATIONS)
+   * BASIC_RELATIONS.length === 5
+   * BASIC_RELATIONS.every(br => br instanceof BasicPointIntervalRelation)
+   * BASIC_RELATIONS.every((br1, i1) =>
+   *   BASIC_RELATIONS.every((br2, i2) => i2 < i1 || br1 !== br2 && !br1.implies(br2) && !br2.implies(br1)))
+   * ```
    */
   public static readonly BASIC_RELATIONS: readonly BasicPointIntervalRelation[] = Object.freeze(
     basicPointIntervalRelationBitPatterns.map(bitPattern => new BasicPointIntervalRelation(bitPattern))
