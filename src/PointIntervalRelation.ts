@@ -53,7 +53,7 @@ const haveCommonType: string = 't, i.start and i.end must be of a common type'
 export class PointIntervalRelation {
   /* Implementation note:
 
-     Point-interval relations are implemented as a 5-bit bit pattern, stored in the 5 least significant bits of an
+     point – interval relations are implemented as a 5-bit bit pattern, stored in the 5 least significant bits of an
      integer number.
 
      Each of those 5 bits represents a basic relation, being in the general relation (`1`) or not being in the general
@@ -84,7 +84,7 @@ export class PointIntervalRelation {
   }
 
   /**
-   * A measure about the uncertainty this point-interval relation expresses.
+   * A measure about the uncertainty this point – interval relation expresses.
    *
    * This is the fraction of the 5 basic relations that imply this general relation. {@link FULL} is complete
    * uncertainty, and returns `1`. A basic relation is complete certainty, and returns `0`.
@@ -510,16 +510,16 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
 export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
 
 /**
- * This empty relation is not a true point-interval relation. It does not express a relational condition between
- * intervals. Yet, it is needed for consistency with some operations on point-interval relations.
+ * This empty relation is not a true point – interval relation. It does not express a relational condition between
+ * intervals. Yet, it is needed for consistency with some operations on point – interval relations.
  *
  * @Invars(@Expression("for (PointIntervalRelation basic : BASIC_RELATIONS) {! EMPTY.impliedBy(basic)}"))
  */
 export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EMPTY_BIT_PATTERN]
 
 /**
- * A **basic** point-interval relation that says that a point in time `t` _comes before_ an interval `I`, i.e., `t`
- * is before the start of `I`:
+ * A _basic_ point – interval relation that says that a point `t` _comes before_ an interval `I`, i.e., `t` is before
+ * the start of `I`:
  *
  * ```
  * (I.from != undefined) && (t < I.from)
@@ -532,7 +532,7 @@ export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EM
 export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[0]
 
 /**
- * A **basic** point-interval relation that says that a point in time `t` _begins_ an interval `I`, i.e., `t` is the
+ * A _basic_ point – interval relation that says that a point in time `t` _commences_ an interval `I`, i.e., `t` is the
  * start of `I`:
  *
  * ```
@@ -546,7 +546,7 @@ export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BAS
 export const BEGINS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[1]
 
 /**
- * A **basic** point-interval relation that says that a point in time `t` _is in_ an interval `I`, i.e., `t` is after
+ * A _basic_ point – interval relation that says that a point in time `t` _is in_ an interval `I`, i.e., `t` is after
  * the start of `I` and before the end of `I`:
  *
  * ```
@@ -560,7 +560,7 @@ export const BEGINS: BasicPointIntervalRelation = BasicPointIntervalRelation.BAS
 export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[2]
 
 /**
- * A **basic** point-interval relation that says that a point in time `t` _ends_ an interval `I`, i.e., `t` is the end
+ * A _basic_ point – interval relation that says that a point in time `t` _ends_ an interval `I`, i.e., `t` is the end
  * of `I`:
  *
  * ```
@@ -574,7 +574,7 @@ export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_R
 export const ENDS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[3]
 
 /**
- * A **basic** point-interval relation that says that a point in time `t` _comes after_ an interval `I`, i.e., `t` is
+ * A _basic_ point – interval relation that says that a point in time `t` _comes after_ an interval `I`, i.e., `t` is
  * after the end of `I`:
  *
  * ```
