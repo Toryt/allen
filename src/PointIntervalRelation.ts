@@ -336,7 +336,7 @@ export class PointIntervalRelation {
       result = or(result, BEFORE)
     }
     if (s.includes('c')) {
-      result = or(result, BEGINS)
+      result = or(result, COMMENCES)
     }
     if (s.includes('i')) {
       result = or(result, IN)
@@ -426,10 +426,10 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
       if (tToStart < 0) {
         return BEFORE
       } else if (tToStart === 0) {
-        return BEGINS
+        return COMMENCES
       } else {
         // assert(tToStart > 0)
-        result = result.min(BEFORE).min(BEGINS)
+        result = result.min(BEFORE).min(COMMENCES)
       }
     }
     if (i.end !== undefined && i.end !== null) {
@@ -536,18 +536,18 @@ export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EM
 export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[0]
 
 /**
- * A _basic_ point – interval relation that says that a point in time `t` _commences_ an interval `I`, i.e., `t` is the
- * start of `I`:
+ * A _basic_ point – interval relation that says that a point `t` _commences_ an interval `I`, i.e., `t` is the start of
+ * `I`:
  *
  * ```
- * (I.from != undefined) && (t = I.from)
+ * (t !== undefined) && (I.start != undefined) && (t = I.start)
  * ```
  *
- * ![begins](https://github.com/jandppw/ppwcode-recovered-from-google-code/blob/master/java/value/trunk/src/main/java/org/ppwcode/value_III/time/interval/doc-files/PointIntervalRelation-begins.png?raw=true)
+ * ![commences](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-commences.png)
  *
- * The short representation of this point – interval relation is `'=[<'`.
+ * The short representation of this point – interval relation is `c`.
  */
-export const BEGINS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[1]
+export const COMMENCES: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[1]
 
 /**
  * A _basic_ point – interval relation that says that a point in time `t` _is in_ an interval `I`, i.e., `t` is after
