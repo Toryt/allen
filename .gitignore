@@ -6,5 +6,4 @@ node_modules/
 .nyc_output
 coverage
 
-# MUDO replace with lib when fully TS
-lib2
+lib
