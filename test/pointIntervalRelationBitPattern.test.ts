@@ -10,7 +10,7 @@ import {
   BEFORE_BIT_PATTERN,
   COMMENCES_BIT_PATTERN,
   EMPTY_BIT_PATTERN,
-  ENDS_BIT_PATTERN,
+  TERMINATES_BIT_PATTERN,
   FULL_BIT_PATTERN,
   IN_BIT_PATTERN,
   basicPointIntervalRelationBitPatterns,
@@ -28,7 +28,7 @@ const basicPatterns: PatternCase[] = [
   { name: 'BEFORE_BIT_PATTERN', value: BEFORE_BIT_PATTERN },
   { name: 'COMMENCES_BIT_PATTERN', value: COMMENCES_BIT_PATTERN },
   { name: 'IN_BIT_PATTERN', value: IN_BIT_PATTERN },
-  { name: 'ENDS_BIT_PATTERN', value: ENDS_BIT_PATTERN },
+  { name: 'TERMINATES_BIT_PATTERN', value: TERMINATES_BIT_PATTERN },
   { name: 'AFTER_BIT_PATTERN', value: AFTER_BIT_PATTERN }
 ]
 

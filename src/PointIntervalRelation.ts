@@ -342,7 +342,7 @@ export class PointIntervalRelation {
       result = or(result, IN)
     }
     if (s.includes('t')) {
-      result = or(result, ENDS)
+      result = or(result, TERMINATES)
     }
     if (s.includes('a')) {
       result = or(result, AFTER)
@@ -435,9 +435,9 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
     if (i.end !== undefined && i.end !== null) {
       const tToEnd = compare(t, i.end)
       if (tToEnd < 0) {
-        result = result.min(ENDS).min(AFTER)
+        result = result.min(TERMINATES).min(AFTER)
       } else if (tToEnd === 0) {
-        return ENDS
+        return TERMINATES
       } else {
         // assert(tToEnd > 0)
         return AFTER
@@ -564,18 +564,18 @@ export const COMMENCES: BasicPointIntervalRelation = BasicPointIntervalRelation.
 export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[2]
 
 /**
- * A _basic_ point – interval relation that says that a point in time `t` _ends_ an interval `I`, i.e., `t` is the end
- * of `I`:
+ * A _basic_ point – interval relation that says that a point `t` _terminates_ an interval `I`, i.e., `t` is the end of
+ * `I`:
  *
  * ```
- * (I.until != undefined) && (t = I.until)
+ * (t ≠ undefined) && (I.end ≠ undefined) && (t = I.end)
  * ```
  *
- * ![ends](https://github.com/jandppw/ppwcode-recovered-from-google-code/blob/master/java/value/trunk/src/main/java/org/ppwcode/value_III/time/interval/doc-files/PointIntervalRelation-ends.png?raw=true)
+ * ![ends](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-terminates.png)
  *
- * The short representation of this point – interval relation is `'=[>'`.
+ * The short representation of this point – interval relation is `t`.
  */
-export const ENDS: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[3]
+export const TERMINATES: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[3]
 
 /**
  * A _basic_ point – interval relation that says that a point in time `t` _comes after_ an interval `I`, i.e., `t` is

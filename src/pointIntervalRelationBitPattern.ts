@@ -31,7 +31,7 @@ export const EMPTY_BIT_PATTERN = numberToPointIntervalRelationBitPattern(0) // 0
 export const BEFORE_BIT_PATTERN = numberToPointIntervalRelationBitPattern(1) // 00001 b
 export const COMMENCES_BIT_PATTERN = numberToPointIntervalRelationBitPattern(2) // 00010 c
 export const IN_BIT_PATTERN = numberToPointIntervalRelationBitPattern(4) // 00100 i
-export const ENDS_BIT_PATTERN = numberToPointIntervalRelationBitPattern(8) // 01000 t
+export const TERMINATES_BIT_PATTERN = numberToPointIntervalRelationBitPattern(8) // 01000 t
 export const AFTER_BIT_PATTERN = numberToPointIntervalRelationBitPattern(16) // 10000 a
 export const FULL_BIT_PATTERN = numberToPointIntervalRelationBitPattern(31) // 11111 bcita
 

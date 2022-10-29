@@ -8,7 +8,7 @@ import {
   BEFORE_BIT_PATTERN,
   COMMENCES_BIT_PATTERN,
   IN_BIT_PATTERN,
-  ENDS_BIT_PATTERN,
+  TERMINATES_BIT_PATTERN,
   AFTER_BIT_PATTERN,
   FULL_BIT_PATTERN
 } from '../src/pointIntervalRelationBitPattern'
@@ -20,7 +20,7 @@ import {
   BEFORE,
   COMMENCES,
   IN,
-  ENDS,
+  TERMINATES,
   AFTER,
   FULL,
   BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS,
@@ -88,7 +88,7 @@ describe('PointIntervalRelations', function () {
     testBasicRelation('BEFORE', BEFORE, BEFORE_BIT_PATTERN, 0)
     testBasicRelation('COMMENCES', COMMENCES, COMMENCES_BIT_PATTERN, 1)
     testBasicRelation('IN', IN, IN_BIT_PATTERN, 2)
-    testBasicRelation('ENDS', ENDS, ENDS_BIT_PATTERN, 3)
+    testBasicRelation('TERMINATES', TERMINATES, TERMINATES_BIT_PATTERN, 3)
     testBasicRelation('AFTER', AFTER, AFTER_BIT_PATTERN, 4)
   })
   describe('NR_OF_RELATIONS', function () {
@@ -375,7 +375,7 @@ describe('PointIntervalRelations', function () {
           'fully qualified',
           { start: points[1], end: points[3] },
           points,
-          [BEFORE, COMMENCES, IN, ENDS, AFTER],
+          [BEFORE, COMMENCES, IN, TERMINATES, AFTER],
           compare
         )
         generatePointIntervalRelationTests(
@@ -389,7 +389,7 @@ describe('PointIntervalRelations', function () {
           'unknown from',
           { start: undefined, end: points[3] },
           points,
-          [bci, bci, bci, ENDS, AFTER],
+          [bci, bci, bci, TERMINATES, AFTER],
           compare
         )
       })
