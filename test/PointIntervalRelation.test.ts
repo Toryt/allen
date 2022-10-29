@@ -167,12 +167,12 @@ describe('PointIntervalRelation', function () {
       FULL.uncertainty().should.equal(1)
     })
 
-    BasicPointIntervalRelation.RELATIONS.forEach(pir => {
-      if (pir !== EMPTY) {
+    BasicPointIntervalRelation.RELATIONS.forEach(gr => {
+      if (gr !== EMPTY) {
         const expected =
-          BasicPointIntervalRelation.BASIC_RELATIONS.reduce((acc, br) => (br.implies(pir) ? acc + 1 : acc), -1) / 4
-        it(`${pir.toString()} has uncertainty ${expected}`, function () {
-          pir.uncertainty().should.equal(expected)
+          BasicPointIntervalRelation.BASIC_RELATIONS.reduce((acc, br) => (br.implies(gr) ? acc + 1 : acc), -1) / 4
+        it(`${gr.toString()} has uncertainty ${expected}`, function () {
+          gr.uncertainty().should.equal(expected)
         })
       }
     })
