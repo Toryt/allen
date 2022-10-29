@@ -50,7 +50,7 @@ function testBasicRelation (
   })
 }
 
-describe('PointIntervalRelations', function () {
+describe('PointIntervalRelation', function () {
   describe('NR_OF_RELATIONS', function () {
     it('should pass through pointIntervalRelationBitPattern.NR_OF_RELATIONS', function () {
       NR_OF_RELATIONS.should.equal(BITPATTERN_NR_OF_RELATIONS)
@@ -139,6 +139,19 @@ describe('PointIntervalRelations', function () {
           FULL.impliedBy(gr).should.be.true()
         })
       })
+    })
+  })
+  describe('#isBasic', function () {
+    BasicPointIntervalRelation.RELATIONS.forEach(gr => {
+      if (gr instanceof BasicPointIntervalRelation) {
+        it(`${gr.toString()} is basic`, function () {
+          gr.isBasic().should.be.true()
+        })
+      } else {
+        it(`${gr.toString()} is not basic`, function () {
+          gr.isBasic().should.be.false()
+        })
+      }
     })
   })
   describe('#uncertainty', function () {
