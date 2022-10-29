@@ -1,6 +1,8 @@
 import { isTypeRepresentation, typeRepresentationOf, TypeRepresentation } from './typeRepresentation'
 import { TypeFor, Indefinite } from './type'
 
+// MUDO this seems to be no longer used
+
 export type PrimitivePoint = number | bigint | string | boolean | symbol | Function
 
 /**
