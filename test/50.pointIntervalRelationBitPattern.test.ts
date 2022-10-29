@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { stuffWithUndefined } from './stuff'
+import { stuffWithUndefined } from './_stuff'
 import { inspect } from 'util'
 import {
   NR_OF_BITS,

@@ -24,7 +24,7 @@ import {
 } from '../src/intervalIntervalRelationBitPattern'
 import Joi from 'joi'
 import should from 'should'
-import { stuff, stuffWithUndefined } from './stuff'
+import { stuff, stuffWithUndefined } from './_stuff'
 import { inspect } from 'util'
 
 interface PatternCase {

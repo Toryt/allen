@@ -3,7 +3,7 @@
 import 'should'
 import { ltCompare, isLTComparableOrIndefinite } from '../src/ltCompare'
 import { inspect } from 'util'
-import { stuffWithUndefined } from './stuff'
+import { stuffWithUndefined } from './_stuff'
 
 interface Case<T> {
   label: string

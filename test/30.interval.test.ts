@@ -2,7 +2,7 @@
 
 import 'should'
 import { inspect } from 'util'
-import { stuff, stuffWithUndefined } from './stuff'
+import { stuff, stuffWithUndefined } from './_stuff'
 import { isInterval } from '../src/Interval'
 import { typeRepresentations } from './_typeRepresentationCases'
 import { TypeRepresentation, typeRepresentationOf, representsSuperType } from '../src/typeRepresentation'
