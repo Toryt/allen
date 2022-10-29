@@ -94,11 +94,6 @@ const trueCases: Array<Case<TypeRepresentation>> = [
   },
   { label: 'mixed array', pointType: Array, p1: [11], p2: ['a string'] }
 ]
-//
-// const falseCases: Array<Case<unknown>> = [
-//   { label: 'mixed primitives', elements: [undefined, null, 34, 'a string'] },
-//   { label: 'mixed', elements: [{}, null, 34] }
-// ]
 
 const notAnIntervalCandidate = stuffWithUndefined.filter(s => typeof s !== 'object' && typeof s !== 'function')
 
