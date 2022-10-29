@@ -17,11 +17,6 @@ import {
   PointIntervalRelation,
   BasicPointIntervalRelation,
   EMPTY,
-  BEFORE,
-  COMMENCES,
-  IN,
-  TERMINATES,
-  AFTER,
   FULL,
   BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS,
   or,
@@ -66,30 +61,30 @@ function testBasicRelation (
 }
 
 describe('PointIntervalRelations', function () {
-  describe('BasicPointIntervalRelation.BASIC_RELATIONS', function () {
-    it('is an array', function () {
-      BasicPointIntervalRelation.BASIC_RELATIONS.should.be.an.Array()
-    })
-    it('has 5 entries', function () {
-      BasicPointIntervalRelation.BASIC_RELATIONS.length.should.equal(5)
-    })
-    it('contains only BasicPointIntervalRelation', function () {
-      BasicPointIntervalRelation.BASIC_RELATIONS.forEach(ar => {
-        ar.should.be.instanceof(BasicPointIntervalRelation)
+  describe('BasicPointIntervalRelation', function () {
+    describe('BASIC_RELATIONS', function () {
+      it('is an array', function () {
+        BasicPointIntervalRelation.BASIC_RELATIONS.should.be.an.Array()
+      })
+      it('has 5 entries', function () {
+        BasicPointIntervalRelation.BASIC_RELATIONS.length.should.equal(5)
+      })
+      it('contains only BasicPointIntervalRelation', function () {
+        BasicPointIntervalRelation.BASIC_RELATIONS.forEach(ar => {
+          ar.should.be.instanceof(BasicPointIntervalRelation)
+        })
+      })
+      it('has the basic relation at the position of its ordinal', function () {
+        BasicPointIntervalRelation.BASIC_RELATIONS.forEach((br, i) => {
+          br.ordinal().should.equal(i)
+        })
       })
     })
-    it('has the basic relation at the position of its ordinal', function () {
-      BasicPointIntervalRelation.BASIC_RELATIONS.forEach((br, i) => {
-        br.ordinal().should.equal(i)
-      })
-    })
-  })
-  describe('basic relations', function () {
-    testBasicRelation('BEFORE', BEFORE, BEFORE_BIT_PATTERN, 0)
-    testBasicRelation('COMMENCES', COMMENCES, COMMENCES_BIT_PATTERN, 1)
-    testBasicRelation('IN', IN, IN_BIT_PATTERN, 2)
-    testBasicRelation('TERMINATES', TERMINATES, TERMINATES_BIT_PATTERN, 3)
-    testBasicRelation('AFTER', AFTER, AFTER_BIT_PATTERN, 4)
+    testBasicRelation('BEFORE', BasicPointIntervalRelation.BEFORE, BEFORE_BIT_PATTERN, 0)
+    testBasicRelation('COMMENCES', BasicPointIntervalRelation.COMMENCES, COMMENCES_BIT_PATTERN, 1)
+    testBasicRelation('IN', BasicPointIntervalRelation.IN, IN_BIT_PATTERN, 2)
+    testBasicRelation('TERMINATES', BasicPointIntervalRelation.TERMINATES, TERMINATES_BIT_PATTERN, 3)
+    testBasicRelation('AFTER', BasicPointIntervalRelation.AFTER, AFTER_BIT_PATTERN, 4)
   })
   describe('NR_OF_RELATIONS', function () {
     it('should pass through pointIntervalRelationBitPattern.NR_OF_RELATIONS', function () {
@@ -375,21 +370,27 @@ describe('PointIntervalRelations', function () {
           'fully qualified',
           { start: points[1], end: points[3] },
           points,
-          [BEFORE, COMMENCES, IN, TERMINATES, AFTER],
+          [
+            BasicPointIntervalRelation.BEFORE,
+            BasicPointIntervalRelation.COMMENCES,
+            BasicPointIntervalRelation.IN,
+            BasicPointIntervalRelation.TERMINATES,
+            BasicPointIntervalRelation.AFTER
+          ],
           compare
         )
         generatePointIntervalRelationTests(
           'unkown until',
           { start: points[1], end: undefined },
           points,
-          [BEFORE, COMMENCES, ita, ita, ita],
+          [BasicPointIntervalRelation.BEFORE, BasicPointIntervalRelation.COMMENCES, ita, ita, ita],
           compare
         )
         generatePointIntervalRelationTests(
           'unknown from',
           { start: undefined, end: points[3] },
           points,
-          [bci, bci, bci, TERMINATES, AFTER],
+          [bci, bci, bci, BasicPointIntervalRelation.TERMINATES, BasicPointIntervalRelation.AFTER],
           compare
         )
       })

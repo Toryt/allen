@@ -333,19 +333,19 @@ export class PointIntervalRelation {
   public static relation (s: string): PointIntervalRelation {
     let result = EMPTY
     if (s.includes('b')) {
-      result = or(result, BEFORE)
+      result = or(result, BasicPointIntervalRelation.BEFORE)
     }
     if (s.includes('c')) {
-      result = or(result, COMMENCES)
+      result = or(result, BasicPointIntervalRelation.COMMENCES)
     }
     if (s.includes('i')) {
-      result = or(result, IN)
+      result = or(result, BasicPointIntervalRelation.IN)
     }
     if (s.includes('t')) {
-      result = or(result, TERMINATES)
+      result = or(result, BasicPointIntervalRelation.TERMINATES)
     }
     if (s.includes('a')) {
-      result = or(result, AFTER)
+      result = or(result, BasicPointIntervalRelation.AFTER)
     }
     return result
   }
@@ -424,23 +424,23 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
     if (i.start !== undefined && i.start !== null) {
       const tToStart = compare(t, i.start)
       if (tToStart < 0) {
-        return BEFORE
+        return BasicPointIntervalRelation.BEFORE
       } else if (tToStart === 0) {
-        return COMMENCES
+        return BasicPointIntervalRelation.COMMENCES
       } else {
         // assert(tToStart > 0)
-        result = result.min(BEFORE).min(COMMENCES)
+        result = result.min(BasicPointIntervalRelation.BEFORE).min(BasicPointIntervalRelation.COMMENCES)
       }
     }
     if (i.end !== undefined && i.end !== null) {
       const tToEnd = compare(t, i.end)
       if (tToEnd < 0) {
-        result = result.min(TERMINATES).min(AFTER)
+        result = result.min(BasicPointIntervalRelation.TERMINATES).min(BasicPointIntervalRelation.AFTER)
       } else if (tToEnd === 0) {
-        return TERMINATES
+        return BasicPointIntervalRelation.TERMINATES
       } else {
         // assert(tToEnd > 0)
-        return AFTER
+        return BasicPointIntervalRelation.AFTER
       }
     }
     return result
@@ -492,6 +492,76 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
   )
 
   /**
+   * A _basic_ point – interval relation that says that a point `t` _comes before_ an interval `I`, i.e., `t` is before
+   * the start of `I`:
+   *
+   * ```
+   * (t ≠ undefined) && (I.start ≠ undefined) && (t < I.start)
+   * ```
+   *
+   * ![before](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-before.png)
+   *
+   * The short representation of this point – interval relation is `b`.
+   */
+  public static readonly BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[0]
+
+  /**
+   * A _basic_ point – interval relation that says that a point `t` _commences_ an interval `I`, i.e., `t` is the start of
+   * `I`:
+   *
+   * ```
+   * (t ≠ undefined) && (I.start ≠ undefined) && (t = I.start)
+   * ```
+   *
+   * ![commences](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-commences.png)
+   *
+   * The short representation of this point – interval relation is `c`.
+   */
+  public static readonly COMMENCES: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[1]
+
+  /**
+   * A _basic_ point – interval relation that says that a point `t` _is in_ an interval `I`, i.e., `t` is after the start
+   * of `I` and before the end of `I`:
+   *
+   * ```
+   * (t ≠ undefined) && (I.start ≠ undefined) && (I.end ≠ undefined) && (I.start < t) && (t < I.end)
+   * ```
+   *
+   * ![in](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-in.png)
+   *
+   * The short representation of this point – interval relation is `i`.
+   */
+  public static readonly IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[2]
+
+  /**
+   * A _basic_ point – interval relation that says that a point `t` _terminates_ an interval `I`, i.e., `t` is the end of
+   * `I`:
+   *
+   * ```
+   * (t ≠ undefined) && (I.end ≠ undefined) && (t = I.end)
+   * ```
+   *
+   * ![ends](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-terminates.png)
+   *
+   * The short representation of this point – interval relation is `t`.
+   */
+  public static readonly TERMINATES: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[3]
+
+  /**
+   * A _basic_ point – interval relation that says that a point `t` _comes after_ an interval `I`, i.e., `t` is after the
+   * end of `I`:
+   *
+   * ```
+   * (t ≠ undefined) && (I.until ≠ undefined) && (t > I.end)
+   * ```
+   *
+   * ![after](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-after.png)
+   *
+   * The short representation of this point – interval relation is `a`.
+   */
+  public static readonly AFTER: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[4]
+
+  /**
    * All possible point – interval relations.
    @Invars({
     @Expression("VALUES != null"),
@@ -520,76 +590,6 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
  * ```
  */
 export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EMPTY_BIT_PATTERN]
-
-/**
- * A _basic_ point – interval relation that says that a point `t` _comes before_ an interval `I`, i.e., `t` is before
- * the start of `I`:
- *
- * ```
- * (t ≠ undefined) && (I.start ≠ undefined) && (t < I.start)
- * ```
- *
- * ![before](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-before.png)
- *
- * The short representation of this point – interval relation is `b`.
- */
-export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[0]
-
-/**
- * A _basic_ point – interval relation that says that a point `t` _commences_ an interval `I`, i.e., `t` is the start of
- * `I`:
- *
- * ```
- * (t ≠ undefined) && (I.start ≠ undefined) && (t = I.start)
- * ```
- *
- * ![commences](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-commences.png)
- *
- * The short representation of this point – interval relation is `c`.
- */
-export const COMMENCES: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[1]
-
-/**
- * A _basic_ point – interval relation that says that a point `t` _is in_ an interval `I`, i.e., `t` is after the start
- * of `I` and before the end of `I`:
- *
- * ```
- * (t ≠ undefined) && (I.start ≠ undefined) && (I.end ≠ undefined) && (I.start < t) && (t < I.end)
- * ```
- *
- * ![in](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-in.png)
- *
- * The short representation of this point – interval relation is `i`.
- */
-export const IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[2]
-
-/**
- * A _basic_ point – interval relation that says that a point `t` _terminates_ an interval `I`, i.e., `t` is the end of
- * `I`:
- *
- * ```
- * (t ≠ undefined) && (I.end ≠ undefined) && (t = I.end)
- * ```
- *
- * ![ends](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-terminates.png)
- *
- * The short representation of this point – interval relation is `t`.
- */
-export const TERMINATES: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[3]
-
-/**
- * A _basic_ point – interval relation that says that a point `t` _comes after_ an interval `I`, i.e., `t` is after the
- * end of `I`:
- *
- * ```
- * (t ≠ undefined) && (I.until ≠ undefined) && (t > I.end)
- * ```
- *
- * ![after](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-after.png)
- *
- * The short representation of this point – interval relation is `a`.
- */
-export const AFTER: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[4]
 
 /**
  * The full point – interval relation, which expresses that nothing definite can be said about the relation between a
