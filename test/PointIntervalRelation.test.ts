@@ -12,6 +12,7 @@ import {
 import 'should'
 import { Interval } from '../src/Interval'
 import { inspect } from 'util'
+import { intervalToString } from './_intervalToString'
 
 function testBasicRelation (
   name: string,
@@ -336,20 +337,6 @@ describe('PointIntervalRelation', function () {
             compare
           )
           : PointIntervalRelation.relation(t, i)
-      }
-
-      function intervalToString (i: Interval<T>): string {
-        function valueToString (v: T | undefined | null): string {
-          if (typeof v === 'string') {
-            return v
-          }
-          if (typeof v === 'number' || v instanceof Date) {
-            return v.toString()
-          }
-          return inspect(v)
-        }
-
-        return `[${valueToString(i.start)}, ${valueToString(i.end)}[`
       }
 
       describe(`${label} — ${intervalToString(interval)}`, function () {
