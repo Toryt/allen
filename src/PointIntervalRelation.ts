@@ -332,7 +332,7 @@ export class PointIntervalRelation {
    *               .filter(l => BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS.includes(l))
    *               .every(l => s.includes(l))
    */
-  public static relation (s: string): PointIntervalRelation {
+  public static fromString (s: string): PointIntervalRelation {
     let result = EMPTY
     if (s.includes('b')) {
       result = PointIntervalRelation.or(result, BasicPointIntervalRelation.BEFORE)

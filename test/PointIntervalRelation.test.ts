@@ -309,11 +309,11 @@ describe('PointIntervalRelation', function () {
       result.should.equal(EMPTY)
     })
   })
-  describe('relation', function () {
+  describe('fromString', function () {
     BasicPointIntervalRelation.RELATIONS.forEach(gr => {
       const representation = gr.toString()
       it(`recognizes ${representation} correctly`, function () {
-        const result = PointIntervalRelation.relation(representation)
+        const result = PointIntervalRelation.fromString(representation)
         result.should.equal(gr)
       })
     })
@@ -372,8 +372,8 @@ describe('PointIntervalRelation', function () {
       compare?: (a1: T, a2: T) => number
     ): void {
       describe(label, function () {
-        const ita = PointIntervalRelation.relation('ita')
-        const bci = PointIntervalRelation.relation('bci')
+        const ita = PointIntervalRelation.fromString('ita')
+        const bci = PointIntervalRelation.fromString('bci')
         generatePointIntervalRelationTests(
           'fully qualified',
           { start: points[1], end: points[3] },
