@@ -526,7 +526,7 @@ export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.VALUES[EM
  * the start of `I`:
  *
  * ```
- * (t !== undefined) && (I.start != undefined) && (t < I.start)
+ * (t ≠ undefined) && (I.start ≠ undefined) && (t < I.start)
  * ```
  *
  * ![before](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-before.png)
@@ -540,7 +540,7 @@ export const BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BAS
  * `I`:
  *
  * ```
- * (t !== undefined) && (I.start != undefined) && (t = I.start)
+ * (t ≠ undefined) && (I.start ≠ undefined) && (t = I.start)
  * ```
  *
  * ![commences](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-commences.png)
@@ -554,7 +554,7 @@ export const COMMENCES: BasicPointIntervalRelation = BasicPointIntervalRelation.
  * of `I` and before the end of `I`:
  *
  * ```
- * (t !== undefined) && (I.start != undefined) && (I.end != undefined) && (I.start < t) && (t < I.end)
+ * (t ≠ undefined) && (I.start ≠ undefined) && (I.end ≠ undefined) && (I.start < t) && (t < I.end)
  * ```
  *
  * ![in](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-in.png)
