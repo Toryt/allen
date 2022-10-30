@@ -1,5 +1,5 @@
 import {
-  intervalIntervalRelationBitPatterns,
+  allenRelationBitPatterns,
   CONTAINS_BIT_PATTERN,
   DURING_BIT_PATTERN,
   EMPTY_BIT_PATTERN,
@@ -31,7 +31,7 @@ export class TimeIntervalRelation {
    * @invar VALUES.every((ar1, i1) => VALUES.every((ar2, i2) => i1 < i2 || ar1 !== ar2)
    * @invar ∀ ar: !(ar instanceof TimeIntervalRelation) || VALUES.includes(ar)
    */
-  static VALUES: readonly TimeIntervalRelation[] = intervalIntervalRelationBitPatterns.map(
+  static VALUES: readonly TimeIntervalRelation[] = allenRelationBitPatterns.map(
     bitPattern => new TimeIntervalRelation(bitPattern)
   )
 
