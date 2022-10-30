@@ -23,7 +23,7 @@ import {
   PRECEDED_BY_BIT_PATTERN,
   EMPTY_BIT_PATTERN,
   FULL_BIT_PATTERN,
-  isBasicIntervalIntervalRelationBitPattern,
+  isBasicAllenRelationBitPattern,
   isAllenRelationBitPattern
 } from '../src/allenRelationBitPattern'
 
@@ -121,17 +121,17 @@ describe('allenRelationBitPattern', function () {
         })
       })
   })
-  describe('isBasicIntervalIntervalRelationBitPattern', function () {
+  describe('isBasicAllenRelationBitPattern', function () {
     basicPatterns.forEach(bbp => {
       it(`returns true for ${bbp.name}`, function () {
-        isBasicIntervalIntervalRelationBitPattern(bbp.value).should.be.true()
+        isBasicAllenRelationBitPattern(bbp.value).should.be.true()
       })
     })
     it('returns false for all non-basic bit patterns', function () {
       allenRelationBitPatterns
         .filter(bp => !basicPatterns.map(bbp => bbp.value).includes(bp))
         .forEach(nonBasicBitPattern => {
-          isBasicIntervalIntervalRelationBitPattern(nonBasicBitPattern).should.be.false()
+          isBasicAllenRelationBitPattern(nonBasicBitPattern).should.be.false()
         })
     })
 
@@ -151,7 +151,7 @@ describe('allenRelationBitPattern', function () {
       ])
       .forEach(s => {
         it(`returns false for ${inspect(s)}`, function () {
-          isBasicIntervalIntervalRelationBitPattern(s).should.be.false()
+          isBasicAllenRelationBitPattern(s).should.be.false()
         })
       })
   })

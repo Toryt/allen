@@ -7,7 +7,7 @@ import {
   FINISHED_BY_BIT_PATTERN,
   FINISHES_BIT_PATTERN,
   FULL_BIT_PATTERN,
-  isBasicIntervalIntervalRelationBitPattern,
+  isBasicAllenRelationBitPattern,
   MEETS_BIT_PATTERN,
   MET_BY_BIT_PATTERN,
   OVERLAPPED_BY_BIT_PATTERN,
@@ -421,7 +421,7 @@ export class TimeIntervalRelation {
    * @post BASIC_RELATIONS.contains(this)
    */
   isBasic (): boolean {
-    return isBasicIntervalIntervalRelationBitPattern(this.bitPattern)
+    return isBasicAllenRelationBitPattern(this.bitPattern)
   }
 
   /**

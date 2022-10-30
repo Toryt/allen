@@ -88,7 +88,7 @@ export function isAllenRelationBitPattern (candidate: unknown): candidate is num
  *
  * @internal
  */
-export function isBasicIntervalIntervalRelationBitPattern (candidate: unknown): candidate is number {
+export function isBasicAllenRelationBitPattern (candidate: unknown): candidate is number {
   /* http://graphics.stanford.edu/~seander/bithacks.html
    * Determining if an integer is a power of 2
    * unsigned int v; // we want to see if v is a power of 2
