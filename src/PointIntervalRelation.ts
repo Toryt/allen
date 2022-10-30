@@ -23,13 +23,14 @@ const haveCommonType: string = 't, i.start and i.end must be of a common type'
  *
  * ### About the code
  *
- * We have chosen to introduce a full-featured type for working with point – interval relations, to make encapsulation
- * as good as possible. This has a slight performance overhead, but we believe that this is worth it, considering the
- * immense complexity of reasoning about relations between points and intervals.
+ * We have chosen to introduce a full-featured type for working with point – interval relations, although they are just
+ * bit patterns in essence, to make encapsulation as good as possible. This has a slight performance overhead, but we
+ * believe that this is worth it, considering the immense complexity of reasoning about relations between points and
+ * intervals.
  *
  * Point – interval relations follow the ‘32-fold enumeration pattern’. All possible instances are created when this
  * module is loaded, and it is impossible for a user to create new instances. This means that reference equality
- * (‘`===`’) can be used to compare point – interval relations, Instances are obtained using the constants this module
+ * (‘`===`’) can be used to compare point – interval relations. Instances are obtained using the constants this module
  * offers, or using
  *
  * - the combination methods
