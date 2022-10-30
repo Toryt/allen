@@ -540,6 +540,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
    * The short representation of this point – interval relation is `b`.
    */
   public static readonly BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[0]
+  // Bit pattern: 1 = '00001'
 
   /**
    * A _basic_ point – interval relation that says that a point `t` _commences_ an interval `I`, i.e., `t` is the start of
@@ -554,6 +555,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
    * The short representation of this point – interval relation is `c`.
    */
   public static readonly COMMENCES: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[1]
+  // Bit pattern: 2 = '00010'
 
   /**
    * A _basic_ point – interval relation that says that a point `t` _is in_ an interval `I`, i.e., `t` is after the start
@@ -568,6 +570,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
    * The short representation of this point – interval relation is `i`.
    */
   public static readonly IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[2]
+  // Bit pattern: 4 = '00100'
 
   /**
    * A _basic_ point – interval relation that says that a point `t` _terminates_ an interval `I`, i.e., `t` is the end of
@@ -582,6 +585,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
    * The short representation of this point – interval relation is `t`.
    */
   public static readonly TERMINATES: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[3]
+  // Bit pattern: 8 = '01000'
 
   /**
    * A _basic_ point – interval relation that says that a point `t` _comes after_ an interval `I`, i.e., `t` is after the
@@ -596,6 +600,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
    * The short representation of this point – interval relation is `a`.
    */
   public static readonly AFTER: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[4]
+  // Bit pattern: 16 = '10000'
 
   /**
    * All possible point – interval relations.
@@ -632,6 +637,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
  * ```
  */
 export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS[EMPTY_BIT_PATTERN]
+// Bit pattern: 0 = '00000'
 
 /**
  * The full point – interval relation, which expresses that nothing definite can be said about the relation between a
@@ -644,3 +650,4 @@ export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS
  * ```
  */
 export const FULL: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS[FULL_BIT_PATTERN]
+// Bit pattern: 31 = '11111'
