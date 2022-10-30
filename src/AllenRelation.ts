@@ -86,34 +86,6 @@ export class AllenRelation {
   }
 
   /**
-   * This is a basic time interval relation.
-   *
-   * @post BASIC_RELATIONS.contains(this)
-   */
-  isBasic (): boolean {
-    return isBasicAllenRelationBitPattern(this.bitPattern)
-  }
-
-  /**
-   * An ordinal for basic relations.
-   *
-   * @basic
-   * @pre this.isBasic()
-   * @return {number} result ≥ 0 && result < 13
-   */
-  basicRelationOrdinal (): number {
-    assert(this.isBasic())
-
-    /*
-     * This is the bit position, 0-based, in the 13-bit bit pattern, of the bit
-     * representing this as basic relation.
-     *
-     * See https://www.geeksforgeeks.org/position-of-rightmost-set-bit/
-     */
-    return Math.log2(this.bitPattern & -this.bitPattern)
-  }
-
-  /**
    * Is `this` implied by `gr`?
    *
    * In other words, when considering the relations as a set
