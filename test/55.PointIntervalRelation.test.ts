@@ -33,9 +33,6 @@ function testBasicRelation (
       o.should.be.greaterThanOrEqual(0)
       o.should.be.lessThan(NR_OF_BITS)
     })
-    it('reports as a basic PointIntervalRelation', function () {
-      br.isBasic().should.be.true()
-    })
     it(`has ${BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[ordinal]} as representation`, function () {
       br.representation.should.equal(BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[ordinal])
     })
@@ -138,19 +135,6 @@ describe('PointIntervalRelation', function () {
           FULL.impliedBy(gr).should.be.true()
         })
       })
-    })
-  })
-  describe('#isBasic', function () {
-    BasicPointIntervalRelation.RELATIONS.forEach(gr => {
-      if (gr instanceof BasicPointIntervalRelation) {
-        it(`${gr.toString()} is basic`, function () {
-          gr.isBasic().should.be.true()
-        })
-      } else {
-        it(`${gr.toString()} is not basic`, function () {
-          gr.isBasic().should.be.false()
-        })
-      }
     })
   })
   describe('#uncertainty', function () {

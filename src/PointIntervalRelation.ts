@@ -75,10 +75,6 @@ export class PointIntervalRelation {
     this.bitPattern = bitPattern
   }
 
-  public isBasic (): this is BasicPointIntervalRelation {
-    return isBasicPointIntervalRelationBitPattern(this.bitPattern)
-  }
-
   /**
    * A measure about the uncertainty this point – interval relation expresses.
    *
