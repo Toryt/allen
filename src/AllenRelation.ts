@@ -152,18 +152,16 @@ export const BASIC_ALLEN_RELATION_REPRESENTATIONS = Object.freeze([
   'M',
   'P'
 ] as const)
-// export type BasicAllenRelationRepresentation = typeof BASIC_ALLEN_RELATION_REPRESENTATIONS[number]
+export type BasicAllenRelationRepresentation = typeof BASIC_ALLEN_RELATION_REPRESENTATIONS[number]
 
 export class BasicAllenRelation extends AllenRelation {
-  /* MUDO
-/-*
- * ### Invariants
- *
- * ```
- * this.representation === BASIC_ALLEN_RELATION_REPRESENTATIONS[this.ordinal()]
- *-/
+  /**
+   * ### Invariants
+   *
+   * ```
+   * this.representation === BASIC_ALLEN_RELATION_REPRESENTATIONS[this.ordinal()]
+   */
   public readonly representation: BasicAllenRelationRepresentation
-*/
 
   /**
    * There is only 1 constructor, that constructs the wrapper object
@@ -174,9 +172,7 @@ export class BasicAllenRelation extends AllenRelation {
     assert(bitPattern <= FULL_BIT_PATTERN)
 
     super(bitPattern)
-    /* MUDO
     this.representation = BASIC_ALLEN_RELATION_REPRESENTATIONS[this.ordinal()]
-    */
   }
 
   /**
