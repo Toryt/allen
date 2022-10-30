@@ -1,5 +1,4 @@
 import {
-  AllenRelationBitPattern,
   intervalIntervalRelationBitPatterns,
   CONTAINS_BIT_PATTERN,
   DURING_BIT_PATTERN,
@@ -407,9 +406,9 @@ export class TimeIntervalRelation {
     TimeIntervalRelation.PRECEDED_BY
   ]
 
-  public readonly bitPattern: AllenRelationBitPattern
+  public readonly bitPattern: number
 
-  private constructor (bitpattern: AllenRelationBitPattern) {
+  private constructor (bitpattern: number) {
     /**
      * Only the 13 lowest bits are used. The other (32 - 13 = 19 bits) are 0.
      */
