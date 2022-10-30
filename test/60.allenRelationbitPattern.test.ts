@@ -1,5 +1,8 @@
 /* eslint-env mocha */
 
+import should from 'should'
+import { stuffWithUndefined } from './_stuff'
+import { inspect } from 'util'
 import {
   intervalIntervalRelationBitPatterns,
   NR_OF_RELATIONS,
@@ -21,9 +24,6 @@ import {
   isBasicIntervalIntervalRelationBitPattern,
   isIntervalIntervalRelationBitPattern
 } from '../src/allenRelationBitPattern'
-import should from 'should'
-import { stuffWithUndefined } from './_stuff'
-import { inspect } from 'util'
 
 interface PatternCase {
   name: string
