@@ -2,12 +2,10 @@ import {
   NR_OF_RELATIONS as BIT_PATTERN_NR_OF_RELATIONS,
   EMPTY_BIT_PATTERN,
   FULL_BIT_PATTERN,
-  PointIntervalRelationBitPattern,
   pointIntervalRelationBitPatterns,
   isBasicPointIntervalRelationBitPattern,
   basicPointIntervalRelationBitPatterns,
-  NR_OF_BITS,
-  numberToPointIntervalRelationBitPattern
+  NR_OF_BITS
 } from './pointIntervalRelationBitPattern'
 import assert from 'assert'
 import { Interval, isInterval } from './Interval'
@@ -65,13 +63,13 @@ export class PointIntervalRelation {
   /**
    * Only the 5 lowest bits are used. The other (32 - 5 = 27 bits) are 0.
    */
-  protected readonly bitPattern: PointIntervalRelationBitPattern
+  protected readonly bitPattern: number
 
   /**
    * There is only 1 constructor, that constructs the wrapper object
    * around the bitpattern. This is used exclusively in {@link VALUES} initialization code.
    */
-  protected constructor (bitPattern: PointIntervalRelationBitPattern) {
+  protected constructor (bitPattern: number) {
     assert(bitPattern >= EMPTY_BIT_PATTERN)
     assert(bitPattern <= FULL_BIT_PATTERN)
     this.bitPattern = bitPattern
@@ -297,11 +295,7 @@ export class PointIntervalRelation {
    */
   public static or (...gr: PointIntervalRelation[]): PointIntervalRelation {
     return BasicPointIntervalRelation.RELATIONS[
-      gr.reduce(
-        (acc: PointIntervalRelationBitPattern, grr): PointIntervalRelationBitPattern =>
-          numberToPointIntervalRelationBitPattern(acc | grr.bitPattern),
-        EMPTY_BIT_PATTERN
-      )
+      gr.reduce((acc: number, grr): number => acc | grr.bitPattern, EMPTY_BIT_PATTERN)
     ]
   }
 
@@ -314,11 +308,7 @@ export class PointIntervalRelation {
    */
   public static and (...gr: PointIntervalRelation[]): PointIntervalRelation {
     return BasicPointIntervalRelation.RELATIONS[
-      gr.reduce(
-        (acc: PointIntervalRelationBitPattern, grr: PointIntervalRelation): PointIntervalRelationBitPattern =>
-          numberToPointIntervalRelationBitPattern(acc & grr.bitPattern),
-        FULL_BIT_PATTERN
-      )
+      gr.reduce((acc: number, grr: PointIntervalRelation): number => acc & grr.bitPattern, FULL_BIT_PATTERN)
     ]
   }
 
@@ -485,7 +475,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
    * There is only 1 constructor, that constructs the wrapper object
    * around the bitpattern. This is used exclusively in {@link BASIC_RELATIONS} initialization code.
    */
-  private constructor (bitPattern: PointIntervalRelationBitPattern) {
+  private constructor (bitPattern: number) {
     assert(bitPattern >= EMPTY_BIT_PATTERN)
     assert(bitPattern <= FULL_BIT_PATTERN)
 

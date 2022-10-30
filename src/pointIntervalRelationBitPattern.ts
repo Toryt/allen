@@ -1,5 +1,3 @@
-import assert from 'assert'
-
 /**
  * The number of bits used in Point Interval Relation bit patterns.
  */
@@ -10,45 +8,30 @@ export const NR_OF_BITS = 5
  */
 export const NR_OF_RELATIONS: number = Math.pow(2, NR_OF_BITS)
 
-/**
- * See [Coding Adventure: PositiveNumber in TypeScript, Aleksey Kozin,
- * 2021-11-05](https://javascript.plainenglish.io/coding-adventure-positivenumber-in-typescript-8c642c17bc76).
- */
-export type PointIntervalRelationBitPattern = number & { __brand: 'PointIntervalRelationBitPattern' }
+export const EMPTY_BIT_PATTERN = 0 // 00000
+export const BEFORE_BIT_PATTERN = 1 // 00001 b
+export const COMMENCES_BIT_PATTERN = 2 // 00010 c
+export const IN_BIT_PATTERN = 4 // 00100 i
+export const TERMINATES_BIT_PATTERN = 8 // 01000 t
+export const AFTER_BIT_PATTERN = 16 // 10000 a
+export const FULL_BIT_PATTERN = 31 // 11111 bcita
 
-export function isPointIntervalRelationBitPattern (candidate: unknown): candidate is PointIntervalRelationBitPattern {
+export const basicPointIntervalRelationBitPatterns: readonly number[] = [...Array(NR_OF_BITS).keys()].map(nr =>
+  Math.pow(2, nr)
+)
+
+export const pointIntervalRelationBitPatterns: readonly number[] = [...Array(NR_OF_RELATIONS).keys()]
+
+export function isPointIntervalRelationBitPattern (candidate: unknown): candidate is number {
   return (
     typeof candidate === 'number' && Number.isInteger(candidate) && candidate >= 0 && candidate <= NR_OF_RELATIONS - 1
   )
 }
 
-export function numberToPointIntervalRelationBitPattern (n: number): PointIntervalRelationBitPattern {
-  assert(isPointIntervalRelationBitPattern(n))
-  return n
-}
-
-export const EMPTY_BIT_PATTERN = numberToPointIntervalRelationBitPattern(0) // 00000
-export const BEFORE_BIT_PATTERN = numberToPointIntervalRelationBitPattern(1) // 00001 b
-export const COMMENCES_BIT_PATTERN = numberToPointIntervalRelationBitPattern(2) // 00010 c
-export const IN_BIT_PATTERN = numberToPointIntervalRelationBitPattern(4) // 00100 i
-export const TERMINATES_BIT_PATTERN = numberToPointIntervalRelationBitPattern(8) // 01000 t
-export const AFTER_BIT_PATTERN = numberToPointIntervalRelationBitPattern(16) // 10000 a
-export const FULL_BIT_PATTERN = numberToPointIntervalRelationBitPattern(31) // 11111 bcita
-
-export const basicPointIntervalRelationBitPatterns: readonly PointIntervalRelationBitPattern[] = [
-  ...Array(NR_OF_BITS).keys()
-].map(nr => numberToPointIntervalRelationBitPattern(Math.pow(2, nr)))
-
-export const pointIntervalRelationBitPatterns: readonly PointIntervalRelationBitPattern[] = [
-  ...Array(NR_OF_RELATIONS).keys()
-].map(nr => numberToPointIntervalRelationBitPattern(nr))
-
 /**
  * A basic relation is expressed by a single bit in the bit pattern.
  */
-export function isBasicPointIntervalRelationBitPattern (
-  candidate: unknown
-): candidate is PointIntervalRelationBitPattern {
+export function isBasicPointIntervalRelationBitPattern (candidate: unknown): candidate is number {
   /* http://graphics.stanford.edu/~seander/bithacks.html
    * Determining if an integer is a power of 2
    * unsigned int v; // we want to see if v is a power of 2
