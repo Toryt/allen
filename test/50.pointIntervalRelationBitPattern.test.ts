@@ -6,13 +6,8 @@ import { inspect } from 'util'
 import {
   NR_OF_BITS,
   NR_OF_RELATIONS,
-  AFTER_BIT_PATTERN,
-  BEFORE_BIT_PATTERN,
-  COMMENCES_BIT_PATTERN,
   EMPTY_BIT_PATTERN,
-  TERMINATES_BIT_PATTERN,
   FULL_BIT_PATTERN,
-  IN_BIT_PATTERN,
   basicPointIntervalRelationBitPatterns,
   pointIntervalRelationBitPatterns,
   isPointIntervalRelationBitPattern,
@@ -25,11 +20,11 @@ interface PatternCase {
 }
 
 const basicPatterns: PatternCase[] = [
-  { name: 'BEFORE_BIT_PATTERN', value: BEFORE_BIT_PATTERN },
-  { name: 'COMMENCES_BIT_PATTERN', value: COMMENCES_BIT_PATTERN },
-  { name: 'IN_BIT_PATTERN', value: IN_BIT_PATTERN },
-  { name: 'TERMINATES_BIT_PATTERN', value: TERMINATES_BIT_PATTERN },
-  { name: 'AFTER_BIT_PATTERN', value: AFTER_BIT_PATTERN }
+  { name: 'BEFORE_BIT_PATTERN', value: 1 },
+  { name: 'COMMENCES_BIT_PATTERN', value: 2 },
+  { name: 'IN_BIT_PATTERN', value: 4 },
+  { name: 'TERMINATES_BIT_PATTERN', value: 8 },
+  { name: 'AFTER_BIT_PATTERN', value: 16 }
 ]
 
 describe('pointIntervalRelationBitPattern', function () {
