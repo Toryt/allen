@@ -56,17 +56,6 @@ export class AllenRelation {
    */
   protected readonly bitPattern: number
 
-  /**
-   * All possible time interval relations.
-   *
-   * @invar Array.isArray(VALUES)
-   * @invar VALUES.length = NR_OF_RELATIONS
-   * @invar VALUES.every(ar => ar instanceof TimeIntervalRelation)
-   * @invar VALUES.every((ar1, i1) => VALUES.every((ar2, i2) => i1 < i2 || ar1 !== ar2)
-   * @invar ∀ ar: !(ar instanceof TimeIntervalRelation) || VALUES.includes(ar)
-   */
-  static VALUES: readonly AllenRelation[] = allenRelationBitPatterns.map(bitPattern => new AllenRelation(bitPattern))
-
   protected constructor (bitpattern: number) {
     /**
      * Only the 13 lowest bits are used. The other (32 - 13 = 19 bits) are 0.
