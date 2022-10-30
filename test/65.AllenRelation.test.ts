@@ -96,7 +96,7 @@ describe('AllenRelation', function () {
       it('contains the exact amount of instances', function () {
         BasicAllenRelation.RELATIONS.length.should.equal(NR_OF_RELATIONS)
       })
-      it('contains only PointIntervalRelations', function () {
+      it('contains only AllenRelations', function () {
         BasicAllenRelation.RELATIONS.forEach(gr => {
           gr.should.be.instanceof(AllenRelation)
         })
