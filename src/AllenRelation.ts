@@ -21,6 +21,37 @@ import assert from 'assert'
 
 export type LetterAlias = 'p' | 'm' | 'o' | 'F' | 'D' | 's' | 'e' | 'S' | 'd' | 'f' | 'O' | 'M' | 'P'
 
+/**
+ * Support for reasoning about Allen relations, i.e., relations between intervals, and constraints on those relations.
+ *
+ * **We strongly advise to use this class when working with relations between intervals. Reasoning about relations
+ * between intervals is treacherously difficult.**
+ *
+ * ### About the code
+ *
+ * We have chosen to introduce a full-featured type for working with interval relations, although they are just bit
+ * patterns in essence, to make encapsulation as good as possible. This has a slight performance overhead, but we
+ * believe that this is worth it, considering the immense complexity of reasoning about relations between intervals.
+ *
+ * Allen relations follow the ‘8192-fold enumeration pattern’. All possible instances are created when this module is
+ * loaded, and it is impossible for a user to create new instances. This means that reference equality (‘`===`’) can be
+ * used to compare Allen relations. Instances are obtained using the constants this module offers, or using
+ *
+ * - the combination methods
+ *   - {@link or},
+ *   - {@link and},
+ *   - {@link min},
+ *   - {@link compose}, and // MUDO make instance method?
+ * - the unary method {@link complement}.
+ * // MUDO missing one!
+ *
+ * Basic Allen relations are instances of the subclass {@link BasicAllenRelation}. For technical reasons,
+ * {@link BasicAllenRelation.RELATIONS}, the lists all possible Allen relations, is a static property of that class, not
+ * this.
+ *
+ * All instance methods in this class are _O(1)_, i.e., work in constant time, and all static methods are _O(n)_, i.e.,
+ * work in linear time.
+ */
 export class AllenRelation {
   /**
    * All possible time interval relations.
