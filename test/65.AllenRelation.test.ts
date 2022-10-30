@@ -10,6 +10,7 @@ import {
   FULL
 } from '../src/AllenRelation'
 import 'should'
+import { generateRelationTests } from './_generateRelationTests'
 
 function testBasicRelation (name: string, br: BasicAllenRelation, ordinal: number, representation: string): void {
   describe(name, function () {
@@ -140,4 +141,26 @@ describe('AllenRelation', function () {
       })
     })
   })
+
+  generateRelationTests(
+    'AllenRelation',
+    NR_OF_BITS,
+    BasicAllenRelation,
+    [
+      { name: 'PRECEDES', basicRelation: BasicAllenRelation.PRECEDES, representation: 'p' },
+      { name: 'MEETS', basicRelation: BasicAllenRelation.MEETS, representation: 'm' },
+      { name: 'OVERLAPS', basicRelation: BasicAllenRelation.OVERLAPS, representation: 'o' },
+      { name: 'FINISHED_BY', basicRelation: BasicAllenRelation.FINISHED_BY, representation: 'F' },
+      { name: 'CONTAINS', basicRelation: BasicAllenRelation.CONTAINS, representation: 'D' },
+      { name: 'STARTS', basicRelation: BasicAllenRelation.STARTS, representation: 's' },
+      { name: 'EQUALS', basicRelation: BasicAllenRelation.EQUALS, representation: 'e' },
+      { name: 'STARTED_BY', basicRelation: BasicAllenRelation.STARTED_BY, representation: 'S' },
+      { name: 'DURING', basicRelation: BasicAllenRelation.DURING, representation: 'd' },
+      { name: 'FINISHES', basicRelation: BasicAllenRelation.FINISHES, representation: 'f' },
+      { name: 'OVERLAPPED_BY', basicRelation: BasicAllenRelation.OVERLAPPED_BY, representation: 'O' },
+      { name: 'MET_BY', basicRelation: BasicAllenRelation.MET_BY, representation: 'M' },
+      { name: 'PRECEDED_BY', basicRelation: BasicAllenRelation.PRECEDED_BY, representation: 'P' }
+    ],
+    AllenRelation
+  )
 })
