@@ -5,6 +5,7 @@ import { stuffWithUndefined } from './_stuff'
 import { inspect } from 'util'
 import {
   intervalIntervalRelationBitPatterns,
+  NR_OF_BITS,
   NR_OF_RELATIONS,
   PRECEDES_BIT_PATTERN,
   MEETS_BIT_PATTERN,
@@ -47,6 +48,15 @@ const basicPatterns: PatternCase[] = [
 ]
 
 describe('allenRelationBitPattern', function () {
+  describe('NR_OF_BITS', function () {
+    it('is an integer', function () {
+      NR_OF_BITS.should.be.a.Number()
+      Number.isInteger(NR_OF_BITS).should.be.true()
+    })
+    it('is 13', function () {
+      NR_OF_BITS.should.equal(13)
+    })
+  })
   describe('NR_OF_RELATIONS', function () {
     it('is an integer', function () {
       NR_OF_RELATIONS.should.be.a.Number()
