@@ -509,7 +509,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
   /**
    * All possible basic point – interval relations.
    *
-   * This is a basis for all point – interval relation.
+   * This is a _basis_ for all point – interval relation.
    *
    * ### Invariants
    *
