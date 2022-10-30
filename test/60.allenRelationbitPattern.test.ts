@@ -93,7 +93,7 @@ describe('allenRelationBitPattern', function () {
       })
     })
   })
-  describe('intervalIntervalRelationBitPatterns', function () {
+  describe('allenRelationBitPatterns', function () {
     it('is an array', function () {
       allenRelationBitPatterns.should.be.an.Array()
     })
