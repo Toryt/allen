@@ -456,9 +456,6 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
  */
 export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
 
-export const BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
-export type BasicPointIntervalRelationRepresentation = typeof BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[number]
-
 export class BasicPointIntervalRelation extends PointIntervalRelation {
   /**
    * ### Invariants
@@ -477,7 +474,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
     assert(bitPattern <= FULL_BIT_PATTERN)
 
     super(bitPattern)
-    this.representation = BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[this.ordinal()]
+    this.representation = BasicPointIntervalRelation.BASIC_REPRESENTATIONS[this.ordinal()]
   }
 
   /**
@@ -499,6 +496,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
     return Math.log2(this.bitPattern & -this.bitPattern)
   }
 
+  public static BASIC_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
   /**
    * @inheritDoc
    */
@@ -624,30 +622,36 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
         : new PointIntervalRelation(bitPattern)
     )
   )
+
+  /**
+   * This empty relation is not a true point – interval relation. It does not express a relational condition between
+   * points and intervals. Yet, it is needed for consistency with some operations on point – interval relations.
+   *
+   * ### Invariants
+   *
+   * ```
+   * BasicPointIntervalRelation.RELATIONS.every(gr => gr === EMPTY || !EMPTY.impliedBy(gr))
+   * ```
+   */
+  public static readonly EMPTY: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS[EMPTY_BIT_PATTERN]
+  // Bit pattern: 0 = '00000'
+
+  /**
+   * The full point – interval relation, which expresses that nothing definite can be said about the relation between a
+   * point and an interval.
+   *
+   * ### Invariants
+   *
+   * ```
+   * BasicPointIntervalRelation.RELATIONS.every(gr => FULL.impliedBy(gr))
+   * ```
+   */
+  public static readonly FULL: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS[FULL_BIT_PATTERN]
+  // Bit pattern: 31 = '11111'
 }
 
-/**
- * This empty relation is not a true point – interval relation. It does not express a relational condition between
- * points and intervals. Yet, it is needed for consistency with some operations on point – interval relations.
- *
- * ### Invariants
- *
- * ```
- * BasicPointIntervalRelation.RELATIONS.every(gr => gr === EMPTY || !EMPTY.impliedBy(gr))
- * ```
- */
-export const EMPTY: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS[EMPTY_BIT_PATTERN]
-// Bit pattern: 0 = '00000'
+export const BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS = BasicPointIntervalRelation.BASIC_REPRESENTATIONS
+export type BasicPointIntervalRelationRepresentation = typeof BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[number]
 
-/**
- * The full point – interval relation, which expresses that nothing definite can be said about the relation between a
- * point and an interval.
- *
- * ### Invariants
- *
- * ```
- * BasicPointIntervalRelation.RELATIONS.every(gr => FULL.impliedBy(gr))
- * ```
- */
-export const FULL: PointIntervalRelation = BasicPointIntervalRelation.RELATIONS[FULL_BIT_PATTERN]
-// Bit pattern: 31 = '11111'
+export const EMPTY = BasicPointIntervalRelation.EMPTY
+export const FULL = BasicPointIntervalRelation.FULL
