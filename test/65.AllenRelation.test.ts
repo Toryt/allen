@@ -49,6 +49,26 @@ describe('AllenRelation', function () {
       it('is an array', function () {
         BasicAllenRelation.BASIC_RELATIONS.should.be.an.Array()
       })
+      it('has 13 entries', function () {
+        BasicAllenRelation.BASIC_RELATIONS.length.should.equal(13)
+      })
+      it('contains only BasicAllenRelations', function () {
+        BasicAllenRelation.BASIC_RELATIONS.forEach(br => {
+          br.should.be.instanceof(BasicAllenRelation)
+        })
+      })
+      it('has no duplicates, and this is a basis', function () {
+        BasicAllenRelation.BASIC_RELATIONS.forEach((br1, i1) => {
+          BasicAllenRelation.BASIC_RELATIONS.forEach((br2, i2) => {
+            if (i1 < i2) {
+              br1.should.not.equal(br2)
+              // MUDO
+              // br1.implies(br2).should.be.false()
+              // br2.implies(br1).should.be.false()
+            }
+          })
+        })
+      })
     })
   })
   describe('VALUES', function () {
