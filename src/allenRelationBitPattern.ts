@@ -1,6 +1,11 @@
 import assert from 'assert'
 
 /**
+ * The number of bits used in Allen Relation bit patterns.
+ */
+export const NR_OF_BITS = 13
+
+/**
  * The total number of possible interval - interval relations **= 8192** * (i.e., <code>2<sup>13</sup></code>).
  *
  * @internal
