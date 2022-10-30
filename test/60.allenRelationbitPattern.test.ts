@@ -4,7 +4,8 @@ import should from 'should'
 import { stuffWithUndefined } from './_stuff'
 import { inspect } from 'util'
 import {
-  intervalIntervalRelationBitPatterns,
+  basicAllenRelationBitPatterns,
+  allenRelationBitPatterns,
   NR_OF_BITS,
   NR_OF_RELATIONS,
   PRECEDES_BIT_PATTERN,
@@ -79,22 +80,35 @@ describe('allenRelationBitPattern', function () {
       FULL_BIT_PATTERN.should.equal(NR_OF_RELATIONS - 1)
     })
   })
-  describe('intervalIntervalRelationBitPatterns', function () {
+  describe('basicAllenRelationBitPatterns', function () {
     it('is an array', function () {
-      intervalIntervalRelationBitPatterns.should.be.an.Array()
+      basicAllenRelationBitPatterns.should.be.an.Array()
     })
     it('contains the exact amount of numbers', function () {
-      intervalIntervalRelationBitPatterns.length.should.equal(NR_OF_RELATIONS)
+      basicAllenRelationBitPatterns.length.should.equal(NR_OF_BITS)
     })
     it('contains the pattern of the index at each location', function () {
-      intervalIntervalRelationBitPatterns.forEach((_, i) => {
-        should(intervalIntervalRelationBitPatterns[i]).equal(i)
+      basicAllenRelationBitPatterns.forEach((_, i) => {
+        should(basicAllenRelationBitPatterns[i]).equal(Math.pow(2, i))
+      })
+    })
+  })
+  describe('intervalIntervalRelationBitPatterns', function () {
+    it('is an array', function () {
+      allenRelationBitPatterns.should.be.an.Array()
+    })
+    it('contains the exact amount of numbers', function () {
+      allenRelationBitPatterns.length.should.equal(NR_OF_RELATIONS)
+    })
+    it('contains the pattern of the index at each location', function () {
+      allenRelationBitPatterns.forEach((_, i) => {
+        should(allenRelationBitPatterns[i]).equal(i)
       })
     })
   })
   describe('isIntervalIntervalRelationBitPattern', function () {
     it('returns true for all bit patterns', function () {
-      intervalIntervalRelationBitPatterns.forEach(bp => {
+      allenRelationBitPatterns.forEach(bp => {
         isIntervalIntervalRelationBitPattern(bp).should.be.true()
       })
     })
@@ -114,7 +128,7 @@ describe('allenRelationBitPattern', function () {
       })
     })
     it('returns false for all non-basic bit patterns', function () {
-      intervalIntervalRelationBitPatterns
+      allenRelationBitPatterns
         .filter(bp => !basicPatterns.map(bbp => bbp.value).includes(bp))
         .forEach(nonBasicBitPattern => {
           isBasicIntervalIntervalRelationBitPattern(nonBasicBitPattern).should.be.false()

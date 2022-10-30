@@ -73,10 +73,9 @@ export const PRECEDED_BY_BIT_PATTERN: number = 4096 // 1000000000000 P
  */
 export const FULL_BIT_PATTERN: number = 8191 // 1111111111111 pmoFDseSdfOMP
 
-/**
- * @internal
- */
-export const intervalIntervalRelationBitPatterns: readonly number[] = [...Array(NR_OF_RELATIONS).keys()]
+export const basicAllenRelationBitPatterns: readonly number[] = [...Array(NR_OF_BITS).keys()].map(nr => Math.pow(2, nr))
+
+export const allenRelationBitPatterns: readonly number[] = [...Array(NR_OF_RELATIONS).keys()]
 
 export function isIntervalIntervalRelationBitPattern (candidate: unknown): candidate is number {
   return (
