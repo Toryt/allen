@@ -67,17 +67,6 @@ export class AllenRelation {
    */
   static VALUES: readonly AllenRelation[] = allenRelationBitPatterns.map(bitPattern => new AllenRelation(bitPattern))
 
-  /**
-   * The full time interval relation, which expresses that nothing definite can be
-   * said about the relationship between 2 periods.
-   *
-   * The converse of this relation is the relation itself.
-   *
-   * @type {AllenRelation}
-   * @invar FULL === or(PRECEDES, MEETS, OVERLAPS, FINISHED_BY, CONTAINS, STARTS, EQUALS, STARTED_BY, DURING, FINISHES, OVERLAPPED_BY, MET_BY, PRECEDED_BY)
-   */
-  static readonly FULL: AllenRelation = AllenRelation.VALUES[FULL_BIT_PATTERN]
-
   protected constructor (bitpattern: number) {
     /**
      * Only the 13 lowest bits are used. The other (32 - 13 = 19 bits) are 0.
@@ -479,3 +468,33 @@ export class BasicAllenRelation extends AllenRelation {
     )
   )
 }
+
+/**
+ * This empty relation is not a true Allen relation. It does not express a relational condition between intervals. Yet,
+ * it is needed for consistency with some operations on Allen interval relations.
+ *
+ * The converse of this relation is the relation itself.
+ *
+ * ### Invariants
+ *
+ * ```
+ * BasicAllenRelation.RELATIONS.every(gr => gr === EMPTY || !EMPTY.impliedBy(gr))
+ * ```
+ */
+export const EMPTY: AllenRelation = BasicAllenRelation.RELATIONS[EMPTY_BIT_PATTERN]
+// Bit pattern: 0 = '0000000000000'
+
+/**
+ * The full Allen relation, which expresses that nothing definite can be said about the relation between 2 intervals.
+ *
+ * The converse of this relation is the relation itself.
+ *
+ * ### Invariants
+ *
+ * ```
+ * BasicAllenRelation.RELATIONS.every(gr => FULL.impliedBy(gr))
+ * FULL === or(PRECEDES, MEETS, OVERLAPS, FINISHED_BY, CONTAINS, STARTS, EQUALS, STARTED_BY, DURING, FINISHES, OVERLAPPED_BY, MET_BY, PRECEDED_BY)
+ * ```
+ */
+export const FULL: AllenRelation = BasicAllenRelation.RELATIONS[FULL_BIT_PATTERN]
+// Bit pattern: 31 = '11111'

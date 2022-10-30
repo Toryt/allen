@@ -5,7 +5,9 @@ import {
   NR_OF_RELATIONS,
   AllenRelation,
   BasicAllenRelation,
-  BASIC_ALLEN_RELATION_REPRESENTATIONS
+  BASIC_ALLEN_RELATION_REPRESENTATIONS,
+  EMPTY,
+  FULL
 } from '../src/AllenRelation'
 import 'should'
 
@@ -117,29 +119,24 @@ describe('AllenRelation', function () {
     })
   })
   describe('special relations', function () {
-    // describe('EMPTY', function () {
-    //   it('is an AllenRelation', function () {
-    //     AllenRelation.EMPTY.should.be.instanceof(AllenRelation)
-    //   })
-    // it('has bit pattern 0', function () {
-    //   AllenRelation.EMPTY.bitPattern.should.equal(EMPTY_BIT_PATTERN)
-    // })
-    // it('is not implied by anything', function () {
-    //   AllenRelation.VALUES.filter(ar => ar !== AllenRelation.EMPTY).forEach(ar => {
-    //     AllenRelation.EMPTY.impliedBy(ar).should.be.false()
-    //   })
-    // })
-  })
-  describe('FULL', function () {
-    it('is an AllenRelation', function () {
-      AllenRelation.FULL.should.be.instanceof(AllenRelation)
+    describe('EMPTY', function () {
+      it('is an AllenRelation', function () {
+        EMPTY.should.be.instanceof(AllenRelation)
+      })
+      it('is not implied by anything', function () {
+        BasicAllenRelation.RELATIONS.filter(ar => ar !== EMPTY).forEach(ar => {
+          EMPTY.impliedBy(ar).should.be.false()
+        })
+      })
     })
-    // it('has bit pattern 0', function () {
-    //   AllenRelation.FULL.bitPattern.should.equal(FULL_BIT_PATTERN)
-    // })
-    it('is implied by everything', function () {
-      AllenRelation.VALUES.forEach(ar => {
-        AllenRelation.FULL.impliedBy(ar).should.be.true()
+    describe('FULL', function () {
+      it('is an AllenRelation', function () {
+        FULL.should.be.instanceof(AllenRelation)
+      })
+      it('is implied by everything', function () {
+        BasicAllenRelation.RELATIONS.forEach(ar => {
+          FULL.impliedBy(ar).should.be.true()
+        })
       })
     })
   })
