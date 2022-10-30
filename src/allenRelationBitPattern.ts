@@ -5,8 +5,6 @@ export const NR_OF_BITS = 13
 
 /**
  * The total number of possible Allen relations **= 8192** * (i.e., <code>2<sup>13</sup></code>).
- *
- * @internal
  */
 export const NR_OF_RELATIONS: number = Math.pow(2, NR_OF_BITS)
 
