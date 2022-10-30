@@ -1,4 +1,5 @@
 import {
+  NR_OF_RELATIONS as BIT_PATTERN_NR_OF_RELATIONS,
   allenRelationBitPatterns,
   CONTAINS_BIT_PATTERN,
   DURING_BIT_PATTERN,
@@ -503,6 +504,12 @@ export class AllenRelation {
     return (this.bitPattern & gr.bitPattern) === gr.bitPattern
   }
 }
+
+/**
+ * The total number of possible Allen relations **= 8192**
+ * (i.e., <code>2<sup>13</sup></code>).
+ */
+export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
 
 // export const BASIC_ALLEN_RELATION_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
 // export type BasicAllenRelationRepresentation = typeof BASIC_ALLEN_RELATION_REPRESENTATIONS[number]

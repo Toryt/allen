@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
-import { BasicAllenRelation, AllenRelation } from '../src/AllenRelation'
-import { NR_OF_RELATIONS } from '../src/allenRelationBitPattern'
+import { NR_OF_RELATIONS as BITPATTERN_NR_OF_RELATIONS } from '../src/allenRelationBitPattern'
+import { NR_OF_RELATIONS, AllenRelation, BasicAllenRelation } from '../src/AllenRelation'
 import 'should'
 
 function testBasicRelation (
@@ -39,6 +39,11 @@ function testBasicRelation (
 }
 
 describe('AllenRelation', function () {
+  describe('NR_OF_RELATIONS', function () {
+    it('should pass through allenRelationBitPattern.NR_OF_RELATIONS', function () {
+      NR_OF_RELATIONS.should.equal(BITPATTERN_NR_OF_RELATIONS)
+    })
+  })
   describe('VALUES', function () {
     it('is an array', function () {
       AllenRelation.VALUES.should.be.an.Array()
