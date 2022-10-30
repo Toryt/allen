@@ -44,6 +44,13 @@ describe('AllenRelation', function () {
       NR_OF_RELATIONS.should.equal(BITPATTERN_NR_OF_RELATIONS)
     })
   })
+  describe('BasicAllenRelation', function () {
+    describe('BASIC_RELATIONS', function () {
+      it('is an array', function () {
+        BasicAllenRelation.BASIC_RELATIONS.should.be.an.Array()
+      })
+    })
+  })
   describe('VALUES', function () {
     it('is an array', function () {
       AllenRelation.VALUES.should.be.an.Array()

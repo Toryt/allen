@@ -16,7 +16,8 @@ import {
   PRECEDED_BY_BIT_PATTERN,
   PRECEDES_BIT_PATTERN,
   STARTED_BY_BIT_PATTERN,
-  STARTS_BIT_PATTERN
+  STARTS_BIT_PATTERN,
+  basicAllenRelationBitPatterns
 } from './allenRelationBitPattern'
 import assert from 'assert'
 
@@ -538,4 +539,25 @@ export class BasicAllenRelation extends AllenRelation {
     this.representation = BASIC_ALLEN_RELATION_REPRESENTATIONS[this.ordinal()]
     */
   }
+
+  /**
+   * All possible basic Allen relations.
+   *
+   * This is a _basis_ for all Allen relations.
+   *
+   * ### Invariants
+   *
+   * ```
+   * Array.isArray(BASIC_RELATIONS)
+   * BASIC_RELATIONS.length === 13
+   * BASIC_RELATIONS.every(br => br instanceof BasicAllenRelation)
+   * BASIC_RELATIONS.every((br1, i1) =>
+   *   BASIC_RELATIONS.every((br2, i2) => i2 <= i1 || br1 !== br2 && !br1.implies(br2) && !br2.implies(br1)))
+   * ```
+   *
+   * There are no other `BasicAllenRelation`s than the instances of this array.
+   */
+  public static readonly BASIC_RELATIONS: readonly BasicAllenRelation[] = Object.freeze(
+    basicAllenRelationBitPatterns.map(bitPattern => new BasicAllenRelation(bitPattern))
+  )
 }
