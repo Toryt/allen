@@ -77,7 +77,7 @@ export const basicAllenRelationBitPatterns: readonly number[] = [...Array(NR_OF_
 
 export const allenRelationBitPatterns: readonly number[] = [...Array(NR_OF_RELATIONS).keys()]
 
-export function isIntervalIntervalRelationBitPattern (candidate: unknown): candidate is number {
+export function isAllenRelationBitPattern (candidate: unknown): candidate is number {
   return (
     typeof candidate === 'number' && Number.isInteger(candidate) && candidate >= 0 && candidate <= NR_OF_RELATIONS - 1
   )
@@ -98,5 +98,5 @@ export function isBasicIntervalIntervalRelationBitPattern (candidate: unknown): 
    * Note that 0 is incorrectly considered a power of 2 here. To remedy this, use:
    * f = !(v & (v - 1)) && v;
    */
-  return isIntervalIntervalRelationBitPattern(candidate) && candidate !== 0 && (candidate & (candidate - 1)) === 0
+  return isAllenRelationBitPattern(candidate) && candidate !== 0 && (candidate & (candidate - 1)) === 0
 }

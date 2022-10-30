@@ -24,7 +24,7 @@ import {
   EMPTY_BIT_PATTERN,
   FULL_BIT_PATTERN,
   isBasicIntervalIntervalRelationBitPattern,
-  isIntervalIntervalRelationBitPattern
+  isAllenRelationBitPattern
 } from '../src/allenRelationBitPattern'
 
 interface PatternCase {
@@ -106,10 +106,10 @@ describe('allenRelationBitPattern', function () {
       })
     })
   })
-  describe('isIntervalIntervalRelationBitPattern', function () {
+  describe('isAllenRelationBitPattern', function () {
     it('returns true for all bit patterns', function () {
       allenRelationBitPatterns.forEach(bp => {
-        isIntervalIntervalRelationBitPattern(bp).should.be.true()
+        isAllenRelationBitPattern(bp).should.be.true()
       })
     })
 
@@ -117,7 +117,7 @@ describe('allenRelationBitPattern', function () {
       .filter(s => s !== 0 && s !== 1)
       .forEach(s => {
         it(`returns false for ${JSON.stringify(s)}`, function () {
-          isIntervalIntervalRelationBitPattern(s).should.be.false()
+          isAllenRelationBitPattern(s).should.be.false()
         })
       })
   })
