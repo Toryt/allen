@@ -233,6 +233,7 @@ export class BasicAllenRelation extends AllenRelation {
    * The converse of this relation is {@link PRECEDED_BY}.
    */
   static readonly PRECEDES: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[0]
+  // Bit pattern: 1 = '0000000000001'
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -250,6 +251,7 @@ export class BasicAllenRelation extends AllenRelation {
    * The converse of this relation is {@link MET_BY}.
    */
   static readonly MEETS: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[1]
+  // Bit pattern: 2 = '0000000000010'
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -269,6 +271,7 @@ export class BasicAllenRelation extends AllenRelation {
    * The converse of this relation is {@link OVERLAPPED_BY}.
    */
   static readonly OVERLAPS: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[2]
+  // Bit pattern: 4 = '0000000000100'
 
   /**
    * <A <strong>basic</strong> time interval relation that says that an interval
@@ -288,6 +291,7 @@ export class BasicAllenRelation extends AllenRelation {
    * The converse of this relation is {@link FINISHED_BY}.
    */
   static readonly FINISHED_BY: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[3]
+  // Bit pattern: 8 = '0000000001000'
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -307,6 +311,7 @@ export class BasicAllenRelation extends AllenRelation {
    * The converse of this relation is {@link DURING}.
    */
   static readonly CONTAINS: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[4]
+  // Bit pattern: 16 = '0000000010000'
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -326,6 +331,7 @@ export class BasicAllenRelation extends AllenRelation {
    * The converse of this relation is {@link STARTED_BY}.
    */
   static readonly STARTS: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[5]
+  // Bit pattern: 32 = '0000000100000'
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -345,6 +351,7 @@ export class BasicAllenRelation extends AllenRelation {
    * The converse of this relation is itself.
    */
   static readonly EQUALS: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[6]
+  // Bit pattern: 64 = '0000001000000'
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -364,6 +371,7 @@ export class BasicAllenRelation extends AllenRelation {
    * The converse of this relation is {@link STARTS}.
    */
   static readonly STARTED_BY: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[7]
+  // Bit pattern: 128 = '0000010000000'
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -383,6 +391,7 @@ export class BasicAllenRelation extends AllenRelation {
    * The converse of this relation is {@link CONTAINS}.
    */
   static readonly DURING: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[8]
+  // Bit pattern: 256 = '0000100000000'
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -402,6 +411,7 @@ export class BasicAllenRelation extends AllenRelation {
    * The converse of this relation is {@link FINISHES}.
    */
   static readonly FINISHES: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[9]
+  // Bit pattern: 512 = '0001000000000'
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -421,6 +431,7 @@ export class BasicAllenRelation extends AllenRelation {
    * The converse of this relation is {@link OVERLAPS}.
    */
   static readonly OVERLAPPED_BY: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[10]
+  // Bit pattern: 1024 = '0010000000000'
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -438,6 +449,7 @@ export class BasicAllenRelation extends AllenRelation {
    * The converse of this relation is {@link MEETS}.
    */
   static readonly MET_BY: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[11]
+  // Bit pattern: 2048 = '0100000000000'
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -455,4 +467,5 @@ export class BasicAllenRelation extends AllenRelation {
    * The converse of this relation is {@link PRECEDES}.
    */
   static readonly PRECEDED_BY: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[12]
+  // Bit pattern: 4069 = '1000000000000'
 }
