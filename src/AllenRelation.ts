@@ -21,7 +21,7 @@ import assert from 'assert'
 
 export type LetterAlias = 'p' | 'm' | 'o' | 'F' | 'D' | 's' | 'e' | 'S' | 'd' | 'f' | 'O' | 'M' | 'P'
 
-export class TimeIntervalRelation {
+export class AllenRelation {
   /**
    * All possible time interval relations.
    *
@@ -31,9 +31,7 @@ export class TimeIntervalRelation {
    * @invar VALUES.every((ar1, i1) => VALUES.every((ar2, i2) => i1 < i2 || ar1 !== ar2)
    * @invar ∀ ar: !(ar instanceof TimeIntervalRelation) || VALUES.includes(ar)
    */
-  static VALUES: readonly TimeIntervalRelation[] = allenRelationBitPatterns.map(
-    bitPattern => new TimeIntervalRelation(bitPattern)
-  )
+  static VALUES: readonly AllenRelation[] = allenRelationBitPatterns.map(bitPattern => new AllenRelation(bitPattern))
 
   /**
    * This empty relation is not a true time interval relation. It does not express a
@@ -42,10 +40,10 @@ export class TimeIntervalRelation {
    *
    * The converse of the empty relation is the empty relation itself.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    * @invar BASIC_RELATIONS.every(br = !EMPTY.impliedBy(br))
    */
-  static readonly EMPTY: TimeIntervalRelation = TimeIntervalRelation.VALUES[EMPTY_BIT_PATTERN]
+  static readonly EMPTY: AllenRelation = AllenRelation.VALUES[EMPTY_BIT_PATTERN]
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -62,12 +60,12 @@ export class TimeIntervalRelation {
    *
    * The converse of this relation is {@link #PRECEDED_BY}.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    */
-  static readonly PRECEDES: TimeIntervalRelation = TimeIntervalRelation.VALUES[PRECEDES_BIT_PATTERN]
+  static readonly PRECEDES: AllenRelation = AllenRelation.VALUES[PRECEDES_BIT_PATTERN]
 
-  static readonly p: TimeIntervalRelation = TimeIntervalRelation.PRECEDES
-  static readonly 'br-[[〈〈': TimeIntervalRelation = TimeIntervalRelation.PRECEDES
+  static readonly p: AllenRelation = AllenRelation.PRECEDES
+  static readonly 'br-[[〈〈': AllenRelation = AllenRelation.PRECEDES
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -84,12 +82,12 @@ export class TimeIntervalRelation {
    *
    * The converse of this relation is {@link #MET_BY}.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    */
-  static readonly MEETS: TimeIntervalRelation = TimeIntervalRelation.VALUES[MEETS_BIT_PATTERN]
+  static readonly MEETS: AllenRelation = AllenRelation.VALUES[MEETS_BIT_PATTERN]
 
-  static readonly m: TimeIntervalRelation = TimeIntervalRelation.MEETS
-  static readonly 'br-[《〈': TimeIntervalRelation = TimeIntervalRelation.MEETS
+  static readonly m: AllenRelation = AllenRelation.MEETS
+  static readonly 'br-[《〈': AllenRelation = AllenRelation.MEETS
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -108,12 +106,12 @@ export class TimeIntervalRelation {
    *
    * The converse of this relation is {@link #OVERLAPPED_BY}.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    */
-  static readonly OVERLAPS: TimeIntervalRelation = TimeIntervalRelation.VALUES[OVERLAPS_BIT_PATTERN]
+  static readonly OVERLAPS: AllenRelation = AllenRelation.VALUES[OVERLAPS_BIT_PATTERN]
 
-  static readonly o: TimeIntervalRelation = TimeIntervalRelation.OVERLAPS
-  static readonly 'br-[〈[〈': TimeIntervalRelation = TimeIntervalRelation.OVERLAPS
+  static readonly o: AllenRelation = AllenRelation.OVERLAPS
+  static readonly 'br-[〈[〈': AllenRelation = AllenRelation.OVERLAPS
 
   /**
    * <A <strong>basic</strong> time interval relation that says that an interval
@@ -132,12 +130,12 @@ export class TimeIntervalRelation {
    *
    * The converse of this relation is {@link #FINISHED_BY}.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    */
-  static readonly FINISHED_BY: TimeIntervalRelation = TimeIntervalRelation.VALUES[FINISHED_BY_BIT_PATTERN]
+  static readonly FINISHED_BY: AllenRelation = AllenRelation.VALUES[FINISHED_BY_BIT_PATTERN]
 
-  static readonly F: TimeIntervalRelation = TimeIntervalRelation.FINISHED_BY
-  static readonly 'br-[〈《': TimeIntervalRelation = TimeIntervalRelation.FINISHED_BY
+  static readonly F: AllenRelation = AllenRelation.FINISHED_BY
+  static readonly 'br-[〈《': AllenRelation = AllenRelation.FINISHED_BY
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -156,12 +154,12 @@ export class TimeIntervalRelation {
    *
    * The converse of this relation is {@link #DURING}.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    */
-  static readonly CONTAINS: TimeIntervalRelation = TimeIntervalRelation.VALUES[CONTAINS_BIT_PATTERN]
+  static readonly CONTAINS: AllenRelation = AllenRelation.VALUES[CONTAINS_BIT_PATTERN]
 
-  static readonly D: TimeIntervalRelation = TimeIntervalRelation.CONTAINS
-  static readonly 'br-[〈〈[': TimeIntervalRelation = TimeIntervalRelation.CONTAINS
+  static readonly D: AllenRelation = AllenRelation.CONTAINS
+  static readonly 'br-[〈〈[': AllenRelation = AllenRelation.CONTAINS
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -180,12 +178,12 @@ export class TimeIntervalRelation {
    *
    * The converse of this relation is {@link #STARTED_BY}.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    */
-  static readonly STARTS: TimeIntervalRelation = TimeIntervalRelation.VALUES[STARTS_BIT_PATTERN]
+  static readonly STARTS: AllenRelation = AllenRelation.VALUES[STARTS_BIT_PATTERN]
 
-  static readonly s: TimeIntervalRelation = TimeIntervalRelation.STARTS
-  static readonly 'br-《[〈': TimeIntervalRelation = TimeIntervalRelation.STARTS
+  static readonly s: AllenRelation = AllenRelation.STARTS
+  static readonly 'br-《[〈': AllenRelation = AllenRelation.STARTS
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -204,12 +202,12 @@ export class TimeIntervalRelation {
    *
    * The converse of this relation is itself.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    */
-  static readonly EQUALS: TimeIntervalRelation = TimeIntervalRelation.VALUES[EQUALS_BIT_PATTERN]
+  static readonly EQUALS: AllenRelation = AllenRelation.VALUES[EQUALS_BIT_PATTERN]
 
-  static readonly e: TimeIntervalRelation = TimeIntervalRelation.EQUALS
-  static readonly 'br-《《': TimeIntervalRelation = TimeIntervalRelation.EQUALS
+  static readonly e: AllenRelation = AllenRelation.EQUALS
+  static readonly 'br-《《': AllenRelation = AllenRelation.EQUALS
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -228,12 +226,12 @@ export class TimeIntervalRelation {
    *
    * The converse of this relation is {@link #STARTS}.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    */
-  static readonly STARTED_BY: TimeIntervalRelation = TimeIntervalRelation.VALUES[STARTED_BY_BIT_PATTERN]
+  static readonly STARTED_BY: AllenRelation = AllenRelation.VALUES[STARTED_BY_BIT_PATTERN]
 
-  static readonly S: TimeIntervalRelation = TimeIntervalRelation.STARTED_BY
-  static readonly 'br-《〈[': TimeIntervalRelation = TimeIntervalRelation.STARTED_BY
+  static readonly S: AllenRelation = AllenRelation.STARTED_BY
+  static readonly 'br-《〈[': AllenRelation = AllenRelation.STARTED_BY
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -252,12 +250,12 @@ export class TimeIntervalRelation {
    *
    * The converse of this relation is {@link #CONTAINS}.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    */
-  static readonly DURING: TimeIntervalRelation = TimeIntervalRelation.VALUES[DURING_BIT_PATTERN]
+  static readonly DURING: AllenRelation = AllenRelation.VALUES[DURING_BIT_PATTERN]
 
-  static readonly d: TimeIntervalRelation = TimeIntervalRelation.DURING
-  static readonly 'br-〈[[〈': TimeIntervalRelation = TimeIntervalRelation.DURING
+  static readonly d: AllenRelation = AllenRelation.DURING
+  static readonly 'br-〈[[〈': AllenRelation = AllenRelation.DURING
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -276,12 +274,12 @@ export class TimeIntervalRelation {
    *
    * The converse of this relation is {@link #FINISHES}.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    */
-  static readonly FINISHES: TimeIntervalRelation = TimeIntervalRelation.VALUES[FINISHES_BIT_PATTERN]
+  static readonly FINISHES: AllenRelation = AllenRelation.VALUES[FINISHES_BIT_PATTERN]
 
-  static readonly f: TimeIntervalRelation = TimeIntervalRelation.FINISHES
-  static readonly 'br-〈[《': TimeIntervalRelation = TimeIntervalRelation.FINISHES
+  static readonly f: AllenRelation = AllenRelation.FINISHES
+  static readonly 'br-〈[《': AllenRelation = AllenRelation.FINISHES
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -300,12 +298,12 @@ export class TimeIntervalRelation {
    * The conventional short representation of this Allen relation is &quot;<code><strong>O</strong></code>&quot;.
    * The converse of this relation is {@link #OVERLAPS}.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    */
-  static readonly OVERLAPPED_BY: TimeIntervalRelation = TimeIntervalRelation.VALUES[OVERLAPPED_BY_BIT_PATTERN]
+  static readonly OVERLAPPED_BY: AllenRelation = AllenRelation.VALUES[OVERLAPPED_BY_BIT_PATTERN]
 
-  static readonly O: TimeIntervalRelation = TimeIntervalRelation.OVERLAPPED_BY
-  static readonly 'br-〈[〈[': TimeIntervalRelation = TimeIntervalRelation.OVERLAPPED_BY
+  static readonly O: AllenRelation = AllenRelation.OVERLAPPED_BY
+  static readonly 'br-〈[〈[': AllenRelation = AllenRelation.OVERLAPPED_BY
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -322,12 +320,12 @@ export class TimeIntervalRelation {
    *
    * The converse of this relation is {@link #MEETS}.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    */
-  static readonly MET_BY: TimeIntervalRelation = TimeIntervalRelation.VALUES[MET_BY_BIT_PATTERN]
+  static readonly MET_BY: AllenRelation = AllenRelation.VALUES[MET_BY_BIT_PATTERN]
 
-  static readonly M: TimeIntervalRelation = TimeIntervalRelation.MET_BY
-  static readonly 'br-〈《[': TimeIntervalRelation = TimeIntervalRelation.MET_BY
+  static readonly M: AllenRelation = AllenRelation.MET_BY
+  static readonly 'br-〈《[': AllenRelation = AllenRelation.MET_BY
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -344,12 +342,12 @@ export class TimeIntervalRelation {
    *
    * The converse of this relation is {@link #PRECEDES}.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    */
-  static readonly PRECEDED_BY: TimeIntervalRelation = TimeIntervalRelation.VALUES[PRECEDED_BY_BIT_PATTERN]
+  static readonly PRECEDED_BY: AllenRelation = AllenRelation.VALUES[PRECEDED_BY_BIT_PATTERN]
 
-  static readonly P: TimeIntervalRelation = TimeIntervalRelation.PRECEDED_BY
-  static readonly 'br-〈〈[[': TimeIntervalRelation = TimeIntervalRelation.PRECEDED_BY
+  static readonly P: AllenRelation = AllenRelation.PRECEDED_BY
+  static readonly 'br-〈〈[[': AllenRelation = AllenRelation.PRECEDED_BY
 
   /**
    * The full time interval relation, which expresses that nothing definite can be
@@ -357,10 +355,10 @@ export class TimeIntervalRelation {
    *
    * The converse of this relation is the relation itself.
    *
-   * @type {TimeIntervalRelation}
+   * @type {AllenRelation}
    * @invar FULL === or(PRECEDES, MEETS, OVERLAPS, FINISHED_BY, CONTAINS, STARTS, EQUALS, STARTED_BY, DURING, FINISHES, OVERLAPPED_BY, MET_BY, PRECEDED_BY)
    */
-  static readonly FULL: TimeIntervalRelation = TimeIntervalRelation.VALUES[FULL_BIT_PATTERN]
+  static readonly FULL: AllenRelation = AllenRelation.VALUES[FULL_BIT_PATTERN]
 
   // noinspection GrazieInspection
   /**
@@ -373,7 +371,7 @@ export class TimeIntervalRelation {
    * before the second (<var><code>I1</code></var><code>.end [&lt;, ==, &gt;]
    * <var>I2</var>.end</code>).
    *
-   * @type {TimeIntervalRelation[]}
+   * @type {AllenRelation[]}
    * @invar BASIC_RELATIONS.length = 13
    * @invar BASIC_RELATIONS.every(br => BASIC_RELATIONS[br.basicRelationOrdinal()] === br)
    * @invar BASIC_RELATIONS[ 0] == PRECEDES
@@ -390,20 +388,20 @@ export class TimeIntervalRelation {
    * @invar BASIC_RELATIONS[11] == MET_BY
    * @invar BASIC_RELATIONS[12] == PRECEDED_BY
    */
-  static readonly BASIC_RELATIONS: readonly TimeIntervalRelation[] = [
-    TimeIntervalRelation.PRECEDES,
-    TimeIntervalRelation.MEETS,
-    TimeIntervalRelation.OVERLAPS,
-    TimeIntervalRelation.FINISHED_BY,
-    TimeIntervalRelation.CONTAINS,
-    TimeIntervalRelation.STARTS,
-    TimeIntervalRelation.EQUALS,
-    TimeIntervalRelation.STARTED_BY,
-    TimeIntervalRelation.DURING,
-    TimeIntervalRelation.FINISHES,
-    TimeIntervalRelation.OVERLAPPED_BY,
-    TimeIntervalRelation.MET_BY,
-    TimeIntervalRelation.PRECEDED_BY
+  static readonly BASIC_RELATIONS: readonly AllenRelation[] = [
+    AllenRelation.PRECEDES,
+    AllenRelation.MEETS,
+    AllenRelation.OVERLAPS,
+    AllenRelation.FINISHED_BY,
+    AllenRelation.CONTAINS,
+    AllenRelation.STARTS,
+    AllenRelation.EQUALS,
+    AllenRelation.STARTED_BY,
+    AllenRelation.DURING,
+    AllenRelation.FINISHES,
+    AllenRelation.OVERLAPPED_BY,
+    AllenRelation.MET_BY,
+    AllenRelation.PRECEDED_BY
   ]
 
   public readonly bitPattern: number
@@ -456,7 +454,7 @@ export class TimeIntervalRelation {
    * @invar VALUES.every(gr => this.impliedBy(gr) === BASIC_RELATIONS.every(br => !gr.impliedBy(br) || this.impliedBy(br)))
    * @return {boolean}
    */
-  impliedBy (gr: TimeIntervalRelation): boolean {
+  impliedBy (gr: AllenRelation): boolean {
     return (this.bitPattern & gr.bitPattern) === gr.bitPattern
   }
 }

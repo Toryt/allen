@@ -2,15 +2,15 @@
 
 const { intervalIntervalRelationBitPatterns: bitPatterns } = require('../src/intervalIntervalRelationBitPattern')
 const {
-  TimeIntervalRelation,
-  TimeIntervalRelation: { VALUES, BASIC_RELATIONS }
+  AllenRelation,
+  AllenRelation: { VALUES, BASIC_RELATIONS }
 } = require('../src/TimeIntervalRelation')
 
 describe('TimeIntervalRelation', function () {
   describe('constructor', function () {
     it('constructs for all bit patterns', function () {
       bitPatterns.forEach(value => {
-        const result = new TimeIntervalRelation(value)
+        const result = new AllenRelation(value)
         result.bitPattern.should.equal(value)
       })
     })
