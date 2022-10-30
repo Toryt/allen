@@ -60,7 +60,7 @@ describe('PointIntervalRelation', function () {
       it('has 5 entries', function () {
         BasicPointIntervalRelation.BASIC_RELATIONS.length.should.equal(5)
       })
-      it('contains only BasicPointIntervalRelation', function () {
+      it('contains only BasicPointIntervalRelations', function () {
         BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br => {
           br.should.be.instanceof(BasicPointIntervalRelation)
         })
