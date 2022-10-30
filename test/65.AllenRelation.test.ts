@@ -98,17 +98,17 @@ describe('AllenRelation', function () {
           gr.should.be.instanceof(AllenRelation)
         })
       })
-      /* IDEA This iterates 67 108 864 times, which takes over 5 minutes. Try to find a better solution
       it('does not contain duplicates', function () {
-        BasicAllenRelation.RELATIONS.forEach((gr1, i1) => {
-          BasicAllenRelation.RELATIONS.forEach((gr2, i2) => {
-            if (i1 < i2) {
-              gr1.should.not.equal(gr2)
-            }
-          })
+        /* IDEA A naive implementation iterates 67 108 864 times, and takes several minutes. This is optimized using a
+           Set. */
+        const gathering = new Set<AllenRelation>()
+
+        BasicAllenRelation.RELATIONS.forEach((gr, i) => {
+          gathering.size.should.equal(i)
+          gathering.has(gr).should.be.false()
+          gathering.add(gr)
         })
       })
-      */
       it('contains all basic relations', function () {
         BasicAllenRelation.BASIC_RELATIONS.forEach(br => {
           BasicAllenRelation.RELATIONS.includes(br)
