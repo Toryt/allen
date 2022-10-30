@@ -455,4 +455,27 @@ export class BasicAllenRelation extends AllenRelation {
    */
   static readonly PRECEDED_BY: BasicAllenRelation = BasicAllenRelation.BASIC_RELATIONS[12]
   // Bit pattern: 4069 = '1000000000000'
+
+  /**
+   * All possible Allen relations.
+   *
+   * ### Invariants
+   *
+   * ```
+   * Array.isArray(RELATIONS)
+   * RELATIONS.length === NR_OF_RELATIONS
+   * RELATIONS.every(gr => gr instanceof AllenRelation)
+   * RELATIONS.every((gr1, i1) => RELATIONS.every((gr2, i2) => i2 <= i1 || gr1 !== gr2))
+   * BASIC_RELATIONS.every(br => RELATIONS.includes(br))
+   * ```
+   *
+   * There are no other `AllenRelation`s than the instances of this array.
+   */
+  public static readonly RELATIONS: readonly AllenRelation[] = Object.freeze(
+    allenRelationBitPatterns.map(bitPattern =>
+      isBasicAllenRelationBitPattern(bitPattern)
+        ? BasicAllenRelation.BASIC_RELATIONS[Math.log2(bitPattern & -bitPattern)]
+        : new AllenRelation(bitPattern)
+    )
+  )
 }

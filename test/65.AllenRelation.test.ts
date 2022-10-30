@@ -86,26 +86,35 @@ describe('AllenRelation', function () {
     testBasicRelation('OVERLAPPED_BY', BasicAllenRelation.OVERLAPPED_BY, 10, 'O')
     testBasicRelation('MET_BY', BasicAllenRelation.MET_BY, 11, 'M')
     testBasicRelation('PRECEDED_BY', BasicAllenRelation.PRECEDED_BY, 12, 'P')
-  })
-  describe('VALUES', function () {
-    it('is an array', function () {
-      AllenRelation.VALUES.should.be.an.Array()
-    })
-    it('contains the exact amount of instances', function () {
-      AllenRelation.VALUES.length.should.equal(NR_OF_RELATIONS)
-    })
-    it('contains only TimeIntervalRelations', function () {
-      AllenRelation.VALUES.forEach(ar => {
-        ar.should.be.instanceof(AllenRelation)
+    describe('RELATIONS', function () {
+      it('is an array', function () {
+        BasicAllenRelation.RELATIONS.should.be.an.Array()
+      })
+      it('contains the exact amount of instances', function () {
+        BasicAllenRelation.RELATIONS.length.should.equal(NR_OF_RELATIONS)
+      })
+      it('contains only PointIntervalRelations', function () {
+        BasicAllenRelation.RELATIONS.forEach(gr => {
+          gr.should.be.instanceof(AllenRelation)
+        })
+      })
+      /* IDEA This iterates 67 108 864 times, which takes over 5 minutes. Try to find a better solution
+      it('does not contain duplicates', function () {
+        BasicAllenRelation.RELATIONS.forEach((gr1, i1) => {
+          BasicAllenRelation.RELATIONS.forEach((gr2, i2) => {
+            if (i1 < i2) {
+              gr1.should.not.equal(gr2)
+            }
+          })
+        })
+      })
+      */
+      it('contains all basic relations', function () {
+        BasicAllenRelation.BASIC_RELATIONS.forEach(br => {
+          BasicAllenRelation.RELATIONS.includes(br)
+        })
       })
     })
-    // MUDO
-    // it('does not contain duplicates', function () {
-    //   // optimized to avoid quadratic time
-    //   VALUES.forEach((ar, i) => {
-    //     ar.bitPattern.should.equal(i)
-    //   })
-    // })
   })
   describe('special relations', function () {
     // describe('EMPTY', function () {
