@@ -53,6 +53,22 @@ export type LetterAlias = 'p' | 'm' | 'o' | 'F' | 'D' | 's' | 'e' | 'S' | 'd' | 
  * work in linear time.
  */
 export class AllenRelation {
+  /* Implementation note:
+
+     Allen relations are implemented as a 13-bit bit pattern, stored in the 13 least significant bits of an integer
+     number.
+
+     Each of those 13 bits represents a basic relation, being in the general relation (`1`) or not being in the general
+     relation (`0`), where the relation is thought of as a set of basic relations.
+
+     The order of the basic relations in the bit pattern is important for some algorithms. There is some trickery
+     involved. */
+
+  /**
+   * Only the 5 lowest bits are used. The other (32 - 5 = 27 bits) are 0.
+   */
+  protected readonly bitPattern: number
+
   /**
    * All possible time interval relations.
    *
@@ -435,9 +451,7 @@ export class AllenRelation {
     AllenRelation.PRECEDED_BY
   ]
 
-  public readonly bitPattern: number
-
-  private constructor (bitpattern: number) {
+  protected constructor (bitpattern: number) {
     /**
      * Only the 13 lowest bits are used. The other (32 - 13 = 19 bits) are 0.
      */
@@ -487,5 +501,34 @@ export class AllenRelation {
    */
   impliedBy (gr: AllenRelation): boolean {
     return (this.bitPattern & gr.bitPattern) === gr.bitPattern
+  }
+}
+
+// export const BASIC_ALLEN_RELATION_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
+// export type BasicAllenRelationRepresentation = typeof BASIC_ALLEN_RELATION_REPRESENTATIONS[number]
+
+export class BasicAllenRelation extends AllenRelation {
+  /* MUDO
+/-*
+ * ### Invariants
+ *
+ * ```
+ * this.representation === BASIC_ALLEN_RELATION_REPRESENTATIONS[this.ordinal()]
+ *-/
+  public readonly representation: BasicAllenRelationRepresentation
+*/
+
+  /**
+   * There is only 1 constructor, that constructs the wrapper object
+   * around the bitpattern. This is used exclusively in {@link BASIC_RELATIONS} initialization code.
+   */
+  private constructor (bitPattern: number) {
+    assert(bitPattern >= EMPTY_BIT_PATTERN)
+    assert(bitPattern <= FULL_BIT_PATTERN)
+
+    super(bitPattern)
+    /* MUDO
+    this.representation = BASIC_ALLEN_RELATION_REPRESENTATIONS[this.ordinal()]
+    */
   }
 }

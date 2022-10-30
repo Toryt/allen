@@ -1,46 +1,40 @@
 /* eslint-env mocha */
 
-import { LetterAlias, AllenRelation } from '../src/AllenRelation'
-import {
-  CONTAINS_BIT_PATTERN,
-  DURING_BIT_PATTERN,
-  EMPTY_BIT_PATTERN,
-  EQUALS_BIT_PATTERN,
-  FINISHED_BY_BIT_PATTERN,
-  FINISHES_BIT_PATTERN,
-  FULL_BIT_PATTERN,
-  MEETS_BIT_PATTERN,
-  MET_BY_BIT_PATTERN,
-  NR_OF_RELATIONS,
-  OVERLAPPED_BY_BIT_PATTERN,
-  OVERLAPS_BIT_PATTERN,
-  PRECEDED_BY_BIT_PATTERN,
-  PRECEDES_BIT_PATTERN,
-  STARTED_BY_BIT_PATTERN,
-  STARTS_BIT_PATTERN
-} from '../src/allenRelationBitPattern'
+import { BasicAllenRelation, AllenRelation } from '../src/AllenRelation'
+import { NR_OF_RELATIONS } from '../src/allenRelationBitPattern'
 import 'should'
 
 function testBasicRelation (
   name: string,
-  br: AllenRelation,
-  bp: number,
-  visualAlias: AllenRelation,
-  letterAlias: LetterAlias
+  br: BasicAllenRelation,
+  ordinal: unknown /* MUDO */,
+  representation: string
 ): void {
   describe(name, function () {
-    it('is a TimeIntervalRelation', function () {
-      br.should.be.instanceof(AllenRelation)
+    // MUDO
+    console.log(ordinal, representation)
+    it('is a BasicAllenRelation', function () {
+      br.should.be.instanceof(BasicAllenRelation)
     })
-    it('has the expected bit pattern', function () {
-      br.bitPattern.should.equal(bp)
-    })
-    it('has the correct visual alias', function () {
-      visualAlias.should.equal(br)
-    })
-    it(`has ${letterAlias} as letter alias`, function () {
-      AllenRelation[letterAlias].should.equal(br)
-    })
+    // it(`has ${ordinal} as ordinal`, function () {
+    //   br.ordinal().should.equal(ordinal)
+    // })
+    // it('has an integer ordinal [0, 13[', function () {
+    //   const o = br.ordinal()
+    //   Number.isInteger(o).should.be.true()
+    //   o.should.be.greaterThanOrEqual(0)
+    //   o.should.be.lessThan(NR_OF_BITS)
+    // })
+    // it(`has ${BASIC_ALLEN_RELATION_REPRESENTATIONS[ordinal]} as representation`, function () {
+    //   br.representation.should.equal(BASIC_ALLEN_RELATION_REPRESENTATIONS[ordinal])
+    // })
+    // it('is in BASIC_RELATIONS at the position of its ordinal', function () {
+    //   BasicAllenRelation.BASIC_RELATIONS[br.ordinal()].should.equal(br)
+    // })
+    // it(`has '${representation}' as representation`, function () {
+    //   br.representation.should.equal(representation)
+    //   br.representation.should.equal(BASIC_ALLEN_RELATION_REPRESENTATIONS[br.ordinal()])
+    // })
   })
 }
 
@@ -67,50 +61,38 @@ describe('AllenRelation', function () {
   })
   describe('special relations', function () {
     describe('EMPTY', function () {
-      it('is a TimeIntervalRelation', function () {
+      it('is an AllenRelation', function () {
         AllenRelation.EMPTY.should.be.instanceof(AllenRelation)
       })
-      it('has bit pattern 0', function () {
-        AllenRelation.EMPTY.bitPattern.should.equal(EMPTY_BIT_PATTERN)
-      })
+      // it('has bit pattern 0', function () {
+      //   AllenRelation.EMPTY.bitPattern.should.equal(EMPTY_BIT_PATTERN)
+      // })
       it('is not implied by anything', function () {
         AllenRelation.VALUES.filter(ar => ar !== AllenRelation.EMPTY).forEach(ar => {
           AllenRelation.EMPTY.impliedBy(ar).should.be.false()
         })
       })
     })
-    testBasicRelation('PRECEDES', AllenRelation.PRECEDES, PRECEDES_BIT_PATTERN, AllenRelation['br-[[〈〈'], 'p')
-    testBasicRelation('MEETS', AllenRelation.MEETS, MEETS_BIT_PATTERN, AllenRelation['br-[《〈'], 'm')
-    testBasicRelation('OVERLAPS', AllenRelation.OVERLAPS, OVERLAPS_BIT_PATTERN, AllenRelation['br-[〈[〈'], 'o')
-    testBasicRelation('FINISHED_BY', AllenRelation.FINISHED_BY, FINISHED_BY_BIT_PATTERN, AllenRelation['br-[〈《'], 'F')
-    testBasicRelation('CONTAINS', AllenRelation.CONTAINS, CONTAINS_BIT_PATTERN, AllenRelation['br-[〈〈['], 'D')
-    testBasicRelation('STARTS', AllenRelation.STARTS, STARTS_BIT_PATTERN, AllenRelation['br-《[〈'], 's')
-    testBasicRelation('EQUALS', AllenRelation.EQUALS, EQUALS_BIT_PATTERN, AllenRelation['br-《《'], 'e')
-    testBasicRelation('STARTED_BY', AllenRelation.STARTED_BY, STARTED_BY_BIT_PATTERN, AllenRelation['br-《〈['], 'S')
-    testBasicRelation('DURING', AllenRelation.DURING, DURING_BIT_PATTERN, AllenRelation['br-〈[[〈'], 'd')
-    testBasicRelation('FINISHES', AllenRelation.FINISHES, FINISHES_BIT_PATTERN, AllenRelation['br-〈[《'], 'f')
-    testBasicRelation(
-      'OVERLAPPED_BY',
-      AllenRelation.OVERLAPPED_BY,
-      OVERLAPPED_BY_BIT_PATTERN,
-      AllenRelation['br-〈[〈['],
-      'O'
-    )
-    testBasicRelation('MET_BY', AllenRelation.MET_BY, MET_BY_BIT_PATTERN, AllenRelation['br-〈《['], 'M')
-    testBasicRelation(
-      'PRECEDED_BY',
-      AllenRelation.PRECEDED_BY,
-      PRECEDED_BY_BIT_PATTERN,
-      AllenRelation['br-〈〈[['],
-      'P'
-    )
+    testBasicRelation('PRECEDES', AllenRelation.PRECEDES, AllenRelation['br-[[〈〈'], 'p')
+    testBasicRelation('MEETS', AllenRelation.MEETS, AllenRelation['br-[《〈'], 'm')
+    testBasicRelation('OVERLAPS', AllenRelation.OVERLAPS, AllenRelation['br-[〈[〈'], 'o')
+    testBasicRelation('FINISHED_BY', AllenRelation.FINISHED_BY, AllenRelation['br-[〈《'], 'F')
+    testBasicRelation('CONTAINS', AllenRelation.CONTAINS, AllenRelation['br-[〈〈['], 'D')
+    testBasicRelation('STARTS', AllenRelation.STARTS, AllenRelation['br-《[〈'], 's')
+    testBasicRelation('EQUALS', AllenRelation.EQUALS, AllenRelation['br-《《'], 'e')
+    testBasicRelation('STARTED_BY', AllenRelation.STARTED_BY, AllenRelation['br-《〈['], 'S')
+    testBasicRelation('DURING', AllenRelation.DURING, AllenRelation['br-〈[[〈'], 'd')
+    testBasicRelation('FINISHES', AllenRelation.FINISHES, AllenRelation['br-〈[《'], 'f')
+    testBasicRelation('OVERLAPPED_BY', AllenRelation.OVERLAPPED_BY, AllenRelation['br-〈[〈['], 'O')
+    testBasicRelation('MET_BY', AllenRelation.MET_BY, AllenRelation['br-〈《['], 'M')
+    testBasicRelation('PRECEDED_BY', AllenRelation.PRECEDED_BY, AllenRelation['br-〈〈[['], 'P')
     describe('FULL', function () {
-      it('is a TimeIntervalRelation', function () {
+      it('is an AllenRelation', function () {
         AllenRelation.FULL.should.be.instanceof(AllenRelation)
       })
-      it('has bit pattern 0', function () {
-        AllenRelation.FULL.bitPattern.should.equal(FULL_BIT_PATTERN)
-      })
+      // it('has bit pattern 0', function () {
+      //   AllenRelation.FULL.bitPattern.should.equal(FULL_BIT_PATTERN)
+      // })
       it('is implied by everything', function () {
         AllenRelation.VALUES.forEach(ar => {
           AllenRelation.FULL.impliedBy(ar).should.be.true()
