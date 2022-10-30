@@ -628,7 +628,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
 
 /**
  * This empty relation is not a true point – interval relation. It does not express a relational condition between
- * intervals. Yet, it is needed for consistency with some operations on point – interval relations.
+ * points and intervals. Yet, it is needed for consistency with some operations on point – interval relations.
  *
  * ### Invariants
  *
