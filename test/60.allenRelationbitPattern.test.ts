@@ -8,19 +8,6 @@ import {
   allenRelationBitPatterns,
   NR_OF_BITS,
   NR_OF_RELATIONS,
-  PRECEDES_BIT_PATTERN,
-  MEETS_BIT_PATTERN,
-  OVERLAPS_BIT_PATTERN,
-  FINISHED_BY_BIT_PATTERN,
-  CONTAINS_BIT_PATTERN,
-  STARTS_BIT_PATTERN,
-  EQUALS_BIT_PATTERN,
-  STARTED_BY_BIT_PATTERN,
-  DURING_BIT_PATTERN,
-  FINISHES_BIT_PATTERN,
-  OVERLAPPED_BY_BIT_PATTERN,
-  MET_BY_BIT_PATTERN,
-  PRECEDED_BY_BIT_PATTERN,
   EMPTY_BIT_PATTERN,
   FULL_BIT_PATTERN,
   isBasicAllenRelationBitPattern,
@@ -33,19 +20,19 @@ interface PatternCase {
 }
 
 const basicPatterns: PatternCase[] = [
-  { name: 'PRECEDES_BIT_PATTERN', value: PRECEDES_BIT_PATTERN },
-  { name: 'MEETS_BIT_PATTERN', value: MEETS_BIT_PATTERN },
-  { name: 'OVERLAPS_BIT_PATTERN', value: OVERLAPS_BIT_PATTERN },
-  { name: 'FINISHED_BY_BIT_PATTERN', value: FINISHED_BY_BIT_PATTERN },
-  { name: 'CONTAINS_BIT_PATTERN', value: CONTAINS_BIT_PATTERN },
-  { name: 'STARTS_BIT_PATTERN', value: STARTS_BIT_PATTERN },
-  { name: 'EQUALS_BIT_PATTERN', value: EQUALS_BIT_PATTERN },
-  { name: 'STARTED_BY_BIT_PATTERN', value: STARTED_BY_BIT_PATTERN },
-  { name: 'DURING_BIT_PATTERN', value: DURING_BIT_PATTERN },
-  { name: 'FINISHES_BIT_PATTERN', value: FINISHES_BIT_PATTERN },
-  { name: 'OVERLAPPED_BY_BIT_PATTERN', value: OVERLAPPED_BY_BIT_PATTERN },
-  { name: 'MET_BY_BIT_PATTERN', value: MET_BY_BIT_PATTERN },
-  { name: 'PRECEDED_BY_BIT_PATTERN', value: PRECEDED_BY_BIT_PATTERN }
+  { name: 'PRECEDES_BIT_PATTERN', value: 1 },
+  { name: 'MEETS_BIT_PATTERN', value: 2 },
+  { name: 'OVERLAPS_BIT_PATTERN', value: 4 },
+  { name: 'FINISHED_BY_BIT_PATTERN', value: 8 },
+  { name: 'CONTAINS_BIT_PATTERN', value: 16 },
+  { name: 'STARTS_BIT_PATTERN', value: 32 },
+  { name: 'EQUALS_BIT_PATTERN', value: 64 },
+  { name: 'STARTED_BY_BIT_PATTERN', value: 128 },
+  { name: 'DURING_BIT_PATTERN', value: 256 },
+  { name: 'FINISHES_BIT_PATTERN', value: 512 },
+  { name: 'OVERLAPPED_BY_BIT_PATTERN', value: 1024 },
+  { name: 'MET_BY_BIT_PATTERN', value: 2048 },
+  { name: 'PRECEDED_BY_BIT_PATTERN', value: 4096 }
 ]
 
 describe('allenRelationBitPattern', function () {
