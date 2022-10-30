@@ -180,6 +180,25 @@ export class BasicAllenRelation extends AllenRelation {
   }
 
   /**
+   * An ordinal for basic relations (zero-based).
+   *
+   * ### Invariants
+   *
+   * ```
+   * BASIC_RELATIONS[this.ordinal()] === this
+   * ```
+   */
+  public ordinal (): number {
+    /*
+     * This is the bit position, 0-based, in the 5-bit bit pattern, of the bit
+     * representing this as basic relation.
+     *
+     * See https://www.geeksforgeeks.org/position-of-rightmost-set-bit/
+     */
+    return Math.log2(this.bitPattern & -this.bitPattern)
+  }
+
+  /**
    * All possible basic Allen relations.
    *
    * This is a _basis_ for all Allen relations.

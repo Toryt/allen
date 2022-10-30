@@ -1,36 +1,31 @@
 /* eslint-env mocha */
 
-import { NR_OF_RELATIONS as BITPATTERN_NR_OF_RELATIONS } from '../src/allenRelationBitPattern'
+import { NR_OF_BITS, NR_OF_RELATIONS as BITPATTERN_NR_OF_RELATIONS } from '../src/allenRelationBitPattern'
 import { NR_OF_RELATIONS, AllenRelation, BasicAllenRelation } from '../src/AllenRelation'
 import 'should'
 
-function testBasicRelation (
-  name: string,
-  br: BasicAllenRelation,
-  ordinal: unknown /* MUDO */,
-  representation: string
-): void {
+function testBasicRelation (name: string, br: BasicAllenRelation, ordinal: number, representation: string): void {
   describe(name, function () {
     // MUDO
-    console.log(ordinal, representation)
+    console.log(representation)
     it('is a BasicAllenRelation', function () {
       br.should.be.instanceof(BasicAllenRelation)
     })
-    // it(`has ${ordinal} as ordinal`, function () {
-    //   br.ordinal().should.equal(ordinal)
-    // })
-    // it('has an integer ordinal [0, 13[', function () {
-    //   const o = br.ordinal()
-    //   Number.isInteger(o).should.be.true()
-    //   o.should.be.greaterThanOrEqual(0)
-    //   o.should.be.lessThan(NR_OF_BITS)
-    // })
+    it(`has ${ordinal} as ordinal`, function () {
+      br.ordinal().should.equal(ordinal)
+    })
+    it('has an integer ordinal [0, 13[', function () {
+      const o = br.ordinal()
+      Number.isInteger(o).should.be.true()
+      o.should.be.greaterThanOrEqual(0)
+      o.should.be.lessThan(NR_OF_BITS)
+    })
     // it(`has ${BASIC_ALLEN_RELATION_REPRESENTATIONS[ordinal]} as representation`, function () {
     //   br.representation.should.equal(BASIC_ALLEN_RELATION_REPRESENTATIONS[ordinal])
     // })
-    // it('is in BASIC_RELATIONS at the position of its ordinal', function () {
-    //   BasicAllenRelation.BASIC_RELATIONS[br.ordinal()].should.equal(br)
-    // })
+    it('is in BASIC_RELATIONS at the position of its ordinal', function () {
+      BasicAllenRelation.BASIC_RELATIONS[br.ordinal()].should.equal(br)
+    })
     // it(`has '${representation}' as representation`, function () {
     //   br.representation.should.equal(representation)
     //   br.representation.should.equal(BASIC_ALLEN_RELATION_REPRESENTATIONS[br.ordinal()])
@@ -69,11 +64,11 @@ describe('AllenRelation', function () {
           })
         })
       })
-      // it('has the basic relation at the position of its ordinal', function () {
-      //   BasicAllenRelation.BASIC_RELATIONS.forEach((br, i) => {
-      //     br.ordinal().should.equal(i)
-      //   })
-      // })
+      it('has the basic relation at the position of its ordinal', function () {
+        BasicAllenRelation.BASIC_RELATIONS.forEach((br, i) => {
+          br.ordinal().should.equal(i)
+        })
+      })
     })
     testBasicRelation('PRECEDES', BasicAllenRelation.PRECEDES, 0, 'p')
     testBasicRelation('MEETS', BasicAllenRelation.MEETS, 1, 'm')
