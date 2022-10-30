@@ -69,7 +69,25 @@ describe('AllenRelation', function () {
           })
         })
       })
+      // it('has the basic relation at the position of its ordinal', function () {
+      //   BasicAllenRelation.BASIC_RELATIONS.forEach((br, i) => {
+      //     br.ordinal().should.equal(i)
+      //   })
+      // })
     })
+    testBasicRelation('PRECEDES', BasicAllenRelation.PRECEDES, 0, 'p')
+    testBasicRelation('MEETS', BasicAllenRelation.MEETS, 1, 'm')
+    testBasicRelation('OVERLAPS', BasicAllenRelation.OVERLAPS, 2, 'o')
+    testBasicRelation('FINISHED_BY', BasicAllenRelation.FINISHED_BY, 3, 'F')
+    testBasicRelation('CONTAINS', BasicAllenRelation.CONTAINS, 4, 'D')
+    testBasicRelation('STARTS', BasicAllenRelation.STARTS, 5, 's')
+    testBasicRelation('EQUALS', BasicAllenRelation.EQUALS, 6, 'e')
+    testBasicRelation('STARTED_BY', BasicAllenRelation.STARTED_BY, 7, 'S')
+    testBasicRelation('DURING', BasicAllenRelation.DURING, 8, 'd')
+    testBasicRelation('FINISHES', BasicAllenRelation.FINISHES, 9, 'f')
+    testBasicRelation('OVERLAPPED_BY', BasicAllenRelation.OVERLAPPED_BY, 10, 'O')
+    testBasicRelation('MET_BY', BasicAllenRelation.MET_BY, 11, 'M')
+    testBasicRelation('PRECEDED_BY', BasicAllenRelation.PRECEDED_BY, 12, 'P')
   })
   describe('VALUES', function () {
     it('is an array', function () {
@@ -92,62 +110,29 @@ describe('AllenRelation', function () {
     // })
   })
   describe('special relations', function () {
-    describe('EMPTY', function () {
-      it('is an AllenRelation', function () {
-        AllenRelation.EMPTY.should.be.instanceof(AllenRelation)
-      })
-      // it('has bit pattern 0', function () {
-      //   AllenRelation.EMPTY.bitPattern.should.equal(EMPTY_BIT_PATTERN)
-      // })
-      it('is not implied by anything', function () {
-        AllenRelation.VALUES.filter(ar => ar !== AllenRelation.EMPTY).forEach(ar => {
-          AllenRelation.EMPTY.impliedBy(ar).should.be.false()
-        })
-      })
-    })
-    testBasicRelation('PRECEDES', AllenRelation.PRECEDES, AllenRelation['br-[[〈〈'], 'p')
-    testBasicRelation('MEETS', AllenRelation.MEETS, AllenRelation['br-[《〈'], 'm')
-    testBasicRelation('OVERLAPS', AllenRelation.OVERLAPS, AllenRelation['br-[〈[〈'], 'o')
-    testBasicRelation('FINISHED_BY', AllenRelation.FINISHED_BY, AllenRelation['br-[〈《'], 'F')
-    testBasicRelation('CONTAINS', AllenRelation.CONTAINS, AllenRelation['br-[〈〈['], 'D')
-    testBasicRelation('STARTS', AllenRelation.STARTS, AllenRelation['br-《[〈'], 's')
-    testBasicRelation('EQUALS', AllenRelation.EQUALS, AllenRelation['br-《《'], 'e')
-    testBasicRelation('STARTED_BY', AllenRelation.STARTED_BY, AllenRelation['br-《〈['], 'S')
-    testBasicRelation('DURING', AllenRelation.DURING, AllenRelation['br-〈[[〈'], 'd')
-    testBasicRelation('FINISHES', AllenRelation.FINISHES, AllenRelation['br-〈[《'], 'f')
-    testBasicRelation('OVERLAPPED_BY', AllenRelation.OVERLAPPED_BY, AllenRelation['br-〈[〈['], 'O')
-    testBasicRelation('MET_BY', AllenRelation.MET_BY, AllenRelation['br-〈《['], 'M')
-    testBasicRelation('PRECEDED_BY', AllenRelation.PRECEDED_BY, AllenRelation['br-〈〈[['], 'P')
-    describe('FULL', function () {
-      it('is an AllenRelation', function () {
-        AllenRelation.FULL.should.be.instanceof(AllenRelation)
-      })
-      // it('has bit pattern 0', function () {
-      //   AllenRelation.FULL.bitPattern.should.equal(FULL_BIT_PATTERN)
-      // })
-      it('is implied by everything', function () {
-        AllenRelation.VALUES.forEach(ar => {
-          AllenRelation.FULL.impliedBy(ar).should.be.true()
-        })
-      })
-    })
+    // describe('EMPTY', function () {
+    //   it('is an AllenRelation', function () {
+    //     AllenRelation.EMPTY.should.be.instanceof(AllenRelation)
+    //   })
+    // it('has bit pattern 0', function () {
+    //   AllenRelation.EMPTY.bitPattern.should.equal(EMPTY_BIT_PATTERN)
+    // })
+    // it('is not implied by anything', function () {
+    //   AllenRelation.VALUES.filter(ar => ar !== AllenRelation.EMPTY).forEach(ar => {
+    //     AllenRelation.EMPTY.impliedBy(ar).should.be.false()
+    //   })
+    // })
   })
-  describe('BASIC_RELATIONS', function () {
-    it('is an array', function () {
-      AllenRelation.BASIC_RELATIONS.should.be.an.Array()
+  describe('FULL', function () {
+    it('is an AllenRelation', function () {
+      AllenRelation.FULL.should.be.instanceof(AllenRelation)
     })
-    it('has 13 entries', function () {
-      // MUDO generalize 13
-      AllenRelation.BASIC_RELATIONS.length.should.equal(13)
-    })
-    it('contains only TimeIntervalRelations', function () {
-      AllenRelation.BASIC_RELATIONS.forEach(ar => {
-        ar.should.be.instanceof(AllenRelation)
-      })
-    })
-    it('has the basic relation at the position of its ordinal', function () {
-      AllenRelation.BASIC_RELATIONS.forEach(br => {
-        AllenRelation.BASIC_RELATIONS[br.basicRelationOrdinal()].should.equal(br)
+    // it('has bit pattern 0', function () {
+    //   AllenRelation.FULL.bitPattern.should.equal(FULL_BIT_PATTERN)
+    // })
+    it('is implied by everything', function () {
+      AllenRelation.VALUES.forEach(ar => {
+        AllenRelation.FULL.impliedBy(ar).should.be.true()
       })
     })
   })
