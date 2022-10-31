@@ -473,14 +473,6 @@ export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
 
 export class BasicPointIntervalRelation extends PointIntervalRelation {
   /**
-   * ### Invariants
-   *
-   * ```
-   * this.representation === BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[this.ordinal()]
-   */
-  public readonly representation: BasicPointIntervalRelationRepresentation
-
-  /**
    * There is only 1 constructor, that constructs the wrapper object
    * around the bitpattern. This is used exclusively in {@link BASIC_RELATIONS} initialization code.
    */
@@ -489,7 +481,6 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
     assert(bitPattern <= FULL_BIT_PATTERN)
 
     super(bitPattern)
-    this.representation = BasicPointIntervalRelation.BASIC_REPRESENTATIONS[this.ordinal()]
   }
 
   public static BASIC_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)

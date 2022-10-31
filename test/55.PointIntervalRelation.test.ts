@@ -36,15 +36,12 @@ function testBasicRelation (
     it('reports as a basic PointIntervalRelation', function () {
       br.isBasic().should.be.true()
     })
-    it(`has ${BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[ordinal]} as representation`, function () {
-      br.representation.should.equal(BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[ordinal])
-    })
     it('is in BASIC_RELATIONS at the position of its ordinal', function () {
       BasicPointIntervalRelation.BASIC_RELATIONS[br.ordinal()].should.equal(br)
     })
     it(`has '${representation}' as representation`, function () {
-      br.representation.should.equal(representation)
-      br.representation.should.equal(BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[br.ordinal()])
+      br.toString().should.equal(`(${representation})`)
+      br.toString().should.equal(`(${BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[ordinal]})`)
     })
   })
 }
@@ -151,7 +148,7 @@ describe('PointIntervalRelation', function () {
       EMPTY.uncertainty().should.be.NaN()
     })
     BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br => {
-      it(`returns 0 for ${br.representation}`, function () {
+      it(`returns 0 for ${br.toString()}`, function () {
         br.uncertainty().should.equal(0)
       })
     })
@@ -184,15 +181,15 @@ describe('PointIntervalRelation', function () {
     BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br1 => {
       BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br2 => {
         if (br1 !== br2) {
-          it(`${br1.representation} is not implied by ${br2.representation}`, function () {
+          it(`${br1.toString()} is not implied by ${br2.toString()}`, function () {
             br1.impliedBy(br2).should.be.false()
           })
         }
       })
-      it(`${br1.representation} is implied by EMPTY`, function () {
+      it(`${br1.toString()} is implied by EMPTY`, function () {
         br1.impliedBy(EMPTY).should.be.true()
       })
-      it(`${br1.representation} is not implied by FULL`, function () {
+      it(`${br1.toString()} is not implied by FULL`, function () {
         br1.impliedBy(FULL).should.be.false()
       })
     })
@@ -215,15 +212,15 @@ describe('PointIntervalRelation', function () {
     BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br1 => {
       BasicPointIntervalRelation.BASIC_RELATIONS.forEach(br2 => {
         if (br1 !== br2) {
-          it(`${br1.representation} does not imply ${br2.representation}`, function () {
+          it(`${br1.toString()} does not imply ${br2.toString()}`, function () {
             br1.implies(br2).should.be.false()
           })
         }
       })
-      it(`${br1.representation} does not imply EMPTY`, function () {
+      it(`${br1.toString()} does not imply EMPTY`, function () {
         br1.implies(EMPTY).should.be.false()
       })
-      it(`${br1.representation} implies FULL`, function () {
+      it(`${br1.toString()} implies FULL`, function () {
         br1.implies(FULL).should.be.true()
       })
     })
