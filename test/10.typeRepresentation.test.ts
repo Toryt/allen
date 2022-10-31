@@ -126,8 +126,6 @@ describe('typeRepresentation', function () {
       typeRepresentations.forEach(ptr => {
         it(`returns true for ${inspect(ptr)}`, function () {
           isTypeRepresentation(ptr).should.be.true()
-          const typed: TypeRepresentation = ptr
-          console.log(typed)
         })
       })
     })
@@ -135,9 +133,6 @@ describe('typeRepresentation', function () {
       idiotTypeRepresentations.forEach(iptr => {
         it(`returns false for ${inspect(iptr)}`, function () {
           isTypeRepresentation(iptr).should.be.false()
-          // @ts-expect-error
-          const typed: TypeRepresentation = iptr
-          console.log(typed)
         })
       })
     })
