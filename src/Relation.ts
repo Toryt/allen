@@ -1,11 +1,11 @@
 export interface Relation {
-  impliedBy(gr: this): boolean
-  implies(gr: this): boolean
+  impliedBy: (gr: this) => boolean
+  implies: (gr: this) => boolean
 }
 
 export interface BasicRelation<BRR extends string> extends Relation {
   readonly representation: BRR
-  ordinal(): number
+  ordinal: () => number
 }
 
 export type RepresentationOf<BR extends BasicRelation<string>> = BR['representation']

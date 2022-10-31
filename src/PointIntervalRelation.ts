@@ -12,6 +12,7 @@ import { Interval, isInterval } from './Interval'
 import { Comparator } from './comparator'
 import { commonTypeRepresentation } from './typeRepresentation'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
+import { BasicRelation } from './Relation'
 
 const haveCommonType: string = 't, i.start and i.end must be of a common type'
 
@@ -456,7 +457,8 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
  */
 export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
 
-export class BasicPointIntervalRelation extends PointIntervalRelation {
+export class BasicPointIntervalRelation extends PointIntervalRelation
+  implements BasicRelation<BasicPointIntervalRelationRepresentation> {
   /**
    * ### Invariants
    *

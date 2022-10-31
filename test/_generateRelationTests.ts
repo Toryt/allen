@@ -11,9 +11,9 @@ export function generateRelationTests<R extends Relation, BRR extends string, BR
   relationName: string,
   NR_OF_BITS: number,
   BasicRelationConstructor: BasicRelationConstructor<R, BRR, BR>,
-  basicRelationExpectations: BasicRelationExpectations<BRR, BR>[],
+  basicRelationExpectations: Array<BasicRelationExpectations<BRR, BasicRelation<BRR>>>,
   RelationConstructor: Function
-) {
+): void {
   const expectedNumberOfRelations: number = Math.pow(2, NR_OF_BITS)
   const BASIC_REPRESENTATIONS: readonly BRR[] = BasicRelationConstructor.BASIC_REPRESENTATIONS
   const BASIC_RELATIONS: readonly BR[] = BasicRelationConstructor.BASIC_RELATIONS
@@ -32,7 +32,7 @@ export function generateRelationTests<R extends Relation, BRR extends string, BR
         it(`has ${NR_OF_BITS} entries`, function () {
           BASIC_RELATIONS.length.should.equal(NR_OF_BITS)
         })
-        it('contains only Basic${relationName}', function () {
+        it(`contains only Basic${relationName}`, function () {
           BASIC_RELATIONS.forEach(br => {
             br.should.be.instanceof(BasicRelationConstructor)
           })
@@ -59,7 +59,7 @@ export function generateRelationTests<R extends Relation, BRR extends string, BR
           basicRelationExpectations.length.should.equal(NR_OF_BITS)
         })
         basicRelationExpectations.forEach(
-          ({ name, basicRelation, representation }: BasicRelationExpectations<BRR, BR>, i: number) => {
+          ({ name, basicRelation, representation }: BasicRelationExpectations<BRR, BasicRelation<BRR>>, i: number) => {
             describe(name, function () {
               it(`is a Basic${relationName}`, function () {
                 basicRelation.should.be.instanceof(BasicRelationConstructor)
@@ -73,7 +73,7 @@ export function generateRelationTests<R extends Relation, BRR extends string, BR
                 o.should.be.greaterThanOrEqual(0)
                 o.should.be.lessThan(NR_OF_BITS)
               })
-              it(`has ${BASIC_REPRESENTATIONS[i]} as representation`, function () {
+              it(`has ${BASIC_REPRESENTATIONS[i] as string} as representation`, function () {
                 basicRelation.representation.should.equal(BASIC_REPRESENTATIONS[i])
               })
               it('is in BASIC_RELATIONS at the position of its ordinal', function () {
