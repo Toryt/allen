@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 
-import { NR_OF_BITS, NR_OF_RELATIONS as BITPATTERN_NR_OF_RELATIONS } from '../src/pointIntervalRelationBitPattern'
-import { NR_OF_RELATIONS, PointIntervalRelation } from '../src/PointIntervalRelation'
 import 'should'
+import { NR_OF_BITS } from '../src/pointIntervalRelationBitPattern'
+import { PointIntervalRelation } from '../src/PointIntervalRelation'
 import { Interval } from '../src/Interval'
 import { inspect } from 'util'
 import { intervalToString } from './_intervalToString'
+import { nrOfRelations } from '../lib/relationBitPattern'
 
 function testBasicRelation (name: string, br: PointIntervalRelation, ordinal: number, representation: string): void {
   describe(name, function () {
@@ -32,11 +33,6 @@ function testBasicRelation (name: string, br: PointIntervalRelation, ordinal: nu
 }
 
 describe('PointIntervalRelation', function () {
-  describe('NR_OF_RELATIONS', function () {
-    it('should pass through pointIntervalRelationBitPattern.NR_OF_RELATIONS', function () {
-      NR_OF_RELATIONS.should.equal(BITPATTERN_NR_OF_RELATIONS)
-    })
-  })
   describe('BasicPointIntervalRelation', function () {
     describe('BASIC_RELATIONS', function () {
       it('is an array', function () {
@@ -77,7 +73,7 @@ describe('PointIntervalRelation', function () {
         PointIntervalRelation.RELATIONS.should.be.an.Array()
       })
       it('contains the exact amount of instances', function () {
-        PointIntervalRelation.RELATIONS.length.should.equal(NR_OF_RELATIONS)
+        PointIntervalRelation.RELATIONS.length.should.equal(nrOfRelations(PointIntervalRelation.NR_OF_BITS))
       })
       it('contains only PointIntervalRelations, which report as !isBasic and has NaN as ordinal, unless they are basic', function () {
         PointIntervalRelation.RELATIONS.forEach(gr => {
@@ -107,21 +103,25 @@ describe('PointIntervalRelation', function () {
   describe('special relations', function () {
     describe('EMPTY', function () {
       it('is a PointIntervalRelation', function () {
-        PointIntervalRelation.EMPTY.should.be.instanceof(PointIntervalRelation)
+        PointIntervalRelation.emptyRelation().should.be.instanceof(PointIntervalRelation)
       })
       it('is not implied by anything', function () {
-        PointIntervalRelation.RELATIONS.filter(gr => gr !== PointIntervalRelation.EMPTY).forEach(gr => {
-          PointIntervalRelation.EMPTY.impliedBy(gr).should.be.false()
+        PointIntervalRelation.RELATIONS.filter(gr => gr !== PointIntervalRelation.emptyRelation()).forEach(gr => {
+          PointIntervalRelation.emptyRelation()
+            .impliedBy(gr)
+            .should.be.false()
         })
       })
     })
     describe('FULL', function () {
       it('is a PointIntervalRelation', function () {
-        PointIntervalRelation.FULL.should.be.instanceof(PointIntervalRelation)
+        PointIntervalRelation.fullRelation().should.be.instanceof(PointIntervalRelation)
       })
       it('is implied by everything', function () {
         PointIntervalRelation.RELATIONS.forEach(gr => {
-          PointIntervalRelation.FULL.impliedBy(gr).should.be.true()
+          PointIntervalRelation.fullRelation()
+            .impliedBy(gr)
+            .should.be.true()
         })
       })
     })
@@ -130,7 +130,9 @@ describe('PointIntervalRelation', function () {
   // ordinal is a basic inspector, and cannot be tested sensibly in isolation, but is tested as invariant
   describe('#uncertainty', function () {
     it('returns NaN for EMPTY', function () {
-      PointIntervalRelation.EMPTY.uncertainty().should.be.NaN()
+      PointIntervalRelation.emptyRelation()
+        .uncertainty()
+        .should.be.NaN()
     })
     PointIntervalRelation.BASIC_RELATIONS.forEach(br => {
       it(`returns 0 for ${br.toString()}`, function () {
@@ -138,11 +140,13 @@ describe('PointIntervalRelation', function () {
       })
     })
     it('returns 1 for FULL', function () {
-      PointIntervalRelation.FULL.uncertainty().should.equal(1)
+      PointIntervalRelation.fullRelation()
+        .uncertainty()
+        .should.equal(1)
     })
 
     PointIntervalRelation.RELATIONS.forEach(gr => {
-      if (gr !== PointIntervalRelation.EMPTY) {
+      if (gr !== PointIntervalRelation.emptyRelation()) {
         const expected =
           PointIntervalRelation.BASIC_RELATIONS.reduce((acc, br) => (br.implies(gr) ? acc + 1 : acc), -1) / 4
         it(`${gr.toString()} has uncertainty ${expected}`, function () {
@@ -153,13 +157,17 @@ describe('PointIntervalRelation', function () {
   })
   describe('#impliedBy', function () {
     PointIntervalRelation.RELATIONS.forEach(gr => {
-      if (gr === PointIntervalRelation.EMPTY) {
+      if (gr === PointIntervalRelation.emptyRelation()) {
         it('EMPTY is implied by itself', function () {
-          PointIntervalRelation.EMPTY.impliedBy(gr).should.be.true()
+          PointIntervalRelation.emptyRelation()
+            .impliedBy(gr)
+            .should.be.true()
         })
       } else {
         it(`EMPTY is not implied by ${gr.toString()}`, function () {
-          PointIntervalRelation.EMPTY.impliedBy(gr).should.be.false()
+          PointIntervalRelation.emptyRelation()
+            .impliedBy(gr)
+            .should.be.false()
         })
       }
     })
@@ -172,10 +180,10 @@ describe('PointIntervalRelation', function () {
         }
       })
       it(`${br1.toString()} is implied by EMPTY`, function () {
-        br1.impliedBy(PointIntervalRelation.EMPTY).should.be.true()
+        br1.impliedBy(PointIntervalRelation.emptyRelation()).should.be.true()
       })
       it(`${br1.toString()} is not implied by FULL`, function () {
-        br1.impliedBy(PointIntervalRelation.FULL).should.be.false()
+        br1.impliedBy(PointIntervalRelation.fullRelation()).should.be.false()
       })
     })
     PointIntervalRelation.RELATIONS.forEach(gr1 => {
@@ -191,7 +199,9 @@ describe('PointIntervalRelation', function () {
   describe('#implies', function () {
     PointIntervalRelation.RELATIONS.forEach(gr => {
       it(`EMPTY implies ${gr.toString()}`, function () {
-        PointIntervalRelation.EMPTY.implies(gr).should.be.true()
+        PointIntervalRelation.emptyRelation()
+          .implies(gr)
+          .should.be.true()
       })
     })
     PointIntervalRelation.BASIC_RELATIONS.forEach(br1 => {
@@ -203,10 +213,10 @@ describe('PointIntervalRelation', function () {
         }
       })
       it(`${br1.toString()} does not imply EMPTY`, function () {
-        br1.implies(PointIntervalRelation.EMPTY).should.be.false()
+        br1.implies(PointIntervalRelation.emptyRelation()).should.be.false()
       })
       it(`${br1.toString()} implies FULL`, function () {
-        br1.implies(PointIntervalRelation.FULL).should.be.true()
+        br1.implies(PointIntervalRelation.fullRelation()).should.be.true()
       })
     })
     PointIntervalRelation.RELATIONS.forEach(gr1 => {
@@ -257,11 +267,11 @@ describe('PointIntervalRelation', function () {
     })
     it('the or of all basic point relations is FULL', function () {
       const result = PointIntervalRelation.or(...PointIntervalRelation.BASIC_RELATIONS)
-      result.should.equal(PointIntervalRelation.FULL)
+      result.should.equal(PointIntervalRelation.fullRelation())
     })
     it('the or of all point relations is FULL', function () {
       const result = PointIntervalRelation.or(...PointIntervalRelation.RELATIONS)
-      result.should.equal(PointIntervalRelation.FULL)
+      result.should.equal(PointIntervalRelation.fullRelation())
     })
   })
   describe('and', function () {
@@ -278,11 +288,11 @@ describe('PointIntervalRelation', function () {
     })
     it('the and of all basic point relations is EMPTY', function () {
       const result = PointIntervalRelation.and(...PointIntervalRelation.BASIC_RELATIONS)
-      result.should.equal(PointIntervalRelation.EMPTY)
+      result.should.equal(PointIntervalRelation.emptyRelation())
     })
     it('the and of all point relations is EMPTY', function () {
       const result = PointIntervalRelation.and(...PointIntervalRelation.RELATIONS)
-      result.should.equal(PointIntervalRelation.EMPTY)
+      result.should.equal(PointIntervalRelation.emptyRelation())
     })
   })
   describe('fromString', function () {
@@ -324,11 +334,11 @@ describe('PointIntervalRelation', function () {
         })
         it('returns FULL for `undefined`', function () {
           const result = callIt(undefined, interval)
-          result.should.equal(PointIntervalRelation.FULL)
+          result.should.equal(PointIntervalRelation.fullRelation())
         })
         it('returns FULL for `null`', function () {
           const result = callIt(null, interval)
-          result.should.equal(PointIntervalRelation.FULL)
+          result.should.equal(PointIntervalRelation.fullRelation())
         })
       })
     }
