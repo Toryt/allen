@@ -493,12 +493,6 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
   }
 
   public static BASIC_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
-  /**
-   * @inheritDoc
-   */
-  public toString (): string {
-    return `(${this.representation})`
-  }
 
   /**
    * All possible basic point – interval relations.
