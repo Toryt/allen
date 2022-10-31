@@ -7,7 +7,7 @@ import {
   nrOfRelations
 } from './relationBitPattern'
 
-export interface RelationConstructor<R extends Relation<any>> extends Function {
+export interface RelationConstructor<R extends Relation> extends Function {
   /**
    * ### Invariants
    *
@@ -16,7 +16,7 @@ export interface RelationConstructor<R extends Relation<any>> extends Function {
    * 0 <= NR_OF_BITS
    * ```
    */
-  readonly NR_OF_BITS: NrOfBits<R>
+  readonly NR_OF_BITS: number
 
   readonly BASIC_REPRESENTATIONS: readonly string[]
 
@@ -130,8 +130,6 @@ export interface RelationConstructor<R extends Relation<any>> extends Function {
   readonly fromString: (s: string) => R
 }
 
-export type NrOfBits<R> = R extends Relation<infer NR_OF_BITS> ? NR_OF_BITS : never
-
 /**
  * Support for reasoning about relations, and constraints on those relations.
  *
@@ -163,7 +161,7 @@ export type NrOfBits<R> = R extends Relation<infer NR_OF_BITS> ? NR_OF_BITS : ne
  * Create a subclass for a specific type of `Relation`. In that class, add all properties of {@link RelationConstructor}
  * as `static` members.
  */
-export class Relation<NR_OF_BITS extends number> {
+export class Relation {
   /* Implementation note:
 
      Relations are implemented as a NR_OF_BITS-bit bit pattern, stored in the least significant bits of an integer
@@ -184,7 +182,7 @@ export class Relation<NR_OF_BITS extends number> {
     return this.constructor as RelationConstructor<this>
   }
 
-  protected nrOfBits (): NR_OF_BITS {
+  protected nrOfBits (): number {
     return this.typedConstructor().NR_OF_BITS
   }
 
@@ -432,7 +430,7 @@ export class Relation<NR_OF_BITS extends number> {
    * R.RELATIONS.every(gr => gr === emptyRelation() || !emptyRelation().impliedBy(gr))
    * ```
    */
-  public static emptyRelation<R extends Relation<any>> (this: RelationConstructor<R>): R {
+  public static emptyRelation<R extends Relation> (this: RelationConstructor<R>): R {
     return this.RELATIONS[EMPTY_BIT_PATTERN]
   }
 
@@ -445,7 +443,7 @@ export class Relation<NR_OF_BITS extends number> {
    * R.RELATIONS.every(gr => fullRelation().impliedBy(gr))
    * ```
    */
-  public static fullRelation<R extends Relation<any>> (this: RelationConstructor<R>): R {
+  public static fullRelation<R extends Relation> (this: RelationConstructor<R>): R {
     return this.RELATIONS[fullBitPattern(this.NR_OF_BITS)]
   }
 
@@ -459,7 +457,7 @@ export class Relation<NR_OF_BITS extends number> {
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.some(gr => gr.impliedBy(br)))
    */
-  public static or<R extends Relation<any>> (this: RelationConstructor<R>, ...gr: R[]): R {
+  public static or<R extends Relation> (this: RelationConstructor<R>, ...gr: R[]): R {
     assert(gr.every(grr => grr instanceof this))
 
     return this.RELATIONS[gr.reduce((acc: number, grr): number => acc | grr.bitPattern, EMPTY_BIT_PATTERN)]
@@ -472,7 +470,7 @@ export class Relation<NR_OF_BITS extends number> {
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
    */
-  public static and<R extends Relation<any>> (this: RelationConstructor<R>, ...gr: R[]): R {
+  public static and<R extends Relation> (this: RelationConstructor<R>, ...gr: R[]): R {
     assert(gr.every(grr => grr instanceof this))
 
     return this.RELATIONS[
@@ -490,7 +488,7 @@ export class Relation<NR_OF_BITS extends number> {
    *               .filter(l => BASIC_REPRESENTATIONS.includes(l))
    *               .every(l => s.includes(l))
    */
-  public static fromString<R extends Relation<any>> (this: RelationConstructor<R>, s: string): R {
+  public static fromString<R extends Relation> (this: RelationConstructor<R>, s: string): R {
     assert(typeof s === 'string')
 
     return this.BASIC_REPRESENTATIONS.reduce((acc: R, brr: string, i: number): R => {

@@ -14,7 +14,7 @@ const haveCommonType: string = 't, i.start and i.end must be of a common type'
  * **We strongly advise to use this class when working with relations between points and intervals. Reasoning about
  * relations between points and intervals is treacherously difficult.**
  */
-export class PointIntervalRelation extends Relation<5> {
+export class PointIntervalRelation extends Relation {
   public static readonly NR_OF_BITS = 5
   public static readonly BASIC_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
 
