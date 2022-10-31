@@ -61,6 +61,8 @@ export class PointIntervalRelation {
      The order of the basic relations in the bit pattern is important for some algorithms. There is some trickery
      involved. */
 
+  public static BASIC_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
+
   /**
    * Only the 5 lowest bits are used. The other (32 - 5 = 27 bits) are 0.
    */
@@ -299,7 +301,7 @@ export class PointIntervalRelation {
   toString (): string {
     return `(${BasicPointIntervalRelation.BASIC_RELATIONS.reduce((acc: string[], br) => {
       if (this.impliedBy(br)) {
-        acc.push(BasicPointIntervalRelation.BASIC_REPRESENTATIONS[br.ordinal()])
+        acc.push(PointIntervalRelation.BASIC_REPRESENTATIONS[br.ordinal()])
       }
       return acc
     }, []).join('')})`
@@ -346,7 +348,7 @@ export class PointIntervalRelation {
    *               .every(l => s.includes(l))
    */
   public static fromString (s: string): PointIntervalRelation {
-    return BasicPointIntervalRelation.BASIC_REPRESENTATIONS.reduce(
+    return PointIntervalRelation.BASIC_REPRESENTATIONS.reduce(
       (acc: PointIntervalRelation, brr: BasicPointIntervalRelationRepresentation, i: number): PointIntervalRelation => {
         return s.includes(brr) ? PointIntervalRelation.or(acc, BasicPointIntervalRelation.BASIC_RELATIONS[i]) : acc
       },
@@ -482,8 +484,6 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
 
     super(bitPattern)
   }
-
-  public static BASIC_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)
 
   /**
    * All possible basic point – interval relations.
@@ -631,7 +631,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
   // Bit pattern: 31 = '11111'
 }
 
-export const BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS = BasicPointIntervalRelation.BASIC_REPRESENTATIONS
+export const BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS = PointIntervalRelation.BASIC_REPRESENTATIONS
 export type BasicPointIntervalRelationRepresentation = typeof BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[number]
 
 export const EMPTY = BasicPointIntervalRelation.EMPTY
