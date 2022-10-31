@@ -114,6 +114,107 @@ export class PointIntervalRelation {
     basicPointIntervalRelationBitPatterns.map(bitPattern => PointIntervalRelation.RELATIONS[bitPattern])
   )
 
+  /**
+   * A _basic_ point – interval relation that says that a point `t` _comes before_ an interval `I`, i.e., `t` is before
+   * the start of `I`:
+   *
+   * ```
+   * (t ≠ undefined) && (I.start ≠ undefined) && (t < I.start)
+   * ```
+   *
+   * ![before](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-before.png)
+   *
+   * The short representation of this point – interval relation is `b`.
+   */
+  public static readonly BEFORE: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[0]
+  // Bit pattern: 1 = '00001'
+
+  /**
+   * A _basic_ point – interval relation that says that a point `t` _commences_ an interval `I`, i.e., `t` is the start of
+   * `I`:
+   *
+   * ```
+   * (t ≠ undefined) && (I.start ≠ undefined) && (t = I.start)
+   * ```
+   *
+   * ![commences](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-commences.png)
+   *
+   * The short representation of this point – interval relation is `c`.
+   */
+  public static readonly COMMENCES: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[1]
+  // Bit pattern: 2 = '00010'
+
+  /**
+   * A _basic_ point – interval relation that says that a point `t` _is in_ an interval `I`, i.e., `t` is after the start
+   * of `I` and before the end of `I`:
+   *
+   * ```
+   * (t ≠ undefined) && (I.start ≠ undefined) && (I.end ≠ undefined) && (I.start < t) && (t < I.end)
+   * ```
+   *
+   * ![in](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-in.png)
+   *
+   * The short representation of this point – interval relation is `i`.
+   */
+  public static readonly IN: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[2]
+  // Bit pattern: 4 = '00100'
+
+  /**
+   * A _basic_ point – interval relation that says that a point `t` _terminates_ an interval `I`, i.e., `t` is the end of
+   * `I`:
+   *
+   * ```
+   * (t ≠ undefined) && (I.end ≠ undefined) && (t = I.end)
+   * ```
+   *
+   * ![ends](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-terminates.png)
+   *
+   * The short representation of this point – interval relation is `t`.
+   */
+  public static readonly TERMINATES: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[3]
+  // Bit pattern: 8 = '01000'
+
+  /**
+   * A _basic_ point – interval relation that says that a point `t` _comes after_ an interval `I`, i.e., `t` is after the
+   * end of `I`:
+   *
+   * ```
+   * (t ≠ undefined) && (I.until ≠ undefined) && (t > I.end)
+   * ```
+   *
+   * ![after](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-after.png)
+   *
+   * The short representation of this point – interval relation is `a`.
+   */
+  public static readonly AFTER: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[4]
+  // Bit pattern: 16 = '10000'
+
+  /**
+   * This empty relation is not a true point – interval relation. It does not express a relational condition between
+   * points and intervals. Yet, it is needed for consistency with some operations on point – interval relations.
+   *
+   * ### Invariants
+   *
+   * ```
+   * BasicPointIntervalRelation.RELATIONS.every(gr => gr === EMPTY || !EMPTY.impliedBy(gr))
+   * ```
+   */
+  public static readonly EMPTY: PointIntervalRelation = PointIntervalRelation.RELATIONS[EMPTY_BIT_PATTERN]
+  // Bit pattern: 0 = '00000'
+
+  /**
+   * The full point – interval relation, which expresses that nothing definite can be said about the relation between a
+   * point and an interval.
+   *
+   * ### Invariants
+   *
+   * ```
+   * BasicPointIntervalRelation.RELATIONS.every(gr => FULL.impliedBy(gr))
+   * ```
+   */
+  public static readonly FULL: PointIntervalRelation = PointIntervalRelation.RELATIONS[FULL_BIT_PATTERN]
+  // Bit pattern: 31 = '11111'
+
   public isBasic (): this is BasicPointIntervalRelation {
     return isBasicPointIntervalRelationBitPattern(this.bitPattern)
   }
@@ -520,107 +621,6 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
 
     super(bitPattern)
   }
-
-  /**
-   * A _basic_ point – interval relation that says that a point `t` _comes before_ an interval `I`, i.e., `t` is before
-   * the start of `I`:
-   *
-   * ```
-   * (t ≠ undefined) && (I.start ≠ undefined) && (t < I.start)
-   * ```
-   *
-   * ![before](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-before.png)
-   *
-   * The short representation of this point – interval relation is `b`.
-   */
-  public static readonly BEFORE: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[0]
-  // Bit pattern: 1 = '00001'
-
-  /**
-   * A _basic_ point – interval relation that says that a point `t` _commences_ an interval `I`, i.e., `t` is the start of
-   * `I`:
-   *
-   * ```
-   * (t ≠ undefined) && (I.start ≠ undefined) && (t = I.start)
-   * ```
-   *
-   * ![commences](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-commences.png)
-   *
-   * The short representation of this point – interval relation is `c`.
-   */
-  public static readonly COMMENCES: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[1]
-  // Bit pattern: 2 = '00010'
-
-  /**
-   * A _basic_ point – interval relation that says that a point `t` _is in_ an interval `I`, i.e., `t` is after the start
-   * of `I` and before the end of `I`:
-   *
-   * ```
-   * (t ≠ undefined) && (I.start ≠ undefined) && (I.end ≠ undefined) && (I.start < t) && (t < I.end)
-   * ```
-   *
-   * ![in](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-in.png)
-   *
-   * The short representation of this point – interval relation is `i`.
-   */
-  public static readonly IN: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[2]
-  // Bit pattern: 4 = '00100'
-
-  /**
-   * A _basic_ point – interval relation that says that a point `t` _terminates_ an interval `I`, i.e., `t` is the end of
-   * `I`:
-   *
-   * ```
-   * (t ≠ undefined) && (I.end ≠ undefined) && (t = I.end)
-   * ```
-   *
-   * ![ends](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-terminates.png)
-   *
-   * The short representation of this point – interval relation is `t`.
-   */
-  public static readonly TERMINATES: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[3]
-  // Bit pattern: 8 = '01000'
-
-  /**
-   * A _basic_ point – interval relation that says that a point `t` _comes after_ an interval `I`, i.e., `t` is after the
-   * end of `I`:
-   *
-   * ```
-   * (t ≠ undefined) && (I.until ≠ undefined) && (t > I.end)
-   * ```
-   *
-   * ![after](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-after.png)
-   *
-   * The short representation of this point – interval relation is `a`.
-   */
-  public static readonly AFTER: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[4]
-  // Bit pattern: 16 = '10000'
-
-  /**
-   * This empty relation is not a true point – interval relation. It does not express a relational condition between
-   * points and intervals. Yet, it is needed for consistency with some operations on point – interval relations.
-   *
-   * ### Invariants
-   *
-   * ```
-   * BasicPointIntervalRelation.RELATIONS.every(gr => gr === EMPTY || !EMPTY.impliedBy(gr))
-   * ```
-   */
-  public static readonly EMPTY: PointIntervalRelation = PointIntervalRelation.RELATIONS[EMPTY_BIT_PATTERN]
-  // Bit pattern: 0 = '00000'
-
-  /**
-   * The full point – interval relation, which expresses that nothing definite can be said about the relation between a
-   * point and an interval.
-   *
-   * ### Invariants
-   *
-   * ```
-   * BasicPointIntervalRelation.RELATIONS.every(gr => FULL.impliedBy(gr))
-   * ```
-   */
-  public static readonly FULL: PointIntervalRelation = PointIntervalRelation.RELATIONS[FULL_BIT_PATTERN]
-  // Bit pattern: 31 = '11111'
 }
 
 export type BasicPointIntervalRelationRepresentation = typeof PointIntervalRelation.BASIC_REPRESENTATIONS[number]

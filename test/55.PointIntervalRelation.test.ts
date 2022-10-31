@@ -1,27 +1,16 @@
 /* eslint-env mocha */
 
 import { NR_OF_BITS, NR_OF_RELATIONS as BITPATTERN_NR_OF_RELATIONS } from '../src/pointIntervalRelationBitPattern'
-import {
-  NR_OF_RELATIONS,
-  PointIntervalRelation,
-  BasicPointIntervalRelation,
-  EMPTY,
-  FULL
-} from '../src/PointIntervalRelation'
+import { NR_OF_RELATIONS, PointIntervalRelation, EMPTY, FULL } from '../src/PointIntervalRelation'
 import 'should'
 import { Interval } from '../src/Interval'
 import { inspect } from 'util'
 import { intervalToString } from './_intervalToString'
 
-function testBasicRelation (
-  name: string,
-  br: BasicPointIntervalRelation,
-  ordinal: number,
-  representation: string
-): void {
+function testBasicRelation (name: string, br: PointIntervalRelation, ordinal: number, representation: string): void {
   describe(name, function () {
-    it('is a BasicPointIntervalRelation', function () {
-      br.should.be.instanceof(BasicPointIntervalRelation)
+    it('is a basic PointIntervalRelation', function () {
+      br.isBasic().should.be.true()
     })
     it(`has ${ordinal} as ordinal`, function () {
       br.ordinal().should.equal(ordinal)
@@ -31,9 +20,6 @@ function testBasicRelation (
       Number.isInteger(o).should.be.true()
       o.should.be.greaterThanOrEqual(0)
       o.should.be.lessThan(NR_OF_BITS)
-    })
-    it('reports as a basic PointIntervalRelation', function () {
-      br.isBasic().should.be.true()
     })
     it('is in BASIC_RELATIONS at the position of its ordinal', function () {
       PointIntervalRelation.BASIC_RELATIONS[br.ordinal()].should.equal(br)
@@ -59,9 +45,9 @@ describe('PointIntervalRelation', function () {
       it('has 5 entries', function () {
         PointIntervalRelation.BASIC_RELATIONS.length.should.equal(5)
       })
-      it('contains only BasicPointIntervalRelations', function () {
+      it('contains only basic PointIntervalRelations', function () {
         PointIntervalRelation.BASIC_RELATIONS.forEach(br => {
-          br.should.be.instanceof(BasicPointIntervalRelation)
+          br.isBasic().should.be.true()
         })
       })
       it('has no duplicates, and this is a basis', function () {
@@ -81,11 +67,11 @@ describe('PointIntervalRelation', function () {
         })
       })
     })
-    testBasicRelation('BEFORE', BasicPointIntervalRelation.BEFORE, 0, 'b')
-    testBasicRelation('COMMENCES', BasicPointIntervalRelation.COMMENCES, 1, 'c')
-    testBasicRelation('IN', BasicPointIntervalRelation.IN, 2, 'i')
-    testBasicRelation('TERMINATES', BasicPointIntervalRelation.TERMINATES, 3, 't')
-    testBasicRelation('AFTER', BasicPointIntervalRelation.AFTER, 4, 'a')
+    testBasicRelation('BEFORE', PointIntervalRelation.BEFORE, 0, 'b')
+    testBasicRelation('COMMENCES', PointIntervalRelation.COMMENCES, 1, 'c')
+    testBasicRelation('IN', PointIntervalRelation.IN, 2, 'i')
+    testBasicRelation('TERMINATES', PointIntervalRelation.TERMINATES, 3, 't')
+    testBasicRelation('AFTER', PointIntervalRelation.AFTER, 4, 'a')
     describe('RELATIONS', function () {
       it('is an array', function () {
         PointIntervalRelation.RELATIONS.should.be.an.Array()
@@ -360,11 +346,11 @@ describe('PointIntervalRelation', function () {
           { start: points[1], end: points[3] },
           points,
           [
-            BasicPointIntervalRelation.BEFORE,
-            BasicPointIntervalRelation.COMMENCES,
-            BasicPointIntervalRelation.IN,
-            BasicPointIntervalRelation.TERMINATES,
-            BasicPointIntervalRelation.AFTER
+            PointIntervalRelation.BEFORE,
+            PointIntervalRelation.COMMENCES,
+            PointIntervalRelation.IN,
+            PointIntervalRelation.TERMINATES,
+            PointIntervalRelation.AFTER
           ],
           compare
         )
@@ -372,14 +358,14 @@ describe('PointIntervalRelation', function () {
           'unkown end',
           { start: points[1], end: undefined },
           points,
-          [BasicPointIntervalRelation.BEFORE, BasicPointIntervalRelation.COMMENCES, ita, ita, ita],
+          [PointIntervalRelation.BEFORE, PointIntervalRelation.COMMENCES, ita, ita, ita],
           compare
         )
         generatePointIntervalRelationTests(
           'unknown start',
           { start: undefined, end: points[3] },
           points,
-          [bci, bci, bci, BasicPointIntervalRelation.TERMINATES, BasicPointIntervalRelation.AFTER],
+          [bci, bci, bci, PointIntervalRelation.TERMINATES, PointIntervalRelation.AFTER],
           compare
         )
       })
