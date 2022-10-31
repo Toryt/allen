@@ -1,7 +1,6 @@
 /* eslint-env mocha */
 
 import 'should'
-import { NR_OF_BITS } from '../src/pointIntervalRelationBitPattern'
 import { PointIntervalRelation } from '../src/PointIntervalRelation'
 import { Interval } from '../src/Interval'
 import { inspect } from 'util'
@@ -16,11 +15,11 @@ function testBasicRelation (name: string, br: PointIntervalRelation, ordinal: nu
     it(`has ${ordinal} as ordinal`, function () {
       br.ordinal().should.equal(ordinal)
     })
-    it('has an integer ordinal [0, 5[', function () {
+    it(`has an integer ordinal [0, ${PointIntervalRelation.NR_OF_BITS}[`, function () {
       const o = br.ordinal()
       Number.isInteger(o).should.be.true()
       o.should.be.greaterThanOrEqual(0)
-      o.should.be.lessThan(NR_OF_BITS)
+      o.should.be.lessThan(PointIntervalRelation.NR_OF_BITS)
     })
     it('is in BASIC_RELATIONS at the position of its ordinal', function () {
       PointIntervalRelation.BASIC_RELATIONS[br.ordinal()].should.equal(br)
@@ -38,8 +37,8 @@ describe('PointIntervalRelation', function () {
       it('is an array', function () {
         PointIntervalRelation.BASIC_RELATIONS.should.be.an.Array()
       })
-      it('has 5 entries', function () {
-        PointIntervalRelation.BASIC_RELATIONS.length.should.equal(5)
+      it(`has ${PointIntervalRelation.NR_OF_BITS} entries`, function () {
+        PointIntervalRelation.BASIC_RELATIONS.length.should.equal(PointIntervalRelation.NR_OF_BITS)
       })
       it('contains only basic PointIntervalRelations', function () {
         PointIntervalRelation.BASIC_RELATIONS.forEach(br => {
