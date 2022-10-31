@@ -299,7 +299,7 @@ export class PointIntervalRelation {
   toString (): string {
     return `(${BasicPointIntervalRelation.BASIC_RELATIONS.reduce((acc: string[], br) => {
       if (this.impliedBy(br)) {
-        acc.push(br.representation)
+        acc.push(BasicPointIntervalRelation.BASIC_REPRESENTATIONS[br.ordinal()])
       }
       return acc
     }, []).join('')})`
