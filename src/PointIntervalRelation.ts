@@ -39,7 +39,7 @@ export class PointIntervalRelation extends Relation {
   /**
    * All possible basic point – interval relations.
    *
-   * This is a _basis_ for all point – interval relation.
+   * This is a _orthogonal basis_ for all point – interval relations.
    *
    * ### Invariants
    *
