@@ -68,7 +68,7 @@ export class PointIntervalRelation {
 
   /**
    * There is only 1 constructor, that constructs the wrapper object
-   * around the bitpattern. This is used exclusively in {@link VALUES} initialization code.
+   * around the bitpattern. This is used exclusively in {@link BasicPointIntervalRelation.RELATIONS} initialization code.
    */
   protected constructor (bitPattern: number) {
     assert(bitPattern >= EMPTY_BIT_PATTERN)
