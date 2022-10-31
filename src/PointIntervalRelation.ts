@@ -81,6 +81,28 @@ export class PointIntervalRelation {
   }
 
   /**
+   * An ordinal for basic relations (zero-based).
+   *
+   * Returns `NaN` for other relations.
+   *
+   * ### Invariants
+   *
+   * ```
+   * isBasic() || Number.isNaN(this.ordinal())
+   * !isBasic() || BASIC_RELATIONS[this.ordinal()] === this
+   * ```
+   */
+  public ordinal (): number {
+    /*
+     * This is the bit position, 0-based, in the 5-bit bit pattern, of the bit
+     * representing this as basic relation.
+     *
+     * See https://www.geeksforgeeks.org/position-of-rightmost-set-bit/
+     */
+    return this.isBasic() ? Math.log2(this.bitPattern & -this.bitPattern) : NaN
+  }
+
+  /**
    * A measure about the uncertainty this point – interval relation expresses.
    *
    * This is the fraction of the 5 basic relations that imply this general relation. {@link FULL} is complete
@@ -479,25 +501,6 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
 
     super(bitPattern)
     this.representation = BasicPointIntervalRelation.BASIC_REPRESENTATIONS[this.ordinal()]
-  }
-
-  /**
-   * An ordinal for basic relations (zero-based).
-   *
-   * ### Invariants
-   *
-   * ```
-   * BASIC_RELATIONS[this.ordinal()] === this
-   * ```
-   */
-  public ordinal (): number {
-    /*
-     * This is the bit position, 0-based, in the 5-bit bit pattern, of the bit
-     * representing this as basic relation.
-     *
-     * See https://www.geeksforgeeks.org/position-of-rightmost-set-bit/
-     */
-    return Math.log2(this.bitPattern & -this.bitPattern)
   }
 
   public static BASIC_REPRESENTATIONS = Object.freeze(['b', 'c', 'i', 't', 'a'] as const)

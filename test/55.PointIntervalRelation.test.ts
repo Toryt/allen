@@ -97,11 +97,12 @@ describe('PointIntervalRelation', function () {
       it('contains the exact amount of instances', function () {
         BasicPointIntervalRelation.RELATIONS.length.should.equal(NR_OF_RELATIONS)
       })
-      it('contains only PointIntervalRelations, which report as !isBasic unless they are basic', function () {
+      it('contains only PointIntervalRelations, which report as !isBasic and has NaN as ordinal, unless they are basic', function () {
         BasicPointIntervalRelation.RELATIONS.forEach(gr => {
           gr.should.be.instanceof(PointIntervalRelation)
           if (!(BasicPointIntervalRelation.BASIC_RELATIONS as readonly PointIntervalRelation[]).includes(gr)) {
             gr.isBasic().should.be.false()
+            gr.ordinal().should.be.NaN()
           }
         })
       })
@@ -143,7 +144,8 @@ describe('PointIntervalRelation', function () {
       })
     })
   })
-  // isBasic is a basic inspector, and cannot be tested sensibly
+  // isBasic is a basic inspector, and cannot be tested sensibly in isolation, but is tested as invariant
+  // ordinal is a basic inspector, and cannot be tested sensibly in isolation, but is tested as invariant
   describe('#uncertainty', function () {
     it('returns NaN for EMPTY', function () {
       EMPTY.uncertainty().should.be.NaN()
