@@ -631,8 +631,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
   // Bit pattern: 31 = '11111'
 }
 
-export const BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS = PointIntervalRelation.BASIC_REPRESENTATIONS
-export type BasicPointIntervalRelationRepresentation = typeof BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[number]
+export type BasicPointIntervalRelationRepresentation = typeof PointIntervalRelation.BASIC_REPRESENTATIONS[number]
 
 export const EMPTY = BasicPointIntervalRelation.EMPTY
 export const FULL = BasicPointIntervalRelation.FULL

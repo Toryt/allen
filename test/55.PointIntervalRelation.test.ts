@@ -6,8 +6,7 @@ import {
   PointIntervalRelation,
   BasicPointIntervalRelation,
   EMPTY,
-  FULL,
-  BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS
+  FULL
 } from '../src/PointIntervalRelation'
 import 'should'
 import { Interval } from '../src/Interval'
@@ -41,7 +40,7 @@ function testBasicRelation (
     })
     it(`has '${representation}' as representation`, function () {
       br.toString().should.equal(`(${representation})`)
-      br.toString().should.equal(`(${BASIC_POINT_INTERVAL_RELATION_REPRESENTATIONS[ordinal]})`)
+      br.toString().should.equal(`(${PointIntervalRelation.BASIC_REPRESENTATIONS[ordinal]})`)
     })
   })
 }
