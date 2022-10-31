@@ -346,23 +346,12 @@ export class PointIntervalRelation {
    *               .every(l => s.includes(l))
    */
   public static fromString (s: string): PointIntervalRelation {
-    let result = EMPTY
-    if (s.includes('b')) {
-      result = PointIntervalRelation.or(result, BasicPointIntervalRelation.BEFORE)
-    }
-    if (s.includes('c')) {
-      result = PointIntervalRelation.or(result, BasicPointIntervalRelation.COMMENCES)
-    }
-    if (s.includes('i')) {
-      result = PointIntervalRelation.or(result, BasicPointIntervalRelation.IN)
-    }
-    if (s.includes('t')) {
-      result = PointIntervalRelation.or(result, BasicPointIntervalRelation.TERMINATES)
-    }
-    if (s.includes('a')) {
-      result = PointIntervalRelation.or(result, BasicPointIntervalRelation.AFTER)
-    }
-    return result
+    return BasicPointIntervalRelation.BASIC_REPRESENTATIONS.reduce(
+      (acc: PointIntervalRelation, brr: BasicPointIntervalRelationRepresentation, i: number): PointIntervalRelation => {
+        return s.includes(brr) ? PointIntervalRelation.or(acc, BasicPointIntervalRelation.BASIC_RELATIONS[i]) : acc
+      },
+      EMPTY
+    )
   }
 
   /*
