@@ -432,7 +432,7 @@ export class Relation<NR_OF_BITS extends number> {
    * R.RELATIONS.every(gr => gr === emptyRelation() || !emptyRelation().impliedBy(gr))
    * ```
    */
-  public static emptyRelation<R extends Relation<number>> (this: RelationConstructor<R>): R {
+  public static emptyRelation<R extends Relation<any>> (this: RelationConstructor<R>): R {
     return this.RELATIONS[EMPTY_BIT_PATTERN]
   }
 
@@ -445,7 +445,7 @@ export class Relation<NR_OF_BITS extends number> {
    * R.RELATIONS.every(gr => fullRelation().impliedBy(gr))
    * ```
    */
-  public static fullRelation<R extends Relation<number>> (this: RelationConstructor<R>) {
+  public static fullRelation<R extends Relation<any>> (this: RelationConstructor<R>): R {
     return this.RELATIONS[fullBitPattern(this.NR_OF_BITS)]
   }
 
@@ -459,7 +459,7 @@ export class Relation<NR_OF_BITS extends number> {
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.some(gr => gr.impliedBy(br)))
    */
-  public static or<R extends Relation<number>> (this: RelationConstructor<R>, ...gr: R[]): R {
+  public static or<R extends Relation<any>> (this: RelationConstructor<R>, ...gr: R[]): R {
     return this.RELATIONS[gr.reduce((acc: number, grr): number => acc | grr.bitPattern, EMPTY_BIT_PATTERN)]
   }
 
@@ -470,7 +470,7 @@ export class Relation<NR_OF_BITS extends number> {
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
    */
-  public static and<R extends Relation<number>> (this: RelationConstructor<R>, ...gr: R[]): R {
+  public static and<R extends Relation<any>> (this: RelationConstructor<R>, ...gr: R[]): R {
     return this.RELATIONS[
       gr.reduce((acc: number, grr: R): number => acc & grr.bitPattern, fullBitPattern(this.NR_OF_BITS))
     ]
@@ -486,7 +486,7 @@ export class Relation<NR_OF_BITS extends number> {
    *               .filter(l => BASIC_REPRESENTATIONS.includes(l))
    *               .every(l => s.includes(l))
    */
-  public static fromString<R extends Relation<number>> (this: RelationConstructor<R>, s: string): R {
+  public static fromString<R extends Relation<any>> (this: RelationConstructor<R>, s: string): R {
     return this.BASIC_REPRESENTATIONS.reduce((acc: R, brr: string, i: number): R => {
       return s.includes(brr) ? this.or(acc, this.BASIC_RELATIONS[i]) : acc
     }, this.emptyRelation())
