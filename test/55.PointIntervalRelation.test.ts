@@ -6,7 +6,7 @@ import { PointIntervalRelation } from '../src/PointIntervalRelation'
 import { Interval } from '../src/Interval'
 import { inspect } from 'util'
 import { intervalToString } from './_intervalToString'
-import { nrOfRelations } from '../lib/relationBitPattern'
+import { nrOfRelations } from '../src/relationBitPattern'
 
 function testBasicRelation (name: string, br: PointIntervalRelation, ordinal: number, representation: string): void {
   describe(name, function () {
