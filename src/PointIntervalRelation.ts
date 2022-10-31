@@ -74,6 +74,46 @@ export class PointIntervalRelation {
     this.bitPattern = bitPattern
   }
 
+  /**
+   * All possible point – interval relations.
+   *
+   * ### Invariants
+   *
+   * ```
+   * Array.isArray(RELATIONS)
+   * RELATIONS.length === NR_OF_RELATIONS
+   * RELATIONS.every(gr => gr instanceof PointIntervalRelation)
+   * RELATIONS.every((gr1, i1) => RELATIONS.every((gr2, i2) => i2 <= i1 || gr1 !== gr2))
+   * ```
+   *
+   * There are no other `PointIntervalRelation`s than the instances of this array.
+   */
+  public static readonly RELATIONS: readonly PointIntervalRelation[] = Object.freeze(
+    pointIntervalRelationBitPatterns.map(bitPattern => new PointIntervalRelation(bitPattern))
+  )
+
+  /**
+   * All possible basic point – interval relations.
+   *
+   * This is a _basis_ for all point – interval relation.
+   *
+   * ### Invariants
+   *
+   * ```
+   * Array.isArray(BASIC_RELATIONS)
+   * BASIC_RELATIONS.length === 5
+   * BASIC_RELATIONS.every(br => br instanceof PointIntervalRelation)
+   * BASIC_RELATIONS.every(br => RELATIONS.includes(br))
+   * BASIC_RELATIONS.every((br1, i1) =>
+   *   BASIC_RELATIONS.every((br2, i2) => i2 <= i1 || br1 !== br2 && !br1.implies(br2) && !br2.implies(br1)))
+   * ```
+   *
+   * There are no other basic `PointIntervalRelation`s than the instances of this array.
+   */
+  public static readonly BASIC_RELATIONS: readonly BasicPointIntervalRelation[] = Object.freeze(
+    basicPointIntervalRelationBitPatterns.map(bitPattern => PointIntervalRelation.RELATIONS[bitPattern])
+  )
+
   public isBasic (): this is BasicPointIntervalRelation {
     return isBasicPointIntervalRelationBitPattern(this.bitPattern)
   }
@@ -295,32 +335,13 @@ export class PointIntervalRelation {
    * A representation of the point – interval relation in the used short notation (`'b'`, `'c'`,`'i'`, `'t'`, `'a'`).
    */
   toString (): string {
-    return `(${BasicPointIntervalRelation.BASIC_RELATIONS.reduce((acc: string[], br) => {
+    return `(${PointIntervalRelation.BASIC_RELATIONS.reduce((acc: string[], br) => {
       if (this.impliedBy(br)) {
         acc.push(PointIntervalRelation.BASIC_REPRESENTATIONS[br.ordinal()])
       }
       return acc
     }, []).join('')})`
   }
-
-  /**
-   * All possible point – interval relations.
-   *
-   * ### Invariants
-   *
-   * ```
-   * Array.isArray(RELATIONS)
-   * RELATIONS.length === NR_OF_RELATIONS
-   * RELATIONS.every(gr => gr instanceof PointIntervalRelation)
-   * RELATIONS.every((gr1, i1) => RELATIONS.every((gr2, i2) => i2 <= i1 || gr1 !== gr2))
-   * BASIC_RELATIONS.every(br => RELATIONS.includes(br))
-   * ```
-   *
-   * There are no other `PointIntervalRelation`s than the instances of this array.
-   */
-  public static readonly RELATIONS: readonly PointIntervalRelation[] = Object.freeze(
-    pointIntervalRelationBitPatterns.map(bitPattern => new PointIntervalRelation(bitPattern))
-  )
 
   /**
    * The main factory method for `PointIntervalRelations`.
@@ -365,7 +386,7 @@ export class PointIntervalRelation {
   public static fromString (s: string): PointIntervalRelation {
     return PointIntervalRelation.BASIC_REPRESENTATIONS.reduce(
       (acc: PointIntervalRelation, brr: BasicPointIntervalRelationRepresentation, i: number): PointIntervalRelation => {
-        return s.includes(brr) ? PointIntervalRelation.or(acc, BasicPointIntervalRelation.BASIC_RELATIONS[i]) : acc
+        return s.includes(brr) ? PointIntervalRelation.or(acc, PointIntervalRelation.BASIC_RELATIONS[i]) : acc
       },
       EMPTY
     )
@@ -501,27 +522,6 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
   }
 
   /**
-   * All possible basic point – interval relations.
-   *
-   * This is a _basis_ for all point – interval relation.
-   *
-   * ### Invariants
-   *
-   * ```
-   * Array.isArray(BASIC_RELATIONS)
-   * BASIC_RELATIONS.length === 5
-   * BASIC_RELATIONS.every(br => br instanceof BasicPointIntervalRelation)
-   * BASIC_RELATIONS.every((br1, i1) =>
-   *   BASIC_RELATIONS.every((br2, i2) => i2 <= i1 || br1 !== br2 && !br1.implies(br2) && !br2.implies(br1)))
-   * ```
-   *
-   * There are no other `BasicPointIntervalRelation`s than the instances of this array.
-   */
-  public static readonly BASIC_RELATIONS: readonly BasicPointIntervalRelation[] = Object.freeze(
-    basicPointIntervalRelationBitPatterns.map(bitPattern => new BasicPointIntervalRelation(bitPattern))
-  )
-
-  /**
    * A _basic_ point – interval relation that says that a point `t` _comes before_ an interval `I`, i.e., `t` is before
    * the start of `I`:
    *
@@ -533,7 +533,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
    *
    * The short representation of this point – interval relation is `b`.
    */
-  public static readonly BEFORE: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[0]
+  public static readonly BEFORE: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[0]
   // Bit pattern: 1 = '00001'
 
   /**
@@ -548,7 +548,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
    *
    * The short representation of this point – interval relation is `c`.
    */
-  public static readonly COMMENCES: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[1]
+  public static readonly COMMENCES: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[1]
   // Bit pattern: 2 = '00010'
 
   /**
@@ -563,7 +563,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
    *
    * The short representation of this point – interval relation is `i`.
    */
-  public static readonly IN: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[2]
+  public static readonly IN: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[2]
   // Bit pattern: 4 = '00100'
 
   /**
@@ -578,7 +578,7 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
    *
    * The short representation of this point – interval relation is `t`.
    */
-  public static readonly TERMINATES: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[3]
+  public static readonly TERMINATES: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[3]
   // Bit pattern: 8 = '01000'
 
   /**
@@ -593,31 +593,8 @@ export class BasicPointIntervalRelation extends PointIntervalRelation {
    *
    * The short representation of this point – interval relation is `a`.
    */
-  public static readonly AFTER: BasicPointIntervalRelation = BasicPointIntervalRelation.BASIC_RELATIONS[4]
+  public static readonly AFTER: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[4]
   // Bit pattern: 16 = '10000'
-
-  /**
-   * All possible point – interval relations.
-   *
-   * ### Invariants
-   *
-   * ```
-   * Array.isArray(RELATIONS)
-   * RELATIONS.length === NR_OF_RELATIONS
-   * RELATIONS.every(gr => gr instanceof PointIntervalRelation)
-   * RELATIONS.every((gr1, i1) => RELATIONS.every((gr2, i2) => i2 <= i1 || gr1 !== gr2))
-   * BASIC_RELATIONS.every(br => RELATIONS.includes(br))
-   * ```
-   *
-   * There are no other `PointIntervalRelation`s than the instances of this array.
-   */
-  public static readonly RELATIONS: readonly PointIntervalRelation[] = Object.freeze(
-    pointIntervalRelationBitPatterns.map(bitPattern =>
-      isBasicPointIntervalRelationBitPattern(bitPattern)
-        ? BasicPointIntervalRelation.BASIC_RELATIONS[Math.log2(bitPattern & -bitPattern)]
-        : new PointIntervalRelation(bitPattern)
-    )
-  )
 
   /**
    * This empty relation is not a true point – interval relation. It does not express a relational condition between
