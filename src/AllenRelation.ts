@@ -79,13 +79,6 @@ export class AllenRelation {
   impliedBy (gr: AllenRelation): boolean {
     return (this.bitPattern & gr.bitPattern) === gr.bitPattern
   }
-
-  implies (gr: AllenRelation): boolean {
-    // noinspection SuspiciousTypeOfGuard
-    assert(gr instanceof AllenRelation)
-
-    return (gr.bitPattern & this.bitPattern) === this.bitPattern
-  }
 }
 
 /**
@@ -93,6 +86,23 @@ export class AllenRelation {
  * (i.e., <code>2<sup>13</sup></code>).
  */
 export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
+
+export const BASIC_ALLEN_RELATION_REPRESENTATIONS = Object.freeze([
+  'p',
+  'm',
+  'o',
+  'F',
+  'D',
+  's',
+  'e',
+  'S',
+  'd',
+  'f',
+  'O',
+  'M',
+  'P'
+] as const)
+export type BasicAllenRelationRepresentation = typeof BASIC_ALLEN_RELATION_REPRESENTATIONS[number]
 
 export class BasicAllenRelation extends AllenRelation {
   /**
@@ -112,7 +122,7 @@ export class BasicAllenRelation extends AllenRelation {
     assert(bitPattern <= FULL_BIT_PATTERN)
 
     super(bitPattern)
-    this.representation = BasicAllenRelation.BASIC_REPRESENTATIONS[this.ordinal()]
+    this.representation = BASIC_ALLEN_RELATION_REPRESENTATIONS[this.ordinal()]
   }
 
   /**
@@ -133,22 +143,6 @@ export class BasicAllenRelation extends AllenRelation {
      */
     return Math.log2(this.bitPattern & -this.bitPattern)
   }
-
-  public static BASIC_REPRESENTATIONS = Object.freeze([
-    'p',
-    'm',
-    'o',
-    'F',
-    'D',
-    's',
-    'e',
-    'S',
-    'd',
-    'f',
-    'O',
-    'M',
-    'P'
-  ] as const)
 
   /**
    * All possible basic Allen relations.
@@ -462,40 +456,34 @@ export class BasicAllenRelation extends AllenRelation {
         : new AllenRelation(bitPattern)
     )
   )
-
-  /**
-   * This empty relation is not a true Allen relation. It does not express a relational condition between intervals. Yet,
-   * it is needed for consistency with some operations on Allen interval relations.
-   *
-   * The converse of this relation is the relation itself.
-   *
-   * ### Invariants
-   *
-   * ```
-   * BasicAllenRelation.RELATIONS.every(gr => gr === EMPTY || !EMPTY.impliedBy(gr))
-   * ```
-   */
-  public static readonly EMPTY: AllenRelation = BasicAllenRelation.RELATIONS[EMPTY_BIT_PATTERN]
-  // Bit pattern: 0 = '0000000000000'
-
-  /**
-   * The full Allen relation, which expresses that nothing definite can be said about the relation between 2 intervals.
-   *
-   * The converse of this relation is the relation itself.
-   *
-   * ### Invariants
-   *
-   * ```
-   * BasicAllenRelation.RELATIONS.every(gr => FULL.impliedBy(gr))
-   * FULL === or(PRECEDES, MEETS, OVERLAPS, FINISHED_BY, CONTAINS, STARTS, EQUALS, STARTED_BY, DURING, FINISHES, OVERLAPPED_BY, MET_BY, PRECEDED_BY)
-   * ```
-   */
-  public static readonly FULL: AllenRelation = BasicAllenRelation.RELATIONS[FULL_BIT_PATTERN]
-  // Bit pattern: 31 = '11111'
 }
 
-export const BASIC_ALLEN_RELATION_REPRESENTATIONS = BasicAllenRelation.BASIC_REPRESENTATIONS
-export type BasicAllenRelationRepresentation = typeof BASIC_ALLEN_RELATION_REPRESENTATIONS[number]
+/**
+ * This empty relation is not a true Allen relation. It does not express a relational condition between intervals. Yet,
+ * it is needed for consistency with some operations on Allen interval relations.
+ *
+ * The converse of this relation is the relation itself.
+ *
+ * ### Invariants
+ *
+ * ```
+ * BasicAllenRelation.RELATIONS.every(gr => gr === EMPTY || !EMPTY.impliedBy(gr))
+ * ```
+ */
+export const EMPTY: AllenRelation = BasicAllenRelation.RELATIONS[EMPTY_BIT_PATTERN]
+// Bit pattern: 0 = '0000000000000'
 
-export const EMPTY = BasicAllenRelation.EMPTY
-export const FULL = BasicAllenRelation.FULL
+/**
+ * The full Allen relation, which expresses that nothing definite can be said about the relation between 2 intervals.
+ *
+ * The converse of this relation is the relation itself.
+ *
+ * ### Invariants
+ *
+ * ```
+ * BasicAllenRelation.RELATIONS.every(gr => FULL.impliedBy(gr))
+ * FULL === or(PRECEDES, MEETS, OVERLAPS, FINISHED_BY, CONTAINS, STARTS, EQUALS, STARTED_BY, DURING, FINISHES, OVERLAPPED_BY, MET_BY, PRECEDED_BY)
+ * ```
+ */
+export const FULL: AllenRelation = BasicAllenRelation.RELATIONS[FULL_BIT_PATTERN]
+// Bit pattern: 31 = '11111'

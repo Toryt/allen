@@ -13,21 +13,6 @@ import 'should'
 import { Interval } from '../src/Interval'
 import { inspect } from 'util'
 import { intervalToString } from './_intervalToString'
-import { generateRelationTests } from './_generateRelationTests'
-
-generateRelationTests(
-  'PointIntervalRelation',
-  NR_OF_BITS,
-  BasicPointIntervalRelation,
-  [
-    { name: 'BEFORE', basicRelation: BasicPointIntervalRelation.BEFORE, representation: 'b' },
-    { name: 'COMMENCES', basicRelation: BasicPointIntervalRelation.COMMENCES, representation: 'c' },
-    { name: 'IN', basicRelation: BasicPointIntervalRelation.IN, representation: 'i' },
-    { name: 'TERMINATES', basicRelation: BasicPointIntervalRelation.TERMINATES, representation: 't' },
-    { name: 'AFTER', basicRelation: BasicPointIntervalRelation.AFTER, representation: 'a' }
-  ],
-  PointIntervalRelation
-)
 
 function testBasicRelation (
   name: string,
