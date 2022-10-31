@@ -32,70 +32,68 @@ function testBasicRelation (name: string, br: PointIntervalRelation, ordinal: nu
 }
 
 describe('PointIntervalRelation', function () {
-  describe('BasicPointIntervalRelation', function () {
-    describe('BASIC_RELATIONS', function () {
-      it('is an array', function () {
-        PointIntervalRelation.BASIC_RELATIONS.should.be.an.Array()
-      })
-      it(`has ${PointIntervalRelation.NR_OF_BITS} entries`, function () {
-        PointIntervalRelation.BASIC_RELATIONS.length.should.equal(PointIntervalRelation.NR_OF_BITS)
-      })
-      it('contains only basic PointIntervalRelations', function () {
-        PointIntervalRelation.BASIC_RELATIONS.forEach(br => {
-          br.isBasic().should.be.true()
-        })
-      })
-      it('has no duplicates, and this is a basis', function () {
-        PointIntervalRelation.BASIC_RELATIONS.forEach((br1, i1) => {
-          PointIntervalRelation.BASIC_RELATIONS.forEach((br2, i2) => {
-            if (i1 < i2) {
-              br1.should.not.equal(br2)
-              br1.implies(br2).should.be.false()
-              br2.implies(br1).should.be.false()
-            }
-          })
-        })
-      })
-      it('has the basic relation at the position of its ordinal', function () {
-        PointIntervalRelation.BASIC_RELATIONS.forEach((br, i) => {
-          br.ordinal().should.equal(i)
-        })
+  describe('BASIC_RELATIONS', function () {
+    it('is an array', function () {
+      PointIntervalRelation.BASIC_RELATIONS.should.be.an.Array()
+    })
+    it(`has ${PointIntervalRelation.NR_OF_BITS} entries`, function () {
+      PointIntervalRelation.BASIC_RELATIONS.length.should.equal(PointIntervalRelation.NR_OF_BITS)
+    })
+    it('contains only basic PointIntervalRelations', function () {
+      PointIntervalRelation.BASIC_RELATIONS.forEach(br => {
+        br.isBasic().should.be.true()
       })
     })
-    testBasicRelation('BEFORE', PointIntervalRelation.BEFORE, 0, 'b')
-    testBasicRelation('COMMENCES', PointIntervalRelation.COMMENCES, 1, 'c')
-    testBasicRelation('IN', PointIntervalRelation.IN, 2, 'i')
-    testBasicRelation('TERMINATES', PointIntervalRelation.TERMINATES, 3, 't')
-    testBasicRelation('AFTER', PointIntervalRelation.AFTER, 4, 'a')
-    describe('RELATIONS', function () {
-      it('is an array', function () {
-        PointIntervalRelation.RELATIONS.should.be.an.Array()
-      })
-      it('contains the exact amount of instances', function () {
-        PointIntervalRelation.RELATIONS.length.should.equal(nrOfRelations(PointIntervalRelation.NR_OF_BITS))
-      })
-      it('contains only PointIntervalRelations, which report as !isBasic and has NaN as ordinal, unless they are basic', function () {
-        PointIntervalRelation.RELATIONS.forEach(gr => {
-          gr.should.be.instanceof(PointIntervalRelation)
-          if (!PointIntervalRelation.BASIC_RELATIONS.includes(gr)) {
-            gr.isBasic().should.be.false()
-            gr.ordinal().should.be.NaN()
+    it('has no duplicates, and this is a basis', function () {
+      PointIntervalRelation.BASIC_RELATIONS.forEach((br1, i1) => {
+        PointIntervalRelation.BASIC_RELATIONS.forEach((br2, i2) => {
+          if (i1 < i2) {
+            br1.should.not.equal(br2)
+            br1.implies(br2).should.be.false()
+            br2.implies(br1).should.be.false()
           }
         })
       })
-      it('does not contain duplicates', function () {
-        PointIntervalRelation.RELATIONS.forEach((gr1, i1) => {
-          PointIntervalRelation.RELATIONS.forEach((gr2, i2) => {
-            if (i1 < i2) {
-              gr1.should.not.equal(gr2)
-            }
-          })
+    })
+    it('has the basic relation at the position of its ordinal', function () {
+      PointIntervalRelation.BASIC_RELATIONS.forEach((br, i) => {
+        br.ordinal().should.equal(i)
+      })
+    })
+  })
+  testBasicRelation('BEFORE', PointIntervalRelation.BEFORE, 0, 'b')
+  testBasicRelation('COMMENCES', PointIntervalRelation.COMMENCES, 1, 'c')
+  testBasicRelation('IN', PointIntervalRelation.IN, 2, 'i')
+  testBasicRelation('TERMINATES', PointIntervalRelation.TERMINATES, 3, 't')
+  testBasicRelation('AFTER', PointIntervalRelation.AFTER, 4, 'a')
+  describe('RELATIONS', function () {
+    it('is an array', function () {
+      PointIntervalRelation.RELATIONS.should.be.an.Array()
+    })
+    it('contains the exact amount of instances', function () {
+      PointIntervalRelation.RELATIONS.length.should.equal(nrOfRelations(PointIntervalRelation.NR_OF_BITS))
+    })
+    it('contains only PointIntervalRelations, which report as !isBasic and has NaN as ordinal, unless they are basic', function () {
+      PointIntervalRelation.RELATIONS.forEach(gr => {
+        gr.should.be.instanceof(PointIntervalRelation)
+        if (!PointIntervalRelation.BASIC_RELATIONS.includes(gr)) {
+          gr.isBasic().should.be.false()
+          gr.ordinal().should.be.NaN()
+        }
+      })
+    })
+    it('does not contain duplicates', function () {
+      PointIntervalRelation.RELATIONS.forEach((gr1, i1) => {
+        PointIntervalRelation.RELATIONS.forEach((gr2, i2) => {
+          if (i1 < i2) {
+            gr1.should.not.equal(gr2)
+          }
         })
       })
-      it('contains all basic relations', function () {
-        PointIntervalRelation.BASIC_RELATIONS.forEach(br => {
-          PointIntervalRelation.RELATIONS.includes(br)
-        })
+    })
+    it('contains all basic relations', function () {
+      PointIntervalRelation.BASIC_RELATIONS.forEach(br => {
+        PointIntervalRelation.RELATIONS.includes(br)
       })
     })
   })
