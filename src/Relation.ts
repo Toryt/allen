@@ -7,7 +7,7 @@ import {
   nrOfRelations
 } from './relationBitPattern'
 
-export interface RelationConstructor<R extends Relation<number, string>> extends Function {
+export interface RelationConstructor<R extends Relation<any>> extends Function {
   /**
    * ### Invariants
    *
@@ -18,7 +18,7 @@ export interface RelationConstructor<R extends Relation<number, string>> extends
    */
   readonly NR_OF_BITS: NrOfBits<R>
 
-  readonly BASIC_REPRESENTATIONS: readonly BasicRelationRepresentation<R>[]
+  readonly BASIC_REPRESENTATIONS: readonly string[]
 
   /**
    * All possible relations.
@@ -130,8 +130,7 @@ export interface RelationConstructor<R extends Relation<number, string>> extends
   readonly fromString: (s: string) => R
 }
 
-export type NrOfBits<R> = R extends Relation<infer NR_OF_BITS, any> ? NR_OF_BITS : never
-export type BasicRelationRepresentation<R> = R extends Relation<any, infer BRR> ? BRR : never
+export type NrOfBits<R> = R extends Relation<infer NR_OF_BITS> ? NR_OF_BITS : never
 
 /**
  * Support for reasoning about relations, and constraints on those relations.
@@ -164,7 +163,7 @@ export type BasicRelationRepresentation<R> = R extends Relation<any, infer BRR> 
  * Create a subclass for a specific type of `Relation`. In that class, add all properties of {@link RelationConstructor}
  * as `static` members.
  */
-export class Relation<NR_OF_BITS extends number, BRR extends string> {
+export class Relation<NR_OF_BITS extends number> {
   /* Implementation note:
 
      Relations are implemented as a NR_OF_BITS-bit bit pattern, stored in the least significant bits of an integer
@@ -185,46 +184,23 @@ export class Relation<NR_OF_BITS extends number, BRR extends string> {
     return this.constructor as RelationConstructor<this>
   }
 
+  protected nrOfBits (): NR_OF_BITS {
+    return this.typedConstructor().NR_OF_BITS
+  }
+
   /**
    * There is only 1 constructor, that constructs the wrapper object
    * around the bitpattern. This is used exclusively in {@link RelationConstructor.RELATIONS} initialization code.
    */
   protected constructor (bitPattern: number) {
     assert(bitPattern >= EMPTY_BIT_PATTERN)
-    assert(bitPattern <= nrOfRelations(this.typedConstructor().NR_OF_BITS) - 1)
+    assert(bitPattern <= nrOfRelations(this.nrOfBits()) - 1)
 
     this.bitPattern = bitPattern
   }
 
-  /**
-   * This empty relation is not a true relation. It does not express a relational condition. Yet, it is needed for
-   * consistency with some operations on relations.
-   *
-   * ### Invariants
-   *
-   * ```
-   * R.RELATIONS.every(gr => gr === emptyRelation() || !emptyRelation().impliedBy(gr))
-   * ```
-   */
-  public static emptyRelation<R extends Relation<number, string>> (this: RelationConstructor<R>): R {
-    return this.RELATIONS[EMPTY_BIT_PATTERN]
-  }
-
-  /**
-   * The full relation, which expresses that nothing definite can be said about the relation.
-   *
-   * ### Invariants
-   *
-   * ```
-   * R.RELATIONS.every(gr => fullRelation().impliedBy(gr))
-   * ```
-   */
-  public static fullRelation<R extends Relation<number, string>> (this: RelationConstructor<R>) {
-    return this.RELATIONS[fullBitPattern(this.NR_OF_BITS)]
-  }
-
   public isBasic (): boolean {
-    return isBasicRelationBitPattern(this.typedConstructor().NR_OF_BITS, this.bitPattern)
+    return isBasicRelationBitPattern(this.nrOfBits(), this.bitPattern)
   }
 
   /**
@@ -268,7 +244,7 @@ export class Relation<NR_OF_BITS extends number, BRR extends string> {
     if (count === 0) {
       return NaN
     }
-    return (count - 1) / (this.typedConstructor().NR_OF_BITS - 1)
+    return (count - 1) / (this.nrOfBits() - 1)
   }
 
   /**
@@ -415,7 +391,7 @@ export class Relation<NR_OF_BITS extends number, BRR extends string> {
      * implemented as the XOR of the FULL bit pattern with this bit pattern;
      * this simply replaces 0 with 1 and 1 with 0.
      */
-    return this.typedConstructor().RELATIONS[fullBitPattern(this.typedConstructor().NR_OF_BITS) ^ this.bitPattern]
+    return this.typedConstructor().RELATIONS[fullBitPattern(this.nrOfBits()) ^ this.bitPattern]
   }
 
   /**
@@ -447,6 +423,33 @@ export class Relation<NR_OF_BITS extends number, BRR extends string> {
   }
 
   /**
+   * This empty relation is not a true relation. It does not express a relational condition. Yet, it is needed for
+   * consistency with some operations on relations.
+   *
+   * ### Invariants
+   *
+   * ```
+   * R.RELATIONS.every(gr => gr === emptyRelation() || !emptyRelation().impliedBy(gr))
+   * ```
+   */
+  public static emptyRelation<R extends Relation<number>> (this: RelationConstructor<R>): R {
+    return this.RELATIONS[EMPTY_BIT_PATTERN]
+  }
+
+  /**
+   * The full relation, which expresses that nothing definite can be said about the relation.
+   *
+   * ### Invariants
+   *
+   * ```
+   * R.RELATIONS.every(gr => fullRelation().impliedBy(gr))
+   * ```
+   */
+  public static fullRelation<R extends Relation<number>> (this: RelationConstructor<R>) {
+    return this.RELATIONS[fullBitPattern(this.NR_OF_BITS)]
+  }
+
+  /**
    * The main factory method for relations.
    *
    * This is the union of all relations in {@code gr}, when they are considered as sets of basic relations.
@@ -456,7 +459,7 @@ export class Relation<NR_OF_BITS extends number, BRR extends string> {
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.some(gr => gr.impliedBy(br)))
    */
-  public static or<R extends Relation<number, string>> (this: RelationConstructor<R>, ...gr: R[]): R {
+  public static or<R extends Relation<number>> (this: RelationConstructor<R>, ...gr: R[]): R {
     return this.RELATIONS[gr.reduce((acc: number, grr): number => acc | grr.bitPattern, EMPTY_BIT_PATTERN)]
   }
 
@@ -467,7 +470,7 @@ export class Relation<NR_OF_BITS extends number, BRR extends string> {
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
    */
-  public static and<R extends Relation<number, string>> (this: RelationConstructor<R>, ...gr: R[]): R {
+  public static and<R extends Relation<number>> (this: RelationConstructor<R>, ...gr: R[]): R {
     return this.RELATIONS[
       gr.reduce((acc: number, grr: R): number => acc & grr.bitPattern, fullBitPattern(this.NR_OF_BITS))
     ]
@@ -483,11 +486,9 @@ export class Relation<NR_OF_BITS extends number, BRR extends string> {
    *               .filter(l => BASIC_REPRESENTATIONS.includes(l))
    *               .every(l => s.includes(l))
    */
-  public static fromString<R extends Relation<number, string>> (this: RelationConstructor<R>, s: string): R {
-    return this.BASIC_REPRESENTATIONS.reduce((acc: R, brr: BasicRelationRepresentation<R>, i: number): R => {
+  public static fromString<R extends Relation<number>> (this: RelationConstructor<R>, s: string): R {
+    return this.BASIC_REPRESENTATIONS.reduce((acc: R, brr: string, i: number): R => {
       return s.includes(brr) ? this.or(acc, this.BASIC_RELATIONS[i]) : acc
     }, this.emptyRelation())
   }
 }
-
-export const StaticTypedRelation: RelationConstructor<Relation<0, string>> = Relation
