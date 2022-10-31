@@ -193,15 +193,15 @@ export function generateRelationTests<R extends Relation> (
         br1.impliedBy(FULL).should.be.false()
       })
     })
-    RConstructor.RELATIONS.forEach(gr1 => {
-      RConstructor.RELATIONS.forEach(gr2 => {
-        const expected = RConstructor.BASIC_RELATIONS.every(br => !gr2.impliedBy(br) || gr1.impliedBy(br))
-
-        it(`should return ${gr1.toString()}.impliedBy(${gr2.toString()}) as ${expected.toString()}`, function () {
-          gr1.impliedBy(gr2).should.equal(expected)
-        })
-      })
-    })
+    //   RConstructor.RELATIONS.forEach(gr1 => {
+    //     RConstructor.RELATIONS.forEach(gr2 => {
+    //       const expected = RConstructor.BASIC_RELATIONS.every(br => !gr2.impliedBy(br) || gr1.impliedBy(br))
+    //
+    //       it(`should return ${gr1.toString()}.impliedBy(${gr2.toString()}) as ${expected.toString()}`, function () {
+    //         gr1.impliedBy(gr2).should.equal(expected)
+    //       })
+    //     })
+    //   })
   })
   describe('#implies', function () {
     RConstructor.RELATIONS.forEach(gr => {
@@ -224,13 +224,13 @@ export function generateRelationTests<R extends Relation> (
         br1.implies(FULL).should.be.true()
       })
     })
-    RConstructor.RELATIONS.forEach(gr1 => {
-      RConstructor.RELATIONS.forEach(gr2 => {
-        it(`${gr1.toString()}.implies(${gr2.toString()}) === ${gr2.toString()}.impliedBy(${gr1.toString()})`, function () {
-          gr1.implies(gr2).should.equal(gr2.impliedBy(gr1))
-        })
-      })
-    })
+    //   RConstructor.RELATIONS.forEach(gr1 => {
+    //     RConstructor.RELATIONS.forEach(gr2 => {
+    //       it(`${gr1.toString()}.implies(${gr2.toString()}) === ${gr2.toString()}.impliedBy(${gr1.toString()})`, function () {
+    //         gr1.implies(gr2).should.equal(gr2.impliedBy(gr1))
+    //       })
+    //     })
+    //   })
   })
   describe('#complement', function () {
     RConstructor.RELATIONS.forEach(gr => {
@@ -246,30 +246,30 @@ export function generateRelationTests<R extends Relation> (
       })
     })
   })
-  describe('#min', function () {
-    RConstructor.RELATIONS.forEach(gr1 => {
-      RConstructor.RELATIONS.forEach(gr2 => {
-        it(`${gr1.toString()}.min(${gr2.toString()}) has the basic relations of ${gr1.toString()} that are not implied by ${gr2.toString()}`, function () {
-          const result = gr1.min(gr2)
-          RConstructor.BASIC_RELATIONS.forEach(br =>
-            result.impliedBy(br).should.equal(gr1.impliedBy(br) && !gr2.impliedBy(br))
-          )
-        })
-      })
-    })
-  })
+  // describe('#min', function () {
+  //   RConstructor.RELATIONS.forEach(gr1 => {
+  //     RConstructor.RELATIONS.forEach(gr2 => {
+  //       it(`${gr1.toString()}.min(${gr2.toString()}) has the basic relations of ${gr1.toString()} that are not implied by ${gr2.toString()}`, function () {
+  //         const result = gr1.min(gr2)
+  //         RConstructor.BASIC_RELATIONS.forEach(br =>
+  //           result.impliedBy(br).should.equal(gr1.impliedBy(br) && !gr2.impliedBy(br))
+  //         )
+  //       })
+  //     })
+  //   })
+  // })
   describe('or', function () {
-    RConstructor.RELATIONS.forEach(gr1 => {
-      RConstructor.RELATIONS.forEach(gr2 => {
-        it(`or(${gr1.toString()}, ${gr2.toString()}) has the basic relations of both`, function () {
-          const args = [gr1, gr2]
-          const result = RConstructor.or(...args)
-          RConstructor.BASIC_RELATIONS.forEach(br =>
-            result.impliedBy(br).should.equal(args.some(gr => gr.impliedBy(br)))
-          )
-        })
-      })
-    })
+    //   RConstructor.RELATIONS.forEach(gr1 => {
+    //     RConstructor.RELATIONS.forEach(gr2 => {
+    //       it(`or(${gr1.toString()}, ${gr2.toString()}) has the basic relations of both`, function () {
+    //         const args = [gr1, gr2]
+    //         const result = RConstructor.or(...args)
+    //         RConstructor.BASIC_RELATIONS.forEach(br =>
+    //           result.impliedBy(br).should.equal(args.some(gr => gr.impliedBy(br)))
+    //         )
+    //       })
+    //     })
+    //   })
     it('the or of all basic point relations is FULL', function () {
       const result = RConstructor.or(...RConstructor.BASIC_RELATIONS)
       result.should.equal(FULL)
@@ -280,17 +280,17 @@ export function generateRelationTests<R extends Relation> (
     })
   })
   describe('and', function () {
-    RConstructor.RELATIONS.forEach(gr1 => {
-      RConstructor.RELATIONS.forEach(gr2 => {
-        it(`and(${gr1.toString()}, ${gr2.toString()}) has the common basic relations`, function () {
-          const args = [gr1, gr2]
-          const result = RConstructor.and(...args)
-          RConstructor.BASIC_RELATIONS.forEach(br =>
-            result.impliedBy(br).should.equal(args.every(gr => gr.impliedBy(br)))
-          )
-        })
-      })
-    })
+    //   RConstructor.RELATIONS.forEach(gr1 => {
+    //     RConstructor.RELATIONS.forEach(gr2 => {
+    //       it(`and(${gr1.toString()}, ${gr2.toString()}) has the common basic relations`, function () {
+    //         const args = [gr1, gr2]
+    //         const result = RConstructor.and(...args)
+    //         RConstructor.BASIC_RELATIONS.forEach(br =>
+    //           result.impliedBy(br).should.equal(args.every(gr => gr.impliedBy(br)))
+    //         )
+    //       })
+    //     })
+    //   })
     it('the and of all basic point relations is EMPTY', function () {
       const result = RConstructor.and(...RConstructor.BASIC_RELATIONS)
       result.should.equal(EMPTY)
