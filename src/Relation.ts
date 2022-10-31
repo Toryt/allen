@@ -460,6 +460,8 @@ export class Relation<NR_OF_BITS extends number> {
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.some(gr => gr.impliedBy(br)))
    */
   public static or<R extends Relation<any>> (this: RelationConstructor<R>, ...gr: R[]): R {
+    assert(gr.every(grr => grr instanceof this))
+
     return this.RELATIONS[gr.reduce((acc: number, grr): number => acc | grr.bitPattern, EMPTY_BIT_PATTERN)]
   }
 
@@ -471,6 +473,8 @@ export class Relation<NR_OF_BITS extends number> {
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
    */
   public static and<R extends Relation<any>> (this: RelationConstructor<R>, ...gr: R[]): R {
+    assert(gr.every(grr => grr instanceof this))
+
     return this.RELATIONS[
       gr.reduce((acc: number, grr: R): number => acc & grr.bitPattern, fullBitPattern(this.NR_OF_BITS))
     ]
@@ -487,6 +491,8 @@ export class Relation<NR_OF_BITS extends number> {
    *               .every(l => s.includes(l))
    */
   public static fromString<R extends Relation<any>> (this: RelationConstructor<R>, s: string): R {
+    assert(typeof s === 'string')
+
     return this.BASIC_REPRESENTATIONS.reduce((acc: R, brr: string, i: number): R => {
       return s.includes(brr) ? this.or(acc, this.BASIC_RELATIONS[i]) : acc
     }, this.emptyRelation())
