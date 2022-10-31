@@ -159,7 +159,9 @@ export function generateRelationTests<R extends Relation> (
 
     RConstructor.RELATIONS.forEach(gr => {
       if (gr !== EMPTY) {
-        const expected = RConstructor.BASIC_RELATIONS.reduce((acc, br) => (br.implies(gr) ? acc + 1 : acc), -1) / 4
+        const expected =
+          RConstructor.BASIC_RELATIONS.reduce((acc, br) => (br.implies(gr) ? acc + 1 : acc), -1) /
+          (RConstructor.NR_OF_BITS - 1)
         it(`${gr.toString()} has uncertainty ${expected}`, function () {
           gr.uncertainty().should.equal(expected)
         })

@@ -235,7 +235,7 @@ export class Relation {
    *
    * @returns this === emptyRelation()
    *            ? NaN
-   *            : BASIC_RELATIONS.reduce((acc, br) => br.implies(this) ? acc + 1 : acc, -1) / 4
+   *            : BASIC_RELATIONS.reduce((acc, br) => br.implies(this) ? acc + 1 : acc, -1) / (NR_OF_BITS - 1)
    */
   uncertainty (): number {
     const count = bitCount(this.bitPattern)
