@@ -38,7 +38,7 @@ export interface RelationConstructor<R extends Relation<any>> extends Function {
    *
    * ```ts
    * public static readonly RELATIONS: readonly R[] = Object.freeze(
-   *   relationBitPatterns(NR_OF_BITS).map(bitPattern => new R(bitPattern))
+   *   relationBitPatterns(this.NR_OF_BITS).map(bitPattern => new R(bitPattern))
    * )
    * ```
    */
@@ -66,7 +66,7 @@ export interface RelationConstructor<R extends Relation<any>> extends Function {
    *
    * ```ts
    * public static readonly BASIC_RELATIONS: readonly R[] = Object.freeze(
-   *   basicRelationBitPatterns(NR_OF_BITS).map(bitPattern => R.RELATIONS[bitPattern])
+   *   basicRelationBitPatterns(this.NR_OF_BITS).map(bitPattern => R.RELATIONS[bitPattern])
    * )
    * ```
    */
