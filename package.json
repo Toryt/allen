@@ -41,6 +41,7 @@
     "forbid-pending": true,
     "recursive": true,
     "sort": true,
+    "reporter": "progress",
     "require": [
       "ts-node/register",
       "should"
