@@ -110,7 +110,7 @@ export class PointIntervalRelation {
    *
    * There are no other basic `PointIntervalRelation`s than the instances of this array.
    */
-  public static readonly BASIC_RELATIONS: readonly BasicPointIntervalRelation[] = Object.freeze(
+  public static readonly BASIC_RELATIONS: readonly PointIntervalRelation[] = Object.freeze(
     basicPointIntervalRelationBitPatterns.map(bitPattern => PointIntervalRelation.RELATIONS[bitPattern])
   )
 
@@ -126,7 +126,7 @@ export class PointIntervalRelation {
    *
    * The short representation of this point – interval relation is `b`.
    */
-  public static readonly BEFORE: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[0]
+  public static readonly BEFORE: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[0]
   // Bit pattern: 1 = '00001'
 
   /**
@@ -141,7 +141,7 @@ export class PointIntervalRelation {
    *
    * The short representation of this point – interval relation is `c`.
    */
-  public static readonly COMMENCES: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[1]
+  public static readonly COMMENCES: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[1]
   // Bit pattern: 2 = '00010'
 
   /**
@@ -156,7 +156,7 @@ export class PointIntervalRelation {
    *
    * The short representation of this point – interval relation is `i`.
    */
-  public static readonly IN: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[2]
+  public static readonly IN: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[2]
   // Bit pattern: 4 = '00100'
 
   /**
@@ -171,7 +171,7 @@ export class PointIntervalRelation {
    *
    * The short representation of this point – interval relation is `t`.
    */
-  public static readonly TERMINATES: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[3]
+  public static readonly TERMINATES: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[3]
   // Bit pattern: 8 = '01000'
 
   /**
@@ -186,7 +186,7 @@ export class PointIntervalRelation {
    *
    * The short representation of this point – interval relation is `a`.
    */
-  public static readonly AFTER: BasicPointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[4]
+  public static readonly AFTER: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[4]
   // Bit pattern: 16 = '10000'
 
   /**
@@ -215,7 +215,7 @@ export class PointIntervalRelation {
   public static readonly FULL: PointIntervalRelation = PointIntervalRelation.RELATIONS[FULL_BIT_PATTERN]
   // Bit pattern: 31 = '11111'
 
-  public isBasic (): this is BasicPointIntervalRelation {
+  public isBasic (): boolean {
     return isBasicPointIntervalRelationBitPattern(this.bitPattern)
   }
 
@@ -489,7 +489,7 @@ export class PointIntervalRelation {
       (acc: PointIntervalRelation, brr: BasicPointIntervalRelationRepresentation, i: number): PointIntervalRelation => {
         return s.includes(brr) ? PointIntervalRelation.or(acc, PointIntervalRelation.BASIC_RELATIONS[i]) : acc
       },
-      EMPTY
+      PointIntervalRelation.EMPTY
     )
   }
 
@@ -573,31 +573,31 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
     assert(cType === undefined || isInterval(i, cType, compareFn))
 
     if (t === undefined || t === null) {
-      return FULL
+      return PointIntervalRelation.FULL
     }
 
     const compare: Comparator<T> = compareFn ?? ltCompare
-    let result = FULL
+    let result = PointIntervalRelation.FULL
     if (i.start !== undefined && i.start !== null) {
       const tToStart = compare(t, i.start)
       if (tToStart < 0) {
-        return BasicPointIntervalRelation.BEFORE
+        return PointIntervalRelation.BEFORE
       } else if (tToStart === 0) {
-        return BasicPointIntervalRelation.COMMENCES
+        return PointIntervalRelation.COMMENCES
       } else {
         // assert(tToStart > 0)
-        result = result.min(BasicPointIntervalRelation.BEFORE).min(BasicPointIntervalRelation.COMMENCES)
+        result = result.min(PointIntervalRelation.BEFORE).min(PointIntervalRelation.COMMENCES)
       }
     }
     if (i.end !== undefined && i.end !== null) {
       const tToEnd = compare(t, i.end)
       if (tToEnd < 0) {
-        result = result.min(BasicPointIntervalRelation.TERMINATES).min(BasicPointIntervalRelation.AFTER)
+        result = result.min(PointIntervalRelation.TERMINATES).min(PointIntervalRelation.AFTER)
       } else if (tToEnd === 0) {
-        return BasicPointIntervalRelation.TERMINATES
+        return PointIntervalRelation.TERMINATES
       } else {
         // assert(tToEnd > 0)
-        return BasicPointIntervalRelation.AFTER
+        return PointIntervalRelation.AFTER
       }
     }
     return result
@@ -610,20 +610,4 @@ public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeInte
  */
 export const NR_OF_RELATIONS: number = BIT_PATTERN_NR_OF_RELATIONS
 
-export class BasicPointIntervalRelation extends PointIntervalRelation {
-  /**
-   * There is only 1 constructor, that constructs the wrapper object
-   * around the bitpattern. This is used exclusively in {@link BASIC_RELATIONS} initialization code.
-   */
-  private constructor (bitPattern: number) {
-    assert(bitPattern >= EMPTY_BIT_PATTERN)
-    assert(bitPattern <= FULL_BIT_PATTERN)
-
-    super(bitPattern)
-  }
-}
-
 export type BasicPointIntervalRelationRepresentation = typeof PointIntervalRelation.BASIC_REPRESENTATIONS[number]
-
-export const EMPTY = BasicPointIntervalRelation.EMPTY
-export const FULL = BasicPointIntervalRelation.FULL
