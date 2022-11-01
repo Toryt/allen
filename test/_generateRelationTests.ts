@@ -12,7 +12,8 @@ export interface BasicRelationExpectations {
 export function generateRelationTests<R extends Relation> (
   relationName: string,
   RConstructor: RelationConstructor<R>,
-  basicRelationConstants: BasicRelationExpectations[]
+  basicRelationConstants: BasicRelationExpectations[],
+  fullCombinationTest: boolean
 ): void {
   const EMPTY: R = RConstructor.emptyRelation()
   const FULL: R = RConstructor.fullRelation()
@@ -34,14 +35,19 @@ export function generateRelationTests<R extends Relation> (
       []
     )
 
-    this['grCombinations'] = RConstructor.RELATIONS.reduce(
-      (acc1: RCombination[], gr1: R) =>
-        RConstructor.RELATIONS.reduce((acc2: RCombination[], gr2: R) => {
-          acc2.push({ r1: gr1, r2: gr2 })
-          return acc2
-        }, acc1),
-      []
-    )
+    this['grCombinations'] = fullCombinationTest
+      ? RConstructor.RELATIONS.reduce(
+          (acc1: RCombination[], gr1: R) =>
+            RConstructor.RELATIONS.reduce((acc2: RCombination[], gr2: R) => {
+              acc2.push({ r1: gr1, r2: gr2 })
+              return acc2
+            }, acc1),
+          []
+        )
+      : RConstructor.RELATIONS.map((r1, i) => ({
+          r1,
+          r2: RConstructor.RELATIONS[RConstructor.RELATIONS.length - i - 1]
+        }))
   })
   describe('nr of test cases', function () {
     it('sparse basic relations', function () {
@@ -49,9 +55,11 @@ export function generateRelationTests<R extends Relation> (
       const expected = ((RConstructor.NR_OF_BITS - 1) * RConstructor.NR_OF_BITS) / 2
       this['sparseBrCombinations'].length.should.equal(expected)
     })
-    it('all relation combinations', function () {
+    it('relation combinations', function () {
       console.log(this['grCombinations'].length)
-      const expected = Math.pow(2, 2 * RConstructor.NR_OF_BITS)
+      const expected = fullCombinationTest
+        ? Math.pow(2, 2 * RConstructor.NR_OF_BITS)
+        : nrOfRelations(RConstructor.NR_OF_BITS)
       this['grCombinations'].length.should.equal(expected)
     })
   })
@@ -233,15 +241,15 @@ export function generateRelationTests<R extends Relation> (
         br1.impliedBy(FULL).should.be.false()
       })
     })
-    //   RConstructor.RELATIONS.forEach(gr1 => {
-    //     RConstructor.RELATIONS.forEach(gr2 => {
-    //       const expected = RConstructor.BASIC_RELATIONS.every(br => !gr2.impliedBy(br) || gr1.impliedBy(br))
-    //
-    //       it(`should return ${gr1.toString()}.impliedBy(${gr2.toString()}) as ${expected.toString()}`, function () {
-    //         gr1.impliedBy(gr2).should.equal(expected)
-    //       })
-    //     })
-    //   })
+    it(`${
+      fullCombinationTest ? 'all' : ''
+    } relation combinations are implied by each other or not as expected`, function () {
+      const combinations: RCombination[] = this['grCombinations']
+      combinations.forEach(({ r1, r2 }) => {
+        const expected = RConstructor.BASIC_RELATIONS.every(br => !r2.impliedBy(br) || r1.impliedBy(br))
+        r1.impliedBy(r2).should.equal(expected)
+      })
+    })
   })
   describe('#implies', function () {
     it('EMPTY implies all relations', function () {

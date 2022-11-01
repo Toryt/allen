@@ -8,13 +8,18 @@ import { intervalToString } from './_intervalToString'
 import { generateRelationTests } from './_generateRelationTests'
 
 describe('PointIntervalRelation', function () {
-  generateRelationTests('PointIntervalRelation', PointIntervalRelation, [
-    { name: 'BEFORE', representation: 'b' },
-    { name: 'COMMENCES', representation: 'c' },
-    { name: 'IN', representation: 'i' },
-    { name: 'TERMINATES', representation: 't' },
-    { name: 'AFTER', representation: 'a' }
-  ])
+  generateRelationTests(
+    'PointIntervalRelation',
+    PointIntervalRelation,
+    [
+      { name: 'BEFORE', representation: 'b' },
+      { name: 'COMMENCES', representation: 'c' },
+      { name: 'IN', representation: 'i' },
+      { name: 'TERMINATES', representation: 't' },
+      { name: 'AFTER', representation: 'a' }
+    ],
+    true
+  )
 
   describe('relation', function () {
     const fivePoints = [-6, -4.983458, -1, 2, Math.PI]
