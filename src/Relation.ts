@@ -1,5 +1,12 @@
 import assert from 'assert'
-import { bitCount, EMPTY_BIT_PATTERN, fullBitPattern, isBasicRelationBitPattern, nrOfRelations } from './bitPattern'
+import {
+  bitCount,
+  EMPTY_BIT_PATTERN,
+  fullBitPattern,
+  isBasicRelationBitPattern,
+  nrOfRelations,
+  reverse
+} from './bitPattern'
 
 export interface RelationConstructor<R extends Relation> extends Function {
   /**
@@ -299,6 +306,13 @@ export class Relation {
     assert(gr instanceof this.typedConstructor())
 
     return (gr.bitPattern & this.bitPattern) === this.bitPattern
+  }
+
+  converse (): this {
+    /* Given the order in which the basic relations occur in the bit pattern, the converse is the reverse bit pattern
+       (read the bit pattern from left to right instead of right to left). We need to add a `32 - NR_OF_BITS` bit shift
+       to compensate for the fact that we store the `NR_OF_BITS` bit bitpattern in a 32 bit int. */
+    return this.typedConstructor().RELATIONS[reverse(this.nrOfBits(), this.bitPattern)]
   }
 
   /**

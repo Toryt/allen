@@ -298,6 +298,12 @@ export function generateRelationTests<R extends Relation> (
     })
   })
   describe('#converse', function () {
+    it('the converse of each basic relation is at the same index in the reversed BASIC_RELATIONS array', function () {
+      const lastIndex = RConstructor.NR_OF_BITS - 1
+      RConstructor.BASIC_RELATIONS.forEach((br, i) => {
+        br.converse().should.equal(RConstructor.BASIC_RELATIONS[lastIndex - i])
+      })
+    })
     it('the converse of each relation is implied by the converse of all basic relations that are implied by it', function () {
       RConstructor.RELATIONS.forEach(gr => {
         const result = gr.converse()
@@ -313,9 +319,7 @@ export function generateRelationTests<R extends Relation> (
         const result = gr.converse()
         RConstructor.BASIC_RELATIONS.forEach(br => {
           if (result.impliedBy(br.converse())) {
-            gr.impliedBy(br)
-              .should.be.true()
-              .should.be.true()
+            gr.impliedBy(br).should.be.true()
           }
         })
       })
@@ -325,18 +329,6 @@ export function generateRelationTests<R extends Relation> (
         gr.converse()
           .converse()
           .should.equal(gr)
-      })
-    })
-    it('the converse of each basic relation is at the same index in the reversed BASIC_RELATIONS array', function () {
-      const lastIndex = RConstructor.NR_OF_BITS - 1
-      RConstructor.BASIC_RELATIONS.forEach((br, i) => {
-        br.converse().should.equal(RConstructor.BASIC_RELATIONS[lastIndex - i])
-      })
-    })
-    it('the converse of each relation is at the same index in the reversed RELATIONS array', function () {
-      const lastIndex = nrOfRelations(RConstructor.NR_OF_BITS) - 1
-      RConstructor.RELATIONS.forEach((br, i) => {
-        br.converse().should.equal(RConstructor.RELATIONS[lastIndex - i])
       })
     })
   })
