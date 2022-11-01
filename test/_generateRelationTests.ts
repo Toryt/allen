@@ -292,6 +292,8 @@ export function generateRelationTests<R extends Relation> (
   })
   describe('#complement', function () {
     it('the complement of each relation is implied by all basic relations that are not implied by it', function () {
+      this.timeout(5000)
+
       RConstructor.RELATIONS.forEach(gr => {
         const result = gr.complement()
         RConstructor.BASIC_RELATIONS.forEach(br => {
@@ -330,6 +332,8 @@ export function generateRelationTests<R extends Relation> (
     it(`for ${
       fullCombinationTest ? 'all' : ''
     } relation combinations, \`or\` has the basic relations of both`, function () {
+      this.timeout(5000)
+
       const combinations: RCombination[] = this['grCombinations']
       combinations.forEach(({ r1, r2 }) => {
         const args: R[] = [r1, r2]
@@ -350,6 +354,8 @@ export function generateRelationTests<R extends Relation> (
     it(`for ${
       fullCombinationTest ? 'all' : ''
     } relation combinations, \`and\` has the common basic relations`, function () {
+      this.timeout(5000)
+
       const combinations: RCombination[] = this['grCombinations']
       combinations.forEach(({ r1, r2 }) => {
         const args: R[] = [r1, r2]
