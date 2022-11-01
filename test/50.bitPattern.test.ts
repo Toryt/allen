@@ -12,6 +12,7 @@ import {
   isRelationBitPattern,
   basicRelationBitPatterns,
   isBasicRelationBitPattern,
+  reverse,
   bitCount,
   largestBitInteger
 } from '../src/bitPattern'
@@ -160,6 +161,26 @@ describe('bitPattern', function () {
                 isBasicRelationBitPattern(nrOfBits, s).should.be.false()
               })
             })
+        })
+        describe('reverse', function () {
+          it('reverses the bitPattern correctly', function () {
+            const rbps: number[] = this['relationBitPatterns']
+            rbps.forEach(bitPattern => {
+              const result = reverse(nrOfBits, bitPattern)
+              const sBp = bitPattern.toString(2).split('')
+              console.log(sBp.join(''))
+              const sR = result.toString(2).split('')
+              console.log(sR.join(''))
+              console.log()
+              sR.should.deepEqual(sBp.reverse())
+            })
+          })
+          it('the reverse of the reverse of a bitPattern is the bitPattern', function () {
+            const rbps: number[] = this['relationBitPatterns']
+            rbps.forEach(bitPattern => {
+              reverse(nrOfBits, reverse(nrOfBits, bitPattern)).should.equal(bitPattern)
+            })
+          })
         })
       })
     })

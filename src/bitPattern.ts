@@ -73,6 +73,20 @@ export function isBasicRelationBitPattern (nrOfBits: number, candidate: unknown)
 
 export const largestBitInteger = 2 ** (32 - 1)
 
+/**
+ * Reverses the `bitPattern` of `nrOfBits` long.
+ */
+export function reverse (nrOfBits: number, bitPattern: number): number {
+  assert(Number.isInteger(nrOfBits))
+  assert(nrOfBits >= 0)
+  assert(nrOfBits <= largestNrOfBits)
+  assert(Number.isInteger(bitPattern))
+  assert(bitPattern >= 0)
+  assert(bitPattern <= nrOfRelations(nrOfBits))
+
+  return 0
+}
+
 export function bitCount (n: number): number {
   assert(Number.isInteger(n))
   assert(n >= 0)
