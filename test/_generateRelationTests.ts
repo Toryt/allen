@@ -281,13 +281,14 @@ export function generateRelationTests<R extends Relation> (
         br1.implies(FULL).should.be.true()
       })
     })
-    //   RConstructor.RELATIONS.forEach(gr1 => {
-    //     RConstructor.RELATIONS.forEach(gr2 => {
-    //       it(`${gr1.toString()}.implies(${gr2.toString()}) === ${gr2.toString()}.impliedBy(${gr1.toString()})`, function () {
-    //         gr1.implies(gr2).should.equal(gr2.impliedBy(gr1))
-    //       })
-    //     })
-    //   })
+    it(`for ${
+      fullCombinationTest ? 'all' : ''
+    } relation combinations \`r1\`, \`r2\`, \`r1.implies(r2) === r2.impliedBy(r1)\``, function () {
+      const combinations: RCombination[] = this['grCombinations']
+      combinations.forEach(({ r1, r2 }) => {
+        r1.implies(r2).should.equal(r2.impliedBy(r1))
+      })
+    })
   })
   describe('#complement', function () {
     it('the complement of each relation is implied by all basic relations that are not implied by it', function () {
@@ -306,30 +307,36 @@ export function generateRelationTests<R extends Relation> (
       })
     })
   })
-  // describe('#min', function () {
-  //   RConstructor.RELATIONS.forEach(gr1 => {
-  //     RConstructor.RELATIONS.forEach(gr2 => {
-  //       it(`${gr1.toString()}.min(${gr2.toString()}) has the basic relations of ${gr1.toString()} that are not implied by ${gr2.toString()}`, function () {
-  //         const result = gr1.min(gr2)
-  //         RConstructor.BASIC_RELATIONS.forEach(br =>
-  //           result.impliedBy(br).should.equal(gr1.impliedBy(br) && !gr2.impliedBy(br))
-  //         )
-  //       })
-  //     })
-  //   })
-  // })
+  describe('#min', function () {
+    function check (ra: R, rb: R): void {
+      const result = ra.min(rb)
+      RConstructor.BASIC_RELATIONS.forEach(br =>
+        result.impliedBy(br).should.equal(ra.impliedBy(br) && !rb.impliedBy(br))
+      )
+    }
+    it(`for ${
+      fullCombinationTest ? 'all' : ''
+    } relation combinations \`r1\`, \`r2\`, \`r1.min(r2)\` has the basic relations of \`r1\` that are not implied by \`r2\`, and vice versa`, function () {
+      this.timeout(5000)
+
+      const combinations: RCombination[] = this['grCombinations']
+      combinations.forEach(({ r1, r2 }) => {
+        check(r1, r2)
+        check(r2, r1)
+      })
+    })
+  })
   describe('or', function () {
-    //   RConstructor.RELATIONS.forEach(gr1 => {
-    //     RConstructor.RELATIONS.forEach(gr2 => {
-    //       it(`or(${gr1.toString()}, ${gr2.toString()}) has the basic relations of both`, function () {
-    //         const args = [gr1, gr2]
-    //         const result = RConstructor.or(...args)
-    //         RConstructor.BASIC_RELATIONS.forEach(br =>
-    //           result.impliedBy(br).should.equal(args.some(gr => gr.impliedBy(br)))
-    //         )
-    //       })
-    //     })
-    //   })
+    it(`for ${
+      fullCombinationTest ? 'all' : ''
+    } relation combinations, \`or\` has the basic relations of both`, function () {
+      const combinations: RCombination[] = this['grCombinations']
+      combinations.forEach(({ r1, r2 }) => {
+        const args: R[] = [r1, r2]
+        const result = RConstructor.or(...args)
+        RConstructor.BASIC_RELATIONS.forEach(br => result.impliedBy(br).should.equal(args.some(gr => gr.impliedBy(br))))
+      })
+    })
     it('the or of all basic relations is FULL', function () {
       const result = RConstructor.or(...RConstructor.BASIC_RELATIONS)
       result.should.equal(FULL)
@@ -340,17 +347,18 @@ export function generateRelationTests<R extends Relation> (
     })
   })
   describe('and', function () {
-    //   RConstructor.RELATIONS.forEach(gr1 => {
-    //     RConstructor.RELATIONS.forEach(gr2 => {
-    //       it(`and(${gr1.toString()}, ${gr2.toString()}) has the common basic relations`, function () {
-    //         const args = [gr1, gr2]
-    //         const result = RConstructor.and(...args)
-    //         RConstructor.BASIC_RELATIONS.forEach(br =>
-    //           result.impliedBy(br).should.equal(args.every(gr => gr.impliedBy(br)))
-    //         )
-    //       })
-    //     })
-    //   })
+    it(`for ${
+      fullCombinationTest ? 'all' : ''
+    } relation combinations, \`and\` has the common basic relations`, function () {
+      const combinations: RCombination[] = this['grCombinations']
+      combinations.forEach(({ r1, r2 }) => {
+        const args: R[] = [r1, r2]
+        const result = RConstructor.and(...args)
+        RConstructor.BASIC_RELATIONS.forEach(br =>
+          result.impliedBy(br).should.equal(args.every(gr => gr.impliedBy(br)))
+        )
+      })
+    })
     it('the and of all basic relations is EMPTY', function () {
       const result = RConstructor.and(...RConstructor.BASIC_RELATIONS)
       result.should.equal(EMPTY)
