@@ -24,7 +24,8 @@ export function generateRelationTests<R extends Relation> (
   }
 
   before(function () {
-    this.timeout(Math.pow(2, 2 * RConstructor.NR_OF_BITS) / 1e3)
+    this['to'] = Math.max(Math.pow(2, 2 * RConstructor.NR_OF_BITS) / 1e3, 1e3)
+    this.timeout(this['to'])
 
     this['sparseBrCombinations'] = RConstructor.BASIC_RELATIONS.reduce(
       (acc1: RCombination[], br1: R, i: number) =>
@@ -58,7 +59,7 @@ export function generateRelationTests<R extends Relation> (
       this['sparseBrCombinations'].length.should.equal(expected)
     })
     it('relation combinations', function () {
-      console.log(this['grCombinations'].length)
+      console.log(`${this['grCombinations'].length as number} (timeout: ${this['to'] as number})`)
       const expected = fullCombinationTest
         ? Math.pow(2, 2 * RConstructor.NR_OF_BITS)
         : nrOfRelations(RConstructor.NR_OF_BITS)
@@ -246,6 +247,8 @@ export function generateRelationTests<R extends Relation> (
     it(`${
       fullCombinationTest ? 'all' : ''
     } relation combinations are implied by each other or not as expected`, function () {
+      this.timeout(this['to'])
+
       const combinations: RCombination[] = this['grCombinations']
       combinations.forEach(({ r1, r2 }) => {
         const expected = RConstructor.BASIC_RELATIONS.every(br => !r2.impliedBy(br) || r1.impliedBy(br))
@@ -286,6 +289,8 @@ export function generateRelationTests<R extends Relation> (
     it(`for ${
       fullCombinationTest ? 'all' : ''
     } relation combinations \`r1\`, \`r2\`, \`r1.implies(r2) === r2.impliedBy(r1)\``, function () {
+      this.timeout(this['to'])
+
       const combinations: RCombination[] = this['grCombinations']
       combinations.forEach(({ r1, r2 }) => {
         r1.implies(r2).should.equal(r2.impliedBy(r1))
@@ -294,8 +299,6 @@ export function generateRelationTests<R extends Relation> (
   })
   describe('#complement', function () {
     it('the complement of each relation is implied by all basic relations that are not implied by it', function () {
-      this.timeout(5000)
-
       RConstructor.RELATIONS.forEach(gr => {
         const result = gr.complement()
         RConstructor.BASIC_RELATIONS.forEach(br => {
@@ -321,7 +324,7 @@ export function generateRelationTests<R extends Relation> (
     it(`for ${
       fullCombinationTest ? 'all' : ''
     } relation combinations \`r1\`, \`r2\`, \`r1.min(r2)\` has the basic relations of \`r1\` that are not implied by \`r2\`, and vice versa`, function () {
-      this.timeout(5000)
+      this.timeout(this['to'])
 
       const combinations: RCombination[] = this['grCombinations']
       combinations.forEach(({ r1, r2 }) => {
@@ -334,7 +337,7 @@ export function generateRelationTests<R extends Relation> (
     it(`for ${
       fullCombinationTest ? 'all' : ''
     } relation combinations, \`or\` has the basic relations of both`, function () {
-      this.timeout(5000)
+      this.timeout(this['to'])
 
       const combinations: RCombination[] = this['grCombinations']
       combinations.forEach(({ r1, r2 }) => {
@@ -356,7 +359,7 @@ export function generateRelationTests<R extends Relation> (
     it(`for ${
       fullCombinationTest ? 'all' : ''
     } relation combinations, \`and\` has the common basic relations`, function () {
-      this.timeout(5000)
+      this.timeout(this['to'])
 
       const combinations: RCombination[] = this['grCombinations']
       combinations.forEach(({ r1, r2 }) => {
