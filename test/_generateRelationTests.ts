@@ -54,12 +54,12 @@ export function generateRelationTests<R extends Relation> (
   })
   describe('nr of test cases', function () {
     it('sparse basic relations', function () {
-      console.log(this['sparseBrCombinations'].length)
+      // console.log(this['sparseBrCombinations'].length)
       const expected = ((RConstructor.NR_OF_BITS - 1) * RConstructor.NR_OF_BITS) / 2
       this['sparseBrCombinations'].length.should.equal(expected)
     })
     it('relation combinations', function () {
-      console.log(`${this['grCombinations'].length as number} (timeout: ${this['to'] as number})`)
+      // console.log(`${this['grCombinations'].length as number} (timeout: ${this['to'] as number})`)
       const expected = fullCombinationTest
         ? Math.pow(2, 2 * RConstructor.NR_OF_BITS)
         : nrOfRelations(RConstructor.NR_OF_BITS)
