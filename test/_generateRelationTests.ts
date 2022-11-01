@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
 import 'should'
-import { nrOfRelations } from '../src/relationBitPattern'
+import { nrOfRelations } from '../src/bitPattern'
 import { Relation, RelationConstructor } from '../src/Relation'
 
 export interface BasicRelationExpectations {

@@ -1,5 +1,5 @@
 import { Relation } from './Relation'
-import { basicRelationBitPatterns, relationBitPatterns } from './relationBitPattern'
+import { basicRelationBitPatterns, relationBitPatterns } from './bitPattern'
 
 /**
  * Support for reasoning about Allen relations, i.e., relations between intervals, and constraints on those relations.

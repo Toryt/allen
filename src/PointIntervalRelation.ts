@@ -4,7 +4,7 @@ import { Comparator } from './comparator'
 import { commonTypeRepresentation } from './typeRepresentation'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { Relation } from './Relation'
-import { basicRelationBitPatterns, relationBitPatterns } from './relationBitPattern'
+import { basicRelationBitPatterns, relationBitPatterns } from './bitPattern'
 
 const haveCommonType: string = 't, i.start and i.end must be of a common type'
 

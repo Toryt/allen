@@ -1,11 +1,5 @@
 import assert from 'assert'
-import {
-  bitCount,
-  EMPTY_BIT_PATTERN,
-  fullBitPattern,
-  isBasicRelationBitPattern,
-  nrOfRelations
-} from './relationBitPattern'
+import { bitCount, EMPTY_BIT_PATTERN, fullBitPattern, isBasicRelationBitPattern, nrOfRelations } from './bitPattern'
 
 export interface RelationConstructor<R extends Relation> extends Function {
   /**
