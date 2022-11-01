@@ -35,19 +35,21 @@ export function generateRelationTests<R extends Relation> (
       []
     )
 
-    this['grCombinations'] = fullCombinationTest
+    this[
+      'grCombinations'
+    ] = /* prettier-ignore */ fullCombinationTest
       ? RConstructor.RELATIONS.reduce(
-          (acc1: RCombination[], gr1: R) =>
-            RConstructor.RELATIONS.reduce((acc2: RCombination[], gr2: R) => {
-              acc2.push({ r1: gr1, r2: gr2 })
-              return acc2
-            }, acc1),
-          []
-        )
+        (acc1: RCombination[], gr1: R) =>
+          RConstructor.RELATIONS.reduce((acc2: RCombination[], gr2: R) => {
+            acc2.push({ r1: gr1, r2: gr2 })
+            return acc2
+          }, acc1),
+        []
+      )
       : RConstructor.RELATIONS.map((r1, i) => ({
-          r1,
-          r2: RConstructor.RELATIONS[RConstructor.RELATIONS.length - i - 1]
-        }))
+        r1,
+        r2: RConstructor.RELATIONS[RConstructor.RELATIONS.length - i - 1]
+      }))
   })
   describe('nr of test cases', function () {
     it('sparse basic relations', function () {
