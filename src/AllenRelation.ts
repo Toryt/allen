@@ -316,4 +316,457 @@ export class AllenRelation extends Relation {
    */
   static readonly PRECEDED_BY: AllenRelation = AllenRelation.BASIC_RELATIONS[12]
   // Bit pattern: 4069 = '1000000000000'
+
+  /*<section name="secondary relations">*/
+  //------------------------------------------------------------------
+
+  /**
+   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
+   * and an interval <var>I2</var> are concurrent in some way.
+   * Thus, <var>I1</var> does <em>not</em> precede <var>I2</var>, <var>I1</var> does <em>not</em> meet <var>I2</var>,
+   * <var>I1</var> is <em>not</em> met be <var>I2</var>, and <var>I1</var> is <em>not</em> preceded by <var>I2</var>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("CONCURS_WITH == or(OVERLAPS, FINISHED_BY, CONTAINS, STARTS, EQUALS, STARTED_BY, DURING, FINISHES, OVERLAPPED_BY)"))
+   */
+  static readonly CONCURS_WITH: AllenRelation = AllenRelation.or(
+    AllenRelation.OVERLAPS,
+    AllenRelation.FINISHED_BY,
+    AllenRelation.CONTAINS,
+    AllenRelation.STARTS,
+    AllenRelation.EQUALS,
+    AllenRelation.STARTED_BY,
+    AllenRelation.DURING,
+    AllenRelation.FINISHES,
+    AllenRelation.OVERLAPPED_BY
+  )
+
+  /**
+   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
+   * begins earlier than an interval <var>I2</var> begins:
+   * <pre>
+   *   (I1.begin != null) && (I2.begin != null) && (I1.begin &lt; I2.begin)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("BEGINS_EARLIER == or(PRECEDES, MEETS, OVERLAPS, FINISHED_BY, CONTAINS)"))
+   */
+  static readonly BEGINS_EARLIER: AllenRelation = AllenRelation.or(
+    AllenRelation.PRECEDES,
+    AllenRelation.MEETS,
+    AllenRelation.OVERLAPS,
+    AllenRelation.FINISHED_BY,
+    AllenRelation.CONTAINS
+  )
+
+  /**
+   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
+   * and an interval <var>I2</var> begin at the same time:
+   * <pre>
+   *   (I1.begin != null) && (I2.begin != null) && (I1.begin == I2.begin)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("BEGIN_TOGETHER == or(STARTS, EQUALS, STARTED_BY)"))
+   */
+  static readonly BEGIN_TOGETHER: AllenRelation = AllenRelation.or(
+    AllenRelation.STARTS,
+    AllenRelation.EQUALS,
+    AllenRelation.STARTED_BY
+  )
+
+  /**
+   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
+   * begins later than an interval <var>I2</var> begins:
+   * <pre>
+   *   (I1.begin != null) && (I2.begin != null) && (I1.begin &gt; I2.begin)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("BEGINS_LATER == or(DURING, FINISHES, OVERLAPPED_BY, MET_BY, PRECEDED_BY)"))
+   */
+  static readonly BEGINS_LATER: AllenRelation = AllenRelation.or(
+    AllenRelation.DURING,
+    AllenRelation.FINISHES,
+    AllenRelation.OVERLAPPED_BY,
+    AllenRelation.MET_BY,
+    AllenRelation.PRECEDED_BY
+  )
+
+  /**
+   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
+   * begins inside an interval <var>I2</var>:
+   * <pre>
+   *   (I1.begin != null) && (I2.begin != null) && (I2.end != null) && (I1.begin &gt; I2.begin) && (I1.begin &lt; I2.end)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("BEGINS_IN == or(DURING, FINISHES, OVERLAPPED_BY)"))
+   */
+  static readonly BEGINS_IN: AllenRelation = AllenRelation.or(
+    AllenRelation.DURING,
+    AllenRelation.FINISHES,
+    AllenRelation.OVERLAPPED_BY
+  )
+
+  /**
+   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
+   * begins earlier and ends earlier than an interval <var>I2</var> begins and ends:
+   * <pre>
+   *   (I1.begin != null) && (I2.begin != null) && (I1.end != null) && (I2.end != null) && (I1.begin &lt; I2.begin) && (I1.end &lt; I2.end)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("BEGINS_EARLIER_AND_ENDS_EARLIER == or(PRECEDES, MEETS, OVERLAPS)"))
+   */
+  static readonly BEGINS_EARLIER_AND_ENDS_EARLIER: AllenRelation = AllenRelation.or(
+    AllenRelation.PRECEDES,
+    AllenRelation.MEETS,
+    AllenRelation.OVERLAPS
+  )
+
+  /**
+   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
+   * begins later and ends later than an interval <var>I2</var> begins and ends:
+   * <pre>
+   *   (I1.begin != null) && (I2.begin != null) && (I1.end != null) && (I2.end != null) && (I1.begin &gt; I2.begin) && (I1.end &gt; I2.end)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("BEGINS_LATER_AND_ENDS_LATER == or(OVERLAPPED_BY, MET_BY, PRECEDED_BY)"))
+   */
+  static readonly BEGINS_LATER_AND_ENDS_LATER: AllenRelation = AllenRelation.or(
+    AllenRelation.OVERLAPPED_BY,
+    AllenRelation.MET_BY,
+    AllenRelation.PRECEDED_BY
+  )
+
+  /**
+   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
+   * ends earlier than an interval <var>I2</var> ends:
+   * <pre>
+   *   (I1.end != null) && (I2.end != null) && (I1.end &lt; I2.end)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("ENDS_EARLIER == or(PRECEDES, MEETS, OVERLAPS, STARTS, DURING)"))
+   */
+  static readonly ENDS_EARLIER: AllenRelation = AllenRelation.or(
+    AllenRelation.PRECEDES,
+    AllenRelation.MEETS,
+    AllenRelation.OVERLAPS,
+    AllenRelation.STARTS,
+    AllenRelation.DURING
+  )
+
+  /**
+   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
+   * ends inside an interval <var>I2</var>:
+   * <pre>
+   *   (I1.end != null) && (I2.begin != null) && (I2.end != null) && (I1.end &gt; I2.begin) && (I1.end &lt; I2.end)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("ENDS_IN == or(OVERLAPS, STARTS, DURING)"))
+   */
+  static readonly ENDS_IN: AllenRelation = AllenRelation.or(
+    AllenRelation.OVERLAPS,
+    AllenRelation.STARTS,
+    AllenRelation.DURING
+  )
+
+  /**
+   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
+   * and an interval <var>I2</var> end at the same time.
+   * <pre>
+   *   (I1.end != null) && (I2.end != null) && (I1.end == I2.end)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("END_TOGETHER == or(FINISHED_BY, EQUALS, FINISHES)"))
+   */
+  static readonly END_TOGETHER: AllenRelation = AllenRelation.or(
+    AllenRelation.FINISHED_BY,
+    AllenRelation.EQUALS,
+    AllenRelation.FINISHES
+  )
+
+  /**
+   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
+   * ends later than an interval <var>I2</var> ends:
+   * <pre>
+   *   (I1.end != null) && (I2.end != null) && (I1.end &gt; I2.end)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("ENDS_LATER == or(CONTAINS, STARTED_BY, OVERLAPPED_BY, MET_BY, PRECEDED_BY)"))
+   */
+  static readonly ENDS_LATER: AllenRelation = AllenRelation.or(
+    AllenRelation.CONTAINS,
+    AllenRelation.STARTED_BY,
+    AllenRelation.OVERLAPPED_BY,
+    AllenRelation.MET_BY,
+    AllenRelation.PRECEDED_BY
+  )
+
+  /**
+   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
+   * contains the begin of an interval <var>I2</var>:
+   * <pre>
+   *   (I1.begin != null) && (I1.end != null) && (I2.begin != null) && (I1.begin &lt; I2.begin) && (I1.end &gt; I2.begin)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("CONTAINS_BEGIN == or(OVERLAPS, FINISHED_BY, CONTAINS)"))
+   */
+  static readonly CONTAINS_BEGIN: AllenRelation = AllenRelation.or(
+    AllenRelation.OVERLAPS,
+    AllenRelation.FINISHED_BY,
+    AllenRelation.CONTAINS
+  )
+
+  /**
+   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
+   * contains the end of an interval <var>I2</var>:
+   * <pre>
+   *   (I1.begin != null) && (I1.end != null) && (I2.end != null) && (I1.begin &lt; I2.end) && (I1.end &gt; I2.end)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("CONTAINS_END == or(CONTAINS, STARTED_BY, OVERLAPPED_BY)"))
+   */
+  static readonly CONTAINS_END: AllenRelation = AllenRelation.or(
+    AllenRelation.CONTAINS,
+    AllenRelation.STARTED_BY,
+    AllenRelation.OVERLAPPED_BY
+  )
+
+  /*</section>*/
+
+  /**
+   * This matrix holds the compositions of basic interval relations. These are part of the given semantics, and cannot
+   * be calculated. See {@link compose}.
+   */
+  static readonly BASIC_COMPOSITIONS: AllenRelation[][] = [
+    [
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.ENDS_EARLIER,
+      AllenRelation.ENDS_EARLIER,
+      AllenRelation.ENDS_EARLIER,
+      AllenRelation.ENDS_EARLIER,
+      AllenRelation.fullRelation()
+    ],
+    [
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.MEETS,
+      AllenRelation.MEETS,
+      AllenRelation.MEETS,
+      AllenRelation.ENDS_IN,
+      AllenRelation.ENDS_IN,
+      AllenRelation.ENDS_IN,
+      AllenRelation.END_TOGETHER,
+      AllenRelation.ENDS_LATER
+    ],
+    [
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.BEGINS_EARLIER_AND_ENDS_EARLIER,
+      AllenRelation.BEGINS_EARLIER_AND_ENDS_EARLIER,
+      AllenRelation.BEGINS_EARLIER,
+      AllenRelation.OVERLAPS,
+      AllenRelation.OVERLAPS,
+      AllenRelation.CONTAINS_BEGIN,
+      AllenRelation.ENDS_IN,
+      AllenRelation.ENDS_IN,
+      AllenRelation.CONCURS_WITH,
+      AllenRelation.CONTAINS_END,
+      AllenRelation.ENDS_LATER
+    ],
+    [
+      AllenRelation.PRECEDES,
+      AllenRelation.MEETS,
+      AllenRelation.OVERLAPS,
+      AllenRelation.FINISHED_BY,
+      AllenRelation.CONTAINS,
+      AllenRelation.OVERLAPS,
+      AllenRelation.FINISHED_BY,
+      AllenRelation.CONTAINS,
+      AllenRelation.ENDS_IN,
+      AllenRelation.END_TOGETHER,
+      AllenRelation.CONTAINS_END,
+      AllenRelation.CONTAINS_END,
+      AllenRelation.ENDS_LATER
+    ],
+    [
+      AllenRelation.BEGINS_EARLIER,
+      AllenRelation.CONTAINS_BEGIN,
+      AllenRelation.CONTAINS_BEGIN,
+      AllenRelation.CONTAINS,
+      AllenRelation.CONTAINS,
+      AllenRelation.CONTAINS_BEGIN,
+      AllenRelation.CONTAINS,
+      AllenRelation.CONTAINS,
+      AllenRelation.CONCURS_WITH,
+      AllenRelation.CONTAINS_END,
+      AllenRelation.CONTAINS_END,
+      AllenRelation.CONTAINS_END,
+      AllenRelation.ENDS_LATER
+    ],
+    [
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.BEGINS_EARLIER_AND_ENDS_EARLIER,
+      AllenRelation.BEGINS_EARLIER_AND_ENDS_EARLIER,
+      AllenRelation.BEGINS_EARLIER,
+      AllenRelation.STARTS,
+      AllenRelation.STARTS,
+      AllenRelation.BEGIN_TOGETHER,
+      AllenRelation.DURING,
+      AllenRelation.DURING,
+      AllenRelation.BEGINS_IN,
+      AllenRelation.MET_BY,
+      AllenRelation.PRECEDED_BY
+    ],
+    [
+      AllenRelation.PRECEDES,
+      AllenRelation.MEETS,
+      AllenRelation.OVERLAPS,
+      AllenRelation.FINISHED_BY,
+      AllenRelation.CONTAINS,
+      AllenRelation.STARTS,
+      AllenRelation.EQUALS,
+      AllenRelation.STARTED_BY,
+      AllenRelation.DURING,
+      AllenRelation.FINISHES,
+      AllenRelation.OVERLAPPED_BY,
+      AllenRelation.MET_BY,
+      AllenRelation.PRECEDED_BY
+    ],
+    [
+      AllenRelation.BEGINS_EARLIER,
+      AllenRelation.CONTAINS_BEGIN,
+      AllenRelation.CONTAINS_BEGIN,
+      AllenRelation.CONTAINS,
+      AllenRelation.CONTAINS,
+      AllenRelation.BEGIN_TOGETHER,
+      AllenRelation.STARTED_BY,
+      AllenRelation.STARTED_BY,
+      AllenRelation.BEGINS_IN,
+      AllenRelation.OVERLAPPED_BY,
+      AllenRelation.OVERLAPPED_BY,
+      AllenRelation.MET_BY,
+      AllenRelation.PRECEDED_BY
+    ],
+    [
+      AllenRelation.PRECEDES,
+      AllenRelation.PRECEDES,
+      AllenRelation.ENDS_EARLIER,
+      AllenRelation.ENDS_EARLIER,
+      AllenRelation.fullRelation(),
+      AllenRelation.DURING,
+      AllenRelation.DURING,
+      AllenRelation.BEGINS_LATER,
+      AllenRelation.DURING,
+      AllenRelation.DURING,
+      AllenRelation.BEGINS_LATER,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.PRECEDED_BY
+    ],
+    [
+      AllenRelation.PRECEDES,
+      AllenRelation.MEETS,
+      AllenRelation.ENDS_IN,
+      AllenRelation.END_TOGETHER,
+      AllenRelation.ENDS_LATER,
+      AllenRelation.DURING,
+      AllenRelation.FINISHES,
+      AllenRelation.BEGINS_LATER_AND_ENDS_LATER,
+      AllenRelation.DURING,
+      AllenRelation.FINISHES,
+      AllenRelation.BEGINS_LATER_AND_ENDS_LATER,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.PRECEDED_BY
+    ],
+    [
+      AllenRelation.BEGINS_EARLIER,
+      AllenRelation.CONTAINS_BEGIN,
+      AllenRelation.CONCURS_WITH,
+      AllenRelation.CONTAINS_END,
+      AllenRelation.ENDS_LATER,
+      AllenRelation.BEGINS_IN,
+      AllenRelation.OVERLAPPED_BY,
+      AllenRelation.BEGINS_LATER_AND_ENDS_LATER,
+      AllenRelation.BEGINS_IN,
+      AllenRelation.OVERLAPPED_BY,
+      AllenRelation.BEGINS_LATER_AND_ENDS_LATER,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.PRECEDED_BY
+    ],
+    [
+      AllenRelation.BEGINS_EARLIER,
+      AllenRelation.BEGIN_TOGETHER,
+      AllenRelation.BEGINS_IN,
+      AllenRelation.MET_BY,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.BEGINS_IN,
+      AllenRelation.MET_BY,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.BEGINS_IN,
+      AllenRelation.MET_BY,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.PRECEDED_BY
+    ],
+    [
+      AllenRelation.fullRelation(),
+      AllenRelation.BEGINS_LATER,
+      AllenRelation.BEGINS_LATER,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.BEGINS_LATER,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.BEGINS_LATER,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.PRECEDED_BY,
+      AllenRelation.PRECEDED_BY
+    ]
+  ]
+
+  /**
+ * <p>Given 3 time intervals <code><var>I1</var></code>, <code><var>I2</var></code> and <code><var>I3</var></code>,
+ *   given <code>gr1 == timeIntervalRelation(<var>I1</var>, <var>I2</var>)</code> and <code>gr2 ==
+ *   timeIntervalRelation(<var>I2</var>, <var>I3</var>)</code>, <code>compose(gr1, gr2) == timeIntervalRelation(<var>I1</var>,
+ *   <var>I3</var>)</code>.</p>
+ * <p>Although this method is still, like most other methods in this class, of constant time (<em>O(n)</em>), it
+ *   takes a significant longer constant time, namely ~ 13<sup>2</sup>. During unit tests we saw that 100 000 calls
+ *   take over a second on a 2.4GHz dual core processor.</p>
+@MethodContract(
+    pre  = {
+      @Expression("_gr1 != null"),
+      @Expression("_gr2 != null")
+    },
+    post = {
+      @Expression("for (TimeIntervalRelation br1 : BASIC_RELATIONS) {for (TimeIntervalRelation br2: BASIC_RELATIONS) {" +
+          "br1.implies(_gr1) && br2.implies(_gr2) ? result.impliedBy(BASIC_COMPOSITIONS[br1.basicRelationOrdinal()][br2.basicRelationOrdinal()])" +
+          "}}")
+    })
+ */
+  static compose (ar1: AllenRelation, ar2: AllenRelation): AllenRelation {
+    // assert preArgumentNotNull(gr1, "gr1");
+    // assert preArgumentNotNull(gr2, "gr2");
+
+    return AllenRelation.BASIC_RELATIONS.reduce(
+      (acc1: AllenRelation, br1: AllenRelation) =>
+        ar1.impliedBy(br1)
+          ? AllenRelation.BASIC_RELATIONS.reduce(
+              (acc2: AllenRelation, br2: AllenRelation) =>
+                ar2.impliedBy(br2)
+                  ? AllenRelation.or(acc2, AllenRelation.BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()])
+                  : acc2,
+              acc1
+            )
+          : acc1,
+      AllenRelation.emptyRelation()
+    )
+  }
 }

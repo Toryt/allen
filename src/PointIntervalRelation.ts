@@ -5,6 +5,7 @@ import { commonTypeRepresentation } from './typeRepresentation'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { Relation } from './Relation'
 import { basicRelationBitPatterns, relationBitPatterns } from './bitPattern'
+import { AllenRelation } from './AllenRelation'
 
 const haveCommonType: string = 't, i.start and i.end must be of a common type'
 
@@ -133,52 +134,172 @@ export class PointIntervalRelation extends Relation {
   public static readonly AFTER: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[4]
   // Bit pattern: 16 = '10000'
 
-  /*
-/!**
- * This matrix holds the compositions of basic point – interval relations with Allen relations. These are part
- * of the given semantics, and cannot be calculated. See {@link #compose(PointIntervalRelation, TimeIntervalRelation)}.
- *!/
-public final static PointIntervalRelation[][] BASIC_COMPOSITIONS =
-    {
-{BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEFORE_END, BEFORE_END, BEFORE_END, BEFORE_END, FULL},
-{BEFORE, BEFORE, BEFORE, BEFORE, BEFORE, BEGINS, BEGINS, BEGINS, IN, IN, IN, ENDS, AFTER},
-{BEFORE, BEFORE, BEFORE_END, BEFORE_END, FULL, IN, IN, AFTER_BEGIN, IN, IN, AFTER_BEGIN, AFTER, AFTER},
-{BEFORE, BEGINS, IN, ENDS, AFTER, IN, ENDS, AFTER, IN, ENDS, AFTER, AFTER, AFTER},
-{FULL, AFTER_BEGIN, AFTER_BEGIN, AFTER, AFTER, AFTER_BEGIN, AFTER, AFTER, AFTER_BEGIN, AFTER, AFTER, AFTER, AFTER}
-};
+  /*<section name="secondary relations">*/
+  //------------------------------------------------------------------
 
-/!**
- * <p>Given a point in time <code><var>t</var></code> and 2 time intervals <code><var>I1</var></code>, <code><var>I2</var></code>,
- *   given <code>tpir = timePointIntervalRelation(<var>t</var>, <var>I1</var>)</code> and
- *   <code>ar == allenRelation(<var>I1</var>, <var>I2</var>)</code>,
- *   <code>compose(tpir, ar) == timePointIntervalRelation(<var>t</var>, <var>I2</var>)</code>.</p>
- *!/
-@MethodContract(
-    pre  = {
+  /**
+   * A non-basic time point-interval relation that is often handy to use, which expresses that a time point <var>t</var>
+   * and an interval <var>I</var> are concurrent in some way.
+   * Thus, <var>t</var> does <em>not</em> come before <var>I</var>, <var>t</var> is not the end time of <var>I</var>,
+   * and <var>t</var> does <em>not</em> come after <var>I</var> (remember that we define time intervals as right half-open).
+  @Invars(@Expression("CONCURS_WITH == or(BEGINS, IN)"))
+   */
+  public static readonly CONCURS_WITH: PointIntervalRelation = PointIntervalRelation.or(
+    PointIntervalRelation.COMMENCES,
+    PointIntervalRelation.IN
+  )
+
+  /**
+   * A non-basic time point-interval relation that is often handy to use, which expresses that a time point <var>t</var>
+   * is earlier than an interval <var>I</var> ends:
+   * <pre>
+   *   (I.end != null) && (t &lt; I.end)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("BEFORE_END == or(BEFORE, BEGINS, IN)"))
+   */
+  public static readonly BEFORE_END: PointIntervalRelation = PointIntervalRelation.or(
+    PointIntervalRelation.BEFORE,
+    PointIntervalRelation.COMMENCES,
+    PointIntervalRelation.IN
+  )
+
+  /**
+   * A non-basic time point-interval relation that is often handy to use, which expresses that a time point <var>t</var>
+   * is later than an interval <var>I</var> begins:
+   * <pre>
+   *   (I.begin != null) && (t &gt; I.begin)
+   * </pre>.
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+  @Invars(@Expression("AFTER_BEGIN == or(IN, ENDS, AFTER)"))
+   */
+  public static readonly AFTER_BEGIN: PointIntervalRelation = PointIntervalRelation.or(
+    PointIntervalRelation.IN,
+    PointIntervalRelation.TERMINATES,
+    PointIntervalRelation.AFTER
+  )
+
+  /*</section>*/
+
+  /**
+   * This matrix holds the compositions of basic time point-interval relations with Allen relations. These are part
+   * of the given semantics, and cannot be calculated. See {@link compose}.
+   */
+  public static readonly BASIC_COMPOSITIONS: PointIntervalRelation[][] = [
+    [
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE_END,
+      PointIntervalRelation.BEFORE_END,
+      PointIntervalRelation.BEFORE_END,
+      PointIntervalRelation.BEFORE_END,
+      PointIntervalRelation.fullRelation()
+    ],
+    [
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.COMMENCES,
+      PointIntervalRelation.COMMENCES,
+      PointIntervalRelation.COMMENCES,
+      PointIntervalRelation.IN,
+      PointIntervalRelation.IN,
+      PointIntervalRelation.IN,
+      PointIntervalRelation.TERMINATES,
+      PointIntervalRelation.AFTER
+    ],
+    [
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.BEFORE_END,
+      PointIntervalRelation.BEFORE_END,
+      PointIntervalRelation.fullRelation(),
+      PointIntervalRelation.IN,
+      PointIntervalRelation.IN,
+      PointIntervalRelation.AFTER_BEGIN,
+      PointIntervalRelation.IN,
+      PointIntervalRelation.IN,
+      PointIntervalRelation.AFTER_BEGIN,
+      PointIntervalRelation.AFTER,
+      PointIntervalRelation.AFTER
+    ],
+    [
+      PointIntervalRelation.BEFORE,
+      PointIntervalRelation.COMMENCES,
+      PointIntervalRelation.IN,
+      PointIntervalRelation.TERMINATES,
+      PointIntervalRelation.AFTER,
+      PointIntervalRelation.IN,
+      PointIntervalRelation.TERMINATES,
+      PointIntervalRelation.AFTER,
+      PointIntervalRelation.IN,
+      PointIntervalRelation.TERMINATES,
+      PointIntervalRelation.AFTER,
+      PointIntervalRelation.AFTER,
+      PointIntervalRelation.AFTER
+    ],
+    [
+      PointIntervalRelation.fullRelation(),
+      PointIntervalRelation.AFTER_BEGIN,
+      PointIntervalRelation.AFTER_BEGIN,
+      PointIntervalRelation.AFTER,
+      PointIntervalRelation.AFTER,
+      PointIntervalRelation.AFTER_BEGIN,
+      PointIntervalRelation.AFTER,
+      PointIntervalRelation.AFTER,
+      PointIntervalRelation.AFTER_BEGIN,
+      PointIntervalRelation.AFTER,
+      PointIntervalRelation.AFTER,
+      PointIntervalRelation.AFTER,
+      PointIntervalRelation.AFTER
+    ]
+  ]
+
+  /**
+   * <p>Given a point in time <code><var>t</var></code> and 2 time intervals <code><var>I1</var></code>, <code><var>I2</var></code>,
+   *   given <code>tpir = timePointIntervalRelation(<var>t</var>, <var>I1</var>)</code> and
+   *   <code>ar == allenRelation(<var>I1</var>, <var>I2</var>)</code>,
+   *   <code>compose(tpir, ar) == timePointIntervalRelation(<var>t</var>, <var>I2</var>)</code>.</p>
+  @MethodContract(
+      pre  = {
         @Expression("_tpir != null"),
         @Expression("_ar != null")
-    },
-    post = {
-        @Expression("for (PointIntervalRelation bTpir : BASIC_RELATIONS) {for (TimeIntervalRelation bAr: TimeIntervalRelation.BASIC_RELATIONS) {" +
+      },
+      post = {
+        @Expression("for (TimePointIntervalRelation bTpir : BASIC_RELATIONS) {for (TimeIntervalRelation bAr: TimeIntervalRelation.BASIC_RELATIONS) {" +
             "bTpir.implies(_tpir) && bAr.implies(_ar) ? result.impliedBy(BASIC_COMPOSITIONS[btPir.basicRelationOrdinal()][bAr.basicRelationOrdinal()])" +
             "}}")
-    })
-public static PointIntervalRelation compose(PointIntervalRelation tpir, TimeIntervalRelation ar) {
-    assert preArgumentNotNull(tpir, "tpir");
-    assert preArgumentNotNull(ar, "ar");
-    PointIntervalRelation acc = EMPTY;
-    for (PointIntervalRelation bTpir : BASIC_RELATIONS) {
-        if (tpir.impliedBy(tpir)) {
-            for (TimeIntervalRelation bAr : TimeIntervalRelation.BASIC_RELATIONS) {
-                if (ar.impliedBy(bAr)) {
-                    acc = or(acc, BASIC_COMPOSITIONS[bTpir.basicRelationOrdinal()][bAr.basicRelationOrdinal()]);
-                }
-            }
-        }
-    }
-    return acc;
-}
-*/
+      })
+   */
+  static compose (pir: PointIntervalRelation, ar: AllenRelation): PointIntervalRelation {
+    // assert preArgumentNotNull(tpir, "tpir");
+    // assert preArgumentNotNull(ar, "ar");
+
+    return PointIntervalRelation.BASIC_RELATIONS.reduce(
+      (acc1: PointIntervalRelation, bpir: PointIntervalRelation) =>
+        pir.impliedBy(bpir)
+          ? AllenRelation.BASIC_RELATIONS.reduce(
+              (acc2: PointIntervalRelation, bar: AllenRelation) =>
+                ar.impliedBy(bar)
+                  ? PointIntervalRelation.or(
+                      acc2,
+                      PointIntervalRelation.BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]
+                    )
+                  : acc2,
+              acc1
+            )
+          : acc1,
+      PointIntervalRelation.emptyRelation()
+    )
+  }
 
   /**
    * The relation of `t` with `i` with the lowest possible {@link uncertainty}.
