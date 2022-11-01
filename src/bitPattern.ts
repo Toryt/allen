@@ -76,15 +76,25 @@ export const largestBitInteger = 2 ** (32 - 1)
 /**
  * Reverses the `bitPattern` of `nrOfBits` long.
  */
-export function reverse (nrOfBits: number, bitPattern: number): number {
+export function reverse (nrOfBits: number, n: number): number {
   assert(Number.isInteger(nrOfBits))
   assert(nrOfBits >= 0)
   assert(nrOfBits <= largestNrOfBits)
-  assert(Number.isInteger(bitPattern))
-  assert(bitPattern >= 0)
-  assert(bitPattern <= nrOfRelations(nrOfBits))
+  assert(Number.isInteger(n))
+  assert(n >= 0)
+  assert(n <= nrOfRelations(nrOfBits))
 
-  return 0
+  let rev = 0
+
+  for (let i = 1; i <= nrOfBits; i++) {
+    rev <<= 1 // bitwise left shift `rev` by 1
+    if ((n & 1) === 1) {
+      // if current bit is '1'
+      rev ^= 1
+    }
+    n >>= 1 // bitwise right shift `n` by 1
+  }
+  return rev
 }
 
 export function bitCount (n: number): number {
