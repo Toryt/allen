@@ -163,15 +163,29 @@ describe('bitPattern', function () {
             })
         })
         describe('reverse', function () {
+          it('reserves EMPTY to EMPTY', function () {
+            reverse(nrOfBits, EMPTY_BIT_PATTERN).should.equal(EMPTY_BIT_PATTERN)
+          })
+          it('reserves FULL to FULL', function () {
+            const FULL = fullBitPattern(nrOfBits)
+            reverse(nrOfBits, FULL).should.equal(FULL)
+          })
           it('reverses the bitPattern correctly', function () {
+            this.timeout(5000)
+
+            function bits (n: number) {
+              const result = n.toString(2).split('')
+              while (result.length < nrOfBits) {
+                result.unshift('0')
+              }
+              return result
+            }
+
             const rbps: number[] = this['relationBitPatterns']
             rbps.forEach(bitPattern => {
+              const sBp = bits(bitPattern)
               const result = reverse(nrOfBits, bitPattern)
-              const sBp = bitPattern.toString(2).split('')
-              console.log(sBp.join(''))
-              const sR = result.toString(2).split('')
-              console.log(sR.join(''))
-              console.log()
+              const sR = bits(result)
               sR.should.deepEqual(sBp.reverse())
             })
           })
