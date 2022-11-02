@@ -189,21 +189,19 @@ export class AllenRelation extends Relation {
   // Bit pattern: 64 = '0000001000000'
 
   /**
-   * A <strong>basic</strong> time interval relation that says that an interval
-   * <var>I1</var> <dfn>is started by</dfn> an interval <var>I2</var>, i.e.,
-   * the begin of <var>I1</var> is the begin of <var>I2</var>, and the end of
-   * <var>I1</var> is later than the end of <var>I2</var>:
+   * A _basic_ Allen relation that says that an interval `I1` _started by_ an interval `I2`, i.e.,
+   *
+   * - the `start` of `I1` is the `start` of `I2`, and
+   * - the `end` of `I1` is after the `end` of `I2`
    *
    * ```
-   * (I1.begin != null) &amp;&amp; (I1.end != null) &amp;&amp; (I2.begin != null) &amp;&amp; (I2.end != null) &amp;&amp;
-   *   (I1.begin == I2.begin) &amp;&amp; (I1.end &gt; I2.end)
+   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
+   *   (I1.start = I2.start) ∧ (I2.end < I1.end)
    * ```
    *
-   * <img style="text-align: center;" src="doc-files/AllenRelation-startedBy.png">
+   * ![started by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-startedBy.png)
    *
-   * The conventional short representation of this Allen relation is &quot;<code><strong>S</strong></code>&quot;.
-   *
-   * The converse of this relation is {@link STARTS}.
+   * The short representation of this Allen relation is `S`. The converse of this relation is {@link STARTS}.
    */
   static readonly STARTED_BY: AllenRelation = AllenRelation.BASIC_RELATIONS[7]
   // Bit pattern: 128 = '0000010000000'
