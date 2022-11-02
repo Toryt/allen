@@ -84,19 +84,16 @@ export class AllenRelation extends Relation {
   // Bit pattern: 1 = '0000000000001'
 
   /**
-   * A <strong>basic</strong> time interval relation that says that an interval
-   * <var>I1</var> <dfn>meets</dfn> an interval <var>I2</var>, i.e., the end
-   * of <var>I1</var> is the begin of <var>I2</var>:
+   * A _basic_ Allen relation that says that an interval `I1` _meets_ an interval `I2`, i.e., the `end` of `I1` is the
+   * `start` of `I2`.
    *
    * ```
-   * (I1.end != null) &amp;&amp; (I2.begin != null) &amp;&amp; (I1.end == I2.begin)
+   * (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.end = I.start)
    * ```
    *
-   * <img style="text-align: center;" src="doc-files/AllenRelation-meets.png">
+   * ![meets](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-meets.png)
    *
-   * The conventional short representation of this Allen relation is &quot;<code><strong>m</strong></code>&quot;.
-   *
-   * The converse of this relation is {@link MET_BY}.
+   * The short representation of this Allen relation is `m`. The converse of this relation is {@link MET_BY}.
    */
   static readonly MEETS: AllenRelation = AllenRelation.BASIC_RELATIONS[1]
   // Bit pattern: 2 = '0000000000010'
