@@ -38,10 +38,10 @@ When reasoning about the relationship between points and intervals however, like
 often employ _indeterminate_ relations, such as `t (bc) I` (`t` is `BEFORE` `I`, or `COMMENCES` `I`). This is comparable
 to reasoning with `≤`, `≥`, and `≠` with time instances.
 
-For time intervals, given 5 basic relations, we get 32 (= 2<sup>5</sup>) possible _general relations_. This includes the
-`FULL` relation (comparable to `< ⋁ = ⋁ >` with points), which expresses the maximum uncertainty about the relation
-between a point and an interval. `FULL` means you are from Barcelona. The `EMPTY` relation is not a true point –
-interval relation. It does not express a relational condition between a point and an intervals. It is needed for
+For points and intervals, given 5 basic relations, we get 32 (= 2<sup>5</sup>) possible _general relations_. This
+includes the `FULL` relation (comparable to `< ⋁ = ⋁ >` with points), which expresses the maximum uncertainty about the
+relation between a point and an interval. `FULL` means you are from Barcelona. The `EMPTY` relation is not a true point
+– interval relation. It does not express a relational condition between a point and an intervals. It is needed for
 consistency with some algebraic operations on point – interval relations.
 
 ## Interval constraints
