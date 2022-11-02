@@ -308,17 +308,17 @@ export class PointIntervalRelation extends Relation {
 
     return PointIntervalRelation.BASIC_RELATIONS.reduce(
       (acc1: PointIntervalRelation, bpir: PointIntervalRelation) =>
-        pir.impliedBy(bpir)
+        /* prettier-ignore */ pir.impliedBy(bpir)
           ? AllenRelation.BASIC_RELATIONS.reduce(
-              (acc2: PointIntervalRelation, bar: AllenRelation) =>
-                ar.impliedBy(bar)
-                  ? PointIntervalRelation.or(
-                      acc2,
-                      PointIntervalRelation.BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]
-                    )
-                  : acc2,
-              acc1
-            )
+            (acc2: PointIntervalRelation, bar: AllenRelation) =>
+              ar.impliedBy(bar)
+                ? PointIntervalRelation.or(
+                  acc2,
+                  PointIntervalRelation.BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]
+                )
+                : acc2,
+            acc1
+          )
           : acc1,
       PointIntervalRelation.emptyRelation()
     )

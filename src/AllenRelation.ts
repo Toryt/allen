@@ -762,14 +762,14 @@ export class AllenRelation extends Relation {
 
     return AllenRelation.BASIC_RELATIONS.reduce(
       (acc1: AllenRelation, br1: AllenRelation) =>
-        ar1.impliedBy(br1)
+        /* prettier-ignore */ ar1.impliedBy(br1)
           ? AllenRelation.BASIC_RELATIONS.reduce(
-              (acc2: AllenRelation, br2: AllenRelation) =>
-                ar2.impliedBy(br2)
-                  ? AllenRelation.or(acc2, AllenRelation.BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()])
-                  : acc2,
-              acc1
-            )
+            (acc2: AllenRelation, br2: AllenRelation) =>
+              ar2.impliedBy(br2)
+                ? AllenRelation.or(acc2, AllenRelation.BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()])
+                : acc2,
+            acc1
+          )
           : acc1,
       AllenRelation.emptyRelation()
     )
