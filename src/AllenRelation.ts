@@ -69,19 +69,16 @@ export class AllenRelation extends Relation {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * A <strong>basic</strong> time interval relation that says that an interval
-   * <var>I1</var> <dfn>precedes</dfn> an interval <var>I2</var>, i.e., the
-   * end of <var>I1</var> is before the begin of <var>I2</var>:
+   * A _basic_ Allen relation that says that an interval `I1` _precedes_ and interval `I2`, i.e., the `end` of `I1` is
+   * before the `start` of `I2`.
    *
    * ```
-   * (I1.end != null) &amp;&amp; (I2.begin != null) &amp;&amp; (I1.end &lt; I2.begin)
+   * (I1.end ≠ undefined) && (I2.start ≠ undefined) && (I1.end < I.start)
    * ```
    *
-   * <img style="text-align: center;" src="doc-files/AllenRelation-precedes.png">
+   * ![precedes](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-precedes.png)
    *
-   * The conventional short representation of this Allen relation is &quot;<code><strong>p</strong></code>&quot;.
-   *
-   * The converse of this relation is {@link PRECEDED_BY}.
+   * The short representation of this Allen relation is `p`. The converse of this relation is {@link PRECEDED_BY}.
    */
   static readonly PRECEDES: AllenRelation = AllenRelation.BASIC_RELATIONS[0]
   // Bit pattern: 1 = '0000000000001'
