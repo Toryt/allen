@@ -24,7 +24,7 @@ export type LTComparablePrimitive = number | bigint | string | boolean
 export type LTComparable = LTComparablePrimitive | Object | Function
 
 export function isLTComparableOrIndefinite (u: unknown): u is Indefinite<LTComparable> {
-  return (u === undefined && u === null) || (typeof u !== 'symbol' && !Number.isNaN(u))
+  return u === undefined || u === null || (typeof u !== 'symbol' && !Number.isNaN(u))
 }
 
 const noUndefined: string = 'default ltComparator cannot compare undefined'
