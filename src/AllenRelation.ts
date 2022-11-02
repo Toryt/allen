@@ -736,7 +736,7 @@ export class AllenRelation extends Relation {
   //               acc1
   //           )
   //           : acc1,
-  //       this.typedConstructor().emptyRelation()
+  //       this.typedConstructor().emptyRelation<PointIntervalRelation>()
   //
   // }
 }

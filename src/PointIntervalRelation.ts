@@ -320,7 +320,7 @@ export class PointIntervalRelation extends Relation {
   //           acc1
   //         )
   //         : acc1,
-  //     PointIntervalRelation.emptyRelation()
+  //     PointIntervalRelation.emptyRelation<PointIntervalRelation>()
   //   )
   // }
 
