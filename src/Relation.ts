@@ -165,9 +165,9 @@ export interface RelationConstructor<R extends Relation> extends Function {
  *   - {@link and},
  *   - {@link min},
  *   - {@link compose}, and // MUDO make instance method?
- * - the unary method {@link complement}.
- *
- * // MUDO add converse
+ * - the unary methods
+ *   - {@link complement}, and
+ *   - {@link converse}.
  *
  * All instance methods in this class are _O(1)_, i.e., work in constant time, and all static methods are _O(n)_, i.e.,
  * work in linear time.
