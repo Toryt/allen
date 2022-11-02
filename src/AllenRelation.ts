@@ -69,11 +69,11 @@ export class AllenRelation extends Relation {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _precedes_ and interval `I2`, i.e., the `end` of `I1` is
+   * A _basic_ Allen relation that says that an interval `I1` _precedes_ an interval `I2`, i.e., the `end` of `I1` is
    * before the `start` of `I2`.
    *
    * ```
-   * (I1.end ≠ undefined) && (I2.start ≠ undefined) && (I1.end < I.start)
+   * (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.end < I.start)
    * ```
    *
    * ![precedes](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-precedes.png)
