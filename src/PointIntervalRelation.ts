@@ -221,7 +221,7 @@ export class PointIntervalRelation extends Relation {
       PointIntervalRelation.BEFORE_END,
       PointIntervalRelation.BEFORE_END,
       PointIntervalRelation.BEFORE_END,
-      PointIntervalRelation.fullRelation()
+      PointIntervalRelation.fullRelation<PointIntervalRelation>()
     ],
     [
       PointIntervalRelation.BEFORE,
@@ -243,7 +243,7 @@ export class PointIntervalRelation extends Relation {
       PointIntervalRelation.BEFORE,
       PointIntervalRelation.BEFORE_END,
       PointIntervalRelation.BEFORE_END,
-      PointIntervalRelation.fullRelation(),
+      PointIntervalRelation.fullRelation<PointIntervalRelation>(),
       PointIntervalRelation.IN,
       PointIntervalRelation.IN,
       PointIntervalRelation.AFTER_BEGIN,
@@ -269,7 +269,7 @@ export class PointIntervalRelation extends Relation {
       PointIntervalRelation.AFTER
     ],
     [
-      PointIntervalRelation.fullRelation(),
+      PointIntervalRelation.fullRelation<PointIntervalRelation>(),
       PointIntervalRelation.AFTER_BEGIN,
       PointIntervalRelation.AFTER_BEGIN,
       PointIntervalRelation.AFTER,
@@ -357,11 +357,11 @@ export class PointIntervalRelation extends Relation {
     assert(cType === undefined || isInterval(i, cType, compareFn))
 
     if (t === undefined || t === null) {
-      return PointIntervalRelation.fullRelation()
+      return PointIntervalRelation.fullRelation<PointIntervalRelation>()
     }
 
     const compare: Comparator<T> = compareFn ?? ltCompare
-    let result = PointIntervalRelation.fullRelation()
+    let result = PointIntervalRelation.fullRelation<PointIntervalRelation>()
     if (i.start !== undefined && i.start !== null) {
       const tToStart = compare(t, i.start)
       if (tToStart < 0) {

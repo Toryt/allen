@@ -523,7 +523,7 @@ export class AllenRelation extends Relation {
       AllenRelation.ENDS_EARLIER,
       AllenRelation.ENDS_EARLIER,
       AllenRelation.ENDS_EARLIER,
-      AllenRelation.fullRelation()
+      AllenRelation.fullRelation<AllenRelation>()
     ],
     [
       AllenRelation.PRECEDES,
@@ -635,7 +635,7 @@ export class AllenRelation extends Relation {
       AllenRelation.PRECEDES,
       AllenRelation.ENDS_EARLIER,
       AllenRelation.ENDS_EARLIER,
-      AllenRelation.fullRelation(),
+      AllenRelation.fullRelation<AllenRelation>(),
       AllenRelation.DURING,
       AllenRelation.DURING,
       AllenRelation.STARTS_LATER,
@@ -691,7 +691,7 @@ export class AllenRelation extends Relation {
       AllenRelation.PRECEDED_BY
     ],
     [
-      AllenRelation.fullRelation(),
+      AllenRelation.fullRelation<AllenRelation>(),
       AllenRelation.STARTS_LATER,
       AllenRelation.STARTS_LATER,
       AllenRelation.PRECEDED_BY,
