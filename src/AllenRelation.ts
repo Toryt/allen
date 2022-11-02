@@ -171,21 +171,19 @@ export class AllenRelation extends Relation {
   // Bit pattern: 32 = '0000000100000'
 
   /**
-   * A <strong>basic</strong> time interval relation that says that an interval
-   * <var>I1</var> <dfn>is equal to</dfn> an interval <var>I2</var>, i.e., the
-   * begin of <var>I1</var> is the begin of <var>I2</var>, and the end of
-   * <var>I1</var> is the end of <var>I2</var>:
+   * A _basic_ Allen relation that says that an interval `I1` _is equal to_ an interval `I2`, i.e.,
+   *
+   * - the `start` of `I1` is the `start` of `I2`, and
+   * - the `end` of `I1` is the `end` of `I2`
    *
    * ```
-   * (I1.begin != null) &amp;&amp; (I1.end != null) &amp;&amp; (I2.begin != null) &amp;&amp; (I2.end != null) &amp;&amp;
-   *   (I1.begin == I2.begin) &amp;&amp; (I1.end == I2.end)
+   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
+   *   (I1.start = I2.start) ∧ (I1.end = I2.end)
    * ```
    *
-   * <img style="text-align: center;" src="doc-files/AllenRelation-equals.png">
+   * ![equals](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-equals.png)
    *
-   * The conventional short representation of this Allen relation is &quot;<code><strong>e</strong></code>&quot;.
-   *
-   * The converse of this relation is itself.
+   * The short representation of this Allen relation is `e`. The converse of this relation is itself.
    */
   static readonly EQUALS: AllenRelation = AllenRelation.BASIC_RELATIONS[6]
   // Bit pattern: 64 = '0000001000000'
