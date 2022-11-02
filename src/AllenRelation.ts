@@ -352,9 +352,9 @@ export class AllenRelation extends Relation {
    *   (I1.begin != null) && (I2.begin != null) && (I1.begin &lt; I2.begin)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("BEGINS_EARLIER == or(PRECEDES, MEETS, OVERLAPS, FINISHED_BY, CONTAINS)"))
+  @Invars(@Expression("STARTS_EARLIER == or(PRECEDES, MEETS, OVERLAPS, FINISHED_BY, CONTAINS)"))
    */
-  static readonly BEGINS_EARLIER: AllenRelation = AllenRelation.or(
+  static readonly STARTS_EARLIER: AllenRelation = AllenRelation.or(
     AllenRelation.PRECEDES,
     AllenRelation.MEETS,
     AllenRelation.OVERLAPS,
@@ -369,9 +369,9 @@ export class AllenRelation extends Relation {
    *   (I1.begin != null) && (I2.begin != null) && (I1.begin == I2.begin)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("BEGIN_TOGETHER == or(STARTS, EQUALS, STARTED_BY)"))
+  @Invars(@Expression("START_TOGETHER == or(STARTS, EQUALS, STARTED_BY)"))
    */
-  static readonly BEGIN_TOGETHER: AllenRelation = AllenRelation.or(
+  static readonly START_TOGETHER: AllenRelation = AllenRelation.or(
     AllenRelation.STARTS,
     AllenRelation.EQUALS,
     AllenRelation.STARTED_BY
@@ -384,9 +384,9 @@ export class AllenRelation extends Relation {
    *   (I1.begin != null) && (I2.begin != null) && (I1.begin &gt; I2.begin)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("BEGINS_LATER == or(DURING, FINISHES, OVERLAPPED_BY, MET_BY, PRECEDED_BY)"))
+  @Invars(@Expression("STARTS_LATER == or(DURING, FINISHES, OVERLAPPED_BY, MET_BY, PRECEDED_BY)"))
    */
-  static readonly BEGINS_LATER: AllenRelation = AllenRelation.or(
+  static readonly STARTS_LATER: AllenRelation = AllenRelation.or(
     AllenRelation.DURING,
     AllenRelation.FINISHES,
     AllenRelation.OVERLAPPED_BY,
@@ -401,9 +401,9 @@ export class AllenRelation extends Relation {
    *   (I1.begin != null) && (I2.begin != null) && (I2.end != null) && (I1.begin &gt; I2.begin) && (I1.begin &lt; I2.end)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("BEGINS_IN == or(DURING, FINISHES, OVERLAPPED_BY)"))
+  @Invars(@Expression("STARTS_IN == or(DURING, FINISHES, OVERLAPPED_BY)"))
    */
-  static readonly BEGINS_IN: AllenRelation = AllenRelation.or(
+  static readonly STARTS_IN: AllenRelation = AllenRelation.or(
     AllenRelation.DURING,
     AllenRelation.FINISHES,
     AllenRelation.OVERLAPPED_BY
@@ -416,9 +416,9 @@ export class AllenRelation extends Relation {
    *   (I1.begin != null) && (I2.begin != null) && (I1.end != null) && (I2.end != null) && (I1.begin &lt; I2.begin) && (I1.end &lt; I2.end)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("BEGINS_EARLIER_AND_ENDS_EARLIER == or(PRECEDES, MEETS, OVERLAPS)"))
+  @Invars(@Expression("STARTS_EARLIER_AND_ENDS_EARLIER == or(PRECEDES, MEETS, OVERLAPS)"))
    */
-  static readonly BEGINS_EARLIER_AND_ENDS_EARLIER: AllenRelation = AllenRelation.or(
+  static readonly STARTS_EARLIER_AND_ENDS_EARLIER: AllenRelation = AllenRelation.or(
     AllenRelation.PRECEDES,
     AllenRelation.MEETS,
     AllenRelation.OVERLAPS
@@ -431,9 +431,9 @@ export class AllenRelation extends Relation {
    *   (I1.begin != null) && (I2.begin != null) && (I1.end != null) && (I2.end != null) && (I1.begin &gt; I2.begin) && (I1.end &gt; I2.end)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("BEGINS_LATER_AND_ENDS_LATER == or(OVERLAPPED_BY, MET_BY, PRECEDED_BY)"))
+  @Invars(@Expression("STARTS_LATER_AND_ENDS_LATER == or(OVERLAPPED_BY, MET_BY, PRECEDED_BY)"))
    */
-  static readonly BEGINS_LATER_AND_ENDS_LATER: AllenRelation = AllenRelation.or(
+  static readonly STARTS_LATER_AND_ENDS_LATER: AllenRelation = AllenRelation.or(
     AllenRelation.OVERLAPPED_BY,
     AllenRelation.MET_BY,
     AllenRelation.PRECEDED_BY
@@ -510,9 +510,9 @@ export class AllenRelation extends Relation {
    *   (I1.begin != null) && (I1.end != null) && (I2.begin != null) && (I1.begin &lt; I2.begin) && (I1.end &gt; I2.begin)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("CONTAINS_BEGIN == or(OVERLAPS, FINISHED_BY, CONTAINS)"))
+  @Invars(@Expression("CONTAINS_START == or(OVERLAPS, FINISHED_BY, CONTAINS)"))
    */
-  static readonly CONTAINS_BEGIN: AllenRelation = AllenRelation.or(
+  static readonly CONTAINS_START: AllenRelation = AllenRelation.or(
     AllenRelation.OVERLAPS,
     AllenRelation.FINISHED_BY,
     AllenRelation.CONTAINS
@@ -573,12 +573,12 @@ export class AllenRelation extends Relation {
     [
       AllenRelation.PRECEDES,
       AllenRelation.PRECEDES,
-      AllenRelation.BEGINS_EARLIER_AND_ENDS_EARLIER,
-      AllenRelation.BEGINS_EARLIER_AND_ENDS_EARLIER,
-      AllenRelation.BEGINS_EARLIER,
+      AllenRelation.STARTS_EARLIER_AND_ENDS_EARLIER,
+      AllenRelation.STARTS_EARLIER_AND_ENDS_EARLIER,
+      AllenRelation.STARTS_EARLIER,
       AllenRelation.OVERLAPS,
       AllenRelation.OVERLAPS,
-      AllenRelation.CONTAINS_BEGIN,
+      AllenRelation.CONTAINS_START,
       AllenRelation.ENDS_IN,
       AllenRelation.ENDS_IN,
       AllenRelation.CONCURS_WITH,
@@ -601,12 +601,12 @@ export class AllenRelation extends Relation {
       AllenRelation.ENDS_LATER
     ],
     [
-      AllenRelation.BEGINS_EARLIER,
-      AllenRelation.CONTAINS_BEGIN,
-      AllenRelation.CONTAINS_BEGIN,
+      AllenRelation.STARTS_EARLIER,
+      AllenRelation.CONTAINS_START,
+      AllenRelation.CONTAINS_START,
       AllenRelation.CONTAINS,
       AllenRelation.CONTAINS,
-      AllenRelation.CONTAINS_BEGIN,
+      AllenRelation.CONTAINS_START,
       AllenRelation.CONTAINS,
       AllenRelation.CONTAINS,
       AllenRelation.CONCURS_WITH,
@@ -618,15 +618,15 @@ export class AllenRelation extends Relation {
     [
       AllenRelation.PRECEDES,
       AllenRelation.PRECEDES,
-      AllenRelation.BEGINS_EARLIER_AND_ENDS_EARLIER,
-      AllenRelation.BEGINS_EARLIER_AND_ENDS_EARLIER,
-      AllenRelation.BEGINS_EARLIER,
+      AllenRelation.STARTS_EARLIER_AND_ENDS_EARLIER,
+      AllenRelation.STARTS_EARLIER_AND_ENDS_EARLIER,
+      AllenRelation.STARTS_EARLIER,
       AllenRelation.STARTS,
       AllenRelation.STARTS,
-      AllenRelation.BEGIN_TOGETHER,
+      AllenRelation.START_TOGETHER,
       AllenRelation.DURING,
       AllenRelation.DURING,
-      AllenRelation.BEGINS_IN,
+      AllenRelation.STARTS_IN,
       AllenRelation.MET_BY,
       AllenRelation.PRECEDED_BY
     ],
@@ -646,15 +646,15 @@ export class AllenRelation extends Relation {
       AllenRelation.PRECEDED_BY
     ],
     [
-      AllenRelation.BEGINS_EARLIER,
-      AllenRelation.CONTAINS_BEGIN,
-      AllenRelation.CONTAINS_BEGIN,
+      AllenRelation.STARTS_EARLIER,
+      AllenRelation.CONTAINS_START,
+      AllenRelation.CONTAINS_START,
       AllenRelation.CONTAINS,
       AllenRelation.CONTAINS,
-      AllenRelation.BEGIN_TOGETHER,
+      AllenRelation.START_TOGETHER,
       AllenRelation.STARTED_BY,
       AllenRelation.STARTED_BY,
-      AllenRelation.BEGINS_IN,
+      AllenRelation.STARTS_IN,
       AllenRelation.OVERLAPPED_BY,
       AllenRelation.OVERLAPPED_BY,
       AllenRelation.MET_BY,
@@ -668,10 +668,10 @@ export class AllenRelation extends Relation {
       AllenRelation.fullRelation(),
       AllenRelation.DURING,
       AllenRelation.DURING,
-      AllenRelation.BEGINS_LATER,
+      AllenRelation.STARTS_LATER,
       AllenRelation.DURING,
       AllenRelation.DURING,
-      AllenRelation.BEGINS_LATER,
+      AllenRelation.STARTS_LATER,
       AllenRelation.PRECEDED_BY,
       AllenRelation.PRECEDED_BY
     ],
@@ -683,38 +683,38 @@ export class AllenRelation extends Relation {
       AllenRelation.ENDS_LATER,
       AllenRelation.DURING,
       AllenRelation.FINISHES,
-      AllenRelation.BEGINS_LATER_AND_ENDS_LATER,
+      AllenRelation.STARTS_LATER_AND_ENDS_LATER,
       AllenRelation.DURING,
       AllenRelation.FINISHES,
-      AllenRelation.BEGINS_LATER_AND_ENDS_LATER,
+      AllenRelation.STARTS_LATER_AND_ENDS_LATER,
       AllenRelation.PRECEDED_BY,
       AllenRelation.PRECEDED_BY
     ],
     [
-      AllenRelation.BEGINS_EARLIER,
-      AllenRelation.CONTAINS_BEGIN,
+      AllenRelation.STARTS_EARLIER,
+      AllenRelation.CONTAINS_START,
       AllenRelation.CONCURS_WITH,
       AllenRelation.CONTAINS_END,
       AllenRelation.ENDS_LATER,
-      AllenRelation.BEGINS_IN,
+      AllenRelation.STARTS_IN,
       AllenRelation.OVERLAPPED_BY,
-      AllenRelation.BEGINS_LATER_AND_ENDS_LATER,
-      AllenRelation.BEGINS_IN,
+      AllenRelation.STARTS_LATER_AND_ENDS_LATER,
+      AllenRelation.STARTS_IN,
       AllenRelation.OVERLAPPED_BY,
-      AllenRelation.BEGINS_LATER_AND_ENDS_LATER,
+      AllenRelation.STARTS_LATER_AND_ENDS_LATER,
       AllenRelation.PRECEDED_BY,
       AllenRelation.PRECEDED_BY
     ],
     [
-      AllenRelation.BEGINS_EARLIER,
-      AllenRelation.BEGIN_TOGETHER,
-      AllenRelation.BEGINS_IN,
+      AllenRelation.STARTS_EARLIER,
+      AllenRelation.START_TOGETHER,
+      AllenRelation.STARTS_IN,
       AllenRelation.MET_BY,
       AllenRelation.PRECEDED_BY,
-      AllenRelation.BEGINS_IN,
+      AllenRelation.STARTS_IN,
       AllenRelation.MET_BY,
       AllenRelation.PRECEDED_BY,
-      AllenRelation.BEGINS_IN,
+      AllenRelation.STARTS_IN,
       AllenRelation.MET_BY,
       AllenRelation.PRECEDED_BY,
       AllenRelation.PRECEDED_BY,
@@ -722,14 +722,14 @@ export class AllenRelation extends Relation {
     ],
     [
       AllenRelation.fullRelation(),
-      AllenRelation.BEGINS_LATER,
-      AllenRelation.BEGINS_LATER,
+      AllenRelation.STARTS_LATER,
+      AllenRelation.STARTS_LATER,
       AllenRelation.PRECEDED_BY,
       AllenRelation.PRECEDED_BY,
-      AllenRelation.BEGINS_LATER,
+      AllenRelation.STARTS_LATER,
       AllenRelation.PRECEDED_BY,
       AllenRelation.PRECEDED_BY,
-      AllenRelation.BEGINS_LATER,
+      AllenRelation.STARTS_LATER,
       AllenRelation.PRECEDED_BY,
       AllenRelation.PRECEDED_BY,
       AllenRelation.PRECEDED_BY,
