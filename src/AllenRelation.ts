@@ -207,21 +207,19 @@ export class AllenRelation extends Relation {
   // Bit pattern: 128 = '0000010000000'
 
   /**
-   * A <strong>basic</strong> time interval relation that says that an interval
-   * <var>I1</var> <dfn>is during</dfn> an interval <var>I2</var>, i.e., the
-   * begin of <var>I1</var> is later than the begin of <var>I2</var>, and the
-   * end of <var>I1</var> is earlier than the end of <var>I2</var>:
+   * A _basic_ Allen relation that says that an interval `I1` _is during_ an interval `I2`, i.e.,
+   *
+   * - the `start` of `I1` is after the `start` of `I2`, and
+   * - the `end` of `I1` is before the `end` of `I2`
    *
    * ```
-   * (I1.begin != null) &amp;&amp; (I1.end != null) &amp;&amp; (I2.begin != null) &amp;&amp; (I2.end != null) &amp;&amp;
-   *   (I1.begin &gt; I2.begin) &amp;&amp; (I1.end &lt; I2.end)
+   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
+   *   (I2.start < I1.start) ∧ (I1.end < I2.end)
    * ```
    *
-   * <img style="text-align: center;" src="doc-files/AllenRelation-during.png">
+   * ![during](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-during.png)
    *
-   * The conventional short representation of this Allen relation is &quot;<code><strong>d</strong></code>&quot;.
-   *
-   * The converse of this relation is {@link CONTAINS}.
+   * The short representation of this Allen relation is `d`. The converse of this relation is {@link CONTAINS}.
    */
   static readonly DURING: AllenRelation = AllenRelation.BASIC_RELATIONS[8]
   // Bit pattern: 256 = '0000100000000'
