@@ -18,6 +18,11 @@ describe('PointIntervalRelation', function () {
       { name: 'TERMINATES', representation: 't' },
       { name: 'AFTER', representation: 'a' }
     ],
+    [
+      { name: 'CONCURS_WITH', representation: 'ci' },
+      { name: 'BEFORE_END', representation: 'bci' },
+      { name: 'AFTER_BEGIN', representation: 'ita' }
+    ],
     true
   )
 

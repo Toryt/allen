@@ -143,11 +143,17 @@ export class PointIntervalRelation extends Relation {
   //--------------------------------------------------------------------------------------------------------------------
 
   /**
-   * A non-basic time point-interval relation that is often handy to use, which expresses that a time point <var>t</var>
-   * and an interval <var>I</var> are concurrent in some way.
-   * Thus, <var>t</var> does <em>not</em> come before <var>I</var>, <var>t</var> is not the end time of <var>I</var>,
-   * and <var>t</var> does <em>not</em> come after <var>I</var> (remember that we define time intervals as right half-open).
-  @Invars(@Expression("CONCURS_WITH == or(BEGINS, IN)"))
+   * A non-basic point – interval relation that is often handy to use, which expresses that a point `t` and an interval
+   * `I` (interpreted as right half open) are concurrent in some way.
+   *
+   * Thus, `t` does _not_ come {@link BEFORE} `I`, does _not_ {@link TERMINATES} `I`, and does _not_ come {@link AFTER}
+   * `I`.
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * CONCURS_WITH == or(COMMENCES, IN)
+   * ```
    */
   public static readonly CONCURS_WITH: PointIntervalRelation = PointIntervalRelation.or(
     PointIntervalRelation.COMMENCES,
@@ -155,13 +161,19 @@ export class PointIntervalRelation extends Relation {
   )
 
   /**
-   * A non-basic time point-interval relation that is often handy to use, which expresses that a time point <var>t</var>
-   * is earlier than an interval <var>I</var> ends:
-   * <pre>
-   *   (I.end != null) && (t &lt; I.end)
-   * </pre>.
+   * A non-basic point – interval relation that is often handy to use, which expresses that a point `t` is before an
+   * interval `I` (interpreted as right half open) ends.
+   *
+   * Thus, `t` does _not_ come {@link BEFORE} `I`, does _not_ {@link TERMINATES} `I`, and does _not_ come {@link AFTER}
+   * `I`.
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("BEFORE_END == or(BEFORE, BEGINS, IN)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * BEFORE_END == or(BEFORE, COMMENCES, IN)
+   * ```
    */
   public static readonly BEFORE_END: PointIntervalRelation = PointIntervalRelation.or(
     PointIntervalRelation.BEFORE,
@@ -170,13 +182,19 @@ export class PointIntervalRelation extends Relation {
   )
 
   /**
-   * A non-basic time point-interval relation that is often handy to use, which expresses that a time point <var>t</var>
-   * is later than an interval <var>I</var> begins:
-   * <pre>
-   *   (I.begin != null) && (t &gt; I.begin)
-   * </pre>.
+   * A non-basic point – interval relation that is often handy to use, which expresses that a point `t` is after an
+   * interval `I` (interpreted as right half open) starts.
+   *
+   * Thus, `t` does _not_ come {@link BEFORE} `I`, does _not_ {@link TERMINATES} `I`, and does _not_ come {@link AFTER}
+   * `I`.
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("AFTER_BEGIN == or(IN, ENDS, AFTER)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * AFTER_BEGIN == or(IN, TERMINATES, AFTER)
+   * ```
    */
   public static readonly AFTER_BEGIN: PointIntervalRelation = PointIntervalRelation.or(
     PointIntervalRelation.IN,

@@ -4,7 +4,7 @@ import 'should'
 import { nrOfRelations } from '../src/bitPattern'
 import { Relation, RelationConstructor } from '../src/Relation'
 
-export interface BasicRelationExpectations {
+export interface RelationExpectations {
   name: string
   representation: string
 }
@@ -12,7 +12,8 @@ export interface BasicRelationExpectations {
 export function generateRelationTests<R extends Relation> (
   relationName: string,
   RConstructor: RelationConstructor<R>,
-  basicRelationConstants: BasicRelationExpectations[],
+  basicRelationConstants: RelationExpectations[],
+  secondaryRelationConstants: RelationExpectations[],
   fullCombinationTest: boolean
 ): void {
   const EMPTY: R = RConstructor.emptyRelation()
@@ -21,6 +22,10 @@ export function generateRelationTests<R extends Relation> (
   interface RCombination {
     r1: R
     r2: R
+  }
+
+  function relationConstant (brName: string): R {
+    return (RConstructor as any)[brName]
   }
 
   before(function () {
@@ -92,47 +97,46 @@ export function generateRelationTests<R extends Relation> (
       })
     })
   })
-  basicRelationConstants.forEach(({ name, representation }, i) => {
-    function basicRelation (brName: string): R {
-      return (RConstructor as any)[brName]
-    }
-
-    describe(name, function () {
-      it(`${name} is a static property of ${relationName}`, function () {
-        RConstructor.should.have.property(name)
-      })
-      it(`${name} is a ${relationName}`, function () {
-        basicRelation(name).should.be.instanceof(RConstructor)
-      })
-      it(`is a basic ${relationName}`, function () {
-        basicRelation(name)
-          .isBasic()
-          .should.be.true()
-      })
-      it(`has ${i} as ordinal`, function () {
-        basicRelation(name)
-          .ordinal()
-          .should.equal(i)
-      })
-      it(`has an integer ordinal [0, ${RConstructor.NR_OF_BITS}[`, function () {
-        const o = basicRelation(name).ordinal()
-        Number.isInteger(o).should.be.true()
-        o.should.be.greaterThanOrEqual(0)
-        o.should.be.lessThan(RConstructor.NR_OF_BITS)
-      })
-      it('is in BASIC_RELATIONS at the position of its ordinal', function () {
-        RConstructor.BASIC_RELATIONS[basicRelation(name).ordinal()].should.equal(basicRelation(name))
-      })
-      it(`has '${representation}' as representation`, function () {
-        basicRelation(name)
-          .toString()
-          .should.equal(`(${representation})`)
-        basicRelation(name)
-          .toString()
-          .should.equal(`(${RConstructor.BASIC_REPRESENTATIONS[i]})`)
+  describe('basic relations', function () {
+    basicRelationConstants.forEach(({ name, representation }, i) => {
+      describe(name, function () {
+        it(`${name} is a static property of ${relationName}`, function () {
+          RConstructor.should.have.property(name)
+        })
+        it(`${name} is a ${relationName}`, function () {
+          relationConstant(name).should.be.instanceof(RConstructor)
+        })
+        it(`is a basic ${relationName}`, function () {
+          relationConstant(name)
+            .isBasic()
+            .should.be.true()
+        })
+        it(`has ${i} as ordinal`, function () {
+          relationConstant(name)
+            .ordinal()
+            .should.equal(i)
+        })
+        it(`has an integer ordinal [0, ${RConstructor.NR_OF_BITS}[`, function () {
+          const o = relationConstant(name).ordinal()
+          Number.isInteger(o).should.be.true()
+          o.should.be.greaterThanOrEqual(0)
+          o.should.be.lessThan(RConstructor.NR_OF_BITS)
+        })
+        it('is in BASIC_RELATIONS at the position of its ordinal', function () {
+          RConstructor.BASIC_RELATIONS[relationConstant(name).ordinal()].should.equal(relationConstant(name))
+        })
+        it(`has '${representation}' as representation`, function () {
+          relationConstant(name)
+            .toString()
+            .should.equal(`(${representation})`)
+          relationConstant(name)
+            .toString()
+            .should.equal(`(${RConstructor.BASIC_REPRESENTATIONS[i]})`)
+        })
       })
     })
   })
+
   describe('RELATIONS', function () {
     it('is an array', function () {
       RConstructor.RELATIONS.should.be.an.Array()
@@ -189,6 +193,16 @@ export function generateRelationTests<R extends Relation> (
         RConstructor.RELATIONS.forEach(gr => {
           FULL.impliedBy(gr).should.be.true()
         })
+      })
+    })
+  })
+  describe('secondary relations', function () {
+    secondaryRelationConstants.forEach(({ name, representation }) => {
+      it(`${name} is the expected relation, represented by ${representation}`, function () {
+        const r: R = relationConstant(name)
+        const expected = RConstructor.fromString(representation)
+        r.should.equal(expected)
+        r.toString().should.equal(`(${representation})`)
       })
     })
   })
