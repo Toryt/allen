@@ -319,7 +319,7 @@ export class AllenRelation extends Relation {
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
    * begins earlier than an interval <var>I2</var> begins:
    * <pre>
-   *   (I1.begin != null) && (I2.begin != null) && (I1.begin &lt; I2.begin)
+   *   (I1.begin != null) ∧ (I2.begin != null) ∧ (I1.begin &lt; I2.begin)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
   @Invars(@Expression("STARTS_EARLIER == or(PRECEDES, MEETS, OVERLAPS, FINISHED_BY, CONTAINS)"))
@@ -336,7 +336,7 @@ export class AllenRelation extends Relation {
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
    * and an interval <var>I2</var> begin at the same time:
    * <pre>
-   *   (I1.begin != null) && (I2.begin != null) && (I1.begin == I2.begin)
+   *   (I1.begin != null) ∧ (I2.begin != null) ∧ (I1.begin == I2.begin)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
   @Invars(@Expression("START_TOGETHER == or(STARTS, EQUALS, STARTED_BY)"))
@@ -351,7 +351,7 @@ export class AllenRelation extends Relation {
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
    * begins later than an interval <var>I2</var> begins:
    * <pre>
-   *   (I1.begin != null) && (I2.begin != null) && (I1.begin &gt; I2.begin)
+   *   (I1.begin != null) ∧ (I2.begin != null) ∧ (I1.begin &gt; I2.begin)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
   @Invars(@Expression("STARTS_LATER == or(DURING, FINISHES, OVERLAPPED_BY, MET_BY, PRECEDED_BY)"))
@@ -368,7 +368,7 @@ export class AllenRelation extends Relation {
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
    * begins inside an interval <var>I2</var>:
    * <pre>
-   *   (I1.begin != null) && (I2.begin != null) && (I2.end != null) && (I1.begin &gt; I2.begin) && (I1.begin &lt; I2.end)
+   *   (I1.begin != null) ∧ (I2.begin != null) ∧ (I2.end != null) ∧ (I1.begin &gt; I2.begin) ∧ (I1.begin &lt; I2.end)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
   @Invars(@Expression("STARTS_IN == or(DURING, FINISHES, OVERLAPPED_BY)"))
@@ -383,7 +383,7 @@ export class AllenRelation extends Relation {
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
    * begins earlier and ends earlier than an interval <var>I2</var> begins and ends:
    * <pre>
-   *   (I1.begin != null) && (I2.begin != null) && (I1.end != null) && (I2.end != null) && (I1.begin &lt; I2.begin) && (I1.end &lt; I2.end)
+   *   (I1.begin != null) ∧ (I2.begin != null) ∧ (I1.end != null) ∧ (I2.end != null) ∧ (I1.begin &lt; I2.begin) ∧ (I1.end &lt; I2.end)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
   @Invars(@Expression("STARTS_EARLIER_AND_ENDS_EARLIER == or(PRECEDES, MEETS, OVERLAPS)"))
@@ -398,7 +398,7 @@ export class AllenRelation extends Relation {
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
    * begins later and ends later than an interval <var>I2</var> begins and ends:
    * <pre>
-   *   (I1.begin != null) && (I2.begin != null) && (I1.end != null) && (I2.end != null) && (I1.begin &gt; I2.begin) && (I1.end &gt; I2.end)
+   *   (I1.begin != null) ∧ (I2.begin != null) ∧ (I1.end != null) ∧ (I2.end != null) ∧ (I1.begin &gt; I2.begin) ∧ (I1.end &gt; I2.end)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
   @Invars(@Expression("STARTS_LATER_AND_ENDS_LATER == or(OVERLAPPED_BY, MET_BY, PRECEDED_BY)"))
@@ -413,7 +413,7 @@ export class AllenRelation extends Relation {
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
    * ends earlier than an interval <var>I2</var> ends:
    * <pre>
-   *   (I1.end != null) && (I2.end != null) && (I1.end &lt; I2.end)
+   *   (I1.end != null) ∧ (I2.end != null) ∧ (I1.end &lt; I2.end)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
   @Invars(@Expression("ENDS_EARLIER == or(PRECEDES, MEETS, OVERLAPS, STARTS, DURING)"))
@@ -430,7 +430,7 @@ export class AllenRelation extends Relation {
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
    * ends inside an interval <var>I2</var>:
    * <pre>
-   *   (I1.end != null) && (I2.begin != null) && (I2.end != null) && (I1.end &gt; I2.begin) && (I1.end &lt; I2.end)
+   *   (I1.end != null) ∧ (I2.begin != null) ∧ (I2.end != null) ∧ (I1.end &gt; I2.begin) ∧ (I1.end &lt; I2.end)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
   @Invars(@Expression("ENDS_IN == or(OVERLAPS, STARTS, DURING)"))
@@ -445,7 +445,7 @@ export class AllenRelation extends Relation {
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
    * and an interval <var>I2</var> end at the same time.
    * <pre>
-   *   (I1.end != null) && (I2.end != null) && (I1.end == I2.end)
+   *   (I1.end != null) ∧ (I2.end != null) ∧ (I1.end == I2.end)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
   @Invars(@Expression("END_TOGETHER == or(FINISHED_BY, EQUALS, FINISHES)"))
@@ -460,7 +460,7 @@ export class AllenRelation extends Relation {
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
    * ends later than an interval <var>I2</var> ends:
    * <pre>
-   *   (I1.end != null) && (I2.end != null) && (I1.end &gt; I2.end)
+   *   (I1.end != null) ∧ (I2.end != null) ∧ (I1.end &gt; I2.end)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
   @Invars(@Expression("ENDS_LATER == or(CONTAINS, STARTED_BY, OVERLAPPED_BY, MET_BY, PRECEDED_BY)"))
@@ -477,7 +477,7 @@ export class AllenRelation extends Relation {
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
    * contains the begin of an interval <var>I2</var>:
    * <pre>
-   *   (I1.begin != null) && (I1.end != null) && (I2.begin != null) && (I1.begin &lt; I2.begin) && (I1.end &gt; I2.begin)
+   *   (I1.begin != null) ∧ (I1.end != null) ∧ (I2.begin != null) ∧ (I1.begin &lt; I2.begin) ∧ (I1.end &gt; I2.begin)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
   @Invars(@Expression("CONTAINS_START == or(OVERLAPS, FINISHED_BY, CONTAINS)"))
@@ -492,7 +492,7 @@ export class AllenRelation extends Relation {
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
    * contains the end of an interval <var>I2</var>:
    * <pre>
-   *   (I1.begin != null) && (I1.end != null) && (I2.end != null) && (I1.begin &lt; I2.end) && (I1.end &gt; I2.end)
+   *   (I1.begin != null) ∧ (I1.end != null) ∧ (I2.end != null) ∧ (I1.begin &lt; I2.end) ∧ (I1.end &gt; I2.end)
    * </pre>.
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
   @Invars(@Expression("CONTAINS_END == or(CONTAINS, STARTED_BY, OVERLAPPED_BY)"))
