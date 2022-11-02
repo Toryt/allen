@@ -515,10 +515,12 @@ export class Relation {
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.some(gr => gr.impliedBy(br)))
    */
-  public static or<R extends Relation> (this: RelationConstructor<R>, ...gr: R[]): R {
+  public static or<R extends Relation> (...gr: readonly R[]): R {
     assert(gr.every(grr => grr instanceof this))
 
-    return this.RELATIONS[gr.reduce((acc: number, grr): number => acc | grr.bitPattern, EMPTY_BIT_PATTERN)]
+    return ((this as unknown) as RelationConstructor<R>).RELATIONS[
+      gr.reduce((acc: number, grr): number => acc | grr.bitPattern, EMPTY_BIT_PATTERN)
+    ]
   }
 
   /**
@@ -530,11 +532,12 @@ export class Relation {
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
    */
-  public static and<R extends Relation> (this: RelationConstructor<R>, ...gr: R[]): R {
+  public static and<R extends Relation> (...gr: R[]): R {
     assert(gr.every(grr => grr instanceof this))
 
-    return this.RELATIONS[
-      gr.reduce((acc: number, grr: R): number => acc & grr.bitPattern, fullBitPattern(this.NR_OF_BITS))
+    const typedThis = (this as unknown) as RelationConstructor<R>
+    return typedThis.RELATIONS[
+      gr.reduce((acc: number, grr: R): number => acc & grr.bitPattern, fullBitPattern(typedThis.NR_OF_BITS))
     ]
   }
 

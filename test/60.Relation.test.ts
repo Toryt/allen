@@ -75,26 +75,26 @@ describe('usage', function () {
     const result3: E = result1.min(third)
     result3.should.be.instanceof(E)
   })
-  // it('supports or', function () {
-  //   const relations = E.RELATIONS
-  //   const one = relations[3]
-  //   const other = relations[5]
-  //   const third = relations[7]
-  //   const result1: E = E.or(one, other)
-  //   result1.should.be.instanceof(E)
-  //   const result2: E = E.or(result1, third)
-  //   result2.should.be.instanceof(E)
-  // })
-  // it('supports and', function () {
-  //   const relations = E.RELATIONS
-  //   const one = relations[3]
-  //   const other = relations[5]
-  //   const third = relations[7]
-  //   const result1: E = E.and(one, other)
-  //   result1.should.be.instanceof(E)
-  //   const result2: E = E.and(third, result1)
-  //   result2.should.be.instanceof(E)
-  // })
+  it('supports or', function () {
+    const relations = E.RELATIONS
+    const one = relations[3]
+    const other = relations[5]
+    const third = relations[7]
+    const result1 = E.or(one, other)
+    result1.should.be.instanceof(E)
+    const result2: E = E.or(result1, third)
+    result2.should.be.instanceof(E)
+  })
+  it('supports and', function () {
+    const relations = E.RELATIONS
+    const one = relations[3]
+    const other = relations[5]
+    const third = relations[7]
+    const result1: E = E.and(one, other)
+    result1.should.be.instanceof(E)
+    const result2: E = E.and(third, result1)
+    result2.should.be.instanceof(E)
+  })
   it('supports fromString', function () {
     const result: E = E.fromString<E>('xy')
     result.should.be.instanceof(E)
