@@ -5,7 +5,7 @@ import 'should'
 import { generateRelationTests } from './_generateRelationTests'
 
 describe('AllenRelation', function () {
-  generateRelationTests(
+  generateRelationTests<AllenRelation>(
     'AllenRelation',
     AllenRelation,
     [

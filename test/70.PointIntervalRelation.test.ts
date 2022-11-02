@@ -8,7 +8,7 @@ import { intervalToString } from './_intervalToString'
 import { generateRelationTests } from './_generateRelationTests'
 
 describe('PointIntervalRelation', function () {
-  generateRelationTests(
+  generateRelationTests<PointIntervalRelation>(
     'PointIntervalRelation',
     PointIntervalRelation,
     [
