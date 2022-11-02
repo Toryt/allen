@@ -32,7 +32,7 @@ We find that there are 13 _basic relations_ possible between definite intervals:
 
   ![is finished by](AllenRelation-finishedBy.png)
 
-- `I1` `CONTAINS` `I2` (`c`)
+- `I1` `CONTAINS` `I2` (`D`)
 
   ![contains](AllenRelation-contains.png)
 
