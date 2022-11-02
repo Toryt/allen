@@ -163,11 +163,11 @@ export interface RelationConstructor<R extends Relation> extends Function {
  * - the combination methods
  *   - {@link or},
  *   - {@link and},
- *   - {@link min},
- *   - {@link compose}, and // MUDO make instance method?
+ *   - {@link min}, and
  * - the unary methods
  *   - {@link complement}, and
  *   - {@link converse}.
+ *   - `compose`
  *
  * All instance methods in this class are _O(1)_, i.e., work in constant time, and all static methods are _O(n)_, i.e.,
  * work in linear time.
@@ -516,6 +516,7 @@ export class Relation {
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.some(gr => gr.impliedBy(br)))
    */
   public static or<R extends Relation> (...gr: readonly R[]): R {
+    // noinspection SuspiciousTypeOfGuard
     assert(gr.every(grr => grr instanceof this))
 
     return ((this as unknown) as RelationConstructor<R>).RELATIONS[
@@ -533,6 +534,7 @@ export class Relation {
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
    */
   public static and<R extends Relation> (...gr: R[]): R {
+    // noinspection SuspiciousTypeOfGuard
     assert(gr.every(grr => grr instanceof this))
 
     const typedThis = (this as unknown) as RelationConstructor<R>
@@ -552,6 +554,7 @@ export class Relation {
    *               .every(l => s.includes(l))
    */
   public static fromString<R extends Relation> (this: RelationConstructor<R>, s: string): R {
+    // noinspection SuspiciousTypeOfGuard
     assert(typeof s === 'string')
 
     return this.BASIC_REPRESENTATIONS.reduce((acc: R, brr: string, i: number): R => {
