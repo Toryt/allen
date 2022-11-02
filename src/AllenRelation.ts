@@ -225,21 +225,19 @@ export class AllenRelation extends Relation {
   // Bit pattern: 256 = '0000100000000'
 
   /**
-   * A <strong>basic</strong> time interval relation that says that an interval
-   * <var>I1</var> <dfn>finishes</dfn> an interval <var>I2</var>, i.e., the
-   * begin of <var>I1</var> is later than the begin of <var>I2</var>, and the
-   * end of <var>I1</var> is the end of <var>I2</var>:
+   * A _basic_ Allen relation that says that an interval `I1` _finishes_ an interval `I2`, i.e.,
+   *
+   * - the `start` of `I1` is after the `start` of `I2`, and
+   * - the `end` of `I1` is the `end` of `I2`
    *
    * ```
-   * (I1.begin != null) &amp;&amp; (I1.end != null) &amp;&amp; (I2.begin != null) &amp;&amp; (I2.end != null) &amp;&amp;
-   *   (I1.begin &gt; I2.begin) &amp;&amp; (I1.end == I2.end)
+   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
+   *   (I2.start < I1.start) ∧ (I1.end = I2.end)
    * ```
    *
-   * <img style="text-align: center;" src="doc-files/AllenRelation-finishes.png">
+   * ![finishes](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-finishes.png)
    *
-   * The conventional short representation of this Allen relation is &quot;<code><strong>f</strong></code>&quot;.
-   *
-   * The converse of this relation is {@link FINISHES}.
+   * The short representation of this Allen relation is `f`. The converse of this relation is {@link FINISHED_BY}.
    */
   static readonly FINISHES: AllenRelation = AllenRelation.BASIC_RELATIONS[9]
   // Bit pattern: 512 = '0001000000000'
