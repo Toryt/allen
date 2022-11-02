@@ -708,25 +708,20 @@ export class AllenRelation extends Relation {
   ]
 
   /**
- * <p>Given 3 time intervals <code><var>I1</var></code>, <code><var>I2</var></code> and <code><var>I3</var></code>,
- *   given <code>gr1 == timeIntervalRelation(<var>I1</var>, <var>I2</var>)</code> and <code>gr2 ==
- *   timeIntervalRelation(<var>I2</var>, <var>I3</var>)</code>, <code>compose(gr1, gr2) == timeIntervalRelation(<var>I1</var>,
- *   <var>I3</var>)</code>.</p>
- * <p>Although this method is still, like most other methods in this class, of constant time (<em>O(n)</em>), it
- *   takes a significant longer constant time, namely ~ 13<sup>2</sup>. During unit tests we saw that 100 000 calls
- *   take over a second on a 2.4GHz dual core processor.</p>
-@MethodContract(
-    pre  = {
-      @Expression("_gr1 != null"),
-      @Expression("_gr2 != null")
-    },
-    post = {
-      @Expression("for (TimeIntervalRelation br1 : BASIC_RELATIONS) {for (TimeIntervalRelation br2: BASIC_RELATIONS) {" +
-          "br1.implies(_gr1) && br2.implies(_gr2) ? result.impliedBy(BASIC_COMPOSITIONS[br1.basicRelationOrdinal()][br2.basicRelationOrdinal()])" +
-          "}}")
-    })
- */
-  static compose (ar1: AllenRelation, ar2: AllenRelation): AllenRelation {
+   * Given 3 time intervals `I1`, `I2`, and `I3`, given `gr1 = relation(I1, I2)` and `gr2 = relation(I2, I3)`,
+   * `gr1.compose( gr2) = relation(I1, I2)`.
+   *
+   * Composition is not commutative but is both left and right associative, and distributes over `or`.
+   *
+   * Although this method is still, like most other methods in this class, of constant time (_O(1)_), it takes a
+   * significant longer constant time, namely ~ 13<sup>2</sup>.
+   *
+   * ### Preconditions
+   *
+   * `gr` is of the same type as `this`
+   *
+   * @result BASIC_RELATIONS.every(br1 => BASIC_RELATIONS.every(br2 => !br1.implies(this) || !br2.implies(gr) || result.impliedBy(BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()]))
+   */
     // assert preArgumentNotNull(gr1, "gr1");
     // assert preArgumentNotNull(gr2, "gr2");
 
