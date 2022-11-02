@@ -127,7 +127,7 @@ export class AllenRelation extends Relation {
    *   (I1.start < I2.start) ∧ (I1.end = I2.end)
    * ```
    *
-   * ![finished by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-finishedBy.png)
+   * ![is finished by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-finishedBy.png)
    *
    * The short representation of this Allen relation is `F`. The converse of this relation is {@link FINISHES}.
    */
@@ -199,7 +199,7 @@ export class AllenRelation extends Relation {
    *   (I1.start = I2.start) ∧ (I2.end < I1.end)
    * ```
    *
-   * ![started by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-startedBy.png)
+   * ![is started by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-startedBy.png)
    *
    * The short representation of this Allen relation is `S`. The converse of this relation is {@link STARTS}.
    */
@@ -217,7 +217,7 @@ export class AllenRelation extends Relation {
    *   (I2.start < I1.start) ∧ (I1.end < I2.end)
    * ```
    *
-   * ![during](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-during.png)
+   * ![is during](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-during.png)
    *
    * The short representation of this Allen relation is `d`. The converse of this relation is {@link CONTAINS}.
    */
