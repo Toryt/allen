@@ -205,7 +205,7 @@ export class PointIntervalRelation extends Relation {
   /* endregion */
 
   /**
-   * This matrix holds the compositions of basic time point-interval relations with Allen relations. These are part
+   * This matrix holds the compositions of basic point – interval relations with Allen relations. These are part
    * of the given semantics, and cannot be calculated. See {@link compose}.
    */
   public static readonly BASIC_COMPOSITIONS: PointIntervalRelation[][] = [
