@@ -60,7 +60,7 @@ export class PointIntervalRelation extends Relation {
   )
 
   /* region basic relations */
-  //--------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   /**
    * A _basic_ point – interval relation that says that a point `t` _comes before_ an interval `I`, i.e., `t` is before
@@ -140,7 +140,7 @@ export class PointIntervalRelation extends Relation {
   /* endregion */
 
   /* region secondary relations */
-  //--------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   /**
    * A non-basic point – interval relation that is often handy to use, which expresses that a point `t` and an interval

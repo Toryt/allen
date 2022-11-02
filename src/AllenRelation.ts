@@ -66,7 +66,7 @@ export class AllenRelation extends Relation {
   )
 
   /* region basic relations */
-  //--------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
@@ -323,7 +323,7 @@ export class AllenRelation extends Relation {
   /* endregion */
 
   /* region secondary relations */
-  //--------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   /**
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>

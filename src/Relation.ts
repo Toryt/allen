@@ -10,7 +10,7 @@ import {
 
 export interface RelationConstructor<R extends Relation> extends Function {
   /* region definitions */
-  //--------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   /**
    * ### Invariants
@@ -79,7 +79,7 @@ export interface RelationConstructor<R extends Relation> extends Function {
   /* endregion */
 
   /* region special relations */
-  //--------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   /**
    * This empty relation is not a true relation. It does not express a relational condition. Yet, it is needed for
@@ -108,7 +108,7 @@ export interface RelationConstructor<R extends Relation> extends Function {
   /* endregion */
 
   /* region selection functions */
-  //--------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   /**
    * The main factory method for relations.
@@ -214,7 +214,7 @@ export class Relation {
   }
 
   /* region instance methods */
-  //--------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   public isBasic (): boolean {
     return isBasicRelationBitPattern(this.nrOfBits(), this.bitPattern)
@@ -469,7 +469,7 @@ export class Relation {
   /* endregion */
 
   /* region special relations */
-  //--------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   /**
    * This empty relation is not a true relation. It does not express a relational condition. Yet, it is needed for
@@ -501,7 +501,7 @@ export class Relation {
   /* endregion */
 
   /* region selection functions */
-  //--------------------------------------------------------------------------------------------------------------------
+  // -------------------------------------------------------------------------------------------------------------------
 
   /**
    * The main factory method for relations.
