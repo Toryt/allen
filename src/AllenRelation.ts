@@ -296,12 +296,19 @@ export class AllenRelation extends Relation {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
-   * and an interval <var>I2</var> are concurrent in some way.
-   * Thus, <var>I1</var> does <em>not</em> precede <var>I2</var>, <var>I1</var> does <em>not</em> meet <var>I2</var>,
-   * <var>I1</var> is <em>not</em> met be <var>I2</var>, and <var>I1</var> is <em>not</em> preceded by <var>I2</var>.
+   * `(oFDseSdfO)` — a non-basic interval relation that is often handy to use, which expresses that and interval `I1`
+   * and an interval `I2` are concurrent in some way.
+   *
+   * Thus, `I1` does _not_ {@link PRECEDES precede} `I`, does _not_ {@link MEETS meet} `I`, is _not_ {@link MET_BY}, and
+   * is _not_ {@link PRECEDED_BY} `I2`.
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("CONCURS_WITH == or(OVERLAPS, FINISHED_BY, CONTAINS, STARTS, EQUALS, STARTED_BY, DURING, FINISHES, OVERLAPPED_BY)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * CONCURS_WITH = or(OVERLAPS, FINISHED_BY, CONTAINS, STARTS, EQUALS, STARTED_BY, DURING, FINISHES, OVERLAPPED_BY)
+   * ```
    */
   static readonly CONCURS_WITH: AllenRelation = AllenRelation.or(
     AllenRelation.OVERLAPS,
@@ -316,13 +323,20 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
-   * begins earlier than an interval <var>I2</var> begins:
-   * <pre>
-   *   (I1.begin != null) ∧ (I2.begin != null) ∧ (I1.begin &lt; I2.begin)
-   * </pre>.
+   * `(pmoFD)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` starts
+   * earlier then an interval `I2`.
+   *
+   * ```
+   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.start < I2.start)
+   * ```
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("STARTS_EARLIER == or(PRECEDES, MEETS, OVERLAPS, FINISHED_BY, CONTAINS)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * STARTS_EARLIER = or(PRECEDES, MEETS, OVERLAPS, FINISHED_BY, CONTAINS)
+   * ```
    */
   static readonly STARTS_EARLIER: AllenRelation = AllenRelation.or(
     AllenRelation.PRECEDES,
@@ -333,13 +347,20 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
-   * and an interval <var>I2</var> begin at the same time:
-   * <pre>
-   *   (I1.begin != null) ∧ (I2.begin != null) ∧ (I1.begin == I2.begin)
-   * </pre>.
+   * `(seS)` — a non-basic interval relation that is often handy to use, which expresses that and interval `I1` and an
+   * interval `I2` start at the same point.
+   *
+   * ```
+   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.start = I2.start)
+   * ```
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("START_TOGETHER == or(STARTS, EQUALS, STARTED_BY)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * START_TOGETHER == or(STARTS, EQUALS, STARTED_BY)
+   * ```
    */
   static readonly START_TOGETHER: AllenRelation = AllenRelation.or(
     AllenRelation.STARTS,
@@ -348,13 +369,20 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
-   * begins later than an interval <var>I2</var> begins:
-   * <pre>
-   *   (I1.begin != null) ∧ (I2.begin != null) ∧ (I1.begin &gt; I2.begin)
-   * </pre>.
+   * `(dfOMP)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` starts
+   * after an interval `I2`.
+   *
+   * ```
+   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.start < I1.start)
+   * ```
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("STARTS_LATER == or(DURING, FINISHES, OVERLAPPED_BY, MET_BY, PRECEDED_BY)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * STARTS_LATER == or(DURING, FINISHES, OVERLAPPED_BY, MET_BY, PRECEDED_BY)
+   * ```
    */
   static readonly STARTS_LATER: AllenRelation = AllenRelation.or(
     AllenRelation.DURING,
@@ -365,13 +393,20 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
-   * begins inside an interval <var>I2</var>:
-   * <pre>
-   *   (I1.begin != null) ∧ (I2.begin != null) ∧ (I2.end != null) ∧ (I1.begin &gt; I2.begin) ∧ (I1.begin &lt; I2.end)
-   * </pre>.
+   * `(dfO)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` starts in
+   * an interval `I2`.
+   *
+   * ```
+   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I2.start < I1.start < I2.end)
+   * ```
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("STARTS_IN == or(DURING, FINISHES, OVERLAPPED_BY)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * STARTS_IN == or(DURING, FINISHES, OVERLAPPED_BY)
+   * ```
    */
   static readonly STARTS_IN: AllenRelation = AllenRelation.or(
     AllenRelation.DURING,
@@ -380,13 +415,21 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
-   * begins earlier and ends earlier than an interval <var>I2</var> begins and ends:
-   * <pre>
-   *   (I1.begin != null) ∧ (I2.begin != null) ∧ (I1.end != null) ∧ (I2.end != null) ∧ (I1.begin &lt; I2.begin) ∧ (I1.end &lt; I2.end)
-   * </pre>.
+   * `(pmo)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` starts
+   * and ends before an interval `I2` starts and ends.
+   *
+   * ```
+   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.end ≠ undefined) ∧
+   *   (I1.start < I2.start) ∧ (I1.end < I2.end)
+   * ```
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("STARTS_EARLIER_AND_ENDS_EARLIER == or(PRECEDES, MEETS, OVERLAPS)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * STARTS_EARLIER_AND_ENDS_EARLIER == or(PRECEDES, MEETS, OVERLAPS)
+   * ```
    */
   static readonly STARTS_EARLIER_AND_ENDS_EARLIER: AllenRelation = AllenRelation.or(
     AllenRelation.PRECEDES,
@@ -395,13 +438,21 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
-   * begins later and ends later than an interval <var>I2</var> begins and ends:
-   * <pre>
-   *   (I1.begin != null) ∧ (I2.begin != null) ∧ (I1.end != null) ∧ (I2.end != null) ∧ (I1.begin &gt; I2.begin) ∧ (I1.end &gt; I2.end)
-   * </pre>.
+   * `(OMP)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` starts
+   * and ends after an interval `I2` starts and ends.
+   *
+   * ```
+   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.end ≠ undefined) ∧
+   *   (I2.start < I1.start) ∧ (I2.end < I1.end)
+   * ```
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("STARTS_LATER_AND_ENDS_LATER == or(OVERLAPPED_BY, MET_BY, PRECEDED_BY)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * STARTS_LATER_AND_ENDS_LATER == or(OVERLAPPED_BY, MET_BY, PRECEDED_BY)
+   * ```
    */
   static readonly STARTS_LATER_AND_ENDS_LATER: AllenRelation = AllenRelation.or(
     AllenRelation.OVERLAPPED_BY,
@@ -410,13 +461,20 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
-   * ends earlier than an interval <var>I2</var> ends:
-   * <pre>
-   *   (I1.end != null) ∧ (I2.end != null) ∧ (I1.end &lt; I2.end)
-   * </pre>.
+   * `(pmosd)` — a non-basic interval relation that is often handy to use, which expresses that interval `I1` ends
+   * before an interval `I2` ends.
+   *
+   * ```
+   * (I1.end ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I1.end < I2.end)
+   * ```
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("ENDS_EARLIER == or(PRECEDES, MEETS, OVERLAPS, STARTS, DURING)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * ENDS_EARLIER == or(PRECEDES, MEETS, OVERLAPS, STARTS, DURING)
+   * ```
    */
   static readonly ENDS_EARLIER: AllenRelation = AllenRelation.or(
     AllenRelation.PRECEDES,
@@ -427,13 +485,20 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
-   * ends inside an interval <var>I2</var>:
-   * <pre>
-   *   (I1.end != null) ∧ (I2.begin != null) ∧ (I2.end != null) ∧ (I1.end &gt; I2.begin) ∧ (I1.end &lt; I2.end)
-   * </pre>.
+   * `(osd)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` ends in
+   * an interval `I2`.
+   *
+   * ```
+   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I2.start < I1.end < I2.end)
+   * ```
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("ENDS_IN == or(OVERLAPS, STARTS, DURING)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * ENDS_IN == or(OVERLAPS, STARTS, DURING)
+   * ```
    */
   static readonly ENDS_IN: AllenRelation = AllenRelation.or(
     AllenRelation.OVERLAPS,
@@ -442,13 +507,20 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
-   * and an interval <var>I2</var> end at the same time.
-   * <pre>
-   *   (I1.end != null) ∧ (I2.end != null) ∧ (I1.end == I2.end)
-   * </pre>.
+   * `(Fef)` — a non-basic interval relation that is often handy to use, which expresses that interval `I1` and an
+   * interval `I2` end at the same point.
+   *
+   * ```
+   * (I1.end ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I1.end = I2.end)
+   * ```
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("END_TOGETHER == or(FINISHED_BY, EQUALS, FINISHES)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * END_TOGETHER == or(FINISHED_BY, EQUALS, FINISHES)
+   * ```
    */
   static readonly END_TOGETHER: AllenRelation = AllenRelation.or(
     AllenRelation.FINISHED_BY,
@@ -457,13 +529,20 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
-   * ends later than an interval <var>I2</var> ends:
-   * <pre>
-   *   (I1.end != null) ∧ (I2.end != null) ∧ (I1.end &gt; I2.end)
-   * </pre>.
+   * `(DSOMP)` — a non-basic interval relation that is often handy to use, which expresses that interval `I1` ends after
+   * an interval `I2` ends.
+   *
+   * ```
+   * (I1.end ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I2.end < I1.end)
+   * ```
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("ENDS_LATER == or(CONTAINS, STARTED_BY, OVERLAPPED_BY, MET_BY, PRECEDED_BY)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * ENDS_LATER == or(CONTAINS, STARTED_BY, OVERLAPPED_BY, MET_BY, PRECEDED_BY)
+   * ```
    */
   static readonly ENDS_LATER: AllenRelation = AllenRelation.or(
     AllenRelation.CONTAINS,
@@ -474,13 +553,20 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
-   * contains the begin of an interval <var>I2</var>:
-   * <pre>
-   *   (I1.begin != null) ∧ (I1.end != null) ∧ (I2.begin != null) ∧ (I1.begin &lt; I2.begin) ∧ (I1.end &gt; I2.begin)
-   * </pre>.
+   * `(oFD)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` contains
+   * the start of an interval `I2`.
+   *
+   * ```
+   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.start < I2.start < I1.end)
+   * ```
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("CONTAINS_START == or(OVERLAPS, FINISHED_BY, CONTAINS)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * CONTAINS_START == or(OVERLAPS, FINISHED_BY, CONTAINS)
+   * ```
    */
   static readonly CONTAINS_START: AllenRelation = AllenRelation.or(
     AllenRelation.OVERLAPS,
@@ -489,13 +575,20 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
-   * contains the end of an interval <var>I2</var>:
-   * <pre>
-   *   (I1.begin != null) ∧ (I1.end != null) ∧ (I2.end != null) ∧ (I1.begin &lt; I2.end) ∧ (I1.end &gt; I2.end)
-   * </pre>.
+   * `(DSO)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1`
+   * contains the end of an interval `I2`.
+   *
+   * ```
+   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I1.start < I2.end < I1.end)
+   * ```
+   *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
-  @Invars(@Expression("CONTAINS_END == or(CONTAINS, STARTED_BY, OVERLAPPED_BY)"))
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * CONTAINS_END == or(CONTAINS, STARTED_BY, OVERLAPPED_BY)
+   * ```
    */
   static readonly CONTAINS_END: AllenRelation = AllenRelation.or(
     AllenRelation.CONTAINS,
