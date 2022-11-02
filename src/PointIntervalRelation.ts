@@ -5,7 +5,6 @@ import { commonTypeRepresentation } from './typeRepresentation'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { Relation } from './Relation'
 import { basicRelationBitPatterns, relationBitPatterns } from './bitPattern'
-import { AllenRelation } from './AllenRelation'
 
 const haveCommonType: string = 't, i.start and i.end must be of a common type'
 
@@ -287,42 +286,43 @@ export class PointIntervalRelation extends Relation {
   ]
 
   /**
-   * <p>Given a point in time <code><var>t</var></code> and 2 time intervals <code><var>I1</var></code>, <code><var>I2</var></code>,
-   *   given <code>tpir = timePointIntervalRelation(<var>t</var>, <var>I1</var>)</code> and
-   *   <code>ar == allenRelation(<var>I1</var>, <var>I2</var>)</code>,
-   *   <code>compose(tpir, ar) == timePointIntervalRelation(<var>t</var>, <var>I2</var>)</code>.</p>
-  @MethodContract(
-      pre  = {
-        @Expression("_tpir != null"),
-        @Expression("_ar != null")
-      },
-      post = {
-        @Expression("for (TimePointIntervalRelation bTpir : BASIC_RELATIONS) {for (TimeIntervalRelation bAr: TimeIntervalRelation.BASIC_RELATIONS) {" +
-            "bTpir.implies(_tpir) && bAr.implies(_ar) ? result.impliedBy(BASIC_COMPOSITIONS[btPir.basicRelationOrdinal()][bAr.basicRelationOrdinal()])" +
-            "}}")
-      })
+   * Given a point `t` and 2 intervals `I1`, `I2`, given `pir = relation(t, I1)` and `ar = relation(I1, I2)`,
+   * `pir.compose(ar) = relation(t, I2)`.
+   *
+   * Composition is not commutative but is both left and right associative, and distributes over `or`.
+   *
+   * ### Preconditions
+   *
+   * ```
+   * ar !== undefined
+   * ar !== null
+   * ```
+   *
+   * @result BASIC_RELATIONS.every(bpir => AllenRelation.BASIC_RELATIONS.every(bar => !bpir.implies(this) || !bar.implies(ar) || result.impliedBy(BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]))
    */
-  static compose (pir: PointIntervalRelation, ar: AllenRelation): PointIntervalRelation {
-    // assert preArgumentNotNull(tpir, "tpir");
-    // assert preArgumentNotNull(ar, "ar");
-
-    return PointIntervalRelation.BASIC_RELATIONS.reduce(
-      (acc1: PointIntervalRelation, bpir: PointIntervalRelation) =>
-        /* prettier-ignore */ pir.impliedBy(bpir)
-          ? AllenRelation.BASIC_RELATIONS.reduce(
-            (acc2: PointIntervalRelation, bar: AllenRelation) =>
-              ar.impliedBy(bar)
-                ? PointIntervalRelation.or(
-                  acc2,
-                  PointIntervalRelation.BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]
-                )
-                : acc2,
-            acc1
-          )
-          : acc1,
-      PointIntervalRelation.emptyRelation()
-    )
-  }
+  // compose (ar: PointIntervalRelation): this {
+  //   // assert preArgumentNotNull(tpir, "tpir");
+  //   // assert preArgumentNotNull(ar, "ar");
+  //
+  // const x: PointIntervalRelation = this.impliedBy(PointIntervalRelation.AFTER)
+  //
+  //   return PointIntervalRelation.BASIC_RELATIONS.reduce(
+  //     (acc1: PointIntervalRelation, bpir: PointIntervalRelation) =>
+  //       /* prettier-ignore */ this.impliedBy(bpir)
+  //         ? AllenRelation.BASIC_RELATIONS.reduce(
+  //           (acc2: PointIntervalRelation, bar: AllenRelation) =>
+  //             ar.impliedBy(bar)
+  //               ? PointIntervalRelation.or(
+  //                 acc2,
+  //                 PointIntervalRelation.BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]
+  //               )
+  //               : acc2,
+  //           acc1
+  //         )
+  //         : acc1,
+  //     PointIntervalRelation.emptyRelation()
+  //   )
+  // }
 
   /**
    * The relation of `t` with `i` with the lowest possible {@link uncertainty}.

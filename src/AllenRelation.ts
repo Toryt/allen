@@ -708,7 +708,7 @@ export class AllenRelation extends Relation {
   ]
 
   /**
-   * Given 3 time intervals `I1`, `I2`, and `I3`, given `gr1 = relation(I1, I2)` and `gr2 = relation(I2, I3)`,
+   * Given 3 intervals `I1`, `I2`, and `I3`, given `gr1 = relation(I1, I2)` and `gr2 = relation(I2, I3)`,
    * `gr1.compose( gr2) = relation(I1, I2)`.
    *
    * Composition is not commutative but is both left and right associative, and distributes over `or`.
@@ -722,21 +722,21 @@ export class AllenRelation extends Relation {
    *
    * @result BASIC_RELATIONS.every(br1 => BASIC_RELATIONS.every(br2 => !br1.implies(this) || !br2.implies(gr) || result.impliedBy(BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()]))
    */
-    // assert preArgumentNotNull(gr1, "gr1");
-    // assert preArgumentNotNull(gr2, "gr2");
-
-    return AllenRelation.BASIC_RELATIONS.reduce(
-      (acc1: AllenRelation, br1: AllenRelation) =>
-        /* prettier-ignore */ ar1.impliedBy(br1)
-          ? AllenRelation.BASIC_RELATIONS.reduce(
-            (acc2: AllenRelation, br2: AllenRelation) =>
-              ar2.impliedBy(br2)
-                ? AllenRelation.or(acc2, AllenRelation.BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()])
-                : acc2,
-            acc1
-          )
-          : acc1,
-      AllenRelation.emptyRelation()
-    )
-  }
+  // compose (gr: AllenRelation): AllenRelation {
+  //   // assert preArgumentNotNull(gr1, "gr1");
+  //   // assert preArgumentNotNull(gr2, "gr2");
+  //   return this.typedConstructor().BASIC_RELATIONS.reduce(
+  //       (acc1: AllenRelation, br1: AllenRelation) =>
+  //           /* prettier-ignore */ this.impliedBy(br1)
+  //           ? this.typedConstructor().BASIC_RELATIONS.reduce(
+  //               (acc2:AllenRelation, br2:AllenRelation) =>
+  //                   gr.impliedBy(br2)
+  //                       ? this.typedConstructor().or(acc2, this.typedConstructor().BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()])
+  //                       : acc2,
+  //               acc1
+  //           )
+  //           : acc1,
+  //       this.typedConstructor().emptyRelation()
+  //
+  // }
 }
