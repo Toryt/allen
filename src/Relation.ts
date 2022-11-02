@@ -508,6 +508,8 @@ export class Relation {
    *
    * This is the union of all relations in {@code gr}, when they are considered as sets of basic relations.
    *
+   * `or` is commutative and associative.
+   *
    * Although this is intended to create any disjunction of the basic relations, you can use any relation in the
    * argument list.
    *
@@ -523,6 +525,8 @@ export class Relation {
    * The conjunction of the point – interval relations in `gr`.
    * This is the intersection of all point – interval relations in `gr`, when they are considered as sets of basic
    * relations.
+   *
+   * `and` is commutative and associative.
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
    */
