@@ -65,6 +65,9 @@ export class AllenRelation extends Relation {
     basicRelationBitPatterns(this.NR_OF_BITS).map(bitPattern => AllenRelation.RELATIONS[bitPattern])
   )
 
+  /* region basic relations */
+  //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * A <strong>basic</strong> time interval relation that says that an interval
    * <var>I1</var> <dfn>precedes</dfn> an interval <var>I2</var>, i.e., the
@@ -317,8 +320,10 @@ export class AllenRelation extends Relation {
   static readonly PRECEDED_BY: AllenRelation = AllenRelation.BASIC_RELATIONS[12]
   // Bit pattern: 4069 = '1000000000000'
 
-  /*<section name="secondary relations">*/
-  //------------------------------------------------------------------
+  /* endregion */
+
+  /* region secondary relations */
+  //--------------------------------------------------------------------------------------------------------------------
 
   /**
    * A non-basic time interval relation that is often handy to use, which expresses that an interval <var>I1</var>
@@ -528,7 +533,7 @@ export class AllenRelation extends Relation {
     AllenRelation.OVERLAPPED_BY
   )
 
-  /*</section>*/
+  /* endregion */
 
   /**
    * This matrix holds the compositions of basic interval relations. These are part of the given semantics, and cannot

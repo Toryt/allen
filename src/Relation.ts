@@ -9,6 +9,9 @@ import {
 } from './bitPattern'
 
 export interface RelationConstructor<R extends Relation> extends Function {
+  /* region definitions */
+  //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * ### Invariants
    *
@@ -73,6 +76,11 @@ export interface RelationConstructor<R extends Relation> extends Function {
    */
   readonly BASIC_RELATIONS: readonly R[]
 
+  /* endregion */
+
+  /* region special relations */
+  //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * This empty relation is not a true relation. It does not express a relational condition. Yet, it is needed for
    * consistency with some operations on relations.
@@ -96,6 +104,11 @@ export interface RelationConstructor<R extends Relation> extends Function {
    * ```
    */
   readonly fullRelation: () => R
+
+  /* endregion */
+
+  /* region selection functions */
+  //--------------------------------------------------------------------------------------------------------------------
 
   /**
    * The main factory method for relations.
@@ -129,6 +142,8 @@ export interface RelationConstructor<R extends Relation> extends Function {
    *               .every(l => s.includes(l))
    */
   readonly fromString: (s: string) => R
+
+  /* endregion */
 }
 
 /**
@@ -197,6 +212,9 @@ export class Relation {
 
     this.bitPattern = bitPattern
   }
+
+  /* region instance methods */
+  //--------------------------------------------------------------------------------------------------------------------
 
   public isBasic (): boolean {
     return isBasicRelationBitPattern(this.nrOfBits(), this.bitPattern)
@@ -448,6 +466,11 @@ export class Relation {
       .join('')})`
   }
 
+  /* endregion */
+
+  /* region special relations */
+  //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * This empty relation is not a true relation. It does not express a relational condition. Yet, it is needed for
    * consistency with some operations on relations.
@@ -474,6 +497,11 @@ export class Relation {
   public static fullRelation<R extends Relation> (this: RelationConstructor<R>): R {
     return this.RELATIONS[fullBitPattern(this.NR_OF_BITS)]
   }
+
+  /* endregion */
+
+  /* region selection functions */
+  //--------------------------------------------------------------------------------------------------------------------
 
   /**
    * The main factory method for relations.
@@ -523,4 +551,6 @@ export class Relation {
       return s.includes(brr) ? this.or(acc, this.BASIC_RELATIONS[i]) : acc
     }, this.emptyRelation())
   }
+
+  /* endregion */
 }

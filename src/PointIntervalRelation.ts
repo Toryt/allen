@@ -59,6 +59,9 @@ export class PointIntervalRelation extends Relation {
     basicRelationBitPatterns(this.NR_OF_BITS).map(bitPattern => PointIntervalRelation.RELATIONS[bitPattern])
   )
 
+  /* region basic relations */
+  //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * A _basic_ point – interval relation that says that a point `t` _comes before_ an interval `I`, i.e., `t` is before
    * the start of `I`:
@@ -134,8 +137,10 @@ export class PointIntervalRelation extends Relation {
   public static readonly AFTER: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[4]
   // Bit pattern: 16 = '10000'
 
-  /*<section name="secondary relations">*/
-  //------------------------------------------------------------------
+  /* endregion */
+
+  /* region secondary relations */
+  //--------------------------------------------------------------------------------------------------------------------
 
   /**
    * A non-basic time point-interval relation that is often handy to use, which expresses that a time point <var>t</var>
@@ -179,7 +184,7 @@ export class PointIntervalRelation extends Relation {
     PointIntervalRelation.AFTER
   )
 
-  /*</section>*/
+  /* endregion */
 
   /**
    * This matrix holds the compositions of basic time point-interval relations with Allen relations. These are part
