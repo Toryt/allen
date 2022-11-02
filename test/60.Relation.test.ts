@@ -50,18 +50,19 @@ describe('usage', function () {
     const result: E = one.complement()
     result.should.be.instanceof(E)
   })
-  // it('supports implied by', function () {
-  //   const relations = E.RELATIONS
-  //   const one: E = relations[3]
-  //   const other = relations[5]
-  //   one.impliedBy(other).should.be.a.Boolean()
-  // })
-  // it('supports implies', function () {
-  //   const relations = E.RELATIONS
-  //   const one = relations[3]
-  //   const other: E = relations[5]
-  //   one.implies(other).should.be.a.Boolean()
-  // })
+  it('supports implied by', function () {
+    const relations = E.RELATIONS
+    const one: E = relations[3]
+    const other = relations[5]
+    one.impliedBy(other).should.be.a.Boolean()
+  })
+  it('supports implies', function () {
+    const relations = E.RELATIONS
+    const one = relations[3]
+    const other: E = relations[5]
+    const typedOne: E = one
+    typedOne.implies(other).should.be.a.Boolean()
+  })
   it('supports min', function () {
     const relations = E.RELATIONS
     const one = relations[3]
