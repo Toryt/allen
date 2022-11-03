@@ -3,8 +3,6 @@
 import { AllenRelation } from '../src/AllenRelation'
 import 'should'
 import { generateRelationTests } from './_generateRelationTests'
-// import { PointIntervalRelation } from '../src/PointIntervalRelation'
-// import { ok } from 'assert'
 
 describe('AllenRelation', function () {
   generateRelationTests<AllenRelation>(
@@ -99,6 +97,35 @@ describe('AllenRelation', function () {
         })
       })
     })
+
+    // these are 67108864 validations, which takes about a lifetime
+    // it('composes relations as expected', function () {
+    //   const nrOfTests = AllenRelation.RELATIONS.length * AllenRelation.RELATIONS.length
+    //   console.log(`starting ${nrOfTests} verifications`)
+    //   AllenRelation.RELATIONS.forEach((ar1: AllenRelation) => {
+    //     AllenRelation.RELATIONS.forEach((ar2: AllenRelation) => {
+    //       validateCompose(ar1, ar2, ar1.compose(ar2))
+    //     })
+    //   })
+    // })
+    it('composes some relations as expected', function () {
+      function testACombination (nr1: number, nr2: number): void {
+        const ar1: AllenRelation = AllenRelation.RELATIONS[nr1]
+        const ar: AllenRelation = AllenRelation.RELATIONS[nr2]
+        validateCompose(ar1, ar, ar1.compose(ar))
+      }
+
+      testACombination(0, 8191)
+      testACombination(0, 6568)
+      testACombination(3, 342)
+      testACombination(13, 128)
+      testACombination(2048, 444)
+      testACombination(3333, 1024)
+      testACombination(4885, 3884)
+      testACombination(6788, 6788)
+      testACombination(8191, 0)
+    })
+
     //
     //   interface StartEnd {
     //     start: PointIntervalRelation
