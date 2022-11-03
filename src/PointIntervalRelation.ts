@@ -5,6 +5,7 @@ import { commonTypeRepresentation } from './typeRepresentation'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { Relation } from './Relation'
 import { basicRelationBitPatterns, relationBitPatterns } from './bitPattern'
+import { AllenRelation } from './AllenRelation'
 
 const haveCommonType: string = 't, i.start and i.end must be of a common type'
 
@@ -300,29 +301,27 @@ export class PointIntervalRelation extends Relation {
    *
    * @result BASIC_RELATIONS.every(bpir => AllenRelation.BASIC_RELATIONS.every(bar => !bpir.implies(this) || !bar.implies(ar) || result.impliedBy(BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]))
    */
-  // compose (ar: PointIntervalRelation): this {
-  //   // assert preArgumentNotNull(tpir, "tpir");
-  //   // assert preArgumentNotNull(ar, "ar");
-  //
-  // const x: PointIntervalRelation = this.impliedBy(PointIntervalRelation.AFTER)
-  //
-  //   return PointIntervalRelation.BASIC_RELATIONS.reduce(
-  //     (acc1: PointIntervalRelation, bpir: PointIntervalRelation) =>
-  //       /* prettier-ignore */ this.impliedBy(bpir)
-  //         ? AllenRelation.BASIC_RELATIONS.reduce(
-  //           (acc2: PointIntervalRelation, bar: AllenRelation) =>
-  //             ar.impliedBy(bar)
-  //               ? PointIntervalRelation.or(
-  //                 acc2,
-  //                 PointIntervalRelation.BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]
-  //               )
-  //               : acc2,
-  //           acc1
-  //         )
-  //         : acc1,
-  //     PointIntervalRelation.emptyRelation<PointIntervalRelation>()
-  //   )
-  // }
+  compose (ar: AllenRelation): PointIntervalRelation {
+    // noinspection SuspiciousTypeOfGuard
+    assert(ar instanceof AllenRelation)
+
+    return this.typedConstructor().BASIC_RELATIONS.reduce(
+      (acc1: PointIntervalRelation, bpir: this) =>
+        /* prettier-ignore */ this.impliedBy(bpir)
+          ? AllenRelation.BASIC_RELATIONS.reduce(
+            (acc2: PointIntervalRelation, bar: AllenRelation) =>
+              ar.impliedBy(bar)
+                ? PointIntervalRelation.or(
+                  acc2,
+                  PointIntervalRelation.BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]
+                )
+                : acc2,
+            acc1
+          )
+          : acc1,
+      this.typedConstructor().emptyRelation()
+    )
+  }
 
   /**
    * The relation of `t` with `i` with the lowest possible {@link uncertainty}.
