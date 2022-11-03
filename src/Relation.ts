@@ -169,6 +169,14 @@ export interface RelationConstructor<R extends Relation> extends Function {
  *
  * Create a subclass for a specific type of `Relation`. In that class, add all properties of {@link RelationConstructor}
  * as `static` members.
+ *
+ * **BEWARE:** we are lying. There is a hard cast in the protected method {@link typedConstructor}, that says
+ * that `static` members `BASIC_RELATIONS` and `RELATIONS` are arrays of instances of the `this` type. They actually
+ * return instances of the type you put in them. For a subclass `A`, those are instances of type `A`, so, in class `A`,
+ * this is not a lie. For a further subclass `B extends A` however, these are still instances of type `A`, not of the
+ * `this` type, which is now `B`, _unless you override `BASIC_RELATIONS` and `RELATIONS` to be arrays of instances
+ * of type `B`. This means that it is a usage invariant that you **MUST** override at least `BASIC_RELATIONS` and
+ * `RELATIONS` with arrays of the type at hand.
  */
 export class Relation {
   /* Implementation note:
