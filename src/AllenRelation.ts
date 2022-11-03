@@ -850,14 +850,14 @@ export class AllenRelation extends Relation {
     return this.typedConstructor().BASIC_RELATIONS.reduce(
       (acc1: this, br1: this) =>
         /* prettier-ignore */ this.impliedBy(br1)
-            ? this.typedConstructor().BASIC_RELATIONS.reduce(
-                (acc2: this, br2: this) =>
-                    gr.impliedBy(br2)
-                        ? AllenRelation.or(acc2, AllenRelation.BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()] as this)
-                        : acc2,
-                acc1
-            )
-            : acc1,
+          ? this.typedConstructor().BASIC_RELATIONS.reduce(
+            (acc2: this, br2: this) =>
+              gr.impliedBy(br2)
+                ? AllenRelation.or(acc2, AllenRelation.BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()] as this)
+                : acc2,
+            acc1
+          )
+          : acc1,
       this.typedConstructor().emptyRelation()
     )
   }
