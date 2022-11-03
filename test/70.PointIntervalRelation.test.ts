@@ -47,6 +47,32 @@ describe('PointIntervalRelation', function () {
         })
       })
     })
+    // these are 262144 validations, which takes about a minute
+    // it('composes relations as expected', function () {
+    //   const nrOfTests = PointIntervalRelation.RELATIONS.length * AllenRelation.RELATIONS.length
+    //   console.log(`starting ${nrOfTests} verifications`)
+    //   PointIntervalRelation.RELATIONS.forEach((pir: PointIntervalRelation) => {
+    //     AllenRelation.RELATIONS.forEach((ar: AllenRelation) => {
+    //       validateCompose(pir, ar, pir.compose(ar))
+    //     })
+    //   })
+    // })
+    it('composes some relations as expected', function () {
+      function testACombination (pirNr: number, arNumber: number): void {
+        const pir: PointIntervalRelation = PointIntervalRelation.RELATIONS[pirNr]
+        const ar: AllenRelation = AllenRelation.RELATIONS[arNumber]
+        validateCompose(pir, ar, pir.compose(ar))
+      }
+
+      testACombination(0, 0)
+      testACombination(0, 6568)
+      testACombination(3, 342)
+      testACombination(13, 128)
+      testACombination(16, 444)
+      testACombination(23, 1024)
+      testACombination(31, 3884)
+      testACombination(31, 6788)
+    })
   })
 
   describe('relation', function () {
