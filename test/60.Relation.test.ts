@@ -22,6 +22,14 @@ class E extends Relation {
   extraMethod (): number {
     return 4
   }
+
+  noParamReturnsThisType (): this {
+    return this.typedConstructor().BASIC_RELATIONS[0]
+  }
+
+  noParamReturnsE (): E {
+    return E.BASIC_RELATIONS[0]
+  }
 }
 
 function isEAsExpected (e: E, isBasic?: boolean, noRecursion?: boolean) {
@@ -36,6 +44,10 @@ function isEAsExpected (e: E, isBasic?: boolean, noRecursion?: boolean) {
   if (!noRecursion) {
     const complement: E = e.complement()
     isEAsExpected(complement, false, true)
+    const thisType: E = e.noParamReturnsThisType()
+    isEAsExpected(thisType, false, true)
+    const eType: E = e.noParamReturnsE()
+    isEAsExpected(eType, false, true)
   }
 }
 
@@ -62,12 +74,6 @@ describe('usage', function () {
   it('has a typed FULL', function () {
     const FULL: E = E.fullRelation<E>()
     isEAsExpected(FULL)
-  })
-  it('supports converse', function () {
-    const relations = E.RELATIONS
-    const one: E = relations[2]
-    const result: E = one.converse()
-    result.should.be.instanceof(E)
   })
   it('supports implied by', function () {
     const relations = E.RELATIONS

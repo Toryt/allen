@@ -43,6 +43,42 @@ describe('AllenRelation', function () {
     false // there are 67108864; it takes hours to test all combinations
   )
 
+  describe('#converse', function () {
+    it('the converse of each basic relation is at the same index in the reversed BASIC_RELATIONS array', function () {
+      const lastIndex = AllenRelation.NR_OF_BITS - 1
+      AllenRelation.BASIC_RELATIONS.forEach((br, i) => {
+        br.converse().should.equal(AllenRelation.BASIC_RELATIONS[lastIndex - i])
+      })
+    })
+    it('the converse of each relation is implied by the converse of all basic relations that are implied by it', function () {
+      AllenRelation.RELATIONS.forEach(gr => {
+        const result = gr.converse()
+        AllenRelation.BASIC_RELATIONS.forEach(br => {
+          if (gr.impliedBy(br)) {
+            result.impliedBy(br.converse()).should.be.true()
+          }
+        })
+      })
+    })
+    it('each relation is implied by all basic relations whose converse are implied by the relations converse', function () {
+      AllenRelation.RELATIONS.forEach(gr => {
+        const result = gr.converse()
+        AllenRelation.BASIC_RELATIONS.forEach(br => {
+          if (result.impliedBy(br.converse())) {
+            gr.impliedBy(br).should.be.true()
+          }
+        })
+      })
+    })
+    it('all relations are their own converse‘s converse', function () {
+      AllenRelation.RELATIONS.forEach(gr => {
+        gr.converse()
+          .converse()
+          .should.equal(gr)
+      })
+    })
+  })
+
   // describe('#compose', function () {
   //   function validateCompose (ar1: AllenRelation, ar2: AllenRelation, result: AllenRelation): void {
   //     AllenRelation.BASIC_RELATIONS.forEach((br1: AllenRelation) => {

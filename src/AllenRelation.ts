@@ -1,5 +1,5 @@
 import { Relation } from './Relation'
-import { basicRelationBitPatterns, relationBitPatterns } from './bitPattern'
+import { basicRelationBitPatterns, relationBitPatterns, reverse } from './bitPattern'
 
 /**
  * Support for reasoning about Allen relations, i.e., relations between intervals, and constraints on those relations.
@@ -597,6 +597,33 @@ export class AllenRelation extends Relation {
   )
 
   /* endregion */
+
+  /**
+   * The _converse_ of a relation `x1 ⊡ x2` between to values of the same type `x1` and `x2` is the relation `x2 ⊡ x1`:
+   *
+   * ```ts
+   * compare(x2, x3).converse() === compare(x1, x2)
+   * ```
+   *
+   * This makes little sense if the relation is between values of different types.
+   *
+   * The converse of a basic relation is defined. The converse of a general relation _gr_ is the disjunction of the
+   * converse relations of the basic relations that are implied by _gr_.
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * this.converse().converse() === this
+   * this.converse() === BASIC_RELATIONS[NR_OF_BITS - this.ordinal()]
+   * BASIC_RELATIONS.every(br => !this.impliedBy(br) || this.converse().impliedBy(br.converse()))
+   * ```
+   */
+  converse (): AllenRelation {
+    /* Given the order in which the basic relations occur in the bit pattern, the converse is the reverse bit pattern
+       (read the bit pattern from left to right instead of right to left). We need to add a `32 - NR_OF_BITS` bit shift
+       to compensate for the fact that we store the `NR_OF_BITS` bit bitpattern in a 32 bit int. */
+    return this.typedConstructor().RELATIONS[reverse(this.nrOfBits(), this.bitPattern)]
+  }
 
   /**
    * This matrix holds the compositions of basic interval relations. These are part of the given semantics, and cannot
