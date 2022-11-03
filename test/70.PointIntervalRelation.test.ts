@@ -6,6 +6,7 @@ import { Interval } from '../src/Interval'
 import { inspect } from 'util'
 import { intervalToString } from './_intervalToString'
 import { generateRelationTests } from './_generateRelationTests'
+import { AllenRelation } from '../lib/AllenRelation'
 
 describe('PointIntervalRelation', function () {
   generateRelationTests<PointIntervalRelation>(
@@ -25,6 +26,28 @@ describe('PointIntervalRelation', function () {
     ],
     true
   )
+
+  describe('compose', function () {
+    function validateCompose (pir: PointIntervalRelation, ar: AllenRelation, result: PointIntervalRelation) {
+      PointIntervalRelation.BASIC_RELATIONS.forEach((bpir: PointIntervalRelation) => {
+        if (bpir.implies(pir)) {
+          AllenRelation.BASIC_RELATIONS.forEach((bar: AllenRelation) => {
+            if (bar.implies(ar)) {
+              result.impliedBy(PointIntervalRelation.BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]).should.be.true()
+            }
+          })
+        }
+      })
+    }
+
+    it('composes basic relations as expected', function () {
+      PointIntervalRelation.BASIC_RELATIONS.forEach((bpir: PointIntervalRelation) => {
+        AllenRelation.BASIC_RELATIONS.forEach((bar: AllenRelation) => {
+          validateCompose(bpir, bar, bpir.compose(bar))
+        })
+      })
+    })
+  })
 
   describe('relation', function () {
     const fivePoints = [-6, -4.983458, -1, 2, Math.PI]
