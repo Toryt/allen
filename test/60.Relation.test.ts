@@ -56,7 +56,7 @@ class E extends Relation {
   // }
 }
 
-function isEAsExpected (e: E, isBasic?: boolean, noRecursion?: boolean) {
+function isEAsExpected (e: E, isBasic?: boolean, noRecursion?: boolean): void {
   e.should.be.an.instanceof(E)
   e.should.be.an.instanceof(Relation)
   if (isBasic === true) {
@@ -65,7 +65,7 @@ function isEAsExpected (e: E, isBasic?: boolean, noRecursion?: boolean) {
   }
   e.uncertainty().should.be.a.Number()
   e.extraMethod().should.equal(4)
-  if (!noRecursion) {
+  if (noRecursion === undefined || !noRecursion) {
     const complement: E = e.complement()
     isEAsExpected(complement, false, true)
     const thisType: E = e.noParamReturnsThisType()
