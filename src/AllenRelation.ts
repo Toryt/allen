@@ -1,6 +1,13 @@
 import { Relation } from './Relation'
 import { basicRelationBitPatterns, relationBitPatterns, reverse } from './bitPattern'
 import assert from 'assert'
+import { Interval, isInterval } from './Interval'
+import { Comparator } from './comparator'
+import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
+import { commonTypeRepresentation } from './typeRepresentation'
+import { Indefinite } from './type'
+
+const haveCommonType: string = 'i1.start, i1.end, i2.start and i2.end must be of a common type'
 
 /**
  * Support for reasoning about Allen relations, i.e., relations between intervals, and constraints on those relations.
@@ -860,5 +867,119 @@ export class AllenRelation extends Relation {
           : acc1,
       this.typedConstructor().emptyRelation()
     )
+  }
+
+  /**
+   * The relation of `i1` with `i2` with the lowest possible {@link uncertainty}.
+   *
+   * `undefined` as `iN.start` or `iN.end` is considered as ‘unknown’ 🤷, and thus is not used to restrict the relation
+   * more, leaving it with more {@link uncertainty}.
+   *
+   * This method is key to validating semantic constraints on intervals, using the following idiom:
+   *
+   * ```ts
+   * ...
+   * T t = ...;
+   * Interval<T> i = ...;
+   * AllenRelation condition = ...;
+   * AllenRelation actual = relation(i1, i2);
+   * if (!actual.implies(condition)) {
+   *   throw new ....
+   * }
+   * ...
+   * ```
+   */
+  static relation<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): AllenRelation {
+    assert(
+      (isLTComparableOrIndefinite(i1.start) &&
+        isLTComparableOrIndefinite(i1.end) &&
+        isLTComparableOrIndefinite(i2.start) &&
+        isLTComparableOrIndefinite(i2.end)) ||
+        compareFn !== undefined,
+      '`compareFn` is mandatory when `iN.start` or `iN.end` is a `symbol` or `NaN`'
+    )
+
+    const cType = commonTypeRepresentation(i1.start, i1.end, i2.start, i2.end)
+
+    assert(cType !== false, haveCommonType)
+    assert(cType === undefined || (isInterval(i1, cType, compareFn) && isInterval(i2, cType, compareFn)))
+
+    const i1Start: Indefinite<T> = i1.start
+    const i1End: Indefinite<T> = i1.end
+    const i2Start: Indefinite<T> = i2.start
+    const i2End: Indefinite<T> = i2.end
+
+    const compare: Comparator<T> = compareFn ?? ltCompare
+
+    let result: AllenRelation = AllenRelation.fullRelation<AllenRelation>()
+
+    if (i1Start !== undefined && i1Start !== null) {
+      if (i2Start !== undefined && i2Start !== null) {
+        const compareStart = compare(i1Start, i2Start)
+        if (compareStart < 0) {
+          result = result.min(AllenRelation.STARTS_EARLIER.complement())
+        } else if (compareStart === 0) {
+          result = result.min(AllenRelation.START_TOGETHER.complement())
+        } else {
+          result = result.min(AllenRelation.STARTS_LATER.complement())
+        }
+      }
+      if (i2End !== undefined && i2End !== null) {
+        const comparei1StartI2End = compare(i1Start, i2End)
+        if (comparei1StartI2End < 0) {
+          // pmoFDseSdfO, not MP; begins before end
+          result = result.min(AllenRelation.MET_BY)
+          result = result.min(AllenRelation.PRECEDED_BY)
+        } else if (comparei1StartI2End === 0) {
+          if (
+            i1End !== undefined &&
+            i1End !== null &&
+            i2Start !== undefined &&
+            i2Start !== null &&
+            compare(i1End, i2Start) === 0
+          ) {
+            return AllenRelation.EQUALS
+          } else {
+            return AllenRelation.MET_BY
+          }
+        } else {
+          return AllenRelation.PRECEDED_BY
+        }
+      }
+    }
+    if (i1End !== undefined && i1End !== null) {
+      if (i2Start !== undefined && i2Start !== null) {
+        const compareI1EndI2Start = compare(i1End, i2Start)
+        if (compareI1EndI2Start < 0) {
+          return AllenRelation.PRECEDES
+        } else if (compareI1EndI2Start === 0) {
+          if (
+            i1Start !== undefined &&
+            i1Start !== null &&
+            i2End !== undefined &&
+            i2End != null &&
+            compare(i1Start, i2End) === 0
+          ) {
+            return AllenRelation.EQUALS
+          }
+          return AllenRelation.MEETS
+        } else {
+          // i1End.after(i2Begin); // not pm, oFDseSdfOMP, ends after begin
+          result = result.min(AllenRelation.PRECEDES)
+          result = result.min(AllenRelation.MEETS)
+        }
+      }
+      if (i2End !== undefined && i2End !== null) {
+        const compareI1EndI2End = compare(i1End, i2End)
+        if (compareI1EndI2End < 0) {
+          result = result.min(AllenRelation.ENDS_EARLIER.complement())
+        } else if (compareI1EndI2End === 0) {
+          result = result.min(AllenRelation.END_TOGETHER.complement())
+        } else {
+          result = result.min(AllenRelation.ENDS_LATER)
+        }
+      }
+    }
+    return result
   }
 }
