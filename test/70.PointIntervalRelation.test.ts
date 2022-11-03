@@ -79,11 +79,11 @@ describe('PointIntervalRelation', function () {
         })
         it('returns FULL for `undefined`', function () {
           const result = callIt(undefined, interval)
-          result.should.equal(PointIntervalRelation.fullRelation())
+          result.should.equal(PointIntervalRelation.fullRelation<PointIntervalRelation>())
         })
         it('returns FULL for `null`', function () {
           const result = callIt(null, interval)
-          result.should.equal(PointIntervalRelation.fullRelation())
+          result.should.equal(PointIntervalRelation.fullRelation<PointIntervalRelation>())
         })
       })
     }
@@ -94,8 +94,8 @@ describe('PointIntervalRelation', function () {
       compare?: (a1: T, a2: T) => number
     ): void {
       describe(label, function () {
-        const ita = PointIntervalRelation.fromString('ita')
-        const bci = PointIntervalRelation.fromString('bci')
+        const ita: PointIntervalRelation = PointIntervalRelation.fromString<PointIntervalRelation>('ita')
+        const bci: PointIntervalRelation = PointIntervalRelation.fromString<PointIntervalRelation>('bci')
         generatePointIntervalRelationTests(
           'fully qualified',
           { start: points[1], end: points[3] },

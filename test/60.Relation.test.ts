@@ -54,6 +54,10 @@ class E extends Relation {
   //   }
   //   return this.typedConstructor().RELATIONS[this.bitPattern | t.bitPattern]
   // }
+
+  public static e (s: string): E {
+    return this.fromString<E>(s)
+  }
 }
 
 function isEAsExpected (e: E, isBasic?: boolean, noRecursion?: boolean): void {
@@ -150,6 +154,10 @@ describe('usage', function () {
   })
   it('supports fromString', function () {
     const result: E = E.fromString<E>('xy')
+    result.should.be.instanceof(E)
+  })
+  it('supports typed fromString', function () {
+    const result: E = E.e('xy')
     result.should.be.instanceof(E)
   })
 
