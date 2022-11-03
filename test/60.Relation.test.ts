@@ -77,10 +77,9 @@ describe('usage', function () {
   })
   it('supports implies', function () {
     const relations = E.RELATIONS
-    const one = relations[3]
+    const one: E = relations[3]
     const other: E = relations[5]
-    const typedOne: E = one
-    typedOne.implies(other).should.be.a.Boolean()
+    one.implies(other).should.be.a.Boolean()
   })
   it('supports min', function () {
     const relations = E.RELATIONS
