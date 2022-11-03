@@ -6,7 +6,7 @@ import { Interval } from '../src/Interval'
 import { inspect } from 'util'
 import { intervalToString } from './_intervalToString'
 import { generateRelationTests } from './_generateRelationTests'
-import { AllenRelation } from '../lib/AllenRelation'
+import { AllenRelation } from '../src/AllenRelation'
 
 describe('PointIntervalRelation', function () {
   generateRelationTests<PointIntervalRelation>(
@@ -28,7 +28,7 @@ describe('PointIntervalRelation', function () {
   )
 
   describe('compose', function () {
-    function validateCompose (pir: PointIntervalRelation, ar: AllenRelation, result: PointIntervalRelation) {
+    function validateCompose (pir: PointIntervalRelation, ar: AllenRelation, result: PointIntervalRelation): void {
       PointIntervalRelation.BASIC_RELATIONS.forEach((bpir: PointIntervalRelation) => {
         if (bpir.implies(pir)) {
           AllenRelation.BASIC_RELATIONS.forEach((bar: AllenRelation) => {
