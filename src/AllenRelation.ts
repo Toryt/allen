@@ -1,5 +1,6 @@
 import { Relation } from './Relation'
 import { basicRelationBitPatterns, relationBitPatterns, reverse } from './bitPattern'
+import assert from 'assert'
 
 /**
  * Support for reasoning about Allen relations, i.e., relations between intervals, and constraints on those relations.
@@ -842,21 +843,22 @@ export class AllenRelation extends Relation {
    *
    * @result BASIC_RELATIONS.every(br1 => BASIC_RELATIONS.every(br2 => !br1.implies(this) || !br2.implies(gr) || result.impliedBy(BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()]))
    */
-  // compose (gr: AllenRelation): AllenRelation {
-  //   // assert preArgumentNotNull(gr1, "gr1");
-  //   // assert preArgumentNotNull(gr2, "gr2");
-  //   return this.typedConstructor().BASIC_RELATIONS.reduce(
-  //       (acc1: AllenRelation, br1: AllenRelation) =>
-  //           /* prettier-ignore */ this.impliedBy(br1)
-  //           ? this.typedConstructor().BASIC_RELATIONS.reduce(
-  //               (acc2:AllenRelation, br2:AllenRelation) =>
-  //                   gr.impliedBy(br2)
-  //                       ? this.typedConstructor().or(acc2, this.typedConstructor().BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()])
-  //                       : acc2,
-  //               acc1
-  //           )
-  //           : acc1,
-  //       this.typedConstructor().emptyRelation<PointIntervalRelation>()
-  //
-  // }
+  compose (gr: AllenRelation): AllenRelation {
+    // noinspection SuspiciousTypeOfGuard
+    assert(gr instanceof AllenRelation)
+
+    return this.typedConstructor().BASIC_RELATIONS.reduce(
+      (acc1: this, br1: this) =>
+        /* prettier-ignore */ this.impliedBy(br1)
+            ? this.typedConstructor().BASIC_RELATIONS.reduce(
+                (acc2: this, br2: this) =>
+                    gr.impliedBy(br2)
+                        ? AllenRelation.or(acc2, AllenRelation.BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()] as this)
+                        : acc2,
+                acc1
+            )
+            : acc1,
+      this.typedConstructor().emptyRelation()
+    )
+  }
 }
