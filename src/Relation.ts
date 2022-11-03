@@ -195,6 +195,7 @@ export class Relation {
   protected readonly bitPattern: number
 
   protected typedConstructor (): RelationConstructor<this> {
+    // this cast means that _each subclass_ **MUST** override BASIC_RELATIONS and RELATIONS
     return this.constructor as RelationConstructor<this>
   }
 
