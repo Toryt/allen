@@ -19,35 +19,49 @@ class E extends Relation {
   }
 }
 
+function isEAsExpected (e: E, isBasic?: boolean, noRecursion?: boolean) {
+  e.should.be.an.instanceof(E)
+  e.should.be.an.instanceof(Relation)
+  if (isBasic === true) {
+    e.isBasic().should.be.true()
+    e.ordinal().should.be.a.Number()
+  }
+  e.uncertainty().should.be.a.Number()
+  e.extraMethod().should.equal(4)
+  if (!noRecursion) {
+    const complement: E = e.complement()
+    isEAsExpected(complement, false, true)
+  }
+}
+
 describe('usage', function () {
-  it('has a typed EMPTY', function () {
-    const EMPTY: E = E.emptyRelation<E>()
-    EMPTY.toString().should.equal('()')
-  })
-  it('has a typed FULL', function () {
-    const FULL = E.fullRelation<E>()
-    FULL.toString().should.equal('(xyz)')
+  it('has basic representations', function () {
+    E.BASIC_REPRESENTATIONS.forEach((brr: string) => {
+      brr.should.be.a.String()
+    })
   })
   it('has typed basic relations', function () {
     const basicRelations: readonly E[] = E.BASIC_RELATIONS
-    const X: E = basicRelations[0]
-    X.ordinal().should.equal(0)
+    const br: E = basicRelations[0]
+    isEAsExpected(br, true)
   })
   it('has typed relations', function () {
     const relations: readonly E[] = E.RELATIONS
-    const X: E = relations[1]
-    X.ordinal().should.equal(0)
+    const br: E = relations[1]
+    isEAsExpected(br)
+  })
+  it('has a typed EMPTY', function () {
+    const EMPTY: E = E.emptyRelation()
+    isEAsExpected(EMPTY)
+  })
+  it('has a typed FULL', function () {
+    const FULL: E = E.fullRelation()
+    isEAsExpected(FULL)
   })
   it('supports converse', function () {
     const relations = E.RELATIONS
     const one: E = relations[2]
     const result: E = one.converse()
-    result.should.be.instanceof(E)
-  })
-  it('supports complement', function () {
-    const relations = E.RELATIONS
-    const one: E = relations[2]
-    const result: E = one.complement()
     result.should.be.instanceof(E)
   })
   it('supports implied by', function () {
@@ -98,10 +112,5 @@ describe('usage', function () {
   it('supports fromString', function () {
     const result: E = E.fromString<E>('xy')
     result.should.be.instanceof(E)
-  })
-  it('supports extraMethod', function () {
-    const relations = E.RELATIONS
-    const one = relations[3]
-    one.extraMethod().should.be.ok()
   })
 })
