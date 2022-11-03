@@ -79,117 +79,125 @@ describe('AllenRelation', function () {
     })
   })
 
-  // describe('#compose', function () {
-  //   function validateCompose (ar1: AllenRelation, ar2: AllenRelation, result: AllenRelation): void {
-  //     AllenRelation.BASIC_RELATIONS.forEach((br1: AllenRelation) => {
-  //       if (br1.implies(ar1)) {
-  //         AllenRelation.BASIC_RELATIONS.forEach((br2: AllenRelation) => {
-  //           if (br2.implies(ar2)) {
-  //             result.impliedBy(AllenRelation.BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()])
-  //           }
-  //         })
-  //       }
-  //     })
-  //   }
-  //
-  //   interface StartEnd {
-  //     start: PointIntervalRelation
-  //     end: PointIntervalRelation
-  //   }
-  //
-  //   const basicAllenI1I2ToI2StartEnd: Map<AllenRelation, StartEnd> = new Map([
-  //     [AllenRelation.PRECEDES, { start: PointIntervalRelation.AFTER, end: PointIntervalRelation.AFTER }],
-  //     [AllenRelation.MEETS, { start: PointIntervalRelation.TERMINATES, end: PointIntervalRelation.AFTER }],
-  //     [AllenRelation.OVERLAPS, { start: PointIntervalRelation.IN, end: PointIntervalRelation.AFTER }],
-  //     [AllenRelation.FINISHED_BY, { start: PointIntervalRelation.IN, end: PointIntervalRelation.TERMINATES }],
-  //     [AllenRelation.CONTAINS, { start: PointIntervalRelation.IN, end: PointIntervalRelation.IN }],
-  //     [AllenRelation.STARTS, { start: PointIntervalRelation.COMMENCES, end: PointIntervalRelation.AFTER }],
-  //     [AllenRelation.EQUALS, { start: PointIntervalRelation.COMMENCES, end: PointIntervalRelation.TERMINATES }],
-  //     [AllenRelation.STARTED_BY, { start: PointIntervalRelation.COMMENCES, end: PointIntervalRelation.IN }],
-  //     [AllenRelation.DURING, { start: PointIntervalRelation.BEFORE, end: PointIntervalRelation.AFTER }],
-  //     [AllenRelation.FINISHES, { start: PointIntervalRelation.BEFORE, end: PointIntervalRelation.TERMINATES }],
-  //     [AllenRelation.OVERLAPPED_BY, { start: PointIntervalRelation.BEFORE, end: PointIntervalRelation.IN }],
-  //     [AllenRelation.MET_BY, { start: PointIntervalRelation.BEFORE, end: PointIntervalRelation.COMMENCES }],
-  //     [AllenRelation.PRECEDED_BY, { start: PointIntervalRelation.BEFORE, end: PointIntervalRelation.BEFORE }]
-  //   ])
-  //
-  //   const basicI1StartEndToAllenI1I2: Map<
-  //     PointIntervalRelation,
-  //     Map<PointIntervalRelation, AllenRelation | undefined>
-  //   > = new Map([
-  //     [
-  //       PointIntervalRelation.BEFORE,
-  //       new Map([
-  //         [PointIntervalRelation.BEFORE, AllenRelation.PRECEDES],
-  //         [PointIntervalRelation.COMMENCES, AllenRelation.MEETS],
-  //         [PointIntervalRelation.IN, AllenRelation.OVERLAPS],
-  //         [PointIntervalRelation.TERMINATES, AllenRelation.FINISHED_BY],
-  //         [PointIntervalRelation.AFTER, AllenRelation.CONTAINS]
-  //       ])
-  //     ],
-  //     [
-  //       PointIntervalRelation.COMMENCES,
-  //       new Map([
-  //         [PointIntervalRelation.BEFORE, undefined],
-  //         [PointIntervalRelation.COMMENCES, undefined],
-  //         [PointIntervalRelation.IN, AllenRelation.STARTS],
-  //         [PointIntervalRelation.TERMINATES, AllenRelation.EQUALS],
-  //         [PointIntervalRelation.AFTER, AllenRelation.STARTED_BY]
-  //       ])
-  //     ],
-  //     [
-  //       PointIntervalRelation.IN,
-  //       new Map([
-  //         [PointIntervalRelation.BEFORE, undefined],
-  //         [PointIntervalRelation.COMMENCES, undefined],
-  //         [PointIntervalRelation.IN, AllenRelation.DURING],
-  //         [PointIntervalRelation.TERMINATES, AllenRelation.FINISHES],
-  //         [PointIntervalRelation.AFTER, AllenRelation.OVERLAPPED_BY]
-  //       ])
-  //     ],
-  //     [
-  //       PointIntervalRelation.TERMINATES,
-  //       new Map([
-  //         [PointIntervalRelation.BEFORE, undefined],
-  //         [PointIntervalRelation.COMMENCES, undefined],
-  //         [PointIntervalRelation.IN, undefined],
-  //         [PointIntervalRelation.TERMINATES, undefined],
-  //         [PointIntervalRelation.AFTER, AllenRelation.MET_BY]
-  //       ])
-  //     ],
-  //     [
-  //       PointIntervalRelation.AFTER,
-  //       new Map([
-  //         [PointIntervalRelation.BEFORE, undefined],
-  //         [PointIntervalRelation.COMMENCES, undefined],
-  //         [PointIntervalRelation.IN, undefined],
-  //         [PointIntervalRelation.TERMINATES, undefined],
-  //         [PointIntervalRelation.AFTER, AllenRelation.PRECEDED_BY]
-  //       ])
-  //     ]
-  //   ])
-  //
-  //   function allenRelationToStartEnd (ar: AllenRelation) {
-  //     return AllenRelation.BASIC_RELATIONS.reduce(
-  //       (acc: StartEnd, bar: AllenRelation) => {
-  //         if (!ar.implies(bar)) {
-  //           return acc
-  //         }
-  //         const basicStartEnd = basicAllenI1I2ToI2StartEnd.get(bar)
-  //         ok(basicStartEnd)
-  //         console.log(bar)
-  //         return {
-  //           start: PointIntervalRelation.or(acc.start, basicStartEnd.start),
-  //           end: PointIntervalRelation.or(acc.end, basicStartEnd.end)
-  //         }
-  //       },
-  //       { start: PointIntervalRelation.emptyRelation(), end: PointIntervalRelation.emptyRelation() }
-  //     )
-  //   }
-  //
-  //   function expectedResult (ar1: AllenRelation, ar2: AllenRelation): AllenRelation | undefined {
-  //     const { start: i1StartToI2, end: i1EndToI2 } = allenRelationToStartEnd(ar1.converse())
-  //     return basicI1StartEndToAllenI1I2.get(i1StartToI2.compose(ar2))?.get(i1EndToI2.compose(ar2))
-  //   }
-  // })
+  describe('#compose', function () {
+    function validateCompose (ar1: AllenRelation, ar2: AllenRelation, result: AllenRelation): void {
+      AllenRelation.BASIC_RELATIONS.forEach((br1: AllenRelation) => {
+        if (br1.implies(ar1)) {
+          AllenRelation.BASIC_RELATIONS.forEach((br2: AllenRelation) => {
+            if (br2.implies(ar2)) {
+              result.impliedBy(AllenRelation.BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()])
+            }
+          })
+        }
+      })
+    }
+
+    it('composes basic relations as expected', function () {
+      AllenRelation.BASIC_RELATIONS.forEach((bar1: AllenRelation) => {
+        AllenRelation.BASIC_RELATIONS.forEach((bar2: AllenRelation) => {
+          validateCompose(bar1, bar2, bar1.compose(bar2))
+        })
+      })
+    })
+    //
+    //   interface StartEnd {
+    //     start: PointIntervalRelation
+    //     end: PointIntervalRelation
+    //   }
+    //
+    //   const basicAllenI1I2ToI2StartEnd: Map<AllenRelation, StartEnd> = new Map([
+    //     [AllenRelation.PRECEDES, { start: PointIntervalRelation.AFTER, end: PointIntervalRelation.AFTER }],
+    //     [AllenRelation.MEETS, { start: PointIntervalRelation.TERMINATES, end: PointIntervalRelation.AFTER }],
+    //     [AllenRelation.OVERLAPS, { start: PointIntervalRelation.IN, end: PointIntervalRelation.AFTER }],
+    //     [AllenRelation.FINISHED_BY, { start: PointIntervalRelation.IN, end: PointIntervalRelation.TERMINATES }],
+    //     [AllenRelation.CONTAINS, { start: PointIntervalRelation.IN, end: PointIntervalRelation.IN }],
+    //     [AllenRelation.STARTS, { start: PointIntervalRelation.COMMENCES, end: PointIntervalRelation.AFTER }],
+    //     [AllenRelation.EQUALS, { start: PointIntervalRelation.COMMENCES, end: PointIntervalRelation.TERMINATES }],
+    //     [AllenRelation.STARTED_BY, { start: PointIntervalRelation.COMMENCES, end: PointIntervalRelation.IN }],
+    //     [AllenRelation.DURING, { start: PointIntervalRelation.BEFORE, end: PointIntervalRelation.AFTER }],
+    //     [AllenRelation.FINISHES, { start: PointIntervalRelation.BEFORE, end: PointIntervalRelation.TERMINATES }],
+    //     [AllenRelation.OVERLAPPED_BY, { start: PointIntervalRelation.BEFORE, end: PointIntervalRelation.IN }],
+    //     [AllenRelation.MET_BY, { start: PointIntervalRelation.BEFORE, end: PointIntervalRelation.COMMENCES }],
+    //     [AllenRelation.PRECEDED_BY, { start: PointIntervalRelation.BEFORE, end: PointIntervalRelation.BEFORE }]
+    //   ])
+    //
+    //   const basicI1StartEndToAllenI1I2: Map<
+    //     PointIntervalRelation,
+    //     Map<PointIntervalRelation, AllenRelation | undefined>
+    //   > = new Map([
+    //     [
+    //       PointIntervalRelation.BEFORE,
+    //       new Map([
+    //         [PointIntervalRelation.BEFORE, AllenRelation.PRECEDES],
+    //         [PointIntervalRelation.COMMENCES, AllenRelation.MEETS],
+    //         [PointIntervalRelation.IN, AllenRelation.OVERLAPS],
+    //         [PointIntervalRelation.TERMINATES, AllenRelation.FINISHED_BY],
+    //         [PointIntervalRelation.AFTER, AllenRelation.CONTAINS]
+    //       ])
+    //     ],
+    //     [
+    //       PointIntervalRelation.COMMENCES,
+    //       new Map([
+    //         [PointIntervalRelation.BEFORE, undefined],
+    //         [PointIntervalRelation.COMMENCES, undefined],
+    //         [PointIntervalRelation.IN, AllenRelation.STARTS],
+    //         [PointIntervalRelation.TERMINATES, AllenRelation.EQUALS],
+    //         [PointIntervalRelation.AFTER, AllenRelation.STARTED_BY]
+    //       ])
+    //     ],
+    //     [
+    //       PointIntervalRelation.IN,
+    //       new Map([
+    //         [PointIntervalRelation.BEFORE, undefined],
+    //         [PointIntervalRelation.COMMENCES, undefined],
+    //         [PointIntervalRelation.IN, AllenRelation.DURING],
+    //         [PointIntervalRelation.TERMINATES, AllenRelation.FINISHES],
+    //         [PointIntervalRelation.AFTER, AllenRelation.OVERLAPPED_BY]
+    //       ])
+    //     ],
+    //     [
+    //       PointIntervalRelation.TERMINATES,
+    //       new Map([
+    //         [PointIntervalRelation.BEFORE, undefined],
+    //         [PointIntervalRelation.COMMENCES, undefined],
+    //         [PointIntervalRelation.IN, undefined],
+    //         [PointIntervalRelation.TERMINATES, undefined],
+    //         [PointIntervalRelation.AFTER, AllenRelation.MET_BY]
+    //       ])
+    //     ],
+    //     [
+    //       PointIntervalRelation.AFTER,
+    //       new Map([
+    //         [PointIntervalRelation.BEFORE, undefined],
+    //         [PointIntervalRelation.COMMENCES, undefined],
+    //         [PointIntervalRelation.IN, undefined],
+    //         [PointIntervalRelation.TERMINATES, undefined],
+    //         [PointIntervalRelation.AFTER, AllenRelation.PRECEDED_BY]
+    //       ])
+    //     ]
+    //   ])
+    //
+    //   function allenRelationToStartEnd (ar: AllenRelation) {
+    //     return AllenRelation.BASIC_RELATIONS.reduce(
+    //       (acc: StartEnd, bar: AllenRelation) => {
+    //         if (!ar.implies(bar)) {
+    //           return acc
+    //         }
+    //         const basicStartEnd = basicAllenI1I2ToI2StartEnd.get(bar)
+    //         ok(basicStartEnd)
+    //         console.log(bar)
+    //         return {
+    //           start: PointIntervalRelation.or(acc.start, basicStartEnd.start),
+    //           end: PointIntervalRelation.or(acc.end, basicStartEnd.end)
+    //         }
+    //       },
+    //       { start: PointIntervalRelation.emptyRelation(), end: PointIntervalRelation.emptyRelation() }
+    //     )
+    //   }
+    //
+    //   function expectedResult (ar1: AllenRelation, ar2: AllenRelation): AllenRelation | undefined {
+    //     const { start: i1StartToI2, end: i1EndToI2 } = allenRelationToStartEnd(ar1.converse())
+    //     return basicI1StartEndToAllenI1I2.get(i1StartToI2.compose(ar2))?.get(i1EndToI2.compose(ar2))
+    //   }
+  })
 })
