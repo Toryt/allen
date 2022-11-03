@@ -1,6 +1,7 @@
 import 'should'
 import { basicRelationBitPatterns, relationBitPatterns } from '../src/bitPattern'
 import { Relation } from '../src/Relation'
+import { generateRelationTests } from './_generateRelationTests'
 
 class E extends Relation {
   public static readonly NR_OF_BITS = 3
@@ -9,6 +10,10 @@ class E extends Relation {
   public static readonly RELATIONS: readonly E[] = Object.freeze(
     relationBitPatterns(this.NR_OF_BITS).map(bitPattern => new E(bitPattern))
   )
+
+  public static readonly X: E = E.RELATIONS[1]
+  public static readonly Y: E = E.RELATIONS[2]
+  public static readonly Z: E = E.RELATIONS[4]
 
   public static readonly BASIC_RELATIONS: readonly E[] = Object.freeze(
     basicRelationBitPatterns(this.NR_OF_BITS).map(bitPattern => E.RELATIONS[bitPattern])
@@ -51,11 +56,11 @@ describe('usage', function () {
     isEAsExpected(br)
   })
   it('has a typed EMPTY', function () {
-    const EMPTY: E = E.emptyRelation()
+    const EMPTY: E = E.emptyRelation<E>()
     isEAsExpected(EMPTY)
   })
   it('has a typed FULL', function () {
-    const FULL: E = E.fullRelation()
+    const FULL: E = E.fullRelation<E>()
     isEAsExpected(FULL)
   })
   it('supports converse', function () {
@@ -113,4 +118,16 @@ describe('usage', function () {
     const result: E = E.fromString<E>('xy')
     result.should.be.instanceof(E)
   })
+
+  generateRelationTests<E>(
+    'E',
+    E,
+    [
+      { name: 'X', representation: 'x' },
+      { name: 'Y', representation: 'y' },
+      { name: 'Z', representation: 'z' }
+    ],
+    [],
+    true
+  )
 })

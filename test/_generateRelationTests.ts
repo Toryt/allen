@@ -311,41 +311,41 @@ export function generateRelationTests<R extends Relation> (
       })
     })
   })
-  describe('#converse', function () {
-    it('the converse of each basic relation is at the same index in the reversed BASIC_RELATIONS array', function () {
-      const lastIndex = RConstructor.NR_OF_BITS - 1
-      RConstructor.BASIC_RELATIONS.forEach((br, i) => {
-        br.converse().should.equal(RConstructor.BASIC_RELATIONS[lastIndex - i])
-      })
-    })
-    it('the converse of each relation is implied by the converse of all basic relations that are implied by it', function () {
-      RConstructor.RELATIONS.forEach(gr => {
-        const result = gr.converse()
-        RConstructor.BASIC_RELATIONS.forEach(br => {
-          if (gr.impliedBy(br)) {
-            result.impliedBy(br.converse()).should.be.true()
-          }
-        })
-      })
-    })
-    it('each relation is implied by all basic relations whose converse are implied by the relations converse', function () {
-      RConstructor.RELATIONS.forEach(gr => {
-        const result = gr.converse()
-        RConstructor.BASIC_RELATIONS.forEach(br => {
-          if (result.impliedBy(br.converse())) {
-            gr.impliedBy(br).should.be.true()
-          }
-        })
-      })
-    })
-    it('all relations are their own converse‘s converse', function () {
-      RConstructor.RELATIONS.forEach(gr => {
-        gr.converse()
-          .converse()
-          .should.equal(gr)
-      })
-    })
-  })
+  // describe('#converse', function () {
+  //   it('the converse of each basic relation is at the same index in the reversed BASIC_RELATIONS array', function () {
+  //     const lastIndex = RConstructor.NR_OF_BITS - 1
+  //     RConstructor.BASIC_RELATIONS.forEach((br, i) => {
+  //       br.converse().should.equal(RConstructor.BASIC_RELATIONS[lastIndex - i])
+  //     })
+  //   })
+  //   it('the converse of each relation is implied by the converse of all basic relations that are implied by it', function () {
+  //     RConstructor.RELATIONS.forEach(gr => {
+  //       const result = gr.converse()
+  //       RConstructor.BASIC_RELATIONS.forEach(br => {
+  //         if (gr.impliedBy(br)) {
+  //           result.impliedBy(br.converse()).should.be.true()
+  //         }
+  //       })
+  //     })
+  //   })
+  //   it('each relation is implied by all basic relations whose converse are implied by the relations converse', function () {
+  //     RConstructor.RELATIONS.forEach(gr => {
+  //       const result = gr.converse()
+  //       RConstructor.BASIC_RELATIONS.forEach(br => {
+  //         if (result.impliedBy(br.converse())) {
+  //           gr.impliedBy(br).should.be.true()
+  //         }
+  //       })
+  //     })
+  //   })
+  //   it('all relations are their own converse‘s converse', function () {
+  //     RConstructor.RELATIONS.forEach(gr => {
+  //       gr.converse()
+  //         .converse()
+  //         .should.equal(gr)
+  //     })
+  //   })
+  // })
   describe('#complement', function () {
     it('the complement of each relation is implied by all basic relations that are not implied by it', function () {
       RConstructor.RELATIONS.forEach(gr => {
