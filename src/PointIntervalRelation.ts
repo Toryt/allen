@@ -329,7 +329,7 @@ export class PointIntervalRelation extends Relation {
    * `undefined` as `i.start` or `i.end` is considered as ‘unknown’ 🤷, and thus is not used to restrict the relation
    * more, leaving it with more {@link uncertainty}.
    *
-   * This method is key to validating semantic constraints on time intervals, using the following idiom:
+   * This method is key to validating semantic constraints on points and interval relations, using the following idiom:
    *
    * ```ts
    * ...
