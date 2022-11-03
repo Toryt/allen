@@ -30,6 +30,30 @@ class E extends Relation {
   noParamReturnsE (): E {
     return E.BASIC_RELATIONS[0]
   }
+
+  thisParamReturnsThisType (t: this): this {
+    if (this.implies(t)) {
+      return this.typedConstructor().RELATIONS[this.bitPattern & t.bitPattern]
+    }
+    return this.typedConstructor().RELATIONS[this.bitPattern | t.bitPattern]
+  }
+
+  thisParamReturnsE (t: this): E {
+    if (this.implies(t)) {
+      return this.typedConstructor().RELATIONS[this.bitPattern & t.bitPattern]
+    }
+    return this.typedConstructor().RELATIONS[this.bitPattern | t.bitPattern]
+  }
+
+  // NOTE: This is not possible; t is of type E, but implies requires the `this` type as parameter. In subclasses that
+  //       could be the subclass, which is stronger than E. This is only relevant when implies is called inside an
+  //       instance method, where there is a `this` type.
+  // eParamReturnsE (t: E): E {
+  //   if (this.implies(t)) {
+  //     return this.typedConstructor().RELATIONS[this.bitPattern & t.bitPattern]
+  //   }
+  //   return this.typedConstructor().RELATIONS[this.bitPattern | t.bitPattern]
+  // }
 }
 
 function isEAsExpected (e: E, isBasic?: boolean, noRecursion?: boolean) {
@@ -48,6 +72,11 @@ function isEAsExpected (e: E, isBasic?: boolean, noRecursion?: boolean) {
     isEAsExpected(thisType, false, true)
     const eType: E = e.noParamReturnsE()
     isEAsExpected(eType, false, true)
+    const other: E = E.RELATIONS[3]
+    const thisParamThisType: E = e.thisParamReturnsThisType(other)
+    isEAsExpected(thisParamThisType, false, true)
+    const thisParamE: E = e.thisParamReturnsE(other)
+    isEAsExpected(thisParamE, false, true)
   }
 }
 
