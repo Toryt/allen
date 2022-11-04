@@ -1,12 +1,12 @@
 {
   "name": "@toryt/allen",
   "version": "0.0.1",
-  "description": "",
-  "main": "lib/index.js",
-  "types": "lib/index.d.js",
+  "description": "Reason and validate the relations between intervals, and points and intervals, in JavaScript and TypeScript.",
   "keywords": ["allen", "interval", "time"],
   "author": "jandockx@gmail.com",
   "license": "Apache-2.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.js",
   "devDependencies": {
     "@types/mocha": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
