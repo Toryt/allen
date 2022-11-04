@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-# Allen Relation
+# Allen Relations
 
 When working with intervals, we often want to express constraints (invariants) that limit acceptable combinations.
 Expressing this correctly proves difficult in practice. Falling back to working with isolated start and end points, and

@@ -172,25 +172,12 @@ unknown 🤷.
 
 There are some pitfalls.
 
-See [Point – Interval Relation] and [Allen Relation] for details.
+### Details
 
-### Points and comparison in JavaScript and TypeScript
-
-The only constraint we have on what we use as points, is that we have to be able to compare them with a
-[strict total order](https://en.wikipedia.org/wiki/Total¬_order). Technicall we can use anything in JavaScript and
-TypeScript to represent points.
-
-For time, we do advise however to only use `string`s (ISO-formatted), `number`s (e.g., as ms since epoch), or `Date`s to
-represent points.
-
-See [Points and comparison] for detailed information.
-
-### Intervals
-
-Some common interface is required to work with intervals. This library expects intervals to realize the `Interface<T>`
-interface.
-
-See [Intervals] for detailed information.
+- [Points and comparison]
+- [Intervals]
+- [Point – Interval Relations]
+- [Allen Relations]
 
 ## Where to find
 
@@ -208,7 +195,7 @@ pull requests there will not be reviewed.</p>
 
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
-This code uses the application to TypeScript[eslint-config-standard-with-typescript] of the [Standard] coding style.
+This code uses the [application to TypeScript][eslint-config-standard-with-typescript] of the [Standard] coding style.
 Tests require complete code coverage.
 
 ## License
@@ -240,8 +227,8 @@ last updated in December 2008.
 [strict total order]: https://en.wikipedia.org/wiki/Total¬_order
 [points and comparison]: doc/Points.md
 [intervals]: doc/Intervals.md
-[point – interval relation]: doc/PointIntervalRelation.md
-[allen relation]: doc/AllenRelation.md
+[point – interval relations]: doc/PointIntervalRelation.md
+[allen relations]: doc/AllenRelation.md
 [bitbucket]: https://bitbucket.org/toryt/allen
 [github]: https://github.com/Toryt/allen
 [npm]: https://www.npmjs.com/package/@toryt/allen
