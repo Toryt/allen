@@ -32,6 +32,38 @@ Good synopses of this theory are
 - [Wikipedia]
 - [Thomas A. Alspaugh “Allen's interval algebra”].
 
+## How to use
+
+```ts
+import { Interval } from './Interval'
+import { AllenRelation } from './AllenRelation'
+import { PointIntervalRelation } from './PointIntervalRelation'
+
+const iiCondition1: AllenRelation = AllenRelation.fromString<AllenRelation>('pbsSd')
+const iiCcondition2: AllenRelation = AllenRelation.fromString<AllenRelation>('sDe')
+const iiCondition: AllenRelation = iiCondition1.compose(iiCondition2)
+
+const i1: Interval<string> = { start: '2022-11-04', end: '2023-04-12' }
+const i2: Interval<string> = { start: '2021-08-22' }
+
+const actual: AllenRelation = AllenRelation.relation(i1, i2)
+if (!actual.implies(iiCondition)) {
+  throw new Error(`i1 and i2 do no uphold ${iiCondition.toString()}`)
+}
+
+const piCondition1: PointIntervalRelation = PointIntervalRelation.or(
+  PointIntervalRelation.BEFORE,
+  PointIntervalRelation.TERMINATE
+)
+const piCondition: PointIntervalRelation = PointIntervalRelation.compose(piCondition1, iiCcondition2)
+
+const p: string = '2021-08-15'
+const piActual: PointIntervalRelation = PointIntervalRelation.relation(p, i2)
+if (!piActual.implies(piCondition)) {
+  throw new Error(`p and i2 do not uphold ${piCondition.toString()}`)
+}
+```
+
 ## Where to find
 
 Repo, CI, issues, pull requests This project is maintained in [Bitbucket] (repo, CI, issues, pull requests, …).
