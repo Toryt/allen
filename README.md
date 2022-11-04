@@ -178,6 +178,7 @@ There are some pitfalls.
 - [Intervals]
 - [Point – Interval Relations]
 - [Allen Relations]
+- [Code documentation]
 
 ## Where to find
 
@@ -229,6 +230,7 @@ last updated in December 2008.
 [intervals]: doc/Intervals.md
 [point – interval relations]: doc/PointIntervalRelation.md
 [allen relations]: doc/AllenRelation.md
+[code documentation]: docs/index.html
 [bitbucket]: https://bitbucket.org/toryt/allen
 [github]: https://github.com/Toryt/allen
 [npm]: https://www.npmjs.com/package/@toryt/allen
