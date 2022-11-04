@@ -4,13 +4,6 @@
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.js",
-  "scripts": {
-    "pretest": "npm-check -i \"\"; npm outdated || exit 0",
-    "lint": "eslint src test",
-    "compile": "rm -Rf lib && tsc",
-    "typedoc": "rm -Rf docs && typedoc src/index.ts",
-    "test": "npm run compile && npm run lint && npm run typedoc && nyc mocha 'test/**/*.test.ts'"
-  },
   "keywords": ["allen", "interval", "time"],
   "author": "jandockx@gmail.com",
   "license": "Apache-2.0",
@@ -61,5 +54,12 @@
       "html",
       "text"
     ]
+  },
+  "scripts": {
+    "pretest": "npm-check -i \"\"; npm outdated || exit 0",
+    "lint": "eslint src test",
+    "compile": "rm -Rf lib && tsc",
+    "typedoc": "rm -Rf docs && typedoc src/index.ts",
+    "test": "npm run compile && npm run lint && npm run typedoc && nyc mocha 'test/**/*.test.ts'"
   }
 }
