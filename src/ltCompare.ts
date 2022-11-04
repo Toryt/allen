@@ -15,7 +15,7 @@
  */
 
 import { notStrictEqual, ok } from 'assert'
-import { Constructor, commonTypeRepresentation } from './typeRepresentation'
+import { commonTypeRepresentation, Constructor } from './typeRepresentation'
 import { Indefinite } from './type'
 
 /**

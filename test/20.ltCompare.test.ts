@@ -17,7 +17,7 @@
 /* eslint-env mocha */
 
 import 'should'
-import { ltCompare, isLTComparableOrIndefinite } from '../src/ltCompare'
+import { isLTComparableOrIndefinite, ltCompare } from '../src/ltCompare'
 import { inspect } from 'util'
 import { stuffWithUndefined } from './_stuff'
 

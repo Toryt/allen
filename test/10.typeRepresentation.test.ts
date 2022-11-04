@@ -17,14 +17,14 @@
 /* eslint-env mocha */
 
 import {
-  Constructor,
-  mostSpecializedCommonType,
   commonTypeRepresentation,
-  TypeRepresentation,
-  primitiveTypeRepresentations,
+  Constructor,
   isTypeRepresentation,
-  typeRepresentationOf,
-  representsSuperType
+  mostSpecializedCommonType,
+  primitiveTypeRepresentations,
+  representsSuperType,
+  TypeRepresentation,
+  typeRepresentationOf
 } from '../src/typeRepresentation'
 import { inspect } from 'util'
 import should from 'should'

@@ -20,17 +20,17 @@ import should from 'should'
 import { stuffWithUndefined } from './_stuff'
 import { inspect } from 'util'
 import {
-  largestNrOfBits,
-  nrOfRelations,
+  basicRelationBitPatterns,
+  bitCount,
   EMPTY_BIT_PATTERN,
   fullBitPattern,
-  relationBitPatterns,
-  isRelationBitPattern,
-  basicRelationBitPatterns,
   isBasicRelationBitPattern,
-  reverse,
-  bitCount,
-  largestBitInteger
+  isRelationBitPattern,
+  largestBitInteger,
+  largestNrOfBits,
+  nrOfRelations,
+  relationBitPatterns,
+  reverse
 } from '../src/bitPattern'
 
 const nrOfBitsCases = [0, 1, 2, 5, 13, largestNrOfBits]
