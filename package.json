@@ -7,6 +7,13 @@
   "license": "Apache-2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.js",
+  "files": [
+    "doc",
+    "docs",
+    "lib",
+    "CHANGES.md",
+    "LICENSE"
+  ],
   "devDependencies": {
     "@types/mocha": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
