@@ -7,7 +7,8 @@
   "scripts": {
     "pretest": "npm-check -i \"\"; npm outdated || exit 0",
     "lint": "eslint src test",
-    "test": "tsc && npm run lint && nyc mocha 'test/**/*.test.ts'"
+    "compile": "rm -Rf lib && tsc",
+    "test": "npm run compile && npm run lint && nyc mocha 'test/**/*.test.ts'"
   },
   "keywords": [],
   "author": "",
