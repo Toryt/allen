@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Authored" pattern="file[allen]:*/&amp;&amp;!file[allen]:.idea//*&amp;&amp;!file[allen]:.nyc_output//*&amp;&amp;!file[allen]:coverage//*&amp;&amp;!file[allen]:lib//*" />
+</component>
