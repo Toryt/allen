@@ -122,7 +122,7 @@ export interface RelationConstructor<R extends Relation> extends Function {
   /**
    * The main factory method for relations.
    *
-   * This is the union of all relations in {@code gr}, when they are considered as sets of basic relations.
+   * This is the union of all relations in `gr`, when they are considered as sets of basic relations.
    *
    * Although this is intended to create any disjunction of the basic relations, you can use any relation in the
    * argument list.
@@ -174,8 +174,9 @@ export interface RelationConstructor<R extends Relation> extends Function {
  *   - {@link and},
  *   - {@link min}, and
  * - the unary methods
- *   - {@link complement}, and
- *   - {@link converse}.
+ *   - {@link complement},
+ *   - `converse` (only when the instances express relations that are internal, i.e., between instances of the same
+ *      type), and
  *   - `compose`
  *
  * All instance methods in this class are _O(1)_, i.e., work in constant time, and all static methods are _O(n)_, i.e.,
@@ -497,7 +498,7 @@ export class Relation {
   /**
    * The main factory method for relations.
    *
-   * This is the union of all relations in {@code gr}, when they are considered as sets of basic relations.
+   * This is the union of all relations in `gr`, when they are considered as sets of basic relations.
    *
    * `or` is commutative and associative.
    *
