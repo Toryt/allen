@@ -63,7 +63,7 @@
     ]
   },
   "scripts": {
-    "pretest": "npm-check -i \"\"; npm outdated || exit 0",
+    "pretest": "npm-check -i \"typedoc\"; npm outdated || exit 0",
     "lint": "eslint src test",
     "compile": "rm -Rf lib && tsc",
     "typedoc": "rm -Rf docs && typedoc src/index.ts",
