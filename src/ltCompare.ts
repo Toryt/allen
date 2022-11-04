@@ -15,25 +15,8 @@
  */
 
 import { notStrictEqual, ok } from 'assert'
-import { commonTypeRepresentation, Constructor } from './typeRepresentation'
+import { commonTypeRepresentation } from './typeRepresentation'
 import { Indefinite } from './type'
-
-/**
- * The primitive types that are acceptable as points for {@link ltCompare}.
- *
- * Note that `number` `NaN` is not an acceptable element. This cannot be expressed in TypeScript.
- * All other values can be compared with {@link ltCompare}, although maybe not intuitively out-of-the-box.
- */
-export const ltComparablePrimitiveTypeRepresentations = ['number', 'bigint', 'string', 'boolean'] as const
-
-/**
- * _Dynamic representation_ of the type of a definite point.
- *
- * For primitive types, this is the `typeof` string. For `object` and `function`, it is the constructor.
- */
-export type LTComparableTypeRepresentation =
-  | typeof ltComparablePrimitiveTypeRepresentations[number]
-  | Constructor<Object>
 
 export type LTComparablePrimitive = number | bigint | string | boolean
 
