@@ -30,7 +30,7 @@ algebra&quot;</cite></a>, on which the conventions used here are based.
 
 ## Quick overview
 
-We find that there are 13 _basic relations_ possible between definite intervals:
+Allen finds that there are 13 _basic relations_ possible between definite intervals:
 
 - `I1` `PRECEDES` `I2` (`p`)
 
