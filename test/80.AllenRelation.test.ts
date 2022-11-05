@@ -153,7 +153,6 @@ describe('AllenRelation', function () {
       relation: AllenRelation
     }
 
-    // MUDO empty interval
     /**
      * Given 4 points, in order, create relevant intervals to test, and the expected relations.
      *
