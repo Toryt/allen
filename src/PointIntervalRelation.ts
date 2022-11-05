@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import assert from 'assert'
+import assert, { ok } from 'assert'
 import { Interval, isInterval } from './Interval'
 import { Comparator } from './comparator'
 import { commonTypeRepresentation } from './typeRepresentation'
@@ -359,7 +359,8 @@ export class PointIntervalRelation extends Relation {
    * ...
    * ```
    */
-  static relation<T> (t: T | undefined, i: Interval<T>, compareFn?: Comparator<T>): PointIntervalRelation {
+  static relation<T> (t: T | undefined | null, i: Interval<T>, compareFn?: Comparator<T>): PointIntervalRelation {
+    ok(i)
     assert(
       (isLTComparableOrIndefinite(t) && isLTComparableOrIndefinite(i.start) && isLTComparableOrIndefinite(i.end)) ||
         compareFn !== undefined,
