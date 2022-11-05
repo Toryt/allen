@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import assert from 'assert'
+import assert, { ok } from 'assert'
 import { Relation } from './Relation'
 import { basicRelationBitPatterns, relationBitPatterns, reverse } from './bitPattern'
 import { Interval, isInterval } from './Interval'
@@ -915,6 +915,8 @@ export class AllenRelation extends Relation {
    * (`PointIntervalRelation.relation` could be used to return `PointIntervalRelation.TERMINATES`).
    */
   static relation<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): AllenRelation {
+    ok(i1)
+    ok(i2)
     assert(
       (isLTComparableOrIndefinite(i1.start) &&
         isLTComparableOrIndefinite(i1.end) &&
