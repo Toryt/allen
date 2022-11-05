@@ -146,6 +146,13 @@ describe('AllenRelation', function () {
   })
   describe('relation', function () {
     const fourPoints = [-4.983458, -1, 2, Math.PI]
+    const fourStrings = ['a smallest', 'b less small', 'c larger', 'e largest']
+    const fourDates = [
+      new Date(2006, 9, 3, 19, 49, 34, 848),
+      new Date(2011, 9, 3, 19, 49, 34, 848),
+      new Date(2018, 9, 3, 19, 49, 34, 848),
+      new Date(2022, 9, 3, 19, 49, 34, 848)
+    ]
 
     interface TestInterval<T> {
       i1: Interval<T>
@@ -236,5 +243,7 @@ describe('AllenRelation', function () {
     }
 
     generateTests<number>('number', fourPoints)
+    generateTests<string>('string', fourStrings)
+    generateTests<Date>('Date', fourDates)
   })
 })
