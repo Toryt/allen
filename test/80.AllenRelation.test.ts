@@ -358,7 +358,13 @@ describe('AllenRelation', function () {
       ]
     }
 
-    function generateTests<T> (label: string, pts: T[]): void {
+    function generateTests<T> (label: string, pts: T[], compare?: (a1: T, a2: T) => number): void {
+      function callIt (i1: Interval<T>, i2: Interval<T>): AllenRelation {
+        return compare !== undefined && compare !== null
+          ? AllenRelation.relation(i1, i2, compare)
+          : AllenRelation.relation(i1, i2)
+      }
+
       describe(label, function () {
         createIntervals<T>(pts).forEach((ti: TestInterval<T>) => {
           const i1: Interval<T> = ti.i1
@@ -367,8 +373,8 @@ describe('AllenRelation', function () {
           it(`relation(${intervalToString(i1)}, ${intervalToString(
             i2
           )}) = ${relation.toString()} (and converse for swapped arguments)`, function () {
-            const straight = AllenRelation.relation(i1, i2)
-            const reversed = AllenRelation.relation(i2, i1)
+            const straight = callIt(i1, i2)
+            const reversed = callIt(i2, i1)
             console.log(`straight: ${straight.toString()}`)
             console.log(`reversed: ${reversed.toString()}`)
             straight.should.equal(relation)
@@ -383,7 +389,8 @@ describe('AllenRelation', function () {
     generateTests<Date>('Date', fourDates)
     generateTests<symbol>(
       'symbol with compare',
-      fourStrings.map(s => Symbol(s))
+      fourStrings.map(s => Symbol(s)),
+      (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
     )
   })
 })
