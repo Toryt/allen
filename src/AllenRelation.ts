@@ -992,7 +992,7 @@ export class AllenRelation extends Relation {
           }
           return AllenRelation.MEETS
         } else {
-          // i1End.after(i2Begin); // not pm, oFDseSdfOMP, ends after begin
+          // i1End.after(i2Begin); // not pm, oFDseSdfOMP, ends after start
           result = result.min(AllenRelation.PRECEDES)
           result = result.min(AllenRelation.MEETS)
         }
