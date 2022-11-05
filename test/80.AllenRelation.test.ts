@@ -197,14 +197,14 @@ describe('AllenRelation', function () {
 
         /* test with 1 empty interval (converse for swapped parameters) */
         { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[2], end: pts[3] }, relation: AllenRelation.PRECEDES },
-        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.MEETS }, // MUDO and starts
+        // NOTE: next should return MEETS _and_ STARTS, but we cannot express that; MEETS is selected
+        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.MEETS },
         // overlaps, finished by, contains, is impossible, unless both are degenerate
-        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.STARTS }, // MUDO and meets
         // equals requires both to be degenerate, see below
         // started by is impossible, unless both are degenerate
         { i1: { start: pts[1], end: pts[1] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.DURING },
-        { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.FINISHES }, // MUDO and met_by
-        { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.MET_BY }, // MUDO and finishes
+        // NOTE: next should return MET_BY _and_ FINISHES, but we cannot express that; MET_BY is selected
+        { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.MET_BY },
         { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.PRECEDED_BY },
 
         /* 2 empty intervals */
