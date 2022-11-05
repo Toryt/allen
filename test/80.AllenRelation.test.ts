@@ -146,7 +146,7 @@ describe('AllenRelation', function () {
   })
   describe('relation', function () {
     const fourPoints = [-4.983458, -1, 2, Math.PI]
-    const fourStrings = ['a smallest', 'b less small', 'c larger', 'e largest']
+    const fourStrings = ['a smallest for ar', 'b less small for ar', 'c larger for ar', 'e largest for ar']
     const fourDates = [
       new Date(2006, 9, 3, 19, 49, 34, 848),
       new Date(2011, 9, 3, 19, 49, 34, 848),
@@ -381,5 +381,9 @@ describe('AllenRelation', function () {
     generateTests<number>('number', fourPoints)
     generateTests<string>('string', fourStrings)
     generateTests<Date>('Date', fourDates)
+    generateTests<symbol>(
+      'symbol with compare',
+      fourStrings.map(s => Symbol(s))
+    )
   })
 })
