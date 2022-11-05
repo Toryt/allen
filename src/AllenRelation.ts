@@ -913,6 +913,85 @@ export class AllenRelation extends Relation {
    * by choosing 1 ({@link MEETS}). The reverse issue occurs with a degenerate interval `i2` whose `start` and `end` are
    * equal to the `end` of `i1`, when the relation is {@link MET_BY} _and_ {@link FINISHES}. {@link MET_BY} is returned
    * (`PointIntervalRelation.relation` could be used to return `PointIntervalRelation.TERMINATES`).
+   *
+   * Users should be aware of the behavior with degenerate intervals. The relation between a degenerate interval and a
+   * non-degenerate interval is better expressed by interpreting the degenerate interval as a point, and using
+   * `PointIntervalRelation`, which can have the values `b`, `c`, `i`, `t`, or `a`.
+   *
+   * When determining the `AllenRelation` between a degenerate interval `i1` and a non-degenerate interval `i2`, the
+   * definitions of the {@link BASIC_RELATIONS} say that the following results will be returned:
+   *
+   * | PointIntervalRelation | AllenRelation | Definition                              |
+   * | --------------------- | ------------- | --------------------------------------- |
+   * | `i1.start (b) i2`     | `p`           | `i1.start = i1.end < i2.start`          |
+   * | `i1.start (c) i2`     | `m`           | `i1.start = i1.end = i2.start`          |
+   * | `i1.start (i) i2`     | `d`           | `i2.start < i1.start = i1.end < i2.end` |
+   * | `i1.start (t) i2`     | `M`           | `i1.start = i1.end = i2.end`            |
+   * |                       | `f`           | `i2.start < i1.start = i1.end = i2.end` |
+   * | `i1.start (a) i2`     | `P`           | `i2.end < i1.start = i1.end`            |
+   *
+   * When determining the `AllenRelation` between a non-degenerate interval `i1` and a degenerate interval `i2`, the
+   * definitions of the {@link BASIC_RELATIONS} say that the following results will be returned:
+   *
+   * | PointIntervalRelation | AllenRelation | Definition                              |
+   * | --------------------- | ------------- | --------------------------------------- |
+   * | `i2.start (a) i1`     | `p`           | `i1.end < i2.start = i2.end`            |
+   * | `i2.start (t) i1`     | `m`           | `i1.end = i2.start = i2.end`            |
+   * |                       | `F`           | `i1.start < i2.start = i2.end = i1.end` |
+   * | `i2.start (i) i1`     | `D`           | `i1.start < i2.start = i2.end < i1.end` |
+   * | `i2.start (c) i1`     | `M`           | `i1.start = i2.end = i2.start`          |
+   * | `i2.start (b) i1`     | `P`           | `i2.start = i2.end < i1.start`          |
+   *
+   * Note that both {@link MET_BY}'s and {@link FINISHES}'s, respectively {@link MEETS}' and {@link FINISHED_BY}'s
+   * definitions are fullfilled when `i1.start (t) i2`, respectively, `i2.start (t) i1`.
+   *
+   *
+   * | AllenRelation | Definition                                                                                                |
+   * | ------------- | --------------------------------------------------------------------------------------------------------- |
+   * | `e`           | `i1.start = i2.start ⋀ i1.end = i2.end` ⇒ `(i1.start = i1.end ⇔ i2.start = i2.end)`                       |
+   *
+   * When `i1.start = i1.end = i2.start = i2.end`, {@link EQUALS} is returned, because all points are equal. We can only
+   * return {@link EQUALS} when both intervals are degenerate.
+   *
+   * {@link OVERLAPS} and {@link OVERLAPPED_BY} are impossible to fullful with either interval being degenerate:
+   *
+   * | AllenRelation | Definition                                                                        |
+   * | ------------- | --------------------------------------------------------------------------------- |
+   * | `o`           | `i1.start < i2.start < i1.end < i2.end` ⇒ `i1.start < i1.end ⋀ i2.start < i2.end` |
+   * | `O`           | `i2.start < i1.start < i2.end < i1.end` ⇒ `i1.start < i1.end ⋀ i2.start < i2.end` |
+   *
+   * {@link CONTAINS} requires `i1` not to be degenerate, and {@link DURING} requires `i2` not to be degenerate, whether
+   * the other interval is or not:
+   *
+   * | AllenRelation | Definition                                                    |
+   * | ------------- | ------------------------------------------------------------- |
+   * | `D`           | `i1.start < i2.start ⋀ i2.end < i1.end` ⇒ `i1.start < i1.end` |
+   * | `d`           | `i2.start < i1.start ⋀ i1.end < i2.end` ⇒ `i2.start < i2.end` |
+   *
+   * // MUDO lower
+   *
+   * When either `i1` or `i2` is degenerate, we get a contradiction for {@link STARTS} and {@link STARTED_BY}, since
+   * `i.start ≤ i.end`:
+   *
+   * | AllenRelation | Definition                                                                                                |
+   * | ------------- | --------------------------------------------------------------------------------------------------------- |
+   * | `s`           | `i1.start = i2.start ⋀ i1.end < i2.end` ⇒ `(i2.start = i2.end ⇒ i1.end < i2.end = i2.start = i.start ⊥)`  |
+   * | `s`           | `i1.start = i2.start ⋀ i1.end < i2.end` ⇒ `(i1.start = i1.end ⇒ i1.end = i1.start< i2.end = i2.start = i2.end)` | NOK
+   * | `S`           | `i1.start = i2.start ⋀ i2.end < i1.end` ⇒ `(i1.start = i1.end ⇒ i2.end < i1.end = i2.start = i1.start ⊥)` |
+   * | `S`           | `i1.start = i2.start ⋀ i2.end < i1.end` ⇒ `(i1.start < i1.end ⇒ i1.start < i1.end)` | NOK
+   *
+   * When `i1` is degenerate, we get a contradiction for {@link FINISHED_BY}, and when `i2` is
+   * degenerate, we get a contradiction for {@link FINISHES}, since `i.start ≤ i.end`:
+   *
+   * | AllenRelation | Definition                                                                                                |
+   * | ------------- | --------------------------------------------------------------------------------------------------------- |
+   * | `F`           | `i1.start < i2.start ⋀ i1.end = i2.end` ⇒ `(i1.start = i1.end ⇒ i1.start = i1.end = i2.end < i2.start ⊥)` |
+   * | `f`           | `i2.start < i1.start ⋀ i1.end = i2.end` ⇒ `(i2.start = i2.end ⇒ i2.start = i2.end = i1.end < i1.start ⊥)` |
+   *
+   * In other words, {@link CONTAINS}, {@link FINISHED_BY}, and {@link STARTED_BY} can never be returned if `i1` is
+   * degenerate, and {@link DURING}, {@link FINISHES}, and {@link STARTS} can never be returned if `i2` is
+   * degenerate.
+   *
    */
   static relation<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): AllenRelation {
     ok(i1)
