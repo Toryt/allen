@@ -992,7 +992,7 @@ export class AllenRelation extends Relation {
         } else if (compareI1EndI2End === 0) {
           result = result.min(AllenRelation.END_TOGETHER.complement())
         } else {
-          result = result.min(AllenRelation.ENDS_LATER)
+          result = result.min(AllenRelation.ENDS_LATER.complement())
         }
       }
     }
