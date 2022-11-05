@@ -957,19 +957,20 @@ export class AllenRelation extends Relation {
           // pmoFDseSdfO, not MP; begins before end
           result = result.min(AllenRelation.MET_BY)
           result = result.min(AllenRelation.PRECEDED_BY)
-        } else if (comparei1StartI2End === 0) {
-          if (
-            i1End !== undefined &&
-            i1End !== null &&
-            i2Start !== undefined &&
-            i2Start !== null &&
-            compare(i1End, i2Start) === 0
-          ) {
-            return AllenRelation.EQUALS
-          } else {
+        } else {
+          /* all paths return (see below) */
+          if (comparei1StartI2End === 0) {
+            if (
+              i1End !== undefined &&
+              i1End !== null &&
+              i2Start !== undefined &&
+              i2Start !== null &&
+              compare(i1End, i2Start) === 0
+            ) {
+              return AllenRelation.EQUALS
+            }
             return AllenRelation.MET_BY
           }
-        } else {
           return AllenRelation.PRECEDED_BY
         }
       }
