@@ -98,13 +98,18 @@ relations.
 
 ## Interval constraints
 
+<div style="background-color: red; color: yellow"><strong>MUDO: port remaining text</strong></div>
+
 ## Reasoning with unknown but constrained start and end point
+
+<div style="background-color: red; color: yellow"><strong>MUDO: port remaining text</strong></div>
 
 ## Inference
 
 **Be aware that, in general, inference over intervals, also using Allen relations, is NP-complete.** This means that the
-time the execution of algorithms will take, is at least difficult to ascertain, and quickly completely impractical
-(i.e., with realistic parameters the algorithm would take longer than the universe exists — no kidding).
+time the execution of inference algorithms will take, is at least difficult to ascertain, and quickly completely
+impractical (i.e., with realistic parameters the algorithm would take longer than the universe exists — no kidding).
 
-There are subsets of the Allen relations for which there exist algorithms that perform much better. These issues are not
-implemented here.
+There are subsets of the Allen relations for which there exist algorithms that perform much better.
+
+This library does not offer inference functions at this time. The main intention of this library is validation.
