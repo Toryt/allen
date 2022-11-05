@@ -34,6 +34,10 @@ If both `start` and `end` are definite,
 ∀ i ∈ Interval<T>: ¬ (i.end ⨀ i.start)
 ```
 
+When `start` equals `end`, the interval is _degenerate_, and has no duration. Note that with 1 degenerate interval,
+there are 2 cases where `AllenRelation.relation` returns a semantically incomplete result (see detailed documentation
+there).
+
 ## Right half open (`[start, end[`)
 
 We highly advise to _interpret_ intervals _in all cases_ to be _right half open_. E.g., when considering the time
