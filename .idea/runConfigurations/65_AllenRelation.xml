@@ -8,7 +8,7 @@
     <ui>bdd</ui>
     <extra-mocha-options>--watch</extra-mocha-options>
     <test-kind>TEST_FILE</test-kind>
-    <test-file>$PROJECT_DIR$/test/65.AllenRelation.test.ts</test-file>
+    <test-file>$PROJECT_DIR$/test/80.AllenRelation.test.ts</test-file>
     <method v="2" />
   </configuration>
 </component>
