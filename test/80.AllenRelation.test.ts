@@ -161,16 +161,20 @@ describe('AllenRelation', function () {
      */
     function createIntervals<T> (pts: T[]): Array<TestInterval<T>> {
       return [
-        // all indefinite
+        /* all indefinite */
         { i1: {}, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>() },
-        // 1 definite
+
+        /* 1 definite */
         { i1: { start: pts[0] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>() },
         { i1: { end: pts[0] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>() },
         { i1: {}, i2: { start: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>() },
         { i1: {}, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>() },
-        // 2 definite
-        // 3 definite
-        // 4 definite -> 13 basic relations
+
+        /* 2 definite */
+
+        /* 3 definite */
+
+        /* 4 definite -> 13 basic relations */
         { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[2], end: pts[3] }, relation: AllenRelation.PRECEDES },
         { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.MEETS },
         { i1: { start: pts[0], end: pts[2] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.OVERLAPS },
@@ -188,8 +192,27 @@ describe('AllenRelation', function () {
         },
         { i1: { start: pts[1], end: pts[2] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.MET_BY },
         { i1: { start: pts[2], end: pts[3] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.PRECEDED_BY },
-        // test with null
-        { i1: { start: null }, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>() }
+        /* test with null */
+        { i1: { start: null }, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>() },
+
+        /* test with 1 empty interval (converse for swapped parameters) */
+        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[2], end: pts[3] }, relation: AllenRelation.PRECEDES },
+        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.MEETS }, // MUDO and starts
+        // overlaps, finished by, contains, is impossible, unless both are degenerate
+        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.STARTS }, // MUDO and meets
+        // equals requires both to be degenerate, see below
+        // started by is impossible, unless both are degenerate
+        { i1: { start: pts[1], end: pts[1] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.DURING },
+        { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.FINISHES }, // MUDO and met_by
+        { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.MET_BY }, // MUDO and finishes
+        { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.PRECEDED_BY },
+
+        /* 2 empty intervals */
+        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[2], end: pts[2] }, relation: AllenRelation.PRECEDES },
+        // meets, overlaps, finished by, contains, starts, is impossible when both are degenerate
+        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[0], end: pts[0] }, relation: AllenRelation.EQUALS },
+        // started by, during, finishes, overlapped by, met_by is impossible when both are degenerate
+        { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[0], end: pts[0] }, relation: AllenRelation.PRECEDED_BY }
       ]
     }
 
@@ -202,8 +225,12 @@ describe('AllenRelation', function () {
           it(`relation(${intervalToString(i1)}, ${intervalToString(
             i2
           )}) = ${relation.toString()} (and converse for swapped arguments)`, function () {
-            AllenRelation.relation(i1, i2).should.equal(relation)
-            AllenRelation.relation(i2, i1).should.equal(relation.converse())
+            const straight = AllenRelation.relation(i1, i2)
+            const reversed = AllenRelation.relation(i2, i1)
+            console.log(`straight: ${straight.toString()}`)
+            console.log(`reversed: ${reversed.toString()}`)
+            straight.should.equal(relation)
+            reversed.should.equal(relation.converse())
           })
         })
       })
