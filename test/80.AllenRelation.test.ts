@@ -177,6 +177,37 @@ describe('AllenRelation', function () {
         { i1: {}, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>() },
 
         /* 2 definite */
+        { i1: { start: pts[0], end: pts[1] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>() },
+
+        { i1: { start: pts[1] }, i2: { start: pts[0] }, relation: AllenRelation.fromString<AllenRelation>('dfOMP') },
+        { i1: { start: pts[1] }, i2: { start: pts[1] }, relation: AllenRelation.fromString<AllenRelation>('seS') },
+        {
+          i1: { start: pts[1] },
+          i2: { start: pts[2] },
+          relation: AllenRelation.fromString<AllenRelation>('dfOMP').converse()
+        },
+
+        { i1: { start: pts[1] }, i2: { end: pts[0] }, relation: AllenRelation.fromString<AllenRelation>('P') },
+        { i1: { start: pts[1] }, i2: { end: pts[1] }, relation: AllenRelation.fromString<AllenRelation>('M') },
+        {
+          i1: { start: pts[1] },
+          i2: { end: pts[2] },
+          relation: AllenRelation.fromString<AllenRelation>('pmoFDseSdfO')
+        },
+
+        {
+          i1: { end: pts[1] },
+          i2: { start: pts[0] },
+          relation: AllenRelation.fromString<AllenRelation>('oFDseSdfOMP')
+        },
+        { i1: { end: pts[1] }, i2: { start: pts[1] }, relation: AllenRelation.fromString<AllenRelation>('m') },
+        { i1: { end: pts[1] }, i2: { start: pts[2] }, relation: AllenRelation.fromString<AllenRelation>('p') },
+
+        { i1: { end: pts[1] }, i2: { end: pts[0] }, relation: AllenRelation.fromString<AllenRelation>('DSOMP') },
+        { i1: { end: pts[1] }, i2: { end: pts[1] }, relation: AllenRelation.fromString<AllenRelation>('Fef') },
+        { i1: { end: pts[1] }, i2: { end: pts[2] }, relation: AllenRelation.fromString<AllenRelation>('pmosd') },
+
+        { i1: {}, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.fullRelation<AllenRelation>() },
 
         /* 3 definite */
 
