@@ -375,8 +375,6 @@ describe('AllenRelation', function () {
           )}) = ${relation.toString()} (and converse for swapped arguments)`, function () {
             const straight = callIt(i1, i2)
             const reversed = callIt(i2, i1)
-            console.log(`straight: ${straight.toString()}`)
-            console.log(`reversed: ${reversed.toString()}`)
             straight.should.equal(relation)
             reversed.should.equal(relation.converse())
           })
