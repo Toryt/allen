@@ -97,7 +97,7 @@ export class AllenRelation extends Relation {
    * before the `start` of `I2`.
    *
    * ```
-   * (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.end < I.start)
+   * (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.end < I2.start)
    * ```
    *
    * ![precedes](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-precedes.png)
@@ -112,7 +112,7 @@ export class AllenRelation extends Relation {
    * `start` of `I2`.
    *
    * ```
-   * (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.end = I.start)
+   * (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.end = I2.start)
    * ```
    *
    * ![meets](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-meets.png)
@@ -184,7 +184,7 @@ export class AllenRelation extends Relation {
    *
    * ```
    * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
-   *   (I1.start = I2.start) ∧ (I2.end < I1.end)
+   *   (I1.start = I2.start) ∧ (I1.end < I2.end)
    * ```
    *
    * ![starts](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-starts.png)
@@ -274,7 +274,7 @@ export class AllenRelation extends Relation {
    *
    * ```
    * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
-   *   (I2.start < I1.start) ∧ (I1.start < I2.end) ∧ (I2.end < I2.end)
+   *   (I2.start < I1.start) ∧ (I1.start < I2.end) ∧ (I2.end < I1.end)
    * ```
    *
    * ![is overlapped by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-overlappedBy.png)
