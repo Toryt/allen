@@ -102,13 +102,9 @@ describe('PointIntervalRelation', function () {
       expected: PointIntervalRelation[],
       compare?: (a1: T, a2: T) => number
     ): void {
-      function callIt<T> (t: T | undefined, i: Interval<T>): PointIntervalRelation {
-        return compare != null
-          ? /* prettier-ignore */ PointIntervalRelation.relation(
-            t as Parameters<typeof compare>[0],
-            (i as unknown) as Interval<Parameters<typeof compare>[0]>,
-            compare
-          )
+      function callIt (t: T | undefined | null, i: Interval<T>): PointIntervalRelation {
+        return compare !== undefined && compare !== null
+          ? /* prettier-ignore */ PointIntervalRelation.relation(t, i, compare)
           : PointIntervalRelation.relation(t, i)
       }
 
