@@ -153,7 +153,6 @@ describe('AllenRelation', function () {
       relation: AllenRelation
     }
 
-    // MUDO null
     // MUDO empty interval
     /**
      * Given 4 points, in order, create relevant intervals to test, and the expected relations.
@@ -188,7 +187,9 @@ describe('AllenRelation', function () {
           relation: AllenRelation.OVERLAPPED_BY
         },
         { i1: { start: pts[1], end: pts[2] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.MET_BY },
-        { i1: { start: pts[2], end: pts[3] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.PRECEDED_BY }
+        { i1: { start: pts[2], end: pts[3] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.PRECEDED_BY },
+        // test with null
+        { i1: { start: null }, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>() }
       ]
     }
 
