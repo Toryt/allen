@@ -173,7 +173,7 @@ describe('AllenRelation', function () {
 
         /* 3 definite */
 
-        /* 4 definite -> 13 basic relations */
+        /* 4 definite → 13 basic relations */
         { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[2], end: pts[3] }, relation: AllenRelation.PRECEDES },
         { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.MEETS },
         { i1: { start: pts[0], end: pts[2] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.OVERLAPS },
