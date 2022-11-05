@@ -153,15 +153,42 @@ describe('AllenRelation', function () {
       relation: AllenRelation
     }
 
+    // MUDO null
+    // MUDO empty interval
     /**
      * Given 4 points, in order, create relevant intervals to test, and the expected relations.
      *
      * When `i1` and `i2` are swapped, we expect the `converse` relation.
      */
-    function createIntervals<T> (pts: T[]): TestInterval<T>[] {
+    function createIntervals<T> (pts: T[]): Array<TestInterval<T>> {
       return [
+        // all indefinite
         { i1: {}, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>() },
-        { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[2], end: pts[3] }, relation: AllenRelation.PRECEDES }
+        // 1 definite
+        { i1: { start: pts[0] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>() },
+        { i1: { end: pts[0] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>() },
+        { i1: {}, i2: { start: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>() },
+        { i1: {}, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>() },
+        // 2 definite
+        // 3 definite
+        // 4 definite -> 13 basic relations
+        { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[2], end: pts[3] }, relation: AllenRelation.PRECEDES },
+        { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.MEETS },
+        { i1: { start: pts[0], end: pts[2] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.OVERLAPS },
+        { i1: { start: pts[0], end: pts[3] }, i2: { start: pts[2], end: pts[3] }, relation: AllenRelation.FINISHED_BY },
+        { i1: { start: pts[0], end: pts[3] }, i2: { start: pts[1], end: pts[2] }, relation: AllenRelation.CONTAINS },
+        { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.STARTS },
+        { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.EQUALS },
+        { i1: { start: pts[0], end: pts[3] }, i2: { start: pts[0], end: pts[2] }, relation: AllenRelation.STARTED_BY },
+        { i1: { start: pts[1], end: pts[2] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.DURING },
+        { i1: { start: pts[1], end: pts[3] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.FINISHES },
+        {
+          i1: { start: pts[1], end: pts[3] },
+          i2: { start: pts[0], end: pts[2] },
+          relation: AllenRelation.OVERLAPPED_BY
+        },
+        { i1: { start: pts[1], end: pts[2] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.MET_BY },
+        { i1: { start: pts[2], end: pts[3] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.PRECEDED_BY }
       ]
     }
 
