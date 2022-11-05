@@ -170,8 +170,8 @@ export function generateRelationTests<R extends Relation> (
       })
     })
     it('does not contain duplicates', function () {
-      /* IDEA A naive implementation iterates 67 108 864 times, and takes several minutes. This is optimized using a
-         Set. */
+      /* NOTE: A naive implementation iterates 67 108 864 times, and takes several minutes. This is optimized using a
+               Set. */
       const gathering = new Set<R>()
 
       RConstructor.RELATIONS.forEach((gr, i) => {
