@@ -19,6 +19,8 @@
 import { AllenRelation } from '../src/AllenRelation'
 import 'should'
 import { generateRelationTests } from './_generateRelationTests'
+import { Interval } from '../src'
+import { intervalToString } from './_intervalToString'
 
 describe('AllenRelation', function () {
   generateRelationTests<AllenRelation>(
@@ -141,5 +143,44 @@ describe('AllenRelation', function () {
       testACombination(6788, 6788)
       testACombination(8191, 0)
     })
+  })
+  describe('relation', function () {
+    const fourPoints = [-4.983458, -1, 2, Math.PI]
+
+    interface TestInterval<T> {
+      i1: Interval<T>
+      i2: Interval<T>
+      relation: AllenRelation
+    }
+
+    /**
+     * Given 4 points, in order, create relevant intervals to test, and the expected relations.
+     *
+     * When `i1` and `i2` are swapped, we expect the `converse` relation.
+     */
+    function createIntervals<T> (pts: T[]): TestInterval<T>[] {
+      return [
+        { i1: {}, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>() },
+        { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[2], end: pts[3] }, relation: AllenRelation.PRECEDES }
+      ]
+    }
+
+    function generateTests<T> (label: string, pts: T[]): void {
+      describe(label, function () {
+        createIntervals<T>(pts).forEach((ti: TestInterval<T>) => {
+          const i1: Interval<T> = ti.i1
+          const i2: Interval<T> = ti.i2
+          const relation: AllenRelation = ti.relation
+          it(`relation(${intervalToString(i1)}, ${intervalToString(
+            i2
+          )}) = ${relation.toString()} (and converse for swapped arguments)`, function () {
+            AllenRelation.relation(i1, i2).should.equal(relation)
+            AllenRelation.relation(i2, i1).should.equal(relation.converse())
+          })
+        })
+      })
+    }
+
+    generateTests<number>('number', fourPoints)
   })
 })
