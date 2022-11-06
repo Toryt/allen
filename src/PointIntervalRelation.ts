@@ -83,7 +83,7 @@ export class PointIntervalRelation extends Relation {
    * the start of `I`:
    *
    * ```
-   * (t ≠ undefined) && (I.start ≠ undefined) && (t < I.start)
+   * t ≠ undefined ⇒ I.start ≠ undefined ∧ t < I.start
    * ```
    *
    * ![before](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-before.png)
@@ -98,12 +98,14 @@ export class PointIntervalRelation extends Relation {
    * `I`:
    *
    * ```
-   * (t ≠ undefined) && (I.start ≠ undefined) && (t = I.start)
+   * t ≠ undefined ⇒ I.start ≠ undefined ∧ t = I.start
    * ```
    *
    * ![commences](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-commences.png)
    *
    * The short representation of this point – interval relation is `c`.
+   *
+   * The interval may be degenerate.
    */
   public static readonly COMMENCES: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[1]
   // Bit pattern: 2 = '00010'
@@ -113,7 +115,7 @@ export class PointIntervalRelation extends Relation {
    * of `I` and before the end of `I`:
    *
    * ```
-   * (t ≠ undefined) && (I.start ≠ undefined) && (I.end ≠ undefined) && (I.start < t) && (t < I.end)
+   * t ≠ undefined ⇒ I.start ≠ undefined ∧ I.start < t ∧ I.end ≠ undefined ∧ t < I.end
    * ```
    *
    * ![in](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-in.png)
@@ -128,12 +130,15 @@ export class PointIntervalRelation extends Relation {
    * `I`:
    *
    * ```
-   * (t ≠ undefined) && (I.end ≠ undefined) && (t = I.end)
+   * t ≠ undefined ⇒ I.end ≠ undefined ∧ t = I.end ∧ I.start ≠ I.end
    * ```
    *
    * ![ends](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-terminates.png)
    *
    * The short representation of this point – interval relation is `t`.
+   *
+   * This definition explicitly excludes a degenerate interval. When `t = I.start = I.end` {@link COMMENCES} is
+   * returned.
    */
   public static readonly TERMINATES: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[3]
   // Bit pattern: 8 = '01000'
@@ -143,7 +148,7 @@ export class PointIntervalRelation extends Relation {
    * end of `I`:
    *
    * ```
-   * (t ≠ undefined) && (I.until ≠ undefined) && (t > I.end)
+   * t ≠ undefined ⇒ I.until ≠ undefined ∧ I.end < t
    * ```
    *
    * ![after](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-after.png)
