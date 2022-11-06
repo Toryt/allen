@@ -72,77 +72,77 @@ We find that there are 5 _basic relations_ possible between a definite point and
 
 - `t` is `BEFORE` `I` (`b`)
 
-  ![before](doc/PointIntervalRelation-before.png)
+  ![before](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/PointIntervalRelation-before.png)
 
 - `t` `COMMENCES` `I` (`c`)
 
-  ![begins](doc/PointIntervalRelation-commences.png)
+  ![begins](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/PointIntervalRelation-commences.png)
 
 - `t` `IN` `I` (`i`)
 
-  ![in](doc/PointIntervalRelation-in.png)
+  ![in](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/PointIntervalRelation-in.png)
 
 - `t` `TERMINATES`I`(`t`)
 
-  ![ends](doc/PointIntervalRelation-terminates.png)
+  ![ends](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/PointIntervalRelation-terminates.png)
 
 - `t` is `AFTER` `I` (`a`)
 
-  ![after](doc/PointIntervalRelation-after.png)
+  ![after](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/PointIntervalRelation-after.png)
 
 and that there are 13 _basic relations_ possible between definite intervals:
 
 - `I1` `PRECEDES` `I2` (`p`)
 
-  ![precedes](doc/AllenRelation-precedes.png)
+  ![precedes](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precedes.png)
 
 - `I1` `MEETS` `I2` (`m`)
 
-  ![meets](doc/AllenRelation-meets.png)
+  ![meets](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-meets.png)
 
 - `I1` `OVERLAPS` `I2` (`o`)
 
-  ![in](doc/AllenRelation-overlaps.png)
+  ![in](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlaps.png)
 
 - `I1` is `FINISHED_BY` `I2` (`F`)
 
-  ![is finished by](doc/AllenRelation-finishedBy.png)
+  ![is finished by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishedBy.png)
 
 - `I1` `CONTAINS` `I2` (`D`)
 
-  ![contains](doc/AllenRelation-contains.png)
+  ![contains](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-contains.png)
 
 - `I1` `STARTS` `I2` (`s`)
 
-  ![starts](doc/AllenRelation-starts.png)
+  ![starts](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-starts.png)
 
 - `I1` `EQUALS` `I2` (`e`)
 
-  ![equals](doc/AllenRelation-equals.png)
+  ![equals](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-equals.png)
 
 - `I1` is `STARTED_BY` `I2` (`S`)
 
-  ![is started by](doc/AllenRelation-startedBy.png)
+  ![is started by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-startedBy.png)
 
 - `I1` is `DURING` `I2` (`d`)
 
-  ![is during](doc/AllenRelation-during.png)
+  ![is during](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-during.png)
 
 - `I1` `FINISHES` `I2` (`f`)
 
-  ![finishes](doc/AllenRelation-finishes.png)
+  ![finishes](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishes.png)
 
 - `I1` is `OVERLAPPED_BY` `I2` (`O`)
 
-  ![is overlapped by](doc/AllenRelation-overlappedBy.png)
+  ![is overlapped by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlappedBy.png)
 
 - `I1` is `MET_BY` `I2` (`M`)
 
-  ![is met by](doc/AllenRelation-metBy.png)
+  ![is met by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-metBy.png)
 
 - `I1` is `PRECEDED_BY` `I2` (`P`)
 
-  ![is preceded by](doc/AllenRelation-precededBy.png)
+  ![is preceded by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precededBy.png)
 
 These 5, respectively 13, _basic relations_ are an orthogonal basis for all possible _general_ relation-conditions
 between a point and an interval (`PointIntervalRelation`), respectively between two intervals (`AllenRelation`).
