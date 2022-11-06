@@ -97,7 +97,7 @@ export class AllenRelation extends Relation {
    * before the `start` of `I2`.
    *
    * ```
-   * (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.end < I2.start)
+   * I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I1.end < I2.start
    * ```
    *
    * ![precedes](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-precedes.png)
@@ -112,12 +112,15 @@ export class AllenRelation extends Relation {
    * `start` of `I2`.
    *
    * ```
-   * (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.end = I2.start)
+   * I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I1.end = I2.start ∧
+   *   (I1.start = undefined || I2.end = undefined || I1.start < I2.end)
    * ```
    *
    * ![meets](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-meets.png)
    *
    * The short representation of this Allen relation is `m`. The converse of this relation is {@link MET_BY}.
+   *
+   * `I1` may be degenerate, but not both (which results in {@link EQUALS} when all points are equal).
    */
   static readonly MEETS: AllenRelation = AllenRelation.BASIC_RELATIONS[1]
   // Bit pattern: 2 = '0000000000010'
@@ -129,8 +132,8 @@ export class AllenRelation extends Relation {
    * - the `end` of `I1` is after the `start` of `I2`, and before the `end` of `I2`
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
-   *   (I1.start < I2.start) ∧ (I2.start < I1.end) ∧ (I1.end < I2.end)
+   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
+   *   I1.start < I2.start ∧ I2.start < I1.end ∧ I1.end < I2.end
    * ```
    *
    * ![overlaps](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-overlaps.png)
@@ -147,13 +150,16 @@ export class AllenRelation extends Relation {
    * - the `end` of `I1` is the `end` of `I2`
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
-   *   (I1.start < I2.start) ∧ (I1.end = I2.end)
+   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
+   *   (I1.start < I2.start) ∧ (I1.end = I2.end) ∧ (I2.start < I1.end)
    * ```
    *
    * ![is finished by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-finishedBy.png)
    *
    * The short representation of this Allen relation is `F`. The converse of this relation is {@link FINISHES}.
+   *
+   * This definition explicitly excludes a degenerate `I2`. When `I2.start = I1.end = I2.end` {@link MEETS} is
+   * returned.
    */
   static readonly FINISHED_BY: AllenRelation = AllenRelation.BASIC_RELATIONS[3]
   // Bit pattern: 8 = '0000000001000'
@@ -165,8 +171,8 @@ export class AllenRelation extends Relation {
    * - the `end` of `I1` is after the `end` of `I2`
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
-   *   (I1.start < I2.start) ∧ (I2.end < I1.end)
+   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
+   *   I1.start < I2.start ∧ I2.end < I1.end
    * ```
    *
    * ![contains](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-contains.png)
@@ -183,13 +189,16 @@ export class AllenRelation extends Relation {
    * - the `end` of `I1` is before the `end` of `I2`
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
-   *   (I1.start = I2.start) ∧ (I1.end < I2.end)
+   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
+   *   I1.start = I2.start ∧ I1.end < I2.end ∧ I1.start < I1.end
    * ```
    *
    * ![starts](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-starts.png)
    *
    * The short representation of this Allen relation is `s`. The converse of this relation is {@link STARTED_BY}.
+   *
+   * This definition explicitly excludes a degenerate `I1`. When `I2.start = I2.start = I1.end` {@link MEETS} is
+   * returned.
    */
   static readonly STARTS: AllenRelation = AllenRelation.BASIC_RELATIONS[5]
   // Bit pattern: 32 = '0000000100000'
@@ -201,8 +210,8 @@ export class AllenRelation extends Relation {
    * - the `end` of `I1` is the `end` of `I2`
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
-   *   (I1.start = I2.start) ∧ (I1.end = I2.end)
+   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
+   *   I1.start = I2.start ∧ I1.end = I2.end
    * ```
    *
    * ![equals](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-equals.png)
@@ -219,13 +228,16 @@ export class AllenRelation extends Relation {
    * - the `end` of `I1` is after the `end` of `I2`
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
-   *   (I1.start = I2.start) ∧ (I2.end < I1.end)
+   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
+   *   I1.start = I2.start ∧ (I2.end < I1.end) ∧ (I2.start < I2.end)
    * ```
    *
    * ![is started by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-startedBy.png)
    *
    * The short representation of this Allen relation is `S`. The converse of this relation is {@link STARTS}.
+   *
+   * This definition explicitly excludes a degenerate `I2`. When `I1.start = I2.start = I2.end` {@link MET_BY} is
+   * returned.
    */
   static readonly STARTED_BY: AllenRelation = AllenRelation.BASIC_RELATIONS[7]
   // Bit pattern: 128 = '0000010000000'
@@ -237,8 +249,8 @@ export class AllenRelation extends Relation {
    * - the `end` of `I1` is before the `end` of `I2`
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
-   *   (I2.start < I1.start) ∧ (I1.end < I2.end)
+   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
+   *   I2.start < I1.start ∧ I1.end < I2.end
    * ```
    *
    * ![is during](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-during.png)
@@ -255,13 +267,16 @@ export class AllenRelation extends Relation {
    * - the `end` of `I1` is the `end` of `I2`
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
-   *   (I2.start < I1.start) ∧ (I1.end = I2.end)
+   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
+   *   I2.start < I1.start ∧ I1.end = I2.end ∧ I1.start < I2.end
    * ```
    *
    * ![finishes](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-finishes.png)
    *
    * The short representation of this Allen relation is `f`. The converse of this relation is {@link FINISHED_BY}.
+   *
+   * This definition explicitly excludes a degenerate `I1`. When `I1.start = I1.end = I2.end` {@link MET_BY} is
+   * returned.
    */
   static readonly FINISHES: AllenRelation = AllenRelation.BASIC_RELATIONS[9]
   // Bit pattern: 512 = '0001000000000'
@@ -273,8 +288,8 @@ export class AllenRelation extends Relation {
    * - the `end` of `I1` is after the `end` of `I2`
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧
-   *   (I2.start < I1.start) ∧ (I1.start < I2.end) ∧ (I2.end < I1.end)
+   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
+   *   I2.start < I1.start ∧ I1.start < I2.end ∧ I2.end < I1.end
    * ```
    *
    * ![is overlapped by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-overlappedBy.png)
@@ -289,12 +304,16 @@ export class AllenRelation extends Relation {
    * the `end` of `I2`.
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I1.start = I2.end)
+   * I1.start ≠ undefined ∧ I2.end ≠ undefined ∧ I1.start = I2.end ∧
+   *   (I1.end = undefined || I2.start = undefined || I2.start < I1.end)
    * ```
    *
    * ![is met by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-metBy.png)
    *
    * The short representation of this Allen relation is `M`. The converse of this relation is {@link MEETS}.
+   *
+   *
+   * `I2` may be degenerate, but not both (which results in {@link EQUALS} when all points are equal).
    */
   static readonly MET_BY: AllenRelation = AllenRelation.BASIC_RELATIONS[11]
   // Bit pattern: 2048 = '0100000000000'
@@ -304,7 +323,7 @@ export class AllenRelation extends Relation {
    * `I1` is after the `end` of `I2`.
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I2.end < I1.start)
+   * I1.start ≠ undefined ∧ I2.end ≠ undefined ∧ I2.end < I1.start
    * ```
    *
    * ![is preceded by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-precededBy.png)
