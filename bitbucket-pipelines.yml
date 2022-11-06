@@ -57,5 +57,3 @@ pipelines:
     feature/**: *fullTestAndTag
     hotfix/**: *fullTestAndTag
     release/**: *fullTestAndTag
-  tags:
-    v*: *fullTestAndTag
