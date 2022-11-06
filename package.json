@@ -3,8 +3,15 @@
   "version": "0.0.1",
   "description": "Reason and validate the relations between intervals, and points and intervals, in JavaScript and TypeScript.",
   "keywords": ["allen", "interval", "time"],
-  "author": "jandockx@gmail.com",
+  "author": {
+    "name": "Jan Dockx",
+    "email":"jandockx@gmail.com"
+  },
   "license": "Apache-2.0",
+  "repository": "bitbucket:toryt/allen",
+  "bugs": {
+    "url": "https://bitbucket.org/toryt/allen/issues"
+  },
   "main": "lib/index.js",
   "types": "lib/index.d.js",
   "files": [
