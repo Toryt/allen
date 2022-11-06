@@ -1,11 +1,15 @@
 {
   "name": "@toryt/allen",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Reason and validate the relations between intervals, and points and intervals, in JavaScript and TypeScript.",
-  "keywords": ["allen", "interval", "time"],
+  "keywords": [
+    "allen",
+    "interval",
+    "time"
+  ],
   "author": {
     "name": "Jan Dockx",
-    "email":"jandockx@gmail.com"
+    "email": "jandockx@gmail.com"
   },
   "license": "Apache-2.0",
   "repository": "bitbucket:toryt/allen",
