@@ -6,6 +6,7 @@
 
 # 0.0.3
 
+- upgrade `eslint` and a plugin
 - use explicit links in `README.md` for documentation pages, so they work in the `npm` homepage too
 
 No solution yet for `typedoc` pages (they are not in the repository).
