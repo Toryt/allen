@@ -17,13 +17,13 @@
 /* eslint-env mocha */
 
 import 'should'
-import {PointIntervalRelation} from '../src/PointIntervalRelation'
-import {Interval} from '../src/Interval'
-import {inspect} from 'util'
-import {intervalToString} from './_intervalToString'
-import {generateRelationTests} from './_generateRelationTests'
-import {AllenRelation} from '../src/AllenRelation'
-import {ltCompare} from '../src'
+import { PointIntervalRelation } from '../src/PointIntervalRelation'
+import { Interval } from '../src/Interval'
+import { inspect } from 'util'
+import { intervalToString } from './_intervalToString'
+import { generateRelationTests } from './_generateRelationTests'
+import { AllenRelation } from '../src/AllenRelation'
+import { ltCompare } from '../src'
 
 describe('PointIntervalRelation', function () {
   generateRelationTests<PointIntervalRelation>(
@@ -34,12 +34,12 @@ describe('PointIntervalRelation', function () {
       { name: 'COMMENCES', representation: 'c' },
       { name: 'IN', representation: 'i' },
       { name: 'TERMINATES', representation: 't' },
-      { name: 'AFTER', representation: 'a' }
+      { name: 'AFTER', representation: 'a' },
     ],
     [
       { name: 'CONCURS_WITH', representation: 'ci' },
       { name: 'BEFORE_END', representation: 'bci' },
-      { name: 'AFTER_BEGIN', representation: 'ita' }
+      { name: 'AFTER_BEGIN', representation: 'ita' },
     ],
     true
   )
@@ -113,40 +113,48 @@ describe('PointIntervalRelation', function () {
 
       const compare = compareFn ?? ltCompare
 
-      const basicRelationDefinition: [br: PointIntervalRelation, definition: BasicRelationDefinition][] =[
+      const basicRelationDefinition: [br: PointIntervalRelation, definition: BasicRelationDefinition][] = [
         [
           PointIntervalRelation.BEFORE,
           (t: T, i: Interval<T>) =>
-              t === undefined || t === null || i.start === undefined || i.start == null || compare(t, i.start) < 0
+            t === undefined || t === null || i.start === undefined || i.start == null || compare(t, i.start) < 0,
         ],
         [
           PointIntervalRelation.COMMENCES,
           (t: T, i: Interval<T>) =>
-              t === undefined || t === null || i.start === undefined || i.start == null || compare(t, i.start) === 0
+            t === undefined || t === null || i.start === undefined || i.start == null || compare(t, i.start) === 0,
         ],
         [
           PointIntervalRelation.IN,
           (t: T, i: Interval<T>) =>
-              t === undefined || t === null || i.start === undefined || i.start == null|| i.end === undefined || i.end == null || (compare(i.start, t) < 0 && compare(t,i.end) <0)
-        ],[
+            t === undefined ||
+            t === null ||
+            i.start === undefined ||
+            i.start == null ||
+            i.end === undefined ||
+            i.end == null ||
+            (compare(i.start, t) < 0 && compare(t, i.end) < 0),
+        ],
+        [
           PointIntervalRelation.TERMINATES,
           (t: T, i: Interval<T>) =>
-              t === undefined || t === null || i.end === undefined || i.end == null || compare(t, i.end) === 0
-        ],[
+            t === undefined || t === null || i.end === undefined || i.end == null || compare(t, i.end) === 0,
+        ],
+        [
           PointIntervalRelation.AFTER,
           (t: T, i: Interval<T>) =>
-              t === undefined || t === null || i.end === undefined || i.end == null || compare(i.end, t) < 0
-        ]
+            t === undefined || t === null || i.end === undefined || i.end == null || compare(i.end, t) < 0,
+        ],
       ]
 
       function shouldNotViolateBasicRelationDefinitions (t: T, result: PointIntervalRelation): void {
         basicRelationDefinition.forEach(([br, def]) => {
           if (result.implies(br)) {
             def(t, interval).should.be.true()
-          } else {def(t, interval).should.be.false()}
+          } else {
+            def(t, interval).should.be.false()
+          }
         })
-
-
       }
 
       describe(`${label} — ${intervalToString(interval)}`, function () {
@@ -185,7 +193,7 @@ describe('PointIntervalRelation', function () {
             PointIntervalRelation.COMMENCES,
             PointIntervalRelation.IN,
             PointIntervalRelation.TERMINATES,
-            PointIntervalRelation.AFTER
+            PointIntervalRelation.AFTER,
           ],
           compare
         )
@@ -220,7 +228,7 @@ describe('PointIntervalRelation', function () {
       new Date(2011, 9, 3, 19, 49, 34, 848),
       new Date(2015, 9, 3, 19, 49, 34, 848),
       new Date(2018, 9, 3, 19, 49, 34, 848),
-      new Date(2022, 9, 3, 19, 49, 34, 848)
+      new Date(2022, 9, 3, 19, 49, 34, 848),
     ])
     generateAllPointIntervalRelationTests(
       'compare',
