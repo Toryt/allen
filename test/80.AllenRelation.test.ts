@@ -88,9 +88,7 @@ describe('AllenRelation', function () {
     })
     it('all relations are their own converse‘s converse', function () {
       AllenRelation.RELATIONS.forEach(gr => {
-        gr.converse()
-          .converse()
-          .should.equal(gr)
+        gr.converse().converse().should.equal(gr)
       })
     })
   })
@@ -359,6 +357,12 @@ describe('AllenRelation', function () {
     }
 
     function generateTests<T> (label: string, pts: T[], compare?: (a1: T, a2: T) => number): void {
+      type BasicRelationDefinition = (i1: Interval<T>, i2: Interval<T>) => boolean
+
+      const basicRelationDefinition: Array<[br: AllenRelation, definition: BasicRelationDefinition]> = [
+        [AllenRelation.PRECEDES, (i1, i2) => i1 === i2]
+      ]
+
       function callIt (i1: Interval<T>, i2: Interval<T>): AllenRelation {
         return compare !== undefined && compare !== null
           ? AllenRelation.relation(i1, i2, compare)
@@ -370,6 +374,24 @@ describe('AllenRelation', function () {
           const i1: Interval<T> = ti.i1
           const i2: Interval<T> = ti.i2
           const relation: AllenRelation = ti.relation
+
+          function shouldNotViolateBasicRelationDefinitions (
+            i1: Interval<T>,
+            i2: Interval<T>,
+            result: AllenRelation
+          ): void {
+            basicRelationDefinition.forEach(([br, def]) => {
+              if (result.implies(br)) {
+                def(i1, i2).should.be.true()
+              } else {
+                if (def(i1, i2)) {
+                  console.log(br.toString())
+                }
+                def(i1, i2).should.be.false()
+              }
+            })
+          }
+
           it(`relation(${intervalToString(i1)}, ${intervalToString(
             i2
           )}) = ${relation.toString()} (and converse for swapped arguments)`, function () {
@@ -377,6 +399,8 @@ describe('AllenRelation', function () {
             const reversed = callIt(i2, i1)
             straight.should.equal(relation)
             reversed.should.equal(relation.converse())
+            shouldNotViolateBasicRelationDefinitions(i1, i2, straight)
+            shouldNotViolateBasicRelationDefinitions(i2, i1, reversed)
           })
         })
       })
