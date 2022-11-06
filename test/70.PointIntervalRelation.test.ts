@@ -111,39 +111,38 @@ describe('PointIntervalRelation', function () {
 
       type BasicRelationDefinition = (t: T, i: Interval<T>) => boolean
 
-      const compare = compareFn ?? ltCompare
+      function compare (t1: T, c: '<' | '=' | '>', t2: T | undefined | null): boolean {
+        const compare = compareFn ?? ltCompare
+
+        if (t2 === undefined || t2 === null) {
+          return false
+        }
+        const comparison = compare(t1, t2)
+
+        return c === '<' ? comparison < 0 : c === '=' ? comparison === 0 : comparison > 0
+      }
 
       const basicRelationDefinition: [br: PointIntervalRelation, definition: BasicRelationDefinition][] = [
         [
           PointIntervalRelation.BEFORE,
-          (t: T, i: Interval<T>) =>
-            t === undefined || t === null || i.start === undefined || i.start == null || compare(t, i.start) < 0,
+          (t: T, i: Interval<T>) => t === undefined || t === null || compare(t, '<', i.start),
         ],
         [
           PointIntervalRelation.COMMENCES,
-          (t: T, i: Interval<T>) =>
-            t === undefined || t === null || i.start === undefined || i.start == null || compare(t, i.start) === 0,
+          (t: T, i: Interval<T>) => t === undefined || t === null || compare(t, '=', i.start),
         ],
         [
           PointIntervalRelation.IN,
           (t: T, i: Interval<T>) =>
-            t === undefined ||
-            t === null ||
-            i.start === undefined ||
-            i.start == null ||
-            i.end === undefined ||
-            i.end == null ||
-            (compare(i.start, t) < 0 && compare(t, i.end) < 0),
+            t === undefined || t === null || (compare(t, '>', i.start) && compare(t, '<', i.end)),
         ],
         [
           PointIntervalRelation.TERMINATES,
-          (t: T, i: Interval<T>) =>
-            t === undefined || t === null || i.end === undefined || i.end == null || compare(t, i.end) === 0,
+          (t: T, i: Interval<T>) => t === undefined || t === null || (compare(t, '=', i.end) && i.start !== i.end),
         ],
         [
           PointIntervalRelation.AFTER,
-          (t: T, i: Interval<T>) =>
-            t === undefined || t === null || i.end === undefined || i.end == null || compare(i.end, t) < 0,
+          (t: T, i: Interval<T>) => t === undefined || t === null || compare(t, '>', i.end),
         ],
       ]
 
@@ -152,6 +151,9 @@ describe('PointIntervalRelation', function () {
           if (result.implies(br)) {
             def(t, interval).should.be.true()
           } else {
+            if (def(t, interval)) {
+              console.log(br.toString())
+            }
             def(t, interval).should.be.false()
           }
         })
