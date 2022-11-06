@@ -162,6 +162,13 @@ describe('PointIntervalRelation', function () {
           compare
         )
       })
+      generatePointIntervalRelationTests(
+        'degenerate interval',
+        { start: points[1], end: points[1] },
+        [points[0], points[1], points[2]],
+        [PointIntervalRelation.BEFORE, PointIntervalRelation.COMMENCES, PointIntervalRelation.AFTER],
+        compare
+      )
     }
 
     generateAllPointIntervalRelationTests('number', fivePoints)
