@@ -17,12 +17,13 @@
 /* eslint-env mocha */
 
 import 'should'
-import { PointIntervalRelation } from '../src/PointIntervalRelation'
-import { Interval } from '../src/Interval'
-import { inspect } from 'util'
-import { intervalToString } from './_intervalToString'
-import { generateRelationTests } from './_generateRelationTests'
-import { AllenRelation } from '../src/AllenRelation'
+import {PointIntervalRelation} from '../src/PointIntervalRelation'
+import {Interval} from '../src/Interval'
+import {inspect} from 'util'
+import {intervalToString} from './_intervalToString'
+import {generateRelationTests} from './_generateRelationTests'
+import {AllenRelation} from '../src/AllenRelation'
+import {ltCompare} from '../src'
 
 describe('PointIntervalRelation', function () {
   generateRelationTests<PointIntervalRelation>(
@@ -100,12 +101,52 @@ describe('PointIntervalRelation', function () {
       interval: Interval<T>,
       points: T[],
       expected: PointIntervalRelation[],
-      compare?: (a1: T, a2: T) => number
+      compareFn?: (a1: T, a2: T) => number
     ): void {
       function callIt (t: T | undefined | null, i: Interval<T>): PointIntervalRelation {
-        return compare !== undefined && compare !== null
-          ? /* prettier-ignore */ PointIntervalRelation.relation(t, i, compare)
+        return compareFn !== undefined && compareFn !== null
+          ? /* prettier-ignore */ PointIntervalRelation.relation(t, i, compareFn)
           : PointIntervalRelation.relation(t, i)
+      }
+
+      type BasicRelationDefinition = (t: T, i: Interval<T>) => boolean
+
+      const compare = compareFn ?? ltCompare
+
+      const basicRelationDefinition: [br: PointIntervalRelation, definition: BasicRelationDefinition][] =[
+        [
+          PointIntervalRelation.BEFORE,
+          (t: T, i: Interval<T>) =>
+              t === undefined || t === null || i.start === undefined || i.start == null || compare(t, i.start) < 0
+        ],
+        [
+          PointIntervalRelation.COMMENCES,
+          (t: T, i: Interval<T>) =>
+              t === undefined || t === null || i.start === undefined || i.start == null || compare(t, i.start) === 0
+        ],
+        [
+          PointIntervalRelation.IN,
+          (t: T, i: Interval<T>) =>
+              t === undefined || t === null || i.start === undefined || i.start == null|| i.end === undefined || i.end == null || (compare(i.start, t) < 0 && compare(t,i.end) <0)
+        ],[
+          PointIntervalRelation.TERMINATES,
+          (t: T, i: Interval<T>) =>
+              t === undefined || t === null || i.end === undefined || i.end == null || compare(t, i.end) === 0
+        ],[
+          PointIntervalRelation.AFTER,
+          (t: T, i: Interval<T>) =>
+              t === undefined || t === null || i.end === undefined || i.end == null || compare(i.end, t) < 0
+        ]
+      ]
+
+      function shouldNotViolateBasicRelationDefinitions (t: T, result: PointIntervalRelation): void {
+        basicRelationDefinition.forEach(([br, def]) => {
+          if (result.implies(br)) {
+            def(t, interval).should.be.true()
+          } else {def(t, interval).should.be.false()}
+        })
+
+
       }
 
       describe(`${label} — ${intervalToString(interval)}`, function () {
@@ -113,6 +154,7 @@ describe('PointIntervalRelation', function () {
           it(`returns ${exp.toString()} for ${inspect(points[i])}`, function () {
             const result = callIt(points[i], interval)
             result.should.equal(exp)
+            shouldNotViolateBasicRelationDefinitions(points[i], result)
           })
         })
         it('returns FULL for `undefined`', function () {
