@@ -2,6 +2,12 @@
 
 # 0
 
+# 0.1
+
+# 0.1.0
+
+- tweak definitions of basic relations so they work unambiguously with degenerate intervals
+
 # 0.0
 
 # 0.0.3
