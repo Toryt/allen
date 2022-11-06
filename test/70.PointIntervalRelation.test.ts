@@ -146,9 +146,6 @@ describe('PointIntervalRelation', function () {
           if (result.implies(br)) {
             def(t, interval).should.be.true()
           } else {
-            if (def(t, interval)) {
-              console.log(br.toString())
-            }
             def(t, interval).should.be.false()
           }
         })
