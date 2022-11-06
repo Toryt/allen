@@ -83,7 +83,7 @@ export class PointIntervalRelation extends Relation {
    * the start of `I`:
    *
    * ```
-   * t ≠ undefined ⇒ I.start ≠ undefined ∧ t < I.start
+   * t ≠ undefined ⇒ (I.start ≠ undefined ∧ t < I.start)
    * ```
    *
    * ![before](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-before.png)
@@ -98,7 +98,7 @@ export class PointIntervalRelation extends Relation {
    * `I`:
    *
    * ```
-   * t ≠ undefined ⇒ I.start ≠ undefined ∧ t = I.start
+   * t ≠ undefined ⇒ (I.start ≠ undefined ∧ t = I.start)
    * ```
    *
    * ![commences](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-commences.png)
@@ -115,7 +115,7 @@ export class PointIntervalRelation extends Relation {
    * of `I` and before the end of `I`:
    *
    * ```
-   * t ≠ undefined ⇒ I.start ≠ undefined ∧ I.start < t ∧ I.end ≠ undefined ∧ t < I.end
+   * t ≠ undefined ⇒ (I.start ≠ undefined ∧ I.start < t ∧ I.end ≠ undefined ∧ t < I.end)
    * ```
    *
    * ![in](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-in.png)
@@ -130,7 +130,7 @@ export class PointIntervalRelation extends Relation {
    * `I`:
    *
    * ```
-   * t ≠ undefined ⇒ I.end ≠ undefined ∧ t = I.end ∧ I.start ≠ I.end
+   * t ≠ undefined ⇒ (I.end ≠ undefined ∧ t = I.end ∧ I.start ≠ I.end)
    * ```
    *
    * ![ends](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-terminates.png)
@@ -148,7 +148,7 @@ export class PointIntervalRelation extends Relation {
    * end of `I`:
    *
    * ```
-   * t ≠ undefined ⇒ I.until ≠ undefined ∧ I.end < t
+   * t ≠ undefined ⇒ (I.until ≠ undefined ∧ I.end < t)
    * ```
    *
    * ![after](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-after.png)
