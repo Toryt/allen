@@ -50,7 +50,8 @@
     "printWidth": 120,
     "proseWrap": "always",
     "endOfLine": "lf",
-    "arrowParens": "avoid"
+    "arrowParens": "avoid",
+    "trailingComma": "none"
   },
   "mocha": {
     "check-leaks": true,

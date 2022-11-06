@@ -34,12 +34,12 @@ describe('PointIntervalRelation', function () {
       { name: 'COMMENCES', representation: 'c' },
       { name: 'IN', representation: 'i' },
       { name: 'TERMINATES', representation: 't' },
-      { name: 'AFTER', representation: 'a' },
+      { name: 'AFTER', representation: 'a' }
     ],
     [
       { name: 'CONCURS_WITH', representation: 'ci' },
       { name: 'BEFORE_END', representation: 'bci' },
-      { name: 'AFTER_BEGIN', representation: 'ita' },
+      { name: 'AFTER_BEGIN', representation: 'ita' }
     ],
     true
   )
@@ -190,7 +190,7 @@ describe('PointIntervalRelation', function () {
             PointIntervalRelation.COMMENCES,
             PointIntervalRelation.IN,
             PointIntervalRelation.TERMINATES,
-            PointIntervalRelation.AFTER,
+            PointIntervalRelation.AFTER
           ],
           compare
         )
@@ -225,7 +225,7 @@ describe('PointIntervalRelation', function () {
       new Date(2011, 9, 3, 19, 49, 34, 848),
       new Date(2015, 9, 3, 19, 49, 34, 848),
       new Date(2018, 9, 3, 19, 49, 34, 848),
-      new Date(2022, 9, 3, 19, 49, 34, 848),
+      new Date(2022, 9, 3, 19, 49, 34, 848)
     ])
     generateAllPointIntervalRelationTests(
       'compare',
