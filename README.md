@@ -226,10 +226,10 @@ last updated in December 2008.
 [wikipedia]: https://en.wikipedia.org/wiki/Allen%27s_interval_algebra
 [thomas a. alspaugh “allen's interval algebra”]: https://www.ics.uci.edu/~alspaugh/cls/shr/allen.html
 [strict total order]: https://en.wikipedia.org/wiki/Total¬_order
-[points and comparison]: doc/Points.md
-[intervals]: doc/Intervals.md
-[point – interval relations]: doc/PointIntervalRelation.md
-[allen relations]: doc/AllenRelation.md
+[points and comparison]: https://bitbucket.org/toryt/allen/src/master/doc/Points.md
+[intervals]: https://bitbucket.org/toryt/allen/src/master/doc/Intervals.md
+[point – interval relations]: https://bitbucket.org/toryt/allen/src/master/doc/PointIntervalRelation.md
+[allen relations]: https://bitbucket.org/toryt/allen/src/master/doc/AllenRelation.md
 [code documentation]: docs/index.html
 [bitbucket]: https://bitbucket.org/toryt/allen
 [github]: https://github.com/Toryt/allen
