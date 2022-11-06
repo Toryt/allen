@@ -16,10 +16,11 @@
 
 /* eslint-env mocha */
 
-import { AllenRelation } from '../src/AllenRelation'
 import 'should'
 import { generateRelationTests } from './_generateRelationTests'
-import { Interval } from '../src'
+import { AllenRelation } from '../src/AllenRelation'
+import { Interval } from '../src/Interval'
+import { ltCompare } from '../src/ltCompare'
 import { intervalToString } from './_intervalToString'
 
 describe('AllenRelation', function () {
