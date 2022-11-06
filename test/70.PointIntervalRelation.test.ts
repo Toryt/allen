@@ -111,39 +111,34 @@ describe('PointIntervalRelation', function () {
 
       type BasicRelationDefinition = (t: T, i: Interval<T>) => boolean
 
+      function isDefinite (t: T | undefined | null): t is T {
+        return t !== undefined && t !== null
+      }
+
       function compare (t1: T, c: '<' | '=' | '>', t2: T | undefined | null): boolean {
         const compare = compareFn ?? ltCompare
 
-        if (t2 === undefined || t2 === null) {
+        if (!isDefinite(t2)) {
           return false
         }
+
         const comparison = compare(t1, t2)
 
         return c === '<' ? comparison < 0 : c === '=' ? comparison === 0 : comparison > 0
       }
 
-      const basicRelationDefinition: [br: PointIntervalRelation, definition: BasicRelationDefinition][] = [
-        [
-          PointIntervalRelation.BEFORE,
-          (t: T, i: Interval<T>) => t === undefined || t === null || compare(t, '<', i.start),
-        ],
-        [
-          PointIntervalRelation.COMMENCES,
-          (t: T, i: Interval<T>) => t === undefined || t === null || compare(t, '=', i.start),
-        ],
+      const basicRelationDefinition: Array<[br: PointIntervalRelation, definition: BasicRelationDefinition]> = [
+        [PointIntervalRelation.BEFORE, (t: T, i: Interval<T>) => !isDefinite(t) || compare(t, '<', i.start)],
+        [PointIntervalRelation.COMMENCES, (t: T, i: Interval<T>) => !isDefinite(t) || compare(t, '=', i.start)],
         [
           PointIntervalRelation.IN,
-          (t: T, i: Interval<T>) =>
-            t === undefined || t === null || (compare(t, '>', i.start) && compare(t, '<', i.end)),
+          (t: T, i: Interval<T>) => !isDefinite(t) || (compare(t, '>', i.start) && compare(t, '<', i.end))
         ],
         [
           PointIntervalRelation.TERMINATES,
-          (t: T, i: Interval<T>) => t === undefined || t === null || (compare(t, '=', i.end) && i.start !== i.end),
+          (t: T, i: Interval<T>) => !isDefinite(t) || (compare(t, '=', i.end) && i.start !== i.end)
         ],
-        [
-          PointIntervalRelation.AFTER,
-          (t: T, i: Interval<T>) => t === undefined || t === null || compare(t, '>', i.end),
-        ],
+        [PointIntervalRelation.AFTER, (t: T, i: Interval<T>) => !isDefinite(t) || compare(t, '>', i.end)]
       ]
 
       function shouldNotViolateBasicRelationDefinitions (t: T, result: PointIntervalRelation): void {
