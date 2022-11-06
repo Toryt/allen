@@ -357,16 +357,67 @@ describe('AllenRelation', function () {
       ]
     }
 
-    function generateTests<T> (label: string, pts: T[], compare?: (a1: T, a2: T) => number): void {
+    function generateTests<T> (label: string, pts: T[], compareFn?: (a1: T, a2: T) => number): void {
       type BasicRelationDefinition = (i1: Interval<T>, i2: Interval<T>) => boolean
 
+      function isDefinite (t: T | undefined | null): t is T {
+        return t !== undefined && t !== null
+      }
+
+      function compare (
+        t1: T | undefined | null,
+        c: '<' | '=' | '>',
+        t2: T | undefined | null,
+        indefiniteOk?: boolean
+      ): boolean {
+        const compare = compareFn ?? ltCompare
+
+        if (!isDefinite(t1) || !isDefinite(t2)) {
+          return indefiniteOk === true
+        }
+
+        const comparison = compare(t1, t2)
+
+        return c === '<' ? comparison < 0 : c === '=' ? comparison === 0 : comparison > 0
+      }
+
       const basicRelationDefinition: Array<[br: AllenRelation, definition: BasicRelationDefinition]> = [
-        [AllenRelation.PRECEDES, (i1, i2) => i1 === i2]
+        [AllenRelation.PRECEDES, (i1, i2) => compare(i1.end, '<', i2.start)],
+        [AllenRelation.MEETS, (i1, i2) => compare(i1.end, '=', i2.start) && compare(i1.start, '<', i2.end, true)],
+        [
+          AllenRelation.OVERLAPS,
+          (i1, i2) => compare(i1.start, '<', i2.start) && compare(i2.start, '<', i1.end) && compare(i1.end, '<', i2.end)
+        ],
+        [
+          AllenRelation.FINISHED_BY,
+          (i1, i2) => compare(i1.start, '<', i2.start) && compare(i1.end, '=', i2.end) && compare(i2.start, '<', i1.end)
+        ],
+        [AllenRelation.CONTAINS, (i1, i2) => compare(i1.start, '<', i2.start) && compare(i2.end, '<', i1.end)],
+        [
+          AllenRelation.STARTS,
+          (i1, i2) => compare(i1.start, '=', i2.start) && compare(i1.end, '<', i2.end) && compare(i1.start, '<', i1.end)
+        ],
+        [AllenRelation.EQUALS, (i1, i2) => compare(i1.start, '=', i2.start) && compare(i1.end, '=', i2.end)],
+        [
+          AllenRelation.STARTED_BY,
+          (i1, i2) => compare(i1.start, '=', i2.start) && compare(i2.end, '<', i1.end) && compare(i2.start, '<', i2.end)
+        ],
+        [AllenRelation.DURING, (i1, i2) => compare(i2.start, '<', i1.start) && compare(i1.end, '<', i2.end)],
+        [
+          AllenRelation.FINISHES,
+          (i1, i2) => compare(i2.start, '<', i1.start) && compare(i1.end, '=', i2.end) && compare(i1.start, '<', i2.end)
+        ],
+        [
+          AllenRelation.OVERLAPPED_BY,
+          (i1, i2) => compare(i2.start, '<', i1.start) && compare(i1.start, '<', i2.end) && compare(i2.end, '<', i1.end)
+        ],
+        [AllenRelation.MET_BY, (i1, i2) => compare(i1.start, '=', i2.end) && compare(i2.start, '<', i1.end, true)],
+        [AllenRelation.PRECEDED_BY, (i1, i2) => compare(i2.end, '<', i1.start)]
       ]
 
       function callIt (i1: Interval<T>, i2: Interval<T>): AllenRelation {
-        return compare !== undefined && compare !== null
-          ? AllenRelation.relation(i1, i2, compare)
+        return compareFn !== undefined && compareFn !== null
+          ? AllenRelation.relation(i1, i2, compareFn)
           : AllenRelation.relation(i1, i2)
       }
 
