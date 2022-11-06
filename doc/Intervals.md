@@ -34,9 +34,7 @@ If both `start` and `end` are definite,
 ∀ i ∈ Interval<T>: ¬ (i.end ⨀ i.start)
 ```
 
-When `start` equals `end`, the interval is _degenerate_, and has no duration. Note that with 1 degenerate interval,
-there are 2 cases where `AllenRelation.relation` returns a semantically incomplete result (see detailed documentation
-there).
+When `start` equals `end`, the interval is _degenerate_.
 
 ## Right half open (`[start, end[`)
 
@@ -145,3 +143,6 @@ const couldBeNotApplicable: boolean = !compose(
 |     |          | `t` |       |     | `i`    | `i`               | yes          | yes                 | no              | no                     |
 |     |          |     | `t`   |     | `t`    | `ita`             | no           | yes                 | no              | yes                    |
 |     |          |     |       | `t` | `a`    | `ita`             | no           | yes                 | no              | yes                    |
+
+With right half open intervals, a _degenerate_ interval has no duration, is empty, nothing. _It is not even the point
+used to describe it._ This also simplifies a lot of things.
