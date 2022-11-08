@@ -139,11 +139,11 @@ be `NaN`, or are `symbol`s, and can supply in other cases.
 type Comparator<T> = (t1: T, t2: T) => number
 ```
 
-The `compare` method and function have the traditional semantics, where
+The `compare` function has the traditional semantics, where
 
-- a negative number is returned when `this`, respectively `a`, is considered smaller than `other`,respectively `b`,
-- a positive number when `this`, respectively `a`, is considered larger than `other`,respectively `b`, and
-- `0` when both objects are considered equal.
+- a negative number is returned when `t1` is considered smaller than `t2`,
+- a positive number is returned when `t1` is considered larger than `t2`, and
+- `0` when `t1` and `t2` are considered equal.
 
 The function may never return `NaN`.
 

@@ -7,6 +7,7 @@
 #### 0.1.1
 
 - fix embarissing typo in first sentence of README
+- fixes in documentation
 
 #### 0.1.0
 
