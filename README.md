@@ -16,8 +16,7 @@ limitations under the License.
 
 # Allen
 
-Reason and validate the relations between intervals, and points and intervals, in JavaScript and TypeScript. This
-library does not help with inference.
+Validate and reason about relations between intervals, and between points and intervals, in JavaScript and TypeScript.
 
 When working with intervals, we often want to express constraints (invariants) that limit acceptable combinations.
 Expressing this correctly proves difficult in practice. Falling back to working with isolated start and end points, and
@@ -31,6 +30,8 @@ Good synopses of this theory are
 
 - [Wikipedia]
 - [Thomas A. Alspaugh “Allen's interval algebra”].
+
+This library does not help with inference.
 
 ## How to use
 
