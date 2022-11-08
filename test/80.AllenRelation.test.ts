@@ -357,6 +357,25 @@ describe('AllenRelation', function () {
       ]
     }
 
+    /**
+     * The 26 possible results:
+     */
+    const possibleResults: AllenRelation[] = AllenRelation.BASIC_RELATIONS.concat([
+      AllenRelation.fromString<AllenRelation>('pmoFDseSdfO'),
+      AllenRelation.fromString<AllenRelation>('pmoFD'),
+      AllenRelation.fromString<AllenRelation>('pmosd'),
+      AllenRelation.fromString<AllenRelation>('osd'),
+      AllenRelation.fromString<AllenRelation>('oFD'),
+      AllenRelation.fromString<AllenRelation>('seS'),
+      AllenRelation.fromString<AllenRelation>('Fef'),
+      AllenRelation.fromString<AllenRelation>('dfO'),
+      AllenRelation.fromString<AllenRelation>('DSO'),
+      AllenRelation.fromString<AllenRelation>('DSOMP'),
+      AllenRelation.fromString<AllenRelation>('dfOMP'),
+      AllenRelation.fromString<AllenRelation>('oFDseSdfOMP'),
+      AllenRelation.fullRelation<AllenRelation>()
+    ])
+
     function generateTests<T> (label: string, pts: T[], compareFn?: (a1: T, a2: T) => number): void {
       type BasicRelationDefinition = (i1: Interval<T>, i2: Interval<T>) => boolean
 
@@ -432,6 +451,7 @@ describe('AllenRelation', function () {
             i2: Interval<T>,
             result: AllenRelation
           ): void {
+            possibleResults.includes(relation)
             basicRelationDefinition.forEach(([br, def]) => {
               if (result.implies(br)) {
                 def(i1, i2).should.be.true()
