@@ -940,15 +940,7 @@ export class AllenRelation extends Relation {
    * - `(DSOMP)`,
    * - `(dfOMP)`,
    * - `(oFDseSdfOMP)`, or
-   * - {@link AllenRelation.fullRelation}
-   *
-   * With degenerate intervals, there is a problem with a degenerate interval `i1`, whose `start` and `end` are equal to
-   * the `start` of `i2`. The relation between these intervals is {@link MEETS} _and_ {@link STARTS}, which cannot be
-   * expressed by an AllenRelation (the degenerate interval `i1` represents a point, and
-   * `PointIntervalRelation.relation` could be used to return `PointIntervalRelation.COMMENCES`). The issue is resolved
-   * by choosing 1 ({@link MEETS}). The reverse issue occurs with a degenerate interval `i2` whose `start` and `end` are
-   * equal to the `end` of `i1`, when the relation is {@link MET_BY} _and_ {@link FINISHES}. {@link MET_BY} is returned
-   * (`PointIntervalRelation.relation` could be used to return `PointIntervalRelation.TERMINATES`).
+   * - {@link AllenRelation.fullRelation}.
    */
   static relation<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): AllenRelation {
     ok(i1)
