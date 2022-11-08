@@ -925,6 +925,23 @@ export class AllenRelation extends Relation {
    * ...
    * ```
    *
+   * This can result in any of only 26 relations, i.e.,
+   *
+   * - the 13 {@link BASIC_RELATIONS},
+   * - `(pmoFDseSdfO)`,
+   * - `(pmoFD)`,
+   * - `(pmosd)`,
+   * - `(osd)`,
+   * - `(oFD)`,
+   * - `(seS)`,
+   * - `(Fef)`,
+   * - `(dfO)`,
+   * - `(DSO)`,
+   * - `(DSOMP)`,
+   * - `(dfOMP)`,
+   * - `(oFDseSdfOMP)`, or
+   * - {@link AllenRelation.fullRelation}
+   *
    * With degenerate intervals, there is a problem with a degenerate interval `i1`, whose `start` and `end` are equal to
    * the `start` of `i2`. The relation between these intervals is {@link MEETS} _and_ {@link STARTS}, which cannot be
    * expressed by an AllenRelation (the degenerate interval `i1` represents a point, and
