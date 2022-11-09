@@ -940,7 +940,7 @@ export class AllenRelation extends Relation {
    * - {@link AllenRelation.fullRelation}.
    */
   static relation<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): AllenRelation {
-    const compare: Comparator<T> = getCompareIfOk(i1, i2, compareFn)
+    const compare: Comparator<T> = getCompareIfOk([i1, i2], compareFn)
 
     const i1Start: Indefinite<T> = i1.start
     const i1End: Indefinite<T> = i1.end

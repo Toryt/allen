@@ -14,33 +14,31 @@
  limitations under the License.
  */
 
-import assert, { ok } from 'assert'
+import assert from 'assert'
 import { Interval, isInterval } from './Interval'
 import { Comparator } from './comparator'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { commonTypeRepresentation } from './typeRepresentation'
+import { Indefinite } from './type'
 
 const haveCommonType: string = 'i1.start, i1.end, i2.start and i2.end must be of a common type'
 
 /**
  * Assert that the parameters are acceptable, and return the {@link Comparator} to use.
  */
-export function getCompareIfOk<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): Comparator<T> {
-  ok(i1)
-  ok(i2)
+export function getCompareIfOk<T> (i: Interval<T>[], compareFn?: Comparator<T>): Comparator<T> {
+  i.forEach(j => assert(typeof j === 'object' && j !== null))
   assert(
-    (isLTComparableOrIndefinite(i1.start) &&
-      isLTComparableOrIndefinite(i1.end) &&
-      isLTComparableOrIndefinite(i2.start) &&
-      isLTComparableOrIndefinite(i2.end)) ||
-      compareFn !== undefined,
+    i.every(j => isLTComparableOrIndefinite(j.start) && isLTComparableOrIndefinite(j.end)) || compareFn !== undefined,
     '`compareFn` is mandatory when `iN.start` or `iN.end` is a `symbol` or `NaN`'
   )
 
-  const cType = commonTypeRepresentation(i1.start, i1.end, i2.start, i2.end)
+  const cType = commonTypeRepresentation(
+    ...i.reduce((acc: Indefinite<T>[], j: Interval<T>) => acc.concat([j.start, j.end]), [])
+  )
 
   assert(cType !== false, haveCommonType)
-  assert(cType === undefined || (isInterval(i1, cType, compareFn) && isInterval(i2, cType, compareFn)))
+  assert(cType === undefined || i.every(j => isInterval(j, cType, compareFn)))
 
   return compareFn ?? ltCompare
 }
