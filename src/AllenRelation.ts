@@ -14,16 +14,13 @@
  limitations under the License.
  */
 
-import assert, { ok } from 'assert'
+import assert from 'assert'
 import { Relation } from './Relation'
 import { basicRelationBitPatterns, relationBitPatterns, reverse } from './bitPattern'
-import { Interval, isInterval } from './Interval'
+import { Interval } from './Interval'
 import { Comparator } from './comparator'
-import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
-import { commonTypeRepresentation } from './typeRepresentation'
 import { Indefinite } from './type'
-
-const haveCommonType: string = 'i1.start, i1.end, i2.start and i2.end must be of a common type'
+import { getCompareIfOk } from './getCompareIfOk'
 
 /**
  * Support for reasoning about Allen relations, i.e., relations between intervals, and constraints on those relations.
@@ -943,28 +940,12 @@ export class AllenRelation extends Relation {
    * - {@link AllenRelation.fullRelation}.
    */
   static relation<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): AllenRelation {
-    ok(i1)
-    ok(i2)
-    assert(
-      (isLTComparableOrIndefinite(i1.start) &&
-        isLTComparableOrIndefinite(i1.end) &&
-        isLTComparableOrIndefinite(i2.start) &&
-        isLTComparableOrIndefinite(i2.end)) ||
-        compareFn !== undefined,
-      '`compareFn` is mandatory when `iN.start` or `iN.end` is a `symbol` or `NaN`'
-    )
-
-    const cType = commonTypeRepresentation(i1.start, i1.end, i2.start, i2.end)
-
-    assert(cType !== false, haveCommonType)
-    assert(cType === undefined || (isInterval(i1, cType, compareFn) && isInterval(i2, cType, compareFn)))
+    const compare: Comparator<T> = getCompareIfOk(i1, i2, compareFn)
 
     const i1Start: Indefinite<T> = i1.start
     const i1End: Indefinite<T> = i1.end
     const i2Start: Indefinite<T> = i2.start
     const i2End: Indefinite<T> = i2.end
-
-    const compare: Comparator<T> = compareFn ?? ltCompare
 
     let result: AllenRelation = AllenRelation.fullRelation<AllenRelation>()
 
