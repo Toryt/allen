@@ -57,7 +57,11 @@ describe('intervals', function () {
           const itself = { start: points[0], end: points[1] }
           callIt(itself, [itself]).should.be.true()
         })
-        // it('returns true when all intervals in `is` are enclosed by `i`')
+        it('returns true for the empty set of `is`', function () {
+          const itself = { start: points[0], end: points[1] }
+          callIt(itself, []).should.be.true()
+        })
+        // it('returns true when all intervals in `is` are enclosed by `i`', function () {})
       })
     }
 
