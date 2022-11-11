@@ -78,6 +78,9 @@ describe('intervals', function () {
         it('returns true when all intervals in `is` are enclosed by `i` (with some degenerate intervals)', function () {
           callIt({ start: points[0], end: points[4] }, aCollection).should.be.true()
         })
+        it('returns true when all intervals in `is` are minimally enclosed by `i` (with some degenerate intervals)', function () {
+          callIt({ start: points[1], end: points[4] }, aCollection).should.be.true()
+        })
         it('returns false when some intervals in `is` are not enclosed by `i` (with some degenerate intervals)', function () {
           callIt({ start: points[2], end: points[4] }, aCollection).should.be.false()
         })
