@@ -95,7 +95,7 @@ describe('intervals', function () {
             { start: points[0], end: points[4] }
           ]).should.be.false()
         })
-        it('returns true when `i` is fully indefinite', function () {
+        it('returns false when `i` is fully indefinite', function () {
           callIt({}, [
             { start: points[2], end: points[4] },
             { start: points[0], end: points[1] },
@@ -103,9 +103,9 @@ describe('intervals', function () {
             { start: points[2], end: points[4] },
             { start: points[3], end: points[3] },
             { start: points[0], end: points[4] }
-          ]).should.be.true()
+          ]).should.be.false()
         })
-        it('returns true when `i` is left indefinite', function () {
+        it('returns false when `i` is left indefinite', function () {
           callIt({ end: points[4] }, [
             { start: points[2], end: points[4] },
             { start: points[0], end: points[1] },
@@ -113,9 +113,9 @@ describe('intervals', function () {
             { start: points[2], end: points[4] },
             { start: points[3], end: points[3] },
             { start: points[0], end: points[4] }
-          ]).should.be.true()
+          ]).should.be.false()
         })
-        it('returns true when `i` is right indefinite', function () {
+        it('returns false when `i` is right indefinite', function () {
           callIt({ start: points[0] }, [
             { start: points[2], end: points[4] },
             { start: points[0], end: points[1] },
@@ -123,9 +123,9 @@ describe('intervals', function () {
             { start: points[2], end: points[4] },
             { start: points[3], end: points[3] },
             { start: points[0], end: points[4] }
-          ]).should.be.true()
+          ]).should.be.false()
         })
-        it('returns true when `i` is indefinite, and there are indefinite intervals in `i`', function () {
+        it('returns false when `i` is indefinite, and there are indefinite intervals in `i`', function () {
           callIt({}, [
             { start: points[2], end: points[4] },
             { start: points[0], end: points[1] },
@@ -133,7 +133,7 @@ describe('intervals', function () {
             { start: points[2], end: points[4] },
             { start: points[3] },
             { start: points[0], end: points[4] }
-          ]).should.be.true()
+          ]).should.be.false()
         })
         it('returns false when `i` is definite, and there are indefinite intervals in `i`', function () {
           callIt({ start: points[2], end: points[2] }, [

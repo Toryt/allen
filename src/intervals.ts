@@ -27,6 +27,11 @@ export const ENCLOSES: AllenRelation = AllenRelation.fromString<AllenRelation>('
 
 // export const DOES_NOT_CONCUR = AllenRelation.CONCURS_WITH.complement()
 
+/**
+ * Does `i` {@link ENCLOSES enclose} all intervals in `is`?
+ *
+ * When any interval is fully or partially indefinite, this cannot be guaranteed, and `false` is returned.
+ */
 export function isEnclosing<T> (i: Interval<T>, is: Interval<T>[], compareFn?: Comparator<T>): boolean {
   assert(Array.isArray(is))
   const compare: Comparator<T> = getCompareIfOk<T>(is.concat([i]), compareFn)
