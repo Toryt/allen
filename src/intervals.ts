@@ -15,6 +15,10 @@
  */
 
 import { AllenRelation } from './AllenRelation'
+import { Interval } from './Interval'
+import { Comparator } from './comparator'
+import assert from 'assert'
+import { getCompareIfOk } from './getCompareIfOk'
 
 /**
  * The second interval is completely in the first interval.
@@ -23,9 +27,15 @@ export const ENCLOSES: AllenRelation = AllenRelation.fromString<AllenRelation>('
 
 // export const DOES_NOT_CONCUR = AllenRelation.CONCURS_WITH.complement()
 
-// export function isEnclosing<T> (i: Interval<T>[], i2: Interval<T>, compareFn?: Comparator<T>): boolean {
-//   return true
-// }
+export function isEnclosing<T> (is: Interval<T>[], i: Interval<T>, compareFn?: Comparator<T>): boolean {
+  assert(Array.isArray(is))
+  const compare: Comparator<T> = getCompareIfOk<T>(is.concat([i]), compareFn)
+
+  return (
+    // MUDO dummy to get it to compile
+    i.start !== undefined && i.start !== null && i.end !== undefined && i.end !== null && compare(i.start, i.end) < 0
+  )
+}
 //
 // export function isMinimalEnclosing<T> (i: Interval<T>[], i2: Interval<T>, compareFn?: Comparator<T>): boolean {
 //   return true
