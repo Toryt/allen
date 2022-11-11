@@ -71,6 +71,16 @@ describe('intervals', function () {
             { start: points[0], end: points[4] }
           ])
         })
+        it('returns false when some intervals in `is` are not enclosed by `i` (with some degenerate intervals)', function () {
+          callIt({ start: points[2], end: points[4] }, [
+            { start: points[2], end: points[4] },
+            { start: points[0], end: points[1] },
+            { start: points[0], end: points[3] },
+            { start: points[2], end: points[4] },
+            { start: points[3], end: points[3] },
+            { start: points[0], end: points[4] }
+          ])
+        })
       })
     }
 
