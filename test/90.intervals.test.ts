@@ -18,7 +18,8 @@
 
 import should from 'should'
 import { ENCLOSES, isEnclosing } from '../src/intervals'
-import { AllenRelation, Interval } from '../src'
+import { AllenRelation } from '../src/AllenRelation'
+import { Interval } from '../src/Interval'
 
 const fivePoints = [-6, -4.983458, -1, 2, Math.PI]
 const fiveStrings = [
