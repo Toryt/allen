@@ -62,6 +62,7 @@ describe('intervals', function () {
           { start: points[1], end: points[3] },
           { start: points[2], end: points[3] },
           { start: points[3], end: points[3] },
+          { start: points[4], end: points[4] },
           { start: points[1], end: points[3] }, // deliberate duplicate
           { start: points[1], end: points[4] }
         ]

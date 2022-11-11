@@ -19,6 +19,7 @@ import { Interval } from './Interval'
 import { Comparator } from './comparator'
 import assert from 'assert'
 import { getCompareIfOk } from './getCompareIfOk'
+import { intervalToString } from '../test/_intervalToString'
 
 /**
  * The second interval is completely in the first interval.
@@ -36,6 +37,19 @@ export function isEnclosing<T> (i: Interval<T>, is: Interval<T>[], compareFn?: C
   assert(Array.isArray(is))
   const compare: Comparator<T> = getCompareIfOk<T>(is.concat([i]), compareFn)
 
+  // MUDO remove
+  console.log()
+  console.log()
+  console.log()
+  console.log(`i: ${intervalToString(i)}`)
+  is.forEach(ie => {
+    console.log()
+    console.log(`  ie: ${intervalToString(ie)}`)
+    const actual = AllenRelation.relation(i, ie, compare)
+    console.log(`  actual: ${actual.toString()}`)
+    const implies = actual.implies(ENCLOSES)
+    console.log(`  implies: ${implies}`)
+  })
   return is.every(ie => AllenRelation.relation<T>(i, ie, compare).implies(ENCLOSES))
 }
 //
