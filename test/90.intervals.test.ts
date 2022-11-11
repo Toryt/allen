@@ -64,6 +64,8 @@ describe('intervals', function () {
     generateTests<number>('number', fivePoints)
     generateTests<string>('string', fiveStrings)
     generateTests<Date>('Date', fiveDates)
-    generateTests<symbol>('symbol', fiveSymbols)
+    generateTests<symbol>('symbol', fiveSymbols, (s1: Symbol, s2: Symbol): number =>
+      s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
+    )
   })
 })
