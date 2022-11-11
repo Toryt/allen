@@ -27,14 +27,11 @@ export const ENCLOSES: AllenRelation = AllenRelation.fromString<AllenRelation>('
 
 // export const DOES_NOT_CONCUR = AllenRelation.CONCURS_WITH.complement()
 
-export function isEnclosing<T> (is: Interval<T>[], i: Interval<T>, compareFn?: Comparator<T>): boolean {
+export function isEnclosing<T> (i: Interval<T>, is: Interval<T>[], compareFn?: Comparator<T>): boolean {
   assert(Array.isArray(is))
   const compare: Comparator<T> = getCompareIfOk<T>(is.concat([i]), compareFn)
 
-  return (
-    // MUDO dummy to get it to compile
-    i.start !== undefined && i.start !== null && i.end !== undefined && i.end !== null && compare(i.start, i.end) < 0
-  )
+  return is.every(ie => AllenRelation.relation<T>(i, ie, compare).implies(ENCLOSES))
 }
 //
 // export function isMinimalEnclosing<T> (i: Interval<T>[], i2: Interval<T>, compareFn?: Comparator<T>): boolean {

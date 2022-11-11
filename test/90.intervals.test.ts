@@ -48,16 +48,16 @@ describe('intervals', function () {
   })
   describe('isEnclosing', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number) {
-      function callIt (is: Interval<T>[], i: Interval<T>): boolean {
-        return compareFn !== undefined && compareFn !== null ? isEnclosing(is, i, compareFn) : isEnclosing(is, i)
+      function callIt (i: Interval<T>, is: Interval<T>[]): boolean {
+        return compareFn !== undefined && compareFn !== null ? isEnclosing(i, is, compareFn) : isEnclosing(i, is)
       }
 
       describe(label, function () {
-        it('returns true for a singleton and itself', function () {
+        it('itself encloses itself as singleton', function () {
           const itself = { start: points[0], end: points[1] }
-          callIt([itself], itself).should.be.true()
+          callIt(itself, [itself]).should.be.true()
         })
-        it('returns true when all intervals in `is` are enclosed by `i`')
+        // it('returns true when all intervals in `is` are enclosed by `i`')
       })
     }
 
