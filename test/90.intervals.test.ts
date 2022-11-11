@@ -53,6 +53,15 @@ describe('intervals', function () {
       }
 
       describe(label, function () {
+        const aCollection = [
+          { start: points[2], end: points[4] },
+          { start: points[1], end: points[1] },
+          { start: points[1], end: points[3] },
+          { start: points[2], end: points[4] },
+          { start: points[3], end: points[3] },
+          { start: points[1], end: points[4] }
+        ]
+
         it('itself encloses itself as singleton', function () {
           const itself = { start: points[0], end: points[1] }
           callIt(itself, [itself]).should.be.true()
@@ -66,64 +75,22 @@ describe('intervals', function () {
           callIt(itself, []).should.be.true()
         })
         it('returns true when all intervals in `is` are enclosed by `i` (with some degenerate intervals)', function () {
-          callIt({ start: points[0], end: points[4] }, [
-            { start: points[2], end: points[4] },
-            { start: points[0], end: points[1] },
-            { start: points[0], end: points[3] },
-            { start: points[2], end: points[4] },
-            { start: points[3], end: points[3] },
-            { start: points[0], end: points[4] }
-          ]).should.be.true()
+          callIt({ start: points[0], end: points[4] }, aCollection).should.be.true()
         })
         it('returns false when some intervals in `is` are not enclosed by `i` (with some degenerate intervals)', function () {
-          callIt({ start: points[2], end: points[4] }, [
-            { start: points[2], end: points[4] },
-            { start: points[0], end: points[1] },
-            { start: points[0], end: points[3] },
-            { start: points[2], end: points[4] },
-            { start: points[3], end: points[3] },
-            { start: points[0], end: points[4] }
-          ]).should.be.false()
+          callIt({ start: points[2], end: points[4] }, aCollection).should.be.false()
         })
         it('returns false when `i` is degenerate', function () {
-          callIt({ start: points[2], end: points[2] }, [
-            { start: points[2], end: points[4] },
-            { start: points[0], end: points[1] },
-            { start: points[0], end: points[3] },
-            { start: points[2], end: points[4] },
-            { start: points[3], end: points[3] },
-            { start: points[0], end: points[4] }
-          ]).should.be.false()
+          callIt({ start: points[2], end: points[2] }, aCollection).should.be.false()
         })
         it('returns false when `i` is fully indefinite', function () {
-          callIt({}, [
-            { start: points[2], end: points[4] },
-            { start: points[0], end: points[1] },
-            { start: points[0], end: points[3] },
-            { start: points[2], end: points[4] },
-            { start: points[3], end: points[3] },
-            { start: points[0], end: points[4] }
-          ]).should.be.false()
+          callIt({}, aCollection).should.be.false()
         })
         it('returns false when `i` is left indefinite', function () {
-          callIt({ end: points[4] }, [
-            { start: points[2], end: points[4] },
-            { start: points[0], end: points[1] },
-            { start: points[0], end: points[3] },
-            { start: points[2], end: points[4] },
-            { start: points[3], end: points[3] },
-            { start: points[0], end: points[4] }
-          ]).should.be.false()
+          callIt({ end: points[4] }, aCollection).should.be.false()
         })
         it('returns false when `i` is right indefinite', function () {
-          callIt({ start: points[0] }, [
-            { start: points[2], end: points[4] },
-            { start: points[0], end: points[1] },
-            { start: points[0], end: points[3] },
-            { start: points[2], end: points[4] },
-            { start: points[3], end: points[3] },
-            { start: points[0], end: points[4] }
-          ]).should.be.false()
+          callIt({ start: points[0] }, aCollection).should.be.false()
         })
         it('returns false when `i` is indefinite, and there are indefinite intervals in `i`', function () {
           callIt({}, [
