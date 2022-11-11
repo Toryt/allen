@@ -14,9 +14,6 @@
  limitations under the License.
  */
 
-import { Interval } from './Interval'
-import { Comparator } from './comparator'
-import { getCompareIfOk } from './getCompareIfOk'
 import { AllenRelation } from './AllenRelation'
 
 /**
@@ -24,95 +21,95 @@ import { AllenRelation } from './AllenRelation'
  */
 export const ENCLOSES: AllenRelation = AllenRelation.fromString<AllenRelation>('FDeS')
 
-export const DOES_NOT_CONCUR = AllenRelation.CONCURS_WITH.complement()
+// export const DOES_NOT_CONCUR = AllenRelation.CONCURS_WITH.complement()
 
-export function isEnclosing<T> (i: Interval<T>[], i2: Interval<T>, compareFn?: Comparator<T>): boolean {
-  return true
-}
-
-export function isMinimalEnclosing<T> (i: Interval<T>[], i2: Interval<T>, compareFn?: Comparator<T>): boolean {
-  return true
-}
-
-/**
- * Determine the minimal enclosing interval for all intervals `i[j]`.
- *
- * When one or more elements of `i` have an indefinite `start`, the `result` has an indefinite `start`. Otherwise,
- * `result.start` is the smallest `start` of any element of `i`. When one or more elements of `i` have an indefinite
- * `end`, the `result` has an indefinite `end`. Otherwise, `result.end` is the largest `end` of any element of `i`.
- *
- * @return {Interval<T>} `i.every(j => result {@link ENCLOSES} j)` and IS MINIMAL // MUDO
- */
-export function minimalEnclosing<T> (i: Interval<T>[], compareFn?: Comparator<T>): Interval<T> {
-  const compare: Comparator<T> = getCompareIfOk(i, compareFn)
-
-  return i.reduce((acc, j) => {
-    return {
-      start:
-        j.start !== undefined &&
-        j.start !== null &&
-        (acc.start === undefined || acc.start === null || compare(j.start, acc.start) < 0)
-          ? j.start
-          : acc.start,
-      end:
-        j.end !== undefined &&
-        j.end !== null &&
-        (acc.end === undefined || acc.end === null || compare(j.end, acc.end) > 0)
-          ? j.end
-          : acc.end
-    }
-  }, {})
-}
-
-/**
- * The elements of `i` are discrete (i.e., do not {@link AllenRelation.CONCURS_WITH concur with the previous or next
- * element}), and are ordered from smallest `i.start` to largest `i.end`.
- *
- * There might be gaps in the chain.
- *
- * Only `i[0]` might have an indefinite `start`, and only the last element might have an indefinite `end`.
- */
-export function isSequence<T> (i: Interval<T>[], compareFn?: Comparator<T>): boolean {
-  const compare: Comparator<T> = getCompareIfOk(i, compareFn)
-
-  return i.every(
-    (j: Interval<T>, index: number) =>
-      index === 0 || AllenRelation.relation(j, i[index - 1], compare).implies(DOES_NOT_CONCUR)
-  )
-}
-
-/**
- * Turn the _set_ of intervals `i` into a {@link isSequence seqyence}.
- *
- * Intervals that {@link AllenRelation.CONCURS_WITH concur with} each other are replaced by distinct
- * {@link AllenRelation.MEETS meeting} intervals (the “intersections“).
- */
-export function toSequence<T> (i: Interval<T>[], compareFn?: Comparator<T>): Interval<T>[] {}
-
-/**
- * The elements of `i` {@link AllenRelation.MEETS}, and are ordered from smallest `i.start` to largest `i.end`.
- *
- * There are no gaps in the sequence.
- *
- * Only `i[0]` might have an indefinite `start`, and only the last element might have an indefinite `end`.
- */
-export function isChain<T> (i: Interval<T>[], compareFn?: Comparator<T>): boolean {
-  const compare: Comparator<T> = getCompareIfOk(i, compareFn)
-
-  return i.every(
-    (j: Interval<T>, index: number) =>
-      index === 0 || AllenRelation.relation(j, i[index - 1], compare).implies(AllenRelation.MEETS)
-  )
-}
-
-/**
- * Turn the _set_ of intervals `i` into a {@link isSequence sequence}. This is a chain, with gaps filled up with
- * maximal interval.
- *
- * Intervals that {@link AllenRelation.CONCURS_WITH concur with} each other are replaced by distinct
- * {@link AllenRelation.MEETS meeting} intervals (the “intersections“).
- */
-export function toChain<T> (i: Interval<T>[], compareFn?: Comparator<T>): Interval<T>[] {}
-
-
-export function toChain<T> (t: <T>[], compareFn?: Comparator<T>): Interval<T>[] {}
+// export function isEnclosing<T> (i: Interval<T>[], i2: Interval<T>, compareFn?: Comparator<T>): boolean {
+//   return true
+// }
+//
+// export function isMinimalEnclosing<T> (i: Interval<T>[], i2: Interval<T>, compareFn?: Comparator<T>): boolean {
+//   return true
+// }
+//
+// /**
+//  * Determine the minimal enclosing interval for all intervals `i[j]`.
+//  *
+//  * When one or more elements of `i` have an indefinite `start`, the `result` has an indefinite `start`. Otherwise,
+//  * `result.start` is the smallest `start` of any element of `i`. When one or more elements of `i` have an indefinite
+//  * `end`, the `result` has an indefinite `end`. Otherwise, `result.end` is the largest `end` of any element of `i`.
+//  *
+//  * @return {Interval<T>} `i.every(j => result {@link ENCLOSES} j)` and IS MINIMAL // MUDO
+//  */
+// export function minimalEnclosing<T> (i: Interval<T>[], compareFn?: Comparator<T>): Interval<T> {
+//   const compare: Comparator<T> = getCompareIfOk(i, compareFn)
+//
+//   return i.reduce((acc, j) => {
+//     return {
+//       start:
+//         j.start !== undefined &&
+//         j.start !== null &&
+//         (acc.start === undefined || acc.start === null || compare(j.start, acc.start) < 0)
+//           ? j.start
+//           : acc.start,
+//       end:
+//         j.end !== undefined &&
+//         j.end !== null &&
+//         (acc.end === undefined || acc.end === null || compare(j.end, acc.end) > 0)
+//           ? j.end
+//           : acc.end
+//     }
+//   }, {})
+// }
+//
+// /**
+//  * The elements of `i` are discrete (i.e., do not {@link AllenRelation.CONCURS_WITH concur with the previous or next
+//  * element}), and are ordered from smallest `i.start` to largest `i.end`.
+//  *
+//  * There might be gaps in the chain.
+//  *
+//  * Only `i[0]` might have an indefinite `start`, and only the last element might have an indefinite `end`.
+//  */
+// export function isSequence<T> (i: Interval<T>[], compareFn?: Comparator<T>): boolean {
+//   const compare: Comparator<T> = getCompareIfOk(i, compareFn)
+//
+//   return i.every(
+//     (j: Interval<T>, index: number) =>
+//       index === 0 || AllenRelation.relation(j, i[index - 1], compare).implies(DOES_NOT_CONCUR)
+//   )
+// }
+//
+// /**
+//  * Turn the _set_ of intervals `i` into a {@link isSequence seqyence}.
+//  *
+//  * Intervals that {@link AllenRelation.CONCURS_WITH concur with} each other are replaced by distinct
+//  * {@link AllenRelation.MEETS meeting} intervals (the “intersections“).
+//  */
+// export function toSequence<T> (i: Interval<T>[], compareFn?: Comparator<T>): Interval<T>[] {}
+//
+// /**
+//  * The elements of `i` {@link AllenRelation.MEETS}, and are ordered from smallest `i.start` to largest `i.end`.
+//  *
+//  * There are no gaps in the sequence.
+//  *
+//  * Only `i[0]` might have an indefinite `start`, and only the last element might have an indefinite `end`.
+//  */
+// export function isChain<T> (i: Interval<T>[], compareFn?: Comparator<T>): boolean {
+//   const compare: Comparator<T> = getCompareIfOk(i, compareFn)
+//
+//   return i.every(
+//     (j: Interval<T>, index: number) =>
+//       index === 0 || AllenRelation.relation(j, i[index - 1], compare).implies(AllenRelation.MEETS)
+//   )
+// }
+//
+// /**
+//  * Turn the _set_ of intervals `i` into a {@link isSequence sequence}. This is a chain, with gaps filled up with
+//  * maximal interval.
+//  *
+//  * Intervals that {@link AllenRelation.CONCURS_WITH concur with} each other are replaced by distinct
+//  * {@link AllenRelation.MEETS meeting} intervals (the “intersections“).
+//  */
+// export function toChain<T> (i: Interval<T>[], compareFn?: Comparator<T>): Interval<T>[] {}
+//
+//
+// export function toChain<T> (t: <T>[], compareFn?: Comparator<T>): Interval<T>[] {}
