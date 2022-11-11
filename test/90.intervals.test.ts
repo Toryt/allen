@@ -21,22 +21,24 @@ import { ENCLOSES, isEnclosing } from '../src/intervals'
 import { AllenRelation } from '../src/AllenRelation'
 import { Interval } from '../src/Interval'
 
-const fivePoints = [-6, -4.983458, -1, 2, Math.PI]
-const fiveStrings = [
+const sixPoints = [-6, -4.983458, -1, 2, Math.PI, 23455]
+const sixStrings = [
   'a smallest i point',
   'b less small i point',
   'c medium i point',
   'd larger i point',
-  'e largest i point'
+  'e largest i point',
+  'f supper i point'
 ]
-const fiveDates = [
+const sixDates = [
   new Date(2006, 9, 3, 19, 49, 34, 848),
   new Date(2011, 9, 3, 19, 49, 34, 848),
   new Date(2015, 9, 3, 19, 49, 34, 848),
   new Date(2018, 9, 3, 19, 49, 34, 848),
-  new Date(2022, 9, 3, 19, 49, 34, 848)
+  new Date(2022, 9, 3, 19, 49, 34, 848),
+  new Date(2048, 9, 3, 19, 49, 34, 848)
 ]
-const fiveSymbols = fiveStrings.map(s => Symbol(s))
+const sixSymbols = sixStrings.map(s => Symbol(s))
 
 describe('intervals', function () {
   describe('ENCLOSES', function () {
@@ -58,8 +60,9 @@ describe('intervals', function () {
           { start: points[2], end: points[4] },
           { start: points[1], end: points[1] },
           { start: points[1], end: points[3] },
-          { start: points[2], end: points[4] },
+          { start: points[2], end: points[3] },
           { start: points[3], end: points[3] },
+          { start: points[1], end: points[3] }, // deliberate duplicate
           { start: points[1], end: points[4] }
         ]
 
@@ -76,16 +79,18 @@ describe('intervals', function () {
           callIt(itself, []).should.be.true()
         })
         it('returns true when all intervals in `is` are enclosed by `i` (with some degenerate intervals)', function () {
+          callIt({ start: points[0], end: points[5] }, aCollection).should.be.true()
+        })
           callIt({ start: points[0], end: points[4] }, aCollection).should.be.true()
         })
         it('returns true when all intervals in `is` are minimally enclosed by `i` (with some degenerate intervals)', function () {
           callIt({ start: points[1], end: points[4] }, aCollection).should.be.true()
         })
         it('returns false when some intervals in `is` are not enclosed by `i` (with some degenerate intervals)', function () {
-          callIt({ start: points[2], end: points[4] }, aCollection).should.be.false()
+          callIt({ start: points[2], end: points[5] }, aCollection).should.be.false()
         })
         it('returns false when `i` is degenerate', function () {
-          callIt({ start: points[2], end: points[2] }, aCollection).should.be.false()
+          callIt({ start: points[2], end: points[5] }, aCollection).should.be.false()
         })
         it('returns false when `i` is fully indefinite', function () {
           callIt({}, aCollection).should.be.false()
@@ -119,10 +124,10 @@ describe('intervals', function () {
       })
     }
 
-    generateTests<number>('number', fivePoints)
-    generateTests<string>('string', fiveStrings)
-    generateTests<Date>('Date', fiveDates)
-    generateTests<symbol>('symbol', fiveSymbols, (s1: Symbol, s2: Symbol): number =>
+    generateTests<number>('number', sixPoints)
+    generateTests<string>('string', sixStrings)
+    generateTests<Date>('Date', sixDates)
+    generateTests<symbol>('symbol', sixSymbols, (s1: Symbol, s2: Symbol): number =>
       s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
     )
   })
