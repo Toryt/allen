@@ -24,6 +24,7 @@ import { intervalToString } from './_intervalToString'
 import { generateRelationTests } from './_generateRelationTests'
 import { AllenRelation } from '../src/AllenRelation'
 import { ltCompare } from '../src'
+import assert from 'assert'
 
 describe('PointIntervalRelation', function () {
   generateRelationTests<PointIntervalRelation>(
@@ -202,13 +203,23 @@ describe('PointIntervalRelation', function () {
           [bci, bci, bci, PointIntervalRelation.TERMINATES, PointIntervalRelation.AFTER],
           compare
         )
-        generatePointIntervalRelationTests(
-          'degenerate interval',
-          { start: points[1], end: points[1] },
-          [points[0], points[1], points[2]],
-          [PointIntervalRelation.BEFORE, PointIntervalRelation.COMMENCES, PointIntervalRelation.AFTER],
-          compare
-        )
+        const t: T = points[0]
+        const i: Interval<T> = { start: points[1], end: points[1] }
+        describe(`degenerate interval ${intervalToString(i)}`, function () {
+          it('balks with a degenerate interval', function () {
+            if (compare !== undefined && compare !== null) {
+              // TS keeps us from using bind in this case for some reason
+              try {
+                PointIntervalRelation.relation(t, i, compare)
+                assert(false)
+              } catch (_) {
+                // ok
+              }
+            } else {
+              PointIntervalRelation.relation.bind(PointIntervalRelation, t, i).should.throw()
+            }
+          })
+        })
       })
     }
 
