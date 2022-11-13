@@ -40,7 +40,7 @@ We find that there are 5 _basic relations_ possible between a point and a defini
 
   ![in](PointIntervalRelation-in.png)
 
-- `t` `TERMINATES`I`(`t`)
+- `t` `TERMINATES` `I` (`t`)
 
   ![ends](PointIntervalRelation-terminates.png)
 
@@ -117,8 +117,8 @@ In our example, this would become
 
 ```ts
 ...
-Date t = ...;
-TimeInterval<Date> i = ...;
+const t: Date = ...;
+const i: TimeInterval<Date> = ...;
 if (!relation(t, i).implies(or(BEFORE, COMMENCES)) {
   throw new ....
 }
