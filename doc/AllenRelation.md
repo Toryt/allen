@@ -90,11 +90,11 @@ When reasoning about the relationship between intervals however, like when compa
 _indeterminate_ relations, such as `I1 (pm) I2` (`I1` `PRECEDES` `I2`, or `MEETS` `I2`). This is comparable to reasoning
 with `≤`, `≥`, and `≠` with points.
 
-For intervals, given 13 basic relations, we get 8192 (= 2<sup>13</sup>) possible _general relations_. This includes the
-`FULL` relation (comparable to `< ⋁ = ⋁ >` with points), which expresses the maximum uncertainty about the relation
-between two intervals. `FULL` means you are from Barcelona. The `EMPTY` relation is not a true relation. It does not
-express a relational condition between two intervals. It is needed for consistency with some algebraic operations on
-relations.
+For intervals, given 13 basic relations, we get 8192 (= 2<sup>13</sup>) possible _general relations_. The 13 basic
+relations are an _orthogonal basis_ for all possible general relations. This includes the `FULL` relation (comparable to
+`< ⋁ = ⋁ >` with points), which expresses the maximum uncertainty about the relation between two intervals. `FULL` means
+you are from Barcelona. The `EMPTY` relation is not a true relation. It does not express a relational condition between
+two intervals. It is needed for consistency with some algebraic operations on relations.
 
 ## Interval constraints
 
