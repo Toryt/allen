@@ -148,13 +148,13 @@ describe('interval', function () {
     typeRepresentations.forEach(targetPointType => {
       describe(`pointType ${inspect(targetPointType)}`, function () {
         trueCases.forEach(({ label, pointType, p1, p2, compareFn }) => {
-          const expectedLabel = representsSuperType(targetPointType, pointType) ? 'true' : 'false'
-          describe(`${label} ${expectedLabel === 'true' ? '>' : '≯'} ${inspect(targetPointType)}`, function () {
-            if (compareFn === undefined || expectedLabel === 'false') {
-              it(`returns ${expectedLabel} for [${inspect(p1)}, ${inspect(p2)}[ for point type ${inspect(
+          const isSubtypeOfTarget = representsSuperType(targetPointType, pointType) ? 'true' : 'false'
+          describe(`${label} ${isSubtypeOfTarget === 'true' ? '>' : '≯'} ${inspect(targetPointType)}`, function () {
+            if (compareFn === undefined || isSubtypeOfTarget === 'false') {
+              it(`returns ${isSubtypeOfTarget} for [${inspect(p1)}, ${inspect(p2)}[ for point type ${inspect(
                 targetPointType
               )}`, function () {
-                isInterval({ start: p1, end: p2 }, targetPointType).should.be[expectedLabel]()
+                isInterval({ start: p1, end: p2 }, targetPointType).should.be[isSubtypeOfTarget]()
               })
               if (typeof p1 !== 'object' || p1 instanceof Date || Array.isArray(p1) || Array.isArray(p2)) {
                 it(`returns false for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
@@ -162,31 +162,31 @@ describe('interval', function () {
                 )}`, function () {
                   isInterval({ start: p2, end: p1 }, targetPointType).should.be.false()
                 })
-                it(`returns ${expectedLabel} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
+                it(`returns ${isSubtypeOfTarget} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
                   targetPointType
                 )} with a reverse comparator`, function () {
-                  isInterval({ start: p2, end: p1 }, targetPointType, reverseCompareFn).should.be[expectedLabel]()
+                  isInterval({ start: p2, end: p1 }, targetPointType, reverseCompareFn).should.be[isSubtypeOfTarget]()
                 })
               } else {
-                it(`returns ${expectedLabel} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
+                it(`returns ${isSubtypeOfTarget} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
                   targetPointType
                 )}`, function () {
-                  isInterval({ start: p2, end: p1 }, targetPointType).should.be[expectedLabel]()
+                  isInterval({ start: p2, end: p1 }, targetPointType).should.be[isSubtypeOfTarget]()
                 })
-                it(`returns ${expectedLabel} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
+                it(`returns ${isSubtypeOfTarget} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
                   targetPointType
                 )} with a reverse comparator`, function () {
-                  isInterval({ start: p2, end: p1 }, targetPointType, reverseCompareFn).should.be[expectedLabel]()
+                  isInterval({ start: p2, end: p1 }, targetPointType, reverseCompareFn).should.be[isSubtypeOfTarget]()
                 })
               }
             } else {
               it(`[${inspect(p1)}, ${inspect(p2)}[ throws`, function () {
                 isInterval.bind(undefined, { start: p1, end: p2 }, targetPointType).should.throw()
               })
-              it(`returns ${expectedLabel} for [${inspect(p1)}, ${inspect(p2)}[ for point type ${inspect(
+              it(`returns ${isSubtypeOfTarget} for [${inspect(p1)}, ${inspect(p2)}[ for point type ${inspect(
                 targetPointType
               )} with compareFn`, function () {
-                isInterval({ start: p1, end: p2 }, targetPointType, compareFn).should.be[expectedLabel]()
+                isInterval({ start: p1, end: p2 }, targetPointType, compareFn).should.be[isSubtypeOfTarget]()
               })
               it(`returns false for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
                 targetPointType
@@ -196,17 +196,17 @@ describe('interval', function () {
             }
             indefinites.forEach(indef => {
               if (!represents(targetPointType, p1)) {
-                it(`returns ${expectedLabel} for [${inspect(p1)}, ${inspect(indef)}[ for point type ${inspect(
+                it(`returns ${isSubtypeOfTarget} for [${inspect(p1)}, ${inspect(indef)}[ for point type ${inspect(
                   targetPointType
                 )}`, function () {
-                  isInterval({ start: p1, end: indef }, targetPointType).should.be[expectedLabel]()
+                  isInterval({ start: p1, end: indef }, targetPointType).should.be[isSubtypeOfTarget]()
                 })
               }
               if (!represents(targetPointType, p2)) {
-                it(`returns ${expectedLabel} for [${inspect(indef)}, ${inspect(p2)}[ for point type ${inspect(
+                it(`returns ${isSubtypeOfTarget} for [${inspect(indef)}, ${inspect(p2)}[ for point type ${inspect(
                   targetPointType
                 )}`, function () {
-                  isInterval({ start: indef, end: p2 }, targetPointType).should.be[expectedLabel]()
+                  isInterval({ start: indef, end: p2 }, targetPointType).should.be[isSubtypeOfTarget]()
                 })
               }
             })
