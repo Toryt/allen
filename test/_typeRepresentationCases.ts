@@ -53,7 +53,7 @@ export const idiotTypeRepresentations = [
   false,
   Symbol('not a point type representation'),
   {},
-  new A(),
+  new A(9),
   [],
   [1, 2, 3],
   notAConstructor1,

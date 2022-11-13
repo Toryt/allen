@@ -60,7 +60,7 @@ export const objectCases = [
   [1, {}],
   Math,
   JSON,
-  new A(),
+  new A(17),
   new B(),
   new C(),
   function () {

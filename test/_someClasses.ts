@@ -17,8 +17,8 @@
 export class A {
   public a: number
 
-  constructor () {
-    this.a = 4
+  constructor (a: number) {
+    this.a = a
   }
 }
 
@@ -26,7 +26,7 @@ export class B extends A {
   public b: string
 
   constructor () {
-    super()
+    super(444)
     this.b = 'a string'
   }
 }

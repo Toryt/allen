@@ -61,18 +61,18 @@ const trueCases: Array<TrueCase<unknown>> = [
   { label: 'String', elements: [String('a'), String('b')], expected: 'string' },
   { label: 'Boolean', elements: [Boolean(false), undefined, Boolean(true)], expected: 'boolean' },
   { label: 'object', elements: [{ a: 'a one' }, { b: 'a two' }, null], expected: Object },
-  { label: 'A', elements: [new A(), new A(), undefined], expected: A },
+  { label: 'A', elements: [new A(4), new A(12), undefined], expected: A },
   {
     label: 'polymorph',
-    elements: [null, null, null, undefined, new A(), new A(), new B(), new B()],
+    elements: [null, null, null, undefined, new A(5), new A(3), new B(), new B()],
     expected: A
   },
   {
     label: 'polymorph in reverse order',
-    elements: [null, null, null, undefined, new B(), new A(), new A(), new B()],
+    elements: [null, null, null, undefined, new B(), new A(-5), new A(777), new B()],
     expected: A
   },
-  { label: 'mixed objects', elements: [undefined, new A(), new B(), new C()], expected: Object },
+  { label: 'mixed objects', elements: [undefined, new A(44), new B(), new C()], expected: Object },
   {
     label: 'object and array',
     elements: [{ a: ' a thing' }, [3]],

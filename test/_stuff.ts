@@ -38,7 +38,7 @@ export const stuff: unknown[] = [
   Function,
   Object,
   A,
-  new A(),
+  new A(7),
   B,
   new B(),
   C,
