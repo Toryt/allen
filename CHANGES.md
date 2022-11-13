@@ -2,6 +2,21 @@
 
 ## 0
 
+### 0.2
+
+#### 0.2.0
+
+- intervals can no longer be degenerate
+
+Found out that degenerate intervals make no sense. With half-open intervals, they are the empty set. When intervals are
+interpreted as closed, degenerate intervals represent 1 point. we get nonsensical results, or difficult caveats, when
+considering relations with the empty set or a single point. Depending on the definition of the basic relations (as
+minimal definitions comparing the `start` and `end` points, or as sets of points), we get different results, which is
+confusing. Some relations are the EMPTY relation, and others are not, depending on whether intervals are considered
+closed or half-open.
+
+Degenerate intervals in any interpretation should be barred from the domain representation.
+
 ### 0.1
 
 #### 0.1.1
