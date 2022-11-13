@@ -16,6 +16,7 @@
 
 /* eslint-env mocha */
 
+/* eslint-env mocha */
 import 'should'
 import { inspect } from 'util'
 import { stuff, stuffWithUndefined } from './_stuff'
@@ -33,10 +34,7 @@ interface Case<T extends TypeRepresentation> {
   p1: TypeFor<T>
   p2: TypeFor<T>
   compareFn?: Comparator<TypeFor<T>>
-}
-
-function reverseCompareFn<T> (t1: T, t2: T): number {
-  return -1 * ltCompare(t1, t2)
+  compareFnOptional?: boolean
 }
 
 const indefinites = [undefined, null]
@@ -50,7 +48,8 @@ const trueCases: Array<Case<TypeRepresentation>> = [
     p2: NaN,
     compareFn: (t1: number, t2: number): number =>
       // NaN is largest
-      Number.isNaN(t1) ? (Number.isNaN(t2) ? 0 : +1) : Number.isNaN(t2) ? -1 : ltCompare(t1, t2)
+      Number.isNaN(t1) ? (Number.isNaN(t2) ? 0 : +1) : Number.isNaN(t2) ? -1 : ltCompare(t1, t2),
+    compareFnOptional: false
   },
   {
     label: 'bigint',
@@ -70,11 +69,46 @@ const trueCases: Array<Case<TypeRepresentation>> = [
   { label: 'BigInt', pointType: 'bigint', p1: BigInt(-432), p2: BigInt(8975322352525252662626662677222727n) },
   { label: 'String', pointType: 'string', p1: String('a'), p2: String('b') },
   { label: 'Boolean', pointType: 'boolean', p1: Boolean(false), p2: Boolean(true) },
-  { label: 'object', pointType: Object, p1: { a: 'a one' }, p2: { b: 'a two' } },
-  { label: 'A', pointType: A, p1: new A(), p2: new A() },
-  { label: 'polymorph', pointType: A, p1: new A(), p2: new B() },
-  { label: 'polymorph in reverse order', pointType: A, p1: new B(), p2: new A() },
-  { label: 'mixed objects', pointType: Object, p1: new B(), p2: new C() },
+  {
+    label: 'object',
+    pointType: Object,
+    p1: { a: 'a one' },
+    p2: { b: 'a two' },
+    compareFn: (t1: object, t2: object): number => ('a' in t1 ? ('b' in t2 ? -1 : 0) : +1),
+    compareFnOptional: true
+  },
+  {
+    label: 'A',
+    pointType: A,
+    p1: new A(1),
+    p2: new A(2),
+    compareFn: (t1: A, t2: A): number => (t1.a < t2.a ? -1 : t2.a < t1.a ? +1 : 0),
+    compareFnOptional: true
+  },
+  {
+    label: 'polymorph',
+    pointType: A,
+    p1: new A(1),
+    p2: new B(),
+    compareFn: (t1: A, t2: A): number => (t1.a < t2.a ? -1 : t2.a < t1.a ? +1 : 0),
+    compareFnOptional: true
+  },
+  {
+    label: 'polymorph in reverse order',
+    pointType: A,
+    p1: new B(),
+    p2: new A(777),
+    compareFn: (t1: A, t2: A): number => (t1.a < t2.a ? -1 : t2.a < t1.a ? +1 : 0),
+    compareFnOptional: true
+  },
+  {
+    label: 'mixed objects',
+    pointType: Object,
+    p1: new B(),
+    p2: new C(),
+    compareFn: (t1: A, t2: A): number => (t1.constructor === t2.constructor ? 0 : t1 instanceof B ? -1 : +1),
+    compareFnOptional: true
+  },
   {
     label: 'array and object',
     pointType: Object,
@@ -140,95 +174,93 @@ describe('interval', function () {
       })
     })
 
-    function represents (typeRepresentation: TypeRepresentation, u: unknown): boolean {
-      const tru = typeRepresentationOf(u)
-      return tru === undefined || tru === null || representsSuperType(typeRepresentation, tru)
-    }
-
     typeRepresentations.forEach(targetPointType => {
       describe(`pointType ${inspect(targetPointType)}`, function () {
-        trueCases.forEach(({ label, pointType, p1, p2, compareFn }) => {
+        trueCases.forEach(({ label, pointType, p1, p2, compareFn, compareFnOptional }) => {
+          function reverse<TR extends TypeRepresentation> (comp: Comparator<TypeFor<TR>>) {
+            return function <T extends TypeFor<TR>> (t1: T, t2: T): number {
+              return -1 * comp(t1, t2)
+            }
+          }
+
+          function callIt (i: unknown, reverseCompare?: boolean): boolean {
+            return reverseCompare
+              ? compareFn
+                ? isInterval(i, targetPointType, reverse(compareFn))
+                : isInterval(i, targetPointType, reverse(ltCompare))
+              : compareFn
+              ? isInterval(i, targetPointType, compareFn)
+              : isInterval(i, targetPointType, ltCompare)
+          }
+
           const isSubtypeOfTarget = representsSuperType(targetPointType, pointType) ? 'true' : 'false'
           describe(`${label} ${isSubtypeOfTarget === 'true' ? '>' : '≯'} ${inspect(targetPointType)}`, function () {
-            if (compareFn === undefined || isSubtypeOfTarget === 'false') {
-              it(`returns ${isSubtypeOfTarget} for [${inspect(p1)}, ${inspect(p2)}[ for point type ${inspect(
-                targetPointType
-              )}`, function () {
-                isInterval({ start: p1, end: p2 }, targetPointType).should.be[isSubtypeOfTarget]()
+            describe(`nominal ${compareFn ? 'with' : 'without'} compareFn`, function () {
+              it(`returns ${isSubtypeOfTarget} for [${inspect(p1)}, ${inspect(p2)}[`, function () {
+                callIt({ start: p1, end: p2 }).should.be[isSubtypeOfTarget]()
               })
-              if (typeof p1 !== 'object' || p1 instanceof Date || Array.isArray(p1) || Array.isArray(p2)) {
-                it(`returns false for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
-                  targetPointType
-                )}`, function () {
-                  isInterval({ start: p2, end: p1 }, targetPointType).should.be.false()
-                })
-                it(`returns ${isSubtypeOfTarget} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
-                  targetPointType
-                )} with a reverse comparator`, function () {
-                  isInterval({ start: p2, end: p1 }, targetPointType, reverseCompareFn).should.be[isSubtypeOfTarget]()
-                })
-              } else {
-                it(`returns ${isSubtypeOfTarget} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
-                  targetPointType
-                )}`, function () {
-                  isInterval({ start: p2, end: p1 }, targetPointType).should.be[isSubtypeOfTarget]()
-                })
-                it(`returns ${isSubtypeOfTarget} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
-                  targetPointType
-                )} with a reverse comparator`, function () {
-                  isInterval({ start: p2, end: p1 }, targetPointType, reverseCompareFn).should.be[isSubtypeOfTarget]()
+              it(`returns false for [${inspect(p2)}, ${inspect(p1)}[ (end < start)`, function () {
+                callIt({ start: p2, end: p1 }).should.be.false()
+              })
+              it(`returns ${isSubtypeOfTarget} for [${inspect(p2)}, ${inspect(
+                p1
+              )}[ (end < start) with a reverse comparator`, function () {
+                callIt({ start: p2, end: p1 }, true).should.be[isSubtypeOfTarget]()
+              })
+              it(`returns false for [${inspect(p1)}, ${inspect(p1)}[ (degenerate)`, function () {
+                callIt({ start: p1, end: p1 }).should.be.false()
+              })
+              it(`returns false for [${inspect(p1)}, ${inspect(
+                p1
+              )}[ (degenerate) with a reverse comparator`, function () {
+                callIt({ start: p1, end: p1 }, true).should.be.false()
+              })
+            })
+            describe('throws', function () {
+              if (isSubtypeOfTarget === 'true' && compareFn && !compareFnOptional) {
+                it(`[${inspect(p1)}, ${inspect(p2)}[ throws without comparator`, function () {
+                  isInterval.bind(undefined, { start: p1, end: p2 }, targetPointType).should.throw()
                 })
               }
-            } else {
-              it(`[${inspect(p1)}, ${inspect(p2)}[ throws`, function () {
-                isInterval.bind(undefined, { start: p1, end: p2 }, targetPointType).should.throw()
-              })
-              it(`returns ${isSubtypeOfTarget} for [${inspect(p1)}, ${inspect(p2)}[ for point type ${inspect(
-                targetPointType
-              )} with compareFn`, function () {
-                isInterval({ start: p1, end: p2 }, targetPointType, compareFn).should.be[isSubtypeOfTarget]()
-              })
-              it(`returns false for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
-                targetPointType
-              )} with compareFn`, function () {
-                isInterval({ start: p2, end: p1 }, targetPointType, compareFn).should.be.false()
-              })
-            }
-            indefinites.forEach(indef => {
-              if (!represents(targetPointType, p1)) {
-                it(`returns ${isSubtypeOfTarget} for [${inspect(p1)}, ${inspect(indef)}[ for point type ${inspect(
-                  targetPointType
-                )}`, function () {
-                  isInterval({ start: p1, end: indef }, targetPointType).should.be[isSubtypeOfTarget]()
+            })
+            describe('indefinite', function () {
+              indefinites.forEach(indef => {
+                const p1IsSubtypeOfTarget = representsSuperType(targetPointType, typeRepresentationOf(p1)!)
+                  ? 'true'
+                  : 'false'
+                it(`returns ${p1IsSubtypeOfTarget} for [${inspect(p1)}, ${inspect(indef)}[`, function () {
+                  callIt({ start: p1, end: indef }).should.be[p1IsSubtypeOfTarget]()
                 })
-              }
-              if (!represents(targetPointType, p2)) {
-                it(`returns ${isSubtypeOfTarget} for [${inspect(indef)}, ${inspect(p2)}[ for point type ${inspect(
-                  targetPointType
-                )}`, function () {
-                  isInterval({ start: indef, end: p2 }, targetPointType).should.be[isSubtypeOfTarget]()
+                const p2IsSubtypeOfTarget = representsSuperType(targetPointType, typeRepresentationOf(p2)!)
+                  ? 'true'
+                  : 'false'
+                it(`returns ${p2IsSubtypeOfTarget} for [${inspect(indef)}, ${inspect(p2)}[`, function () {
+                  callIt({ start: indef, end: p2 }).should.be[p2IsSubtypeOfTarget]()
                 })
-              }
+              })
             })
 
-            const wrongStuff = stuff.filter(s => {
-              const trs = typeRepresentationOf(s)
-              return trs !== undefined && !representsSuperType(targetPointType, trs)
-            })
-            wrongStuff.forEach(s => {
-              it(`returns false for [${inspect(p1)}, ${inspect(s)}[ for point type ${inspect(
-                targetPointType
-              )}`, function () {
-                isInterval({ start: p1, end: s }, targetPointType).should.be.false()
+            describe('other types', function () {
+              const wrongStuff = stuff.filter(s => {
+                const trs = typeRepresentationOf(s)
+                return trs !== undefined && !representsSuperType(targetPointType, trs)
               })
-              it(`returns false for [${inspect(s)}, ${inspect(p2)}[ for point type ${inspect(
-                targetPointType
-              )}`, function () {
-                isInterval({ start: s, end: p2 }, targetPointType).should.be.false()
+              wrongStuff.forEach(s => {
+                it(`returns false for [${inspect(p1)}, ${inspect(s)}[`, function () {
+                  callIt({ start: p1, end: s }).should.be.false()
+                })
+                it(`returns false for [${inspect(s)}, ${inspect(p2)}[`, function () {
+                  callIt({ start: s, end: p2 }).should.be.false()
+                })
               })
             })
           })
         })
+      })
+    })
+    describe('object without compareFn', function () {
+      it('returns false because the interval is degenerate (all objects are the same)', function () {
+        isInterval({ start: {}, end: new A(27) }, Object).should.be.false()
       })
     })
   })
