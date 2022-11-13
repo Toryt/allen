@@ -149,7 +149,7 @@ describe('interval', function () {
       describe(`pointType ${inspect(targetPointType)}`, function () {
         trueCases.forEach(({ label, pointType, p1, p2, compareFn }) => {
           const expectedLabel = representsSuperType(targetPointType, pointType) ? 'true' : 'false'
-          describe(`${label} -> ${expectedLabel}`, function () {
+          describe(`${label} ${expectedLabel === 'true' ? '>' : '≯'} ${inspect(targetPointType)}`, function () {
             if (compareFn === undefined || expectedLabel === 'false') {
               it(`returns ${expectedLabel} for [${inspect(p1)}, ${inspect(p2)}[ for point type ${inspect(
                 targetPointType
