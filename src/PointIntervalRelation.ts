@@ -130,15 +130,12 @@ export class PointIntervalRelation extends Relation {
    * `I`:
    *
    * ```
-   * t ≠ undefined ⇒ (I.end ≠ undefined ∧ t = I.end ∧ I.start ≠ I.end)
+   * t ≠ undefined ⇒ (I.end ≠ undefined ∧ t = I.end)
    * ```
    *
    * ![ends](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-terminates.png)
    *
    * The short representation of this point – interval relation is `t`.
-   *
-   * This definition explicitly excludes a degenerate interval. When `t = I.start = I.end` {@link COMMENCES} is
-   * returned.
    */
   public static readonly TERMINATES: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[3]
   // Bit pattern: 8 = '01000'
@@ -375,7 +372,7 @@ export class PointIntervalRelation extends Relation {
     const cType = commonTypeRepresentation(t, i.start, i.end)
 
     assert(cType !== false, haveCommonType)
-    assert(cType === undefined || isInterval(i, cType, compareFn))
+    assert(cType === undefined || isInterval(i, cType, compareFn), '`i` must be a valid Interval')
 
     if (t === undefined || t === null) {
       return PointIntervalRelation.fullRelation<PointIntervalRelation>()

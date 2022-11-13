@@ -134,10 +134,7 @@ describe('PointIntervalRelation', function () {
           PointIntervalRelation.IN,
           (t: T, i: Interval<T>) => !isDefinite(t) || (compare(t, '>', i.start) && compare(t, '<', i.end))
         ],
-        [
-          PointIntervalRelation.TERMINATES,
-          (t: T, i: Interval<T>) => !isDefinite(t) || (compare(t, '=', i.end) && i.start !== i.end)
-        ],
+        [PointIntervalRelation.TERMINATES, (t: T, i: Interval<T>) => !isDefinite(t) || compare(t, '=', i.end)],
         [PointIntervalRelation.AFTER, (t: T, i: Interval<T>) => !isDefinite(t) || compare(t, '>', i.end)]
       ]
 
