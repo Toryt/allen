@@ -27,33 +27,39 @@ leave `null` well alone.
 If both `start` and `end` are definite,
 
 - both must be “of the same type”, and
-- `start` must come before, or be equal to, `end`, using the comparator given (`compareFn<T>`) or the default
+- `start` must come before `end`, using the comparator given (`compareFn<T>`) or the default
   `ltCompare<T> (t1: T, t2: T): number`:
 
 ```
-∀ i ∈ Interval<T>: ¬ (i.end ⨀ i.start)
+∀ i ∈ Interval<T>: i.start ⨀ i.end
 ```
 
-When `start` equals `end`, the interval is _degenerate_.
+`start` and `end` cannot be equal. This would represent a degenerate interval, which has no meaning. When interpreting
+the interval as half-open, a degenerate interval represents the empty set. Any relation with the empty set is
+meaningless in the context of this library. When interpreting the interval as closed, a degenerate interval represents
+one point. To compare points with each other, see [_Points and comparison_](Points.md). To compare points with
+intervals, use `PointIntervalRelation`.
 
-## Right half open (`[start, end[`)
+## Right half-open (`[start, end[`)
 
-We highly advise to _interpret_ intervals _in all cases_ to be _right half open_. E.g., when considering the time
-interval during which a contract is applicable, the contract is applicable in `[I.start, I.end[`. Whatever the precision
-of the point type `T` you use (JavaScript `Date`, UTC ISO strings with μs precision, an integer expressing, ms since
-epoch, or an ISO string expressing vague day dates, …), this should mean that the contract is applicable on `I.start`,
-and not earlier, and that the first moment the contract is no longer applicable is `I.end`.
+We highly advise to _interpret_ intervals _in all cases_ to be _right half-open_.
 
-The main reasons for this are fundamental, and practical. Fundamentally, when the points express time, due to the
-maximum speed of information _c_, the information you use about the universe outside your present location is always
-about the past. You reason about the state of the outside universe in the past, the present not included. Practically,
-some other computer process could be registering the end of the interval in question _now_, and you would not be aware
-of that yet (in distributed systems, or with transactional serialized systems).
+E.g., when considering the time interval during which a contract is applicable, the contract is applicable in
+`[I.start, I.end[`. Whatever the precision of the point type `T` you use (JavaScript `Date`, UTC ISO strings with μs
+precision, an integer expressing, ms since epoch, or an ISO string expressing vague day dates, …), this should mean that
+the contract is applicable on `I.start`, and not earlier, and that the first moment the contract is no longer applicable
+is `I.end`. The main reasons for this are fundamental, and practical.
+
+Fundamentally, when the points express time, due to the maximum speed of information _c_, the information you use about
+the universe outside your present location is always about the past. You reason about the state of the outside universe
+in the past, the present not included. Practically, some other computer process could be registering the end of the
+interval in question _now_, and you would not be aware of that yet (in distributed systems, or with transactional
+serialized systems).
 
 Furthermore, the `start` and `end` “points” are never realy points. Due to Heisenberg's uncertainty principle, we know
 that we fundamentally cannot be more precise, e.g., for time, than the
 [Planck duration](https://en.wikipedia.org/wiki/Planck_units#Planck_time) (~ 5.39.10<sup>−44</sup> s). In practice, any
-measurement, any clock, has a limited precision. The “points” we are using are actually also intervals! E.g., given an
+measurement, any clock, has a limited precision. The “points” we are using are actually also intervals. E.g., given an
 interval with ms precision
 
 ```ts
@@ -71,7 +77,7 @@ relation(i.start, i) = (s)
 relation(i.end, i) = (M)
 ```
 
-When using right half open intervals always, this reasoning is consistent.
+When using right half-open intervals always, this reasoning is consistent.
 
 Whether the contract is applicable at `t` is answered by:
 
@@ -143,6 +149,3 @@ const couldBeNotApplicable: boolean = !compose(
 |     |          | `t` |       |     | `i`    | `i`               | yes          | yes                 | no              | no                     |
 |     |          |     | `t`   |     | `t`    | `ita`             | no           | yes                 | no              | yes                    |
 |     |          |     |       | `t` | `a`    | `ita`             | no           | yes                 | no              | yes                    |
-
-With right half open intervals, a _degenerate_ interval has no duration, is empty, nothing. _It is not even the point
-used to describe it._ This also simplifies a lot of things.
