@@ -176,7 +176,7 @@ describe('interval', function () {
                 it(`returns ${expectedLabel} for [${inspect(p2)}, ${inspect(p1)}[ for point type ${inspect(
                   targetPointType
                 )} with a reverse comparator`, function () {
-                  isInterval({ start: p2, end: p1, reverseCompareFn }, targetPointType).should.be[expectedLabel]()
+                  isInterval({ start: p2, end: p1 }, targetPointType, reverseCompareFn).should.be[expectedLabel]()
                 })
               }
             } else {
