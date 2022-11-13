@@ -201,9 +201,44 @@ When using TypeScript, the library user can limit the “common type” more usi
 `undefined` and `null` represent _don't know 🤷_. We advise to use `undefined`, or not to have a `start` or `end`
 property present in an interval to express this, and leave `null` well alone.
 
-## Advise on points and comparison
+## Advise on points-in-time and comparison
 
 We advise to use `number`s (except `NaN`), `string`s (ISO-formatted), or `Date`s to represent points.
 
 If you must use non-`Date` `object`s, arrays, or `function`s as representations of points, consider overriding
 `valueOf`, or make the comparison explicit with the optional `compareFn` parameter.
+
+`strings` are a good way to represent points-in-time when you are only interested in equality or order, and are
+definitely a helpful representation in serialized representations, e.g., JSON. Other types are better when you need to
+be able to calculate with durations (e.g., ”2 days after `t`“). When you use strings to represent points-in-time, it is
+a good idea to apply [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601).
+
+“Exact” points-in-time should be represented as UTC: `'2022-11-13T10:08:11.854Z'`. It is important to agree on the
+precision, and to explicitly include trailing zeros in the mantisse. A string representation then has a fixed with.
+E.g., when we agree that a point in time is expressed to ms (10<sup>-3</sup> s) precision, it should be represented as
+`'2022-11-13T10:08:11.800Z'`, and when we choose to work to μs (10<sup>-6</sup> s) precision, as
+`'2022-11-13T10:08:11.800000Z'`. Note that, at the time of writing, μs is the most precise precision that can be used in
+PostgreSQL with the native time formats. The clock in Windows uses
+[ticks](https://learn.microsoft.com/en-us/dotnet/api/system.datetime.ticks?view=net-7.0) as the most precise unit. A
+_tick_ represents 100 ns, or 0.1 μs (10<sup>-7</sup> s). In most cases, we suggest you use μs (10<sup>-6</sup> s)
+precision.
+
+When the domain demands working with day dates, months, or years, it is best to represent the concept directly, and to
+not convert it to an exact representation. Given timezones, the interpretation of a date, month, or year, depends on the
+semantics and the timezone of evaluation. While humas gloss over this, computers cannot without extra work. A year
+should be represented as `2022`, a month as `2022-11`, and a day date as `2022-11-13`. Whether
+`'2022-11-13T10:08:11.854884Z'` is in `2022-11-13` depends on the time zone of the evaluation. How to interpret this
+cannot be defined in general, and should be left to the place where the evaluation is made. Representing `2022-11-13`
+as, e.g., `'2022-11-13T00:00:00.000000'` in a native format does not do away with this, but additionally creates
+confusion and conversion needs, i.e., accidental complexity.
+
+When points represent points-in-time, `numbers` can be used, e.g., as expressing _ms since epoch_, which is standard in
+JavaScript, or _s since epoch_ (aka _Unix time_).
+
+Time-related libraries (e.g., [date-fns](https://www.npmjs.com/package/date-fns),
+[luxon](https://www.npmjs.com/package/luxon), [@js-joda/core](https://www.npmjs.com/package/@js-joda/core),
+[moment](https://momentjs.com/), …) are of interest when formatting or parsing points-in-time. This is only relevant
+when interacting with humans, and should be done locally. They also support calculating with points-in-time and
+duration. When that is needed in your code, it might be interesting to represent points-in-time as native `Date`
+objects, or data structures offered by the library. All these libaries can handle
+[ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) representations.
