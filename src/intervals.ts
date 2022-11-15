@@ -28,7 +28,7 @@ export const ENCLOSES: AllenRelation = AllenRelation.fromString<AllenRelation>('
 // export const DOES_NOT_CONCUR = AllenRelation.CONCURS_WITH.complement()
 
 /**
- * Does `i` {@link ENCLOSES enclose} all intervals in `is`?
+ * Does `i` enclose all intervals in `is`?
  *
  * When any interval is fully or partially indefinite, this cannot be guaranteed, and `false` is returned.
  */
