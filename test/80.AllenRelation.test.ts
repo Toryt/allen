@@ -404,35 +404,23 @@ describe('AllenRelation', function () {
 
       const basicRelationDefinition: Array<[br: AllenRelation, definition: BasicRelationDefinition]> = [
         [AllenRelation.PRECEDES, (i1, i2) => compare(i1.end, '<', i2.start)],
-        [AllenRelation.MEETS, (i1, i2) => compare(i1.end, '=', i2.start) && compare(i1.start, '<', i2.end, true)],
+        [AllenRelation.MEETS, (i1, i2) => compare(i1.end, '=', i2.start)],
         [
           AllenRelation.OVERLAPS,
           (i1, i2) => compare(i1.start, '<', i2.start) && compare(i2.start, '<', i1.end) && compare(i1.end, '<', i2.end)
         ],
-        [
-          AllenRelation.FINISHED_BY,
-          (i1, i2) => compare(i1.start, '<', i2.start) && compare(i1.end, '=', i2.end) && compare(i2.start, '<', i1.end)
-        ],
+        [AllenRelation.FINISHED_BY, (i1, i2) => compare(i1.start, '<', i2.start) && compare(i1.end, '=', i2.end)],
         [AllenRelation.CONTAINS, (i1, i2) => compare(i1.start, '<', i2.start) && compare(i2.end, '<', i1.end)],
-        [
-          AllenRelation.STARTS,
-          (i1, i2) => compare(i1.start, '=', i2.start) && compare(i1.end, '<', i2.end) && compare(i1.start, '<', i1.end)
-        ],
+        [AllenRelation.STARTS, (i1, i2) => compare(i1.start, '=', i2.start) && compare(i1.end, '<', i2.end)],
         [AllenRelation.EQUALS, (i1, i2) => compare(i1.start, '=', i2.start) && compare(i1.end, '=', i2.end)],
-        [
-          AllenRelation.STARTED_BY,
-          (i1, i2) => compare(i1.start, '=', i2.start) && compare(i2.end, '<', i1.end) && compare(i2.start, '<', i2.end)
-        ],
+        [AllenRelation.STARTED_BY, (i1, i2) => compare(i1.start, '=', i2.start) && compare(i2.end, '<', i1.end)],
         [AllenRelation.DURING, (i1, i2) => compare(i2.start, '<', i1.start) && compare(i1.end, '<', i2.end)],
-        [
-          AllenRelation.FINISHES,
-          (i1, i2) => compare(i2.start, '<', i1.start) && compare(i1.end, '=', i2.end) && compare(i1.start, '<', i2.end)
-        ],
+        [AllenRelation.FINISHES, (i1, i2) => compare(i2.start, '<', i1.start) && compare(i1.end, '=', i2.end)],
         [
           AllenRelation.OVERLAPPED_BY,
           (i1, i2) => compare(i2.start, '<', i1.start) && compare(i1.start, '<', i2.end) && compare(i2.end, '<', i1.end)
         ],
-        [AllenRelation.MET_BY, (i1, i2) => compare(i1.start, '=', i2.end) && compare(i2.start, '<', i1.end, true)],
+        [AllenRelation.MET_BY, (i1, i2) => compare(i1.start, '=', i2.end)],
         [AllenRelation.PRECEDED_BY, (i1, i2) => compare(i2.end, '<', i1.start)]
       ]
 
