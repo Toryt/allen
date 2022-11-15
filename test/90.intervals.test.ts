@@ -58,11 +58,8 @@ describe('intervals', function () {
       describe(label, function () {
         const aCollection = [
           { start: points[2], end: points[4] },
-          { start: points[1], end: points[1] },
           { start: points[1], end: points[3] },
           { start: points[2], end: points[3] },
-          { start: points[3], end: points[3] },
-          { start: points[4], end: points[4] },
           { start: points[1], end: points[3] }, // deliberate duplicate
           { start: points[1], end: points[4] }
         ]
@@ -71,40 +68,33 @@ describe('intervals', function () {
           const itself = { start: points[0], end: points[1] }
           callIt(itself, [itself]).should.be.true()
         })
-        it('itself encloses itself as singleton when it is degenerate', function () {
-          const itself = { start: points[0], end: points[0] }
-          callIt(itself, [itself]).should.be.true()
-        })
         it('returns true for the empty set of `is`', function () {
           const itself = { start: points[0], end: points[1] }
           callIt(itself, []).should.be.true()
         })
-        it('returns true when all intervals in `is` are enclosed by `i` (with some degenerate intervals)', function () {
+        it('returns true when all intervals in `is` are enclosed by `i`', function () {
           callIt({ start: points[0], end: points[5] }, aCollection).should.be.true()
         })
-        it('returns true when all intervals in `is` are right-minimally enclosed by `i` (with some degenerate intervals)', function () {
+        it('returns true when all intervals in `is` are right-minimally enclosed by `i`', function () {
           callIt({ start: points[0], end: points[4] }, aCollection).should.be.true()
         })
-        it('returns true when all intervals in `is` are left-minimally enclosed by `i` (with some degenerate intervals)', function () {
+        it('returns true when all intervals in `is` are left-minimally enclosed by `i`', function () {
           callIt({ start: points[1], end: points[5] }, aCollection).should.be.true()
         })
-        it('returns true when all intervals in `is` are minimally enclosed by `i` (with some degenerate intervals)', function () {
+        it('returns true when all intervals in `is` are minimally enclosed by `i`', function () {
           callIt({ start: points[1], end: points[4] }, aCollection).should.be.true()
         })
-        it('returns false when some intervals in `is` are not enclosed by `i` (with some degenerate intervals)', function () {
+        it('returns false when some intervals in `is` are not enclosed by `i`', function () {
           callIt({ start: points[2], end: points[5] }, aCollection).should.be.false()
-        })
-        it('returns false when `i` is degenerate', function () {
-          callIt({ start: points[2], end: points[5] }, aCollection).should.be.false()
-        })
-        it('returns false when `i` is fully indefinite', function () {
-          callIt({}, aCollection).should.be.false()
         })
         it('returns false when `i` is left indefinite', function () {
           callIt({ end: points[4] }, aCollection).should.be.false()
         })
         it('returns false when `i` is right indefinite', function () {
           callIt({ start: points[0] }, aCollection).should.be.false()
+        })
+        it('returns false when `i` is fully indefinite', function () {
+          callIt({}, aCollection).should.be.false()
         })
         it('returns false when `i` is indefinite, and there are indefinite intervals in `i`', function () {
           callIt({}, [
@@ -117,7 +107,7 @@ describe('intervals', function () {
           ]).should.be.false()
         })
         it('returns false when `i` is definite, and there are indefinite intervals in `i`', function () {
-          callIt({ start: points[2], end: points[2] }, [
+          callIt({ start: points[2], end: points[3] }, [
             { start: points[2], end: points[4] },
             { start: points[0], end: points[1] },
             { end: points[3] },
