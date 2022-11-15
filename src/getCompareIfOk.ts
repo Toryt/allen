@@ -38,7 +38,10 @@ export function getCompareIfOk<T> (i: Interval<T>[], compareFn?: Comparator<T>):
   )
 
   assert(cType !== false, haveCommonType)
-  assert(cType === undefined || i.every(j => isInterval(j, cType, compareFn)))
+  assert(
+    cType === undefined || i.every(j => isInterval(j, cType, compareFn)),
+    'intervals must have `iN.start` and `iN.end` of the same type, and `iN.start < iN.end`'
+  )
 
   return compareFn ?? ltCompare
 }

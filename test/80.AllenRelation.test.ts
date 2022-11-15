@@ -153,9 +153,12 @@ describe('AllenRelation', function () {
       new Date(2022, 9, 3, 19, 49, 34, 848)
     ]
 
-    interface TestInterval<T> {
+    interface TestIntervals<T> {
       i1: Interval<T>
       i2: Interval<T>
+    }
+
+    interface NonDegenerateTestIntervals<T> extends TestIntervals<T> {
       relation: AllenRelation
     }
 
@@ -164,7 +167,7 @@ describe('AllenRelation', function () {
      *
      * When `i1` and `i2` are swapped, we expect the `converse` relation.
      */
-    function createIntervals<T> (pts: T[]): Array<TestInterval<T>> {
+    function createIntervals<T> (pts: T[]): Array<NonDegenerateTestIntervals<T>> {
       return [
         /* all indefinite */
         { i1: {}, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>() },
@@ -334,26 +337,25 @@ describe('AllenRelation', function () {
         { i1: { start: pts[2], end: pts[3] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.PRECEDED_BY },
 
         /* test with null */
-        { i1: { start: null }, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>() },
+        { i1: { start: null }, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>() }
+      ]
+    }
 
+    function createDegenerateIntervals<T> (pts: T[]): Array<TestIntervals<T>> {
+      return [
         /* test with 1 empty interval (converse for swapped parameters) */
-        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[2], end: pts[3] }, relation: AllenRelation.PRECEDES },
-        // NOTE: next should return MEETS _and_ STARTS, but we cannot express that; MEETS is selected
-        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.MEETS },
-        // overlaps, finished by, contains, is impossible, unless both are degenerate
-        // equals requires both to be degenerate, see below
-        // started by is impossible, unless both are degenerate
-        { i1: { start: pts[1], end: pts[1] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.DURING },
-        // NOTE: next should return MET_BY _and_ FINISHES, but we cannot express that; MET_BY is selected
-        { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.MET_BY },
-        { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.PRECEDED_BY },
+        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[2], end: pts[3] } },
+        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[0], end: pts[3] } },
+        { i1: { start: pts[1], end: pts[1] }, i2: { start: pts[0], end: pts[3] } },
+        { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[1], end: pts[3] } },
+        { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[0], end: pts[1] } },
 
         /* 2 empty intervals */
-        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[2], end: pts[2] }, relation: AllenRelation.PRECEDES },
+        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[2], end: pts[2] } },
         // meets, overlaps, finished by, contains, starts, is impossible when both are degenerate
-        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[0], end: pts[0] }, relation: AllenRelation.EQUALS },
+        { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[0], end: pts[0] } },
         // started by, during, finishes, overlapped by, met_by is impossible when both are degenerate
-        { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[0], end: pts[0] }, relation: AllenRelation.PRECEDED_BY }
+        { i1: { start: pts[3], end: pts[3] }, i2: { start: pts[0], end: pts[0] } }
       ]
     }
 
@@ -441,38 +443,53 @@ describe('AllenRelation', function () {
       }
 
       describe(label, function () {
-        createIntervals<T>(pts).forEach((ti: TestInterval<T>) => {
-          const i1: Interval<T> = ti.i1
-          const i2: Interval<T> = ti.i2
-          const relation: AllenRelation = ti.relation
+        describe('non-degenerate', function () {
+          createIntervals<T>(pts).forEach((ti: NonDegenerateTestIntervals<T>) => {
+            const i1: Interval<T> = ti.i1
+            const i2: Interval<T> = ti.i2
+            const relation: AllenRelation = ti.relation
 
-          function shouldNotViolateBasicRelationDefinitions (
-            i1: Interval<T>,
-            i2: Interval<T>,
-            result: AllenRelation
-          ): void {
-            possibleResults.includes(relation)
-            basicRelationDefinition.forEach(([br, def]) => {
-              if (result.implies(br)) {
-                def(i1, i2).should.be.true()
-              } else {
-                if (def(i1, i2)) {
-                  console.log(br.toString())
+            function shouldNotViolateBasicRelationDefinitions (
+              i1: Interval<T>,
+              i2: Interval<T>,
+              result: AllenRelation
+            ): void {
+              possibleResults.includes(relation)
+              basicRelationDefinition.forEach(([br, def]) => {
+                if (result.implies(br)) {
+                  def(i1, i2).should.be.true()
+                } else {
+                  if (def(i1, i2)) {
+                    console.log(br.toString())
+                  }
+                  def(i1, i2).should.be.false()
                 }
-                def(i1, i2).should.be.false()
-              }
-            })
-          }
+              })
+            }
 
-          it(`relation(${intervalToString(i1)}, ${intervalToString(
-            i2
-          )}) = ${relation.toString()} (and converse for swapped arguments)`, function () {
-            const straight = callIt(i1, i2)
-            const reversed = callIt(i2, i1)
-            straight.should.equal(relation)
-            reversed.should.equal(relation.converse())
-            shouldNotViolateBasicRelationDefinitions(i1, i2, straight)
-            shouldNotViolateBasicRelationDefinitions(i2, i1, reversed)
+            it(`relation(${intervalToString(i1)}, ${intervalToString(
+              i2
+            )}) = ${relation.toString()} (and converse for swapped arguments)`, function () {
+              const straight = callIt(i1, i2)
+              const reversed = callIt(i2, i1)
+              straight.should.equal(relation)
+              reversed.should.equal(relation.converse())
+              shouldNotViolateBasicRelationDefinitions(i1, i2, straight)
+              shouldNotViolateBasicRelationDefinitions(i2, i1, reversed)
+            })
+          })
+        })
+        describe('degenerate', function () {
+          createDegenerateIntervals<T>(pts).forEach((ti: TestIntervals<T>) => {
+            const i1: Interval<T> = ti.i1
+            const i2: Interval<T> = ti.i2
+
+            it(`relation(${intervalToString(i1)}, ${intervalToString(i2)}) and relation(${intervalToString(
+              i2
+            )}, ${intervalToString(i1)}) should throw`, function () {
+              callIt.bind(undefined, i1, i2).should.throw()
+              callIt.bind(undefined, i2, i1).should.throw()
+            })
           })
         })
       })
