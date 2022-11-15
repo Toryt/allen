@@ -973,44 +973,13 @@ export class AllenRelation extends Relation {
         } else if (compareI1EndI2Start === 0) {
           /* Here, the intervals cannot be EQUAL.
 
-             In the first if in this algorithm, when:
-
-             - i1Start !== undefined && i1Start !== null
-             - i2End !== undefined && i2End !== null
-             - compare(i1Start, i2End) ≥ 0
-
-             all paths return. To get here, at least one of these conditions must be false, i.e., we know that at this
-             place:
-
-             (1): (i1Start === undefined || i1Start === null) ||
-                    (i2End === undefined || i2End === null) ||
-                    compare(i1Start, i2End) < 0
-
              Because of the if's we are in, we know that at this place
 
              - i1End !== undefined && i1End !== null
              - i2Start !== undefined && i2Start !== null
              - compare(i1End, i2Start) === 0
 
-             In general, we know i1Start ≤ i1End = i2Start ≤ i2End. This means i1 MEETS i2, or,
-             - if i1 is degenerate, i1 MEETS _and_ STARTS i2
-             - if i2 is degenerate, i1 MEETS _and_ is FINISHED_BY i2
-             - if both are degenerate, i1 EQUALS i2
-
-             The first 2 cases are reduced to MEETS by this algorithm.
-
-             If both i1 and i2 would be degenerate, their `start` and `end` must be definite. In that case, we know from
-             (1) that i1Start < i2End, so
-
-             i1Start < i1End = i2Start ≤ i2End
-
-             or
-
-             i1Start ≤ i1End = i2Start < i2End
-
-             which means either i1 or i2 is not degenerate, which is a contradiction. This case cannot occur.
-
-             This means we always return MEETS here.
+             which is the definition of i1 MEETS i2.
 
              (found by coverage) */
           return AllenRelation.MEETS
