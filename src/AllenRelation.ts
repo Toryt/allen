@@ -950,15 +950,17 @@ export class AllenRelation extends Relation {
         } else {
           /* all paths return (see below) */
           if (comparei1StartI2End === 0) {
-            if (
-              i1End !== undefined &&
-              i1End !== null &&
-              i2Start !== undefined &&
-              i2Start !== null &&
-              compare(i1End, i2Start) === 0
-            ) {
-              return AllenRelation.EQUALS
-            }
+            /* Here, the intervals cannot be EQUAL.
+
+               Because of the if's we are in, we know that at this place
+
+               - i1Start !== undefined && i1Start !== null
+               - i2End !== undefined && i2End !== null
+               - compare(i1Start, i2End) === 0
+
+               which is the definition of i1 MET_BY i2.
+
+               (found by coverage) */
             return AllenRelation.MET_BY
           }
           return AllenRelation.PRECEDED_BY
