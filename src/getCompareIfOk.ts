@@ -26,7 +26,7 @@ const haveCommonType: string = 'i1.start, i1.end, i2.start and i2.end must be of
 /**
  * Assert that the parameters are acceptable, and return the {@link Comparator} to use.
  */
-export function getCompareIfOk<T> (i: Interval<T>[], compareFn?: Comparator<T>): Comparator<T> {
+export function getCompareIfOk<T> (i: Array<Interval<T>>, compareFn?: Comparator<T>): Comparator<T> {
   i.forEach(j => assert(typeof j === 'object' && j !== null))
   assert(
     i.every(j => isLTComparableOrIndefinite(j.start) && isLTComparableOrIndefinite(j.end)) || compareFn !== undefined,
@@ -34,7 +34,7 @@ export function getCompareIfOk<T> (i: Interval<T>[], compareFn?: Comparator<T>):
   )
 
   const cType = commonTypeRepresentation(
-    ...i.reduce((acc: Indefinite<T>[], j: Interval<T>) => acc.concat([j.start, j.end]), [])
+    ...i.reduce((acc: Array<Indefinite<T>>, j: Interval<T>) => acc.concat([j.start, j.end]), [])
   )
 
   assert(cType !== false, haveCommonType)

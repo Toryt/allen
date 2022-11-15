@@ -27,6 +27,7 @@ import { TypeFor } from '../src/type'
 import { A, B, C } from './_someClasses'
 import { Comparator } from '../src/comparator'
 import { ltCompare } from '../src/ltCompare'
+import { ok } from 'assert'
 
 interface Case<T extends TypeRepresentation> {
   label: string
@@ -184,18 +185,18 @@ describe('interval', function () {
           }
 
           function callIt (i: unknown, reverseCompare?: boolean): boolean {
-            return reverseCompare
-              ? compareFn
+            return reverseCompare !== undefined
+              ? compareFn !== undefined
                 ? isInterval(i, targetPointType, reverse(compareFn))
                 : isInterval(i, targetPointType, reverse(ltCompare))
-              : compareFn
-              ? isInterval(i, targetPointType, compareFn)
-              : isInterval(i, targetPointType, ltCompare)
+              : /* prettier-ignore */ compareFn !== undefined
+                ? isInterval(i, targetPointType, compareFn)
+                : isInterval(i, targetPointType, ltCompare)
           }
 
           const isSubtypeOfTarget = representsSuperType(targetPointType, pointType) ? 'true' : 'false'
           describe(`${label} ${isSubtypeOfTarget === 'true' ? '>' : '≯'} ${inspect(targetPointType)}`, function () {
-            describe(`nominal ${compareFn ? 'with' : 'without'} compareFn`, function () {
+            describe(`nominal ${compareFn !== undefined ? 'with' : 'without'} compareFn`, function () {
               it(`returns ${isSubtypeOfTarget} for [${inspect(p1)}, ${inspect(p2)}[`, function () {
                 callIt({ start: p1, end: p2 }).should.be[isSubtypeOfTarget]()
               })
@@ -217,23 +218,28 @@ describe('interval', function () {
               })
             })
             describe('throws', function () {
-              if (isSubtypeOfTarget === 'true' && compareFn && !compareFnOptional) {
+              if (
+                isSubtypeOfTarget === 'true' &&
+                compareFn !== undefined &&
+                (compareFnOptional === undefined || !compareFnOptional)
+              ) {
                 it(`[${inspect(p1)}, ${inspect(p2)}[ throws without comparator`, function () {
                   isInterval.bind(undefined, { start: p1, end: p2 }, targetPointType).should.throw()
                 })
               }
             })
             describe('indefinite', function () {
+              const tP1: TypeRepresentation | undefined = typeRepresentationOf(p1)
+              ok(tP1)
+              const tP2: TypeRepresentation | undefined = typeRepresentationOf(p2)
+              ok(tP2)
+
               indefinites.forEach(indef => {
-                const p1IsSubtypeOfTarget = representsSuperType(targetPointType, typeRepresentationOf(p1)!)
-                  ? 'true'
-                  : 'false'
+                const p1IsSubtypeOfTarget = representsSuperType(targetPointType, tP1) ? 'true' : 'false'
                 it(`returns ${p1IsSubtypeOfTarget} for [${inspect(p1)}, ${inspect(indef)}[`, function () {
                   callIt({ start: p1, end: indef }).should.be[p1IsSubtypeOfTarget]()
                 })
-                const p2IsSubtypeOfTarget = representsSuperType(targetPointType, typeRepresentationOf(p2)!)
-                  ? 'true'
-                  : 'false'
+                const p2IsSubtypeOfTarget = representsSuperType(targetPointType, tP2) ? 'true' : 'false'
                 it(`returns ${p2IsSubtypeOfTarget} for [${inspect(indef)}, ${inspect(p2)}[`, function () {
                   callIt({ start: indef, end: p2 }).should.be[p2IsSubtypeOfTarget]()
                 })

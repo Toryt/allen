@@ -50,8 +50,8 @@ describe('intervals', function () {
     })
   })
   describe('isEnclosing', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number) {
-      function callIt (i: Interval<T>, is: Interval<T>[]): boolean {
+    function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
+      function callIt (i: Interval<T>, is: Array<Interval<T>>): boolean {
         return compareFn !== undefined && compareFn !== null ? isEnclosing(i, is, compareFn) : isEnclosing(i, is)
       }
 

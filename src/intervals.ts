@@ -32,7 +32,7 @@ export const ENCLOSES: AllenRelation = AllenRelation.fromString<AllenRelation>('
  *
  * When any interval is fully or partially indefinite, this cannot be guaranteed, and `false` is returned.
  */
-export function isEnclosing<T> (i: Interval<T>, is: Interval<T>[], compareFn?: Comparator<T>): boolean {
+export function isEnclosing<T> (i: Interval<T>, is: Array<Interval<T>>, compareFn?: Comparator<T>): boolean {
   assert(Array.isArray(is))
   const compare: Comparator<T> = getCompareIfOk<T>(is.concat([i]), compareFn)
   return is.every(ie => AllenRelation.relation<T>(i, ie, compare).implies(ENCLOSES))
