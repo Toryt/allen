@@ -90,11 +90,11 @@ export class AllenRelation extends Relation {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _precedes_ an interval `I2`, i.e., the `end` of `I1` is
-   * before the `start` of `I2`.
+   * A _basic_ Allen relation that says that an interval `i1` _precedes_ an interval `i2`, i.e., the `end` of `i1` is
+   * before the `start` of `i2`.
    *
    * ```
-   * I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I1.end < I2.start
+   * i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i1.end < i2.start
    * ```
    *
    * ![precedes](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-precedes.png)
@@ -105,11 +105,11 @@ export class AllenRelation extends Relation {
   // Bit pattern: 1 = '0000000000001'
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _meets_ an interval `I2`, i.e., the `end` of `I1` is the
-   * `start` of `I2`.
+   * A _basic_ Allen relation that says that an interval `i1` _meets_ an interval `i2`, i.e., the `end` of `i1` is the
+   * `start` of `i2`.
    *
    * ```
-   * I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I1.end = I2.start
+   * i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i1.end = i2.start
    * ```
    *
    * ![meets](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-meets.png)
@@ -120,14 +120,14 @@ export class AllenRelation extends Relation {
   // Bit pattern: 2 = '0000000000010'
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _overlaps_ an interval `I2`, i.e.,
+   * A _basic_ Allen relation that says that an interval `i1` _overlaps_ an interval `i2`, i.e.,
    *
-   * - the `start` of `I1` is before the `start` of `I2`,
-   * - the `end` of `I1` is after the `start` of `I2`, and before the `end` of `I2`
+   * - the `start` of `i1` is before the `start` of `i2`,
+   * - the `end` of `i1` is after the `start` of `i2`, and before the `end` of `i2`
    *
    * ```
-   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
-   *   I1.start < I2.start ∧ I2.start < I1.end ∧ I1.end < I2.end
+   * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
+   *   i1.start < i2.start ∧ i2.start < i1.end ∧ i1.end < i2.end
    * ```
    *
    * ![overlaps](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-overlaps.png)
@@ -138,14 +138,14 @@ export class AllenRelation extends Relation {
   // Bit pattern: 4 = '0000000000100'
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _is finished by_ an interval `I2`, i.e.,
+   * A _basic_ Allen relation that says that an interval `i1` _is finished by_ an interval `i2`, i.e.,
    *
-   * - the `start` of `I1` is before the `start` of `I2`, and
-   * - the `end` of `I1` is the `end` of `I2`
+   * - the `start` of `i1` is before the `start` of `i2`, and
+   * - the `end` of `i1` is the `end` of `i2`
    *
    * ```
-   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
-   *   (I1.start < I2.start) ∧ (I1.end = I2.end)
+   * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
+   *   (i1.start < i2.start) ∧ (i1.end = i2.end)
    * ```
    *
    * ![is finished by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-finishedBy.png)
@@ -156,14 +156,14 @@ export class AllenRelation extends Relation {
   // Bit pattern: 8 = '0000000001000'
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _contains_ an interval `I2`, i.e.,
+   * A _basic_ Allen relation that says that an interval `i1` _contains_ an interval `i2`, i.e.,
    *
-   * - the `start` of `I1` is before the `start` of `I2`, and
-   * - the `end` of `I1` is after the `end` of `I2`
+   * - the `start` of `i1` is before the `start` of `i2`, and
+   * - the `end` of `i1` is after the `end` of `i2`
    *
    * ```
-   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
-   *   I1.start < I2.start ∧ I2.end < I1.end
+   * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
+   *   i1.start < i2.start ∧ i2.end < i1.end
    * ```
    *
    * ![contains](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-contains.png)
@@ -174,14 +174,14 @@ export class AllenRelation extends Relation {
   // Bit pattern: 16 = '0000000010000'
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _starts_ an interval `I2`, i.e.,
+   * A _basic_ Allen relation that says that an interval `i1` _starts_ an interval `i2`, i.e.,
    *
-   * - the `start` of `I1` is the `start` of `I2`, and
-   * - the `end` of `I1` is before the `end` of `I2`
+   * - the `start` of `i1` is the `start` of `i2`, and
+   * - the `end` of `i1` is before the `end` of `i2`
    *
    * ```
-   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
-   *   I1.start = I2.start ∧ I1.end < I2.end
+   * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
+   *   i1.start = i2.start ∧ i1.end < i2.end
    * ```
    *
    * ![starts](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-starts.png)
@@ -192,14 +192,14 @@ export class AllenRelation extends Relation {
   // Bit pattern: 32 = '0000000100000'
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _is equal to_ an interval `I2`, i.e.,
+   * A _basic_ Allen relation that says that an interval `i1` _is equal to_ an interval `i2`, i.e.,
    *
-   * - the `start` of `I1` is the `start` of `I2`, and
-   * - the `end` of `I1` is the `end` of `I2`
+   * - the `start` of `i1` is the `start` of `i2`, and
+   * - the `end` of `i1` is the `end` of `i2`
    *
    * ```
-   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
-   *   I1.start = I2.start ∧ I1.end = I2.end
+   * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
+   *   i1.start = i2.start ∧ i1.end = i2.end
    * ```
    *
    * ![equals](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-equals.png)
@@ -210,14 +210,14 @@ export class AllenRelation extends Relation {
   // Bit pattern: 64 = '0000001000000'
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _started by_ an interval `I2`, i.e.,
+   * A _basic_ Allen relation that says that an interval `i1` _started by_ an interval `i2`, i.e.,
    *
-   * - the `start` of `I1` is the `start` of `I2`, and
-   * - the `end` of `I1` is after the `end` of `I2`
+   * - the `start` of `i1` is the `start` of `i2`, and
+   * - the `end` of `i1` is after the `end` of `i2`
    *
    * ```
-   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
-   *   I1.start = I2.start ∧ (I2.end < I1.end)
+   * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
+   *   i1.start = i2.start ∧ (i2.end < i1.end)
    * ```
    *
    * ![is started by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-startedBy.png)
@@ -228,14 +228,14 @@ export class AllenRelation extends Relation {
   // Bit pattern: 128 = '0000010000000'
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _is during_ an interval `I2`, i.e.,
+   * A _basic_ Allen relation that says that an interval `i1` _is during_ an interval `i2`, i.e.,
    *
-   * - the `start` of `I1` is after the `start` of `I2`, and
-   * - the `end` of `I1` is before the `end` of `I2`
+   * - the `start` of `i1` is after the `start` of `i2`, and
+   * - the `end` of `i1` is before the `end` of `i2`
    *
    * ```
-   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
-   *   I2.start < I1.start ∧ I1.end < I2.end
+   * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
+   *   i2.start < i1.start ∧ i1.end < i2.end
    * ```
    *
    * ![is during](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-during.png)
@@ -246,14 +246,14 @@ export class AllenRelation extends Relation {
   // Bit pattern: 256 = '0000100000000'
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _finishes_ an interval `I2`, i.e.,
+   * A _basic_ Allen relation that says that an interval `i1` _finishes_ an interval `i2`, i.e.,
    *
-   * - the `start` of `I1` is after the `start` of `I2`, and
-   * - the `end` of `I1` is the `end` of `I2`
+   * - the `start` of `i1` is after the `start` of `i2`, and
+   * - the `end` of `i1` is the `end` of `i2`
    *
    * ```
-   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
-   *   I2.start < I1.start ∧ I1.end = I2.end
+   * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
+   *   i2.start < i1.start ∧ i1.end = i2.end
    * ```
    *
    * ![finishes](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-finishes.png)
@@ -264,14 +264,14 @@ export class AllenRelation extends Relation {
   // Bit pattern: 512 = '0001000000000'
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _is overlapped by_ an interval `I2`, i.e.,
+   * A _basic_ Allen relation that says that an interval `i1` _is overlapped by_ an interval `i2`, i.e.,
    *
-   * - the `start` of `I1` is after the `start` of `I2`, and before the `end` of `I2`, and
-   * - the `end` of `I1` is after the `end` of `I2`
+   * - the `start` of `i1` is after the `start` of `i2`, and before the `end` of `i2`, and
+   * - the `end` of `i1` is after the `end` of `i2`
    *
    * ```
-   * I1.start ≠ undefined ∧ I1.end ≠ undefined ∧ I2.start ≠ undefined ∧ I2.end ≠ undefined ∧
-   *   I2.start < I1.start ∧ I1.start < I2.end ∧ I2.end < I1.end
+   * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
+   *   i2.start < i1.start ∧ i1.start < i2.end ∧ i2.end < i1.end
    * ```
    *
    * ![is overlapped by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-overlappedBy.png)
@@ -282,11 +282,11 @@ export class AllenRelation extends Relation {
   // Bit pattern: 1024 = '0010000000000'
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _is met by_ an interval `I2`, i.e., the `start` of `I1` is
-   * the `end` of `I2`.
+   * A _basic_ Allen relation that says that an interval `i1` _is met by_ an interval `i2`, i.e., the `start` of `i1` is
+   * the `end` of `i2`.
    *
    * ```
-   * I1.start ≠ undefined ∧ I2.end ≠ undefined ∧ I1.start = I2.end
+   * i1.start ≠ undefined ∧ i2.end ≠ undefined ∧ i1.start = i2.end
    * ```
    *
    * ![is met by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-metBy.png)
@@ -297,11 +297,11 @@ export class AllenRelation extends Relation {
   // Bit pattern: 2048 = '0100000000000'
 
   /**
-   * A _basic_ Allen relation that says that an interval `I1` _is preceded by_ an interval `I2`, i.e., the `start` of
-   * `I1` is after the `end` of `I2`.
+   * A _basic_ Allen relation that says that an interval `i1` _is preceded by_ an interval `i2`, i.e., the `start` of
+   * `i1` is after the `end` of `i2`.
    *
    * ```
-   * I1.start ≠ undefined ∧ I2.end ≠ undefined ∧ I2.end < I1.start
+   * i1.start ≠ undefined ∧ i2.end ≠ undefined ∧ i2.end < i1.start
    * ```
    *
    * ![is preceded by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-precededBy.png)
@@ -317,11 +317,11 @@ export class AllenRelation extends Relation {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * `(oFDseSdfO)` — a non-basic interval relation that is often handy to use, which expresses that and interval `I1`
-   * and an interval `I2` are concurrent in some way.
+   * `(oFDseSdfO)` — a non-basic interval relation that is often handy to use, which expresses that and interval `i1`
+   * and an interval `i2` are concurrent in some way.
    *
-   * Thus, `I1` does _not_ {@link PRECEDES precede} `I`, does _not_ {@link MEETS meet} `I`, is _not_ {@link MET_BY}, and
-   * is _not_ {@link PRECEDED_BY} `I2`.
+   * Thus, `i1` does _not_ {@link PRECEDES precede} `I`, does _not_ {@link MEETS meet} `I`, is _not_ {@link MET_BY}, and
+   * is _not_ {@link PRECEDED_BY} `i2`.
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
    *
@@ -344,11 +344,11 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * `(pmoFD)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` starts
-   * earlier then an interval `I2`.
+   * `(pmoFD)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1` starts
+   * earlier then an interval `i2`.
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.start < I2.start)
+   * (i1.start ≠ undefined) ∧ (i2.start ≠ undefined) ∧ (i1.start < i2.start)
    * ```
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
@@ -368,11 +368,11 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * `(seS)` — a non-basic interval relation that is often handy to use, which expresses that and interval `I1` and an
-   * interval `I2` start at the same point.
+   * `(seS)` — a non-basic interval relation that is often handy to use, which expresses that and interval `i1` and an
+   * interval `i2` start at the same point.
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.start = I2.start)
+   * (i1.start ≠ undefined) ∧ (i2.start ≠ undefined) ∧ (i1.start = i2.start)
    * ```
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
@@ -390,11 +390,11 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * `(dfOMP)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` starts
-   * after an interval `I2`.
+   * `(dfOMP)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1` starts
+   * after an interval `i2`.
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.start < I1.start)
+   * (i1.start ≠ undefined) ∧ (i2.start ≠ undefined) ∧ (i2.start < i1.start)
    * ```
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
@@ -414,11 +414,11 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * `(dfO)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` starts in
-   * an interval `I2`.
+   * `(dfO)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1` starts in
+   * an interval `i2`.
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I2.start < I1.start < I2.end)
+   * (i1.start ≠ undefined) ∧ (i2.start ≠ undefined) ∧ (i2.end ≠ undefined) ∧ (i2.start < i1.start < i2.end)
    * ```
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
@@ -436,12 +436,12 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * `(pmo)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` starts
-   * and ends before an interval `I2` starts and ends.
+   * `(pmo)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1` starts
+   * and ends before an interval `i2` starts and ends.
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.end ≠ undefined) ∧
-   *   (I1.start < I2.start) ∧ (I1.end < I2.end)
+   * (i1.start ≠ undefined) ∧ (i2.start ≠ undefined) ∧ (i1.end ≠ undefined) ∧ (i2.end ≠ undefined) ∧
+   *   (i1.start < i2.start) ∧ (i1.end < i2.end)
    * ```
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
@@ -459,12 +459,12 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * `(OMP)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` starts
-   * and ends after an interval `I2` starts and ends.
+   * `(OMP)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1` starts
+   * and ends after an interval `i2` starts and ends.
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.end ≠ undefined) ∧
-   *   (I2.start < I1.start) ∧ (I2.end < I1.end)
+   * (i1.start ≠ undefined) ∧ (i2.start ≠ undefined) ∧ (i1.end ≠ undefined) ∧ (i2.end ≠ undefined) ∧
+   *   (i2.start < i1.start) ∧ (i2.end < i1.end)
    * ```
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
@@ -482,11 +482,11 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * `(pmosd)` — a non-basic interval relation that is often handy to use, which expresses that interval `I1` ends
-   * before an interval `I2` ends.
+   * `(pmosd)` — a non-basic interval relation that is often handy to use, which expresses that interval `i1` ends
+   * before an interval `i2` ends.
    *
    * ```
-   * (I1.end ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I1.end < I2.end)
+   * (i1.end ≠ undefined) ∧ (i2.end ≠ undefined) ∧ (i1.end < i2.end)
    * ```
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
@@ -506,11 +506,11 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * `(osd)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` ends in
-   * an interval `I2`.
+   * `(osd)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1` ends in
+   * an interval `i2`.
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I2.start < I1.end < I2.end)
+   * (i1.start ≠ undefined) ∧ (i2.start ≠ undefined) ∧ (i2.end ≠ undefined) ∧ (i2.start < i1.end < i2.end)
    * ```
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
@@ -528,11 +528,11 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * `(Fef)` — a non-basic interval relation that is often handy to use, which expresses that interval `I1` and an
-   * interval `I2` end at the same point.
+   * `(Fef)` — a non-basic interval relation that is often handy to use, which expresses that interval `i1` and an
+   * interval `i2` end at the same point.
    *
    * ```
-   * (I1.end ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I1.end = I2.end)
+   * (i1.end ≠ undefined) ∧ (i2.end ≠ undefined) ∧ (i1.end = i2.end)
    * ```
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
@@ -550,11 +550,11 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * `(DSOMP)` — a non-basic interval relation that is often handy to use, which expresses that interval `I1` ends after
-   * an interval `I2` ends.
+   * `(DSOMP)` — a non-basic interval relation that is often handy to use, which expresses that interval `i1` ends after
+   * an interval `i2` ends.
    *
    * ```
-   * (I1.end ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I2.end < I1.end)
+   * (i1.end ≠ undefined) ∧ (i2.end ≠ undefined) ∧ (i2.end < i1.end)
    * ```
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
@@ -574,11 +574,11 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * `(oFD)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1` contains
-   * the start of an interval `I2`.
+   * `(oFD)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1` contains
+   * the start of an interval `i2`.
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.start ≠ undefined) ∧ (I1.start < I2.start < I1.end)
+   * (i1.start ≠ undefined) ∧ (i1.end ≠ undefined) ∧ (i2.start ≠ undefined) ∧ (i1.start < i2.start < i1.end)
    * ```
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
@@ -596,11 +596,11 @@ export class AllenRelation extends Relation {
   )
 
   /**
-   * `(DSO)` — a non-basic interval relation that is often handy to use, which expresses that an interval `I1`
-   * contains the end of an interval `I2`.
+   * `(DSO)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1`
+   * contains the end of an interval `i2`.
    *
    * ```
-   * (I1.start ≠ undefined) ∧ (I1.end ≠ undefined) ∧ (I2.end ≠ undefined) ∧ (I1.start < I2.end < I1.end)
+   * (i1.start ≠ undefined) ∧ (i1.end ≠ undefined) ∧ (i2.end ≠ undefined) ∧ (i1.start < i2.end < i1.end)
    * ```
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
@@ -849,8 +849,8 @@ export class AllenRelation extends Relation {
   ]
 
   /**
-   * Given 3 intervals `I1`, `I2`, and `I3`, given `gr1 = relation(I1, I2)` and `gr2 = relation(I2, I3)`,
-   * `gr1.compose( gr2) = relation(I1, I2)`.
+   * Given 3 intervals `i1`, `i2`, and `i3`, given `gr1 = relation(i1, i2)` and `gr2 = relation(i2, i3)`,
+   * `gr1.compose(gr2) = relation(i1, i2)`.
    *
    * Composition is not commutative but is both left and right associative, and distributes over `or`.
    *
