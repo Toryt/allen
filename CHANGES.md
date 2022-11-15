@@ -7,6 +7,8 @@
 #### 0.2.0
 
 - intervals can no longer be degenerate
+- definitions of basic Allen relations are simplified (revert)
+- add `isEnclosing`
 
 Found out that degenerate intervals make no sense. With half-open intervals, they are the empty set. When intervals are
 interpreted as closed, degenerate intervals represent 1 point. we get nonsensical results, or difficult caveats, when
