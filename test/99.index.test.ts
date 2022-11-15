@@ -22,6 +22,7 @@ import {
   Constructor,
   Indefinite,
   Interval,
+  isEnclosing,
   isInterval,
   isLTComparableOrIndefinite,
   isTypeRepresentation,
@@ -114,5 +115,8 @@ describe('index', function () {
   it('exports PointIntervalRelation', function () {
     const x: PointIntervalRelation = PointIntervalRelation.IN
     x.should.be.an.instanceof(PointIntervalRelation)
+  })
+  it('exports isEnclosing', function () {
+    isEnclosing.should.be.a.Function()
   })
 })
