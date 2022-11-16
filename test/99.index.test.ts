@@ -29,6 +29,7 @@ import {
   LTComparable,
   LTComparablePrimitive,
   ltCompare,
+  minimalEnclosing,
   PointIntervalRelation,
   primitiveTypeRepresentations,
   Relation,
@@ -118,5 +119,8 @@ describe('index', function () {
   })
   it('exports isEnclosing', function () {
     isEnclosing.should.be.a.Function()
+  })
+  it('exports minimalEnclosing', function () {
+    minimalEnclosing.should.be.a.Function()
   })
 })
