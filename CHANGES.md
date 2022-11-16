@@ -4,6 +4,10 @@
 
 ### 0.2
 
+#### 0.2.1
+
+- add `minimalEnclosing`
+
 #### 0.2.0
 
 - intervals can no longer be degenerate
