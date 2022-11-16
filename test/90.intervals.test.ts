@@ -148,7 +148,7 @@ describe('intervals', function () {
           is: [
             { start: points[2], end: points[4] },
             { start: points[0], end: points[1] },
-            { start: points[2], end: points[4] }
+            { start: points[2], end: points[3] }
           ],
           expected: { start: points[0], end: points[4] }
         },
@@ -157,10 +157,40 @@ describe('intervals', function () {
           is: [
             { start: points[2], end: points[4] },
             { start: points[0], end: points[1] },
-            { start: points[2], end: points[4] },
+            { start: points[2], end: points[3] },
             { start: points[0], end: points[4] }
           ],
           expected: { start: points[0], end: points[4] }
+        },
+        {
+          label: 'collection with some left-indefinite intervals',
+          is: [
+            { start: points[2], end: points[4] },
+            { end: points[1] },
+            { end: points[4] },
+            { start: points[0], end: points[3] }
+          ],
+          expected: { end: points[4] }
+        },
+        {
+          label: 'collection with some right-indefinite intervals',
+          is: [
+            { start: points[2], end: points[4] },
+            { start: points[0], end: points[1] },
+            { start: points[2] },
+            { start: points[0] }
+          ],
+          expected: { start: points[0] }
+        },
+        {
+          label: 'collection with some fully indefinite intervals',
+          is: [{ start: points[2], end: points[4] }, { start: points[0], end: points[1] }, {}, { start: points[0] }],
+          expected: {}
+        },
+        {
+          label: 'collection with only fully indefinite intervals',
+          is: [{}, {}, {}, {}],
+          expected: {}
         }
       ]
 
