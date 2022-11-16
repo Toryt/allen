@@ -70,22 +70,27 @@ export function isEnclosing<T> (i: Interval<T>, is: ReadonlyArray<Interval<T>>, 
 export function minimalEnclosing<T> (is: ReadonlyArray<Interval<T>>, compareFn?: Comparator<T>): Interval<T> {
   const compare: Comparator<T> = getCompareIfOk(is, compareFn)
 
-  return is.reduce((acc: Interval<T>, i: Interval<T>) => {
-    return {
-      start:
-        i.start !== undefined &&
-        i.start !== null &&
-        (acc.start === undefined || acc.start === null || compare(i.start, acc.start) < 0)
-          ? i.start
-          : acc.start,
-      end:
-        i.end !== undefined &&
-        i.end !== null &&
-        (acc.end === undefined || acc.end === null || compare(acc.end, i.end) < 0)
-          ? i.end
-          : acc.end
+  if (is.length <= 0) {
+    return {}
+  }
+
+  let result: Interval<T> = is[0]
+
+  for (let j = 1; j < is.length; j++) {
+    const i: Interval<T> = is[j]
+    if (i.start === undefined || i.start === null) {
+      result = { end: result.end } // delete start
+    } else if (result.start !== undefined && result.start !== null && compare(i.start, result.start) < 0) {
+      result = { start: i.start, end: result.end }
     }
-  }, {})
+    if (i.end === undefined || i.end === null) {
+      result = { start: result.start } // delete end
+    } else if (result.end !== undefined && result.end !== null && compare(result.end, i.end) < 0) {
+      result = { start: result.start, end: i.end }
+    }
+  }
+
+  return result
 }
 
 // /**
