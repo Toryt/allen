@@ -17,9 +17,11 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { ENCLOSES, isEnclosing } from '../src/intervals'
+import { ENCLOSES, isEnclosing, minimalEnclosing } from '../src/intervals'
 import { AllenRelation } from '../src/AllenRelation'
 import { Interval } from '../src/Interval'
+import { ltCompare } from '../src'
+import assert, { ok } from 'assert'
 
 const sixPoints = [-6, -4.983458, -1, 2, Math.PI, 23455]
 const sixStrings = [
@@ -115,6 +117,96 @@ describe('intervals', function () {
             { start: points[3] },
             { start: points[0], end: points[4] }
           ]).should.be.false()
+        })
+      })
+    }
+
+    generateTests<number>('number', sixPoints)
+    generateTests<string>('string', sixStrings)
+    generateTests<Date>('Date', sixDates)
+    generateTests<symbol>('symbol', sixSymbols, (s1: Symbol, s2: Symbol): number =>
+      s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
+    )
+  })
+  describe('minimalEnclosing', function () {
+    function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
+      interface Case {
+        label: string
+        is: Array<Interval<T>>
+        expected: Interval<T>
+      }
+
+      const cases: Case[] = [
+        { label: 'empty collection', is: [], expected: {} },
+        {
+          label: 'collection with fully definite intervals',
+          is: [
+            { start: points[2], end: points[4] },
+            { start: points[0], end: points[1] },
+            { start: points[2], end: points[4] }
+          ],
+          expected: { start: points[0], end: points[4] }
+        },
+        {
+          label: 'collection with fully definite intervals, including the result',
+          is: [
+            { start: points[2], end: points[4] },
+            { start: points[0], end: points[1] },
+            { start: points[2], end: points[4] },
+            { start: points[0], end: points[4] }
+          ],
+          expected: { start: points[0], end: points[4] }
+        }
+      ]
+
+      function compare (t1: T, t2: T): number {
+        return compareFn !== undefined && compareFn !== null ? compareFn(t1, t2) : ltCompare(t1, t2)
+      }
+
+      function callIt (is: Array<Interval<T>>): Interval<T> {
+        return compareFn !== undefined && compareFn !== null ? minimalEnclosing(is, compareFn) : minimalEnclosing(is)
+      }
+
+      describe(label, function () {
+        cases.forEach((c: Case) => {
+          it(`returns the expected result for ${c.label}`, function () {
+            const result = callIt(c.is)
+
+            result.should.be.ok()
+            c.is.forEach(i => AllenRelation.relation(result, i, compareFn).implies(ENCLOSES))
+
+            const resultStart = result.start
+            assert(resultStart !== null)
+            const resultEnd = result.end
+            assert(resultEnd !== null)
+
+            if (resultStart !== undefined) {
+              c.is.forEach(i => {
+                ok(i.start)
+                compare(resultStart, i.start).should.be.lessThanOrEqual(0)
+              })
+              ok(c.expected.start)
+              compare(resultStart, c.expected.start).should.equal(0)
+            } else {
+              if (c.is.length > 0) {
+                c.is.some(i => i.start === undefined || i.start === null).should.be.true()
+              }
+              should(c.expected.start).be.undefined()
+            }
+            if (resultEnd !== undefined) {
+              c.is.forEach(i => {
+                ok(i.end)
+                compare(i.end, resultEnd).should.be.lessThanOrEqual(0)
+              })
+              ok(c.expected.end)
+              compare(resultEnd, c.expected.end).should.equal(0)
+            } else {
+              if (c.is.length > 0) {
+                c.is.some(i => i.end === undefined || i.end === null).should.be.true()
+              }
+              should(c.expected.end).be.undefined()
+            }
+          })
         })
       })
     }

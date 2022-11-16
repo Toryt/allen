@@ -37,41 +37,57 @@ export function isEnclosing<T> (i: Interval<T>, is: Array<Interval<T>>, compareF
   const compare: Comparator<T> = getCompareIfOk<T>(is.concat([i]), compareFn)
   return is.every(ie => AllenRelation.relation<T>(i, ie, compare).implies(ENCLOSES))
 }
-//
-// export function isMinimalEnclosing<T> (i: Interval<T>[], i2: Interval<T>, compareFn?: Comparator<T>): boolean {
+
+// /**
+//  * Does `i` enclose all intervals in `is`, and is `i` not larger than necessary to do that?
+//  *
+//  * When any interval is fully or partially indefinite, this cannot be guaranteed, and `false` is returned.
+//  */
+// export function isMinimalEnclosing<T> (i: Interval<T>, is: Array<Interval<T>>, compareFn?: Comparator<T>): boolean {
 //   return true
 // }
-//
-// /**
-//  * Determine the minimal enclosing interval for all intervals `i[j]`.
-//  *
-//  * When one or more elements of `i` have an indefinite `start`, the `result` has an indefinite `start`. Otherwise,
-//  * `result.start` is the smallest `start` of any element of `i`. When one or more elements of `i` have an indefinite
-//  * `end`, the `result` has an indefinite `end`. Otherwise, `result.end` is the largest `end` of any element of `i`.
-//  *
-//  * @return {Interval<T>} `i.every(j => result {@link ENCLOSES} j)` and IS MINIMAL // MUDO
-//  */
-// export function minimalEnclosing<T> (i: Interval<T>[], compareFn?: Comparator<T>): Interval<T> {
-//   const compare: Comparator<T> = getCompareIfOk(i, compareFn)
-//
-//   return i.reduce((acc, j) => {
-//     return {
-//       start:
-//         j.start !== undefined &&
-//         j.start !== null &&
-//         (acc.start === undefined || acc.start === null || compare(j.start, acc.start) < 0)
-//           ? j.start
-//           : acc.start,
-//       end:
-//         j.end !== undefined &&
-//         j.end !== null &&
-//         (acc.end === undefined || acc.end === null || compare(j.end, acc.end) > 0)
-//           ? j.end
-//           : acc.end
-//     }
-//   }, {})
-// }
-//
+
+/**
+ * Determine the minimal enclosing interval for all intervals `i[j]`.
+ *
+ * When one or more elements of `i` have an indefinite `start`, the `result` has an indefinite `start`. Otherwise,
+ * `result.start` is the smallest `start` of any element of `i`. When one or more elements of `i` have an indefinite
+ * `end`, the `result` has an indefinite `end`. Otherwise, `result.end` is the largest `end` of any element of `i`.
+ *
+ *
+ * ### Result
+ *
+ * ```ts
+ * is.every(i => AllenRelation.relation(result, i).implies(ENCLOSES))
+ * result.start !== null
+ * result.end !== null
+ * result.start !== undefined || is.length <= 0 || is.some(i => i.start === undefined || i.start === null)
+ * result.start === undefined || is.every(i => i.start !== undefined && i.start !== null && !(i.start < result.start))
+ * result.end !== undefined || is.length <= 0 || is.some(i => i.end === undefined || i.end === null)
+ * result.end === undefined || is.every(i => i.end !== undefined && i.end !== null && !(result.end < i.end))
+ * ```
+ */
+export function minimalEnclosing<T> (is: Array<Interval<T>>, compareFn?: Comparator<T>): Interval<T> {
+  const compare: Comparator<T> = getCompareIfOk(is, compareFn)
+
+  return is.reduce((acc: Interval<T>, i: Interval<T>) => {
+    return {
+      start:
+        i.start !== undefined &&
+        i.start !== null &&
+        (acc.start === undefined || acc.start === null || compare(i.start, acc.start) < 0)
+          ? i.start
+          : acc.start,
+      end:
+        i.end !== undefined &&
+        i.end !== null &&
+        (acc.end === undefined || acc.end === null || compare(acc.end, i.end) < 0)
+          ? i.end
+          : acc.end
+    }
+  }, {})
+}
+
 // /**
 //  * The elements of `i` are discrete (i.e., do not {@link AllenRelation.CONCURS_WITH concur with the previous or next
 //  * element}), and are ordered from smallest `i.start` to largest `i.end`.
