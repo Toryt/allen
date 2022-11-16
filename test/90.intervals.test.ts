@@ -139,6 +139,11 @@ describe('intervals', function () {
       const cases: Case[] = [
         { label: 'empty collection', is: [], expected: {} },
         {
+          label: 'singleton of fully definite interval',
+          is: [{ start: points[2], end: points[4] }],
+          expected: { start: points[2], end: points[4] }
+        },
+        {
           label: 'collection with fully definite intervals',
           is: [
             { start: points[2], end: points[4] },
