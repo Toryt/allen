@@ -144,11 +144,20 @@ describe('intervals', function () {
           expected: { start: points[2], end: points[4] }
         },
         {
-          label: 'collection with fully definite intervals',
+          label: 'collection 1 with fully definite intervals',
           is: [
             { start: points[2], end: points[4] },
             { start: points[0], end: points[1] },
             { start: points[2], end: points[3] }
+          ],
+          expected: { start: points[0], end: points[4] }
+        },
+        {
+          label: 'collection 2 with fully definite intervals',
+          is: [
+            { start: points[2], end: points[3] },
+            { start: points[0], end: points[1] },
+            { start: points[2], end: points[4] }
           ],
           expected: { start: points[0], end: points[4] }
         },
