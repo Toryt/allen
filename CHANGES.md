@@ -4,6 +4,10 @@
 
 ### 0.2
 
+#### 0.2.2
+
+- add `isMinimalEnclosing`
+
 #### 0.2.1
 
 - add `minimalEnclosing`
