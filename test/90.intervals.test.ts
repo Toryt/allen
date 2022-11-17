@@ -133,6 +133,8 @@ describe('intervals', function () {
     label: string
     is: Array<Interval<T>>
     expected: Interval<T>
+    smallestDefiniteIndex?: number
+    largestDefiniteIndex?: number
   }
 
   function generateEnclosingCases<T> (points: T[]): Array<EnclosingCase<T>> {
@@ -141,16 +143,20 @@ describe('intervals', function () {
       {
         label: 'singleton of fully definite interval',
         is: [{ start: points[2], end: points[4] }],
-        expected: { start: points[2], end: points[4] }
+        expected: { start: points[2], end: points[4] },
+        smallestDefiniteIndex: 2,
+        largestDefiniteIndex: 2
       },
       {
         label: 'collection 1 with fully definite intervals',
         is: [
           { start: points[2], end: points[4] },
-          { start: points[0], end: points[1] },
+          { start: points[1], end: points[3] },
           { start: points[2], end: points[3] }
         ],
-        expected: { start: points[0], end: points[4] }
+        expected: { start: points[1], end: points[4] },
+        smallestDefiniteIndex: 1,
+        largestDefiniteIndex: 4
       },
       {
         label: 'collection 2 with fully definite intervals',
@@ -159,7 +165,9 @@ describe('intervals', function () {
           { start: points[0], end: points[1] },
           { start: points[2], end: points[4] }
         ],
-        expected: { start: points[0], end: points[4] }
+        expected: { start: points[0], end: points[4] },
+        smallestDefiniteIndex: 0,
+        largestDefiniteIndex: 4
       },
       {
         label: 'collection with fully definite intervals, including the result',
@@ -169,17 +177,21 @@ describe('intervals', function () {
           { start: points[2], end: points[3] },
           { start: points[0], end: points[4] }
         ],
-        expected: { start: points[0], end: points[4] }
+        expected: { start: points[0], end: points[4] },
+        smallestDefiniteIndex: 0,
+        largestDefiniteIndex: 4
       },
       {
         label: 'collection with some left-indefinite intervals',
         is: [
-          { start: points[2], end: points[4] },
+          { start: points[2], end: points[3] },
           { end: points[1] },
-          { end: points[4] },
-          { start: points[0], end: points[3] }
+          { end: points[3] },
+          { start: points[0], end: points[2] }
         ],
-        expected: { end: points[4] }
+        expected: { end: points[3] },
+        smallestDefiniteIndex: 0,
+        largestDefiniteIndex: 3
       },
       {
         label: 'collection with some right-indefinite intervals',
@@ -189,12 +201,16 @@ describe('intervals', function () {
           { start: points[2] },
           { start: points[0] }
         ],
-        expected: { start: points[0] }
+        expected: { start: points[0] },
+        smallestDefiniteIndex: 0,
+        largestDefiniteIndex: 4
       },
       {
         label: 'collection with some fully indefinite intervals',
         is: [{ start: points[2], end: points[4] }, { start: points[0], end: points[1] }, {}, { start: points[0] }],
-        expected: {}
+        expected: {},
+        smallestDefiniteIndex: 0,
+        largestDefiniteIndex: 4
       },
       {
         label: 'collection with only fully indefinite intervals',
@@ -224,10 +240,35 @@ describe('intervals', function () {
             it(`returns true for ${c.label} with the enclosing interval`, function () {
               callIt(c.expected, c.is).should.be.true()
             })
+            it(`returns false for ${c.label} with a left-indefinite enclosing interval`, function () {
+              const i = { end: c.expected.end }
+              callIt(i, c.is).should.be.false()
+            })
+            it(`returns false for ${c.label} with a right-indefinite enclosing interval`, function () {
+              const i = { start: c.expected.start }
+              callIt(i, c.is).should.be.false()
+            })
+            it(`returns false for ${c.label} with a fully indefinite enclosing interval`, function () {
+              const i = {}
+              callIt(i, c.is).should.be.false()
+            })
           } else {
             it(`returns false for ${c.label} because the enclosing interval is not definite`, function () {
               callIt(c.expected, c.is).should.be.false()
             })
+            if (
+              c.smallestDefiniteIndex !== undefined &&
+              c.smallestDefiniteIndex !== null &&
+              c.smallestDefiniteIndex > 0 &&
+              c.largestDefiniteIndex !== undefined &&
+              c.largestDefiniteIndex !== null &&
+              c.largestDefiniteIndex < 4
+            ) {
+              it(`returns false for ${c.label} because there are indefinite intervals`, function () {
+                const i = { start: points[0], end: points[1] }
+                callIt(i, c.is).should.be.false()
+              })
+            }
           }
         })
       })
@@ -249,7 +290,7 @@ describe('intervals', function () {
 
       describe(label, function () {
         enclosingCases.forEach((c: EnclosingCase<T>) => {
-          it(`returns the expected result for ${c.label}`, function () {
+          it(`returns the expected result for the ${c.label}`, function () {
             const result = callIt(c.is)
 
             result.should.be.ok()
