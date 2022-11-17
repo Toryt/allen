@@ -275,6 +275,12 @@ describe('intervals', function () {
         return compareFn !== undefined && compareFn !== null ? minimalEnclosing(is, compareFn) : minimalEnclosing(is)
       }
 
+      function callIsMinimalEnclosing (i: Interval<T>, is: Array<Interval<T>>): boolean {
+        return compareFn !== undefined && compareFn !== null
+          ? isMinimalEnclosing(i, is, compareFn)
+          : isMinimalEnclosing(i, is)
+      }
+
       const enclosingCases: Array<EnclosingCase<T>> = generateEnclosingCases(points)
 
       describe(label, function () {
@@ -315,6 +321,11 @@ describe('intervals', function () {
                 c.is.some(i => i.end === undefined || i.end === null).should.be.true()
               }
               should(c.expected.end).be.undefined()
+            }
+            if (resultStart !== undefined && resultEnd !== undefined) {
+              callIsMinimalEnclosing(result, c.is).should.be.true()
+            } else {
+              callIsMinimalEnclosing(result, c.is).should.be.false()
             }
           })
         })
