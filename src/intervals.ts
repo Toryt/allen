@@ -25,8 +25,6 @@ import { getCompareIfOk } from './getCompareIfOk'
  */
 export const ENCLOSES: AllenRelation = AllenRelation.fromString<AllenRelation>('FDeS')
 
-// export const DOES_NOT_CONCUR = AllenRelation.CONCURS_WITH.complement()
-
 /**
  * Does `i` enclose all intervals in `is`?
  *
@@ -35,17 +33,65 @@ export const ENCLOSES: AllenRelation = AllenRelation.fromString<AllenRelation>('
 export function isEnclosing<T> (i: Interval<T>, is: ReadonlyArray<Interval<T>>, compareFn?: Comparator<T>): boolean {
   assert(Array.isArray(is))
   const compare: Comparator<T> = getCompareIfOk<T>(is.concat([i]), compareFn)
+
   return is.every(ie => AllenRelation.relation<T>(i, ie, compare).implies(ENCLOSES))
 }
 
-// /**
-//  * Does `i` enclose all intervals in `is`, and is `i` not larger than necessary to do that?
-//  *
-//  * When any interval is fully or partially indefinite, this cannot be guaranteed, and `false` is returned.
-//  */
-// export function isMinimalEnclosing<T> (i: Interval<T>, is: Array<Interval<T>>, compareFn?: Comparator<T>): boolean {
-//   return true
-// }
+/**
+ * Does `i` enclose all intervals in `is`, and is `i` not larger than necessary to do that?
+ *
+ * When any interval is fully or partially indefinite, this cannot be guaranteed, and `false` is returned.
+ *
+ * When `is` has no elements, there is no `i` that could be enclosing, so `false` is returned always.
+ *
+ * ### Result
+ *
+ * ```ts
+ * @return i.start !== undefined && i.start !== null &&
+ *         i.end !== undefined && i.end !== null &&
+ *         is.every(j => j.start !== undefined && j.start !== null &&
+ *                       j.end !== undefined && j.end !== null &&
+ *                       !(j.start < i.start) ) &&
+ *                       !(i.end < j.end)) &&
+ *         is.some(j => j.start !== undefined && j.start !== null && i.start === j.start) &&
+ *         is.some(j => j.end !== undefined && j.end !== null && i.end === j.end)
+ */
+export function isMinimalEnclosing<T> (
+  i: Interval<T>,
+  is: ReadonlyArray<Interval<T>>,
+  compareFn?: Comparator<T>
+): boolean {
+  assert(Array.isArray(is))
+  const compare: Comparator<T> = getCompareIfOk<T>(is.concat([i]), compareFn)
+
+  if (i.start === undefined || i.start === null || i.end === undefined || i.end === null || is.length <= 0) {
+    return false
+  }
+
+  let foundStart: boolean = false
+  let foundEnd: boolean = false
+  for (let j = 0; j < is.length; j++) {
+    if (is[j].start === undefined || is[j].start === null || is[j].end === undefined || is[j].end === null) {
+      return false // break
+    }
+    const jStartVsIStart = compare(is[j].start, i.start)
+    if (jStartVsIStart < 0) {
+      return false
+    }
+    if (jStartVsIStart === 0) {
+      foundStart = true
+    }
+    const iEndVsJEnd = compare(i.end, is[j].end)
+    if (iEndVsJEnd < 0) {
+      return false
+    }
+    if (iEndVsJEnd === 0) {
+      foundEnd = true
+    }
+  }
+
+  return foundStart && foundEnd
+}
 
 /**
  * Determine the minimal enclosing interval for all intervals `i[j]`.
@@ -143,5 +189,7 @@ export function minimalEnclosing<T> (is: ReadonlyArray<Interval<T>>, compareFn?:
 //  */
 // export function toChain<T> (i: Interval<T>[], compareFn?: Comparator<T>): Interval<T>[] {}
 //
+//
+// export function toChain<T> (pi: PseudoInterval<T>[], compareFn?: Comparator<T>): Interval<T>[] {}
 //
 // export function toChain<T> (t: <T>[], compareFn?: Comparator<T>): Interval<T>[] {}

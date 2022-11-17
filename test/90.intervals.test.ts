@@ -17,7 +17,7 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { ENCLOSES, isEnclosing, minimalEnclosing } from '../src/intervals'
+import { ENCLOSES, isEnclosing, isMinimalEnclosing, minimalEnclosing } from '../src/intervals'
 import { AllenRelation } from '../src/AllenRelation'
 import { Interval } from '../src/Interval'
 import { ltCompare } from '../src'
@@ -128,81 +128,115 @@ describe('intervals', function () {
       s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
     )
   })
-  describe('minimalEnclosing', function () {
+
+  interface EnclosingCase<T> {
+    label: string
+    is: Array<Interval<T>>
+    expected: Interval<T>
+  }
+
+  function generateEnclosingCases<T> (points: T[]): Array<EnclosingCase<T>> {
+    return [
+      { label: 'empty collection', is: [], expected: {} },
+      {
+        label: 'singleton of fully definite interval',
+        is: [{ start: points[2], end: points[4] }],
+        expected: { start: points[2], end: points[4] }
+      },
+      {
+        label: 'collection 1 with fully definite intervals',
+        is: [
+          { start: points[2], end: points[4] },
+          { start: points[0], end: points[1] },
+          { start: points[2], end: points[3] }
+        ],
+        expected: { start: points[0], end: points[4] }
+      },
+      {
+        label: 'collection 2 with fully definite intervals',
+        is: [
+          { start: points[2], end: points[3] },
+          { start: points[0], end: points[1] },
+          { start: points[2], end: points[4] }
+        ],
+        expected: { start: points[0], end: points[4] }
+      },
+      {
+        label: 'collection with fully definite intervals, including the result',
+        is: [
+          { start: points[2], end: points[4] },
+          { start: points[0], end: points[1] },
+          { start: points[2], end: points[3] },
+          { start: points[0], end: points[4] }
+        ],
+        expected: { start: points[0], end: points[4] }
+      },
+      {
+        label: 'collection with some left-indefinite intervals',
+        is: [
+          { start: points[2], end: points[4] },
+          { end: points[1] },
+          { end: points[4] },
+          { start: points[0], end: points[3] }
+        ],
+        expected: { end: points[4] }
+      },
+      {
+        label: 'collection with some right-indefinite intervals',
+        is: [
+          { start: points[2], end: points[4] },
+          { start: points[0], end: points[1] },
+          { start: points[2] },
+          { start: points[0] }
+        ],
+        expected: { start: points[0] }
+      },
+      {
+        label: 'collection with some fully indefinite intervals',
+        is: [{ start: points[2], end: points[4] }, { start: points[0], end: points[1] }, {}, { start: points[0] }],
+        expected: {}
+      },
+      {
+        label: 'collection with only fully indefinite intervals',
+        is: [{}, {}, {}, {}],
+        expected: {}
+      }
+    ]
+  }
+
+  describe('isMinimalEnclosing', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
-      interface Case {
-        label: string
-        is: Array<Interval<T>>
-        expected: Interval<T>
+      // function compare (t1: T, t2: T): number {
+      //   return compareFn !== undefined && compareFn !== null ? compareFn(t1, t2) : ltCompare(t1, t2)
+      // }
+
+      function callIt (i: Interval<T>, is: Array<Interval<T>>): boolean {
+        return compareFn !== undefined && compareFn !== null
+          ? isMinimalEnclosing(i, is, compareFn)
+          : isMinimalEnclosing(i, is)
       }
 
-      const cases: Case[] = [
-        { label: 'empty collection', is: [], expected: {} },
-        {
-          label: 'singleton of fully definite interval',
-          is: [{ start: points[2], end: points[4] }],
-          expected: { start: points[2], end: points[4] }
-        },
-        {
-          label: 'collection 1 with fully definite intervals',
-          is: [
-            { start: points[2], end: points[4] },
-            { start: points[0], end: points[1] },
-            { start: points[2], end: points[3] }
-          ],
-          expected: { start: points[0], end: points[4] }
-        },
-        {
-          label: 'collection 2 with fully definite intervals',
-          is: [
-            { start: points[2], end: points[3] },
-            { start: points[0], end: points[1] },
-            { start: points[2], end: points[4] }
-          ],
-          expected: { start: points[0], end: points[4] }
-        },
-        {
-          label: 'collection with fully definite intervals, including the result',
-          is: [
-            { start: points[2], end: points[4] },
-            { start: points[0], end: points[1] },
-            { start: points[2], end: points[3] },
-            { start: points[0], end: points[4] }
-          ],
-          expected: { start: points[0], end: points[4] }
-        },
-        {
-          label: 'collection with some left-indefinite intervals',
-          is: [
-            { start: points[2], end: points[4] },
-            { end: points[1] },
-            { end: points[4] },
-            { start: points[0], end: points[3] }
-          ],
-          expected: { end: points[4] }
-        },
-        {
-          label: 'collection with some right-indefinite intervals',
-          is: [
-            { start: points[2], end: points[4] },
-            { start: points[0], end: points[1] },
-            { start: points[2] },
-            { start: points[0] }
-          ],
-          expected: { start: points[0] }
-        },
-        {
-          label: 'collection with some fully indefinite intervals',
-          is: [{ start: points[2], end: points[4] }, { start: points[0], end: points[1] }, {}, { start: points[0] }],
-          expected: {}
-        },
-        {
-          label: 'collection with only fully indefinite intervals',
-          is: [{}, {}, {}, {}],
-          expected: {}
-        }
-      ]
+      const enclosingCases: Array<EnclosingCase<T>> = generateEnclosingCases(points)
 
+      describe(label, function () {
+        enclosingCases.forEach((c: EnclosingCase<T>) => {
+          if (c.expected.start !== undefined && c.expected.end !== undefined) {
+            it(`returns true for ${c.label} with the enclosing interval`, function () {
+              callIt(c.expected, c.is).should.be.true()
+            })
+          } else {
+            it(`returns false for ${c.label} because the enclosing interval is not definite`, function () {
+              callIt(c.expected, c.is).should.be.false()
+            })
+          }
+        })
+      })
+    }
+
+    generateTests<number>('number', sixPoints)
+  })
+  describe('minimalEnclosing', function () {
+    function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
       function compare (t1: T, t2: T): number {
         return compareFn !== undefined && compareFn !== null ? compareFn(t1, t2) : ltCompare(t1, t2)
       }
@@ -211,8 +245,10 @@ describe('intervals', function () {
         return compareFn !== undefined && compareFn !== null ? minimalEnclosing(is, compareFn) : minimalEnclosing(is)
       }
 
+      const enclosingCases: Array<EnclosingCase<T>> = generateEnclosingCases(points)
+
       describe(label, function () {
-        cases.forEach((c: Case) => {
+        enclosingCases.forEach((c: EnclosingCase<T>) => {
           it(`returns the expected result for ${c.label}`, function () {
             const result = callIt(c.is)
 
