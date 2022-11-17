@@ -55,6 +55,7 @@ export function isEnclosing<T> (i: Interval<T>, is: ReadonlyArray<Interval<T>>, 
  *                       !(i.end < j.end)) &&
  *         is.some(j => j.start !== undefined && j.start !== null && i.start === j.start) &&
  *         is.some(j => j.end !== undefined && j.end !== null && i.end === j.end)
+ * ```
  */
 export function isMinimalEnclosing<T> (
   i: Interval<T>,
