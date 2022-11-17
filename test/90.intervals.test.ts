@@ -275,6 +275,11 @@ describe('intervals', function () {
     }
 
     generateTests<number>('number', sixPoints)
+    generateTests<string>('string', sixStrings)
+    generateTests<Date>('Date', sixDates)
+    generateTests<symbol>('symbol', sixSymbols, (s1: Symbol, s2: Symbol): number =>
+      s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
+    )
   })
   describe('minimalEnclosing', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
