@@ -25,6 +25,7 @@ import {
   isEnclosing,
   isInterval,
   isLTComparableOrIndefinite,
+  isMinimalEnclosing,
   isTypeRepresentation,
   LTComparable,
   LTComparablePrimitive,
@@ -119,6 +120,9 @@ describe('index', function () {
   })
   it('exports isEnclosing', function () {
     isEnclosing.should.be.a.Function()
+  })
+  it('exports minimalEnclosing', function () {
+    isMinimalEnclosing.should.be.a.Function()
   })
   it('exports minimalEnclosing', function () {
     minimalEnclosing.should.be.a.Function()
