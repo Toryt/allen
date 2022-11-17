@@ -37,6 +37,36 @@ This library does not help with inference.
 
 ### Example
 
+#### JavaScript
+
+```javascript
+const { AllenRelation } = require('./AllenRelation')
+const { PointIntervalRelation } = require('./PointIntervalRelation')
+
+const iiCondition1 = AllenRelation.fromString('pbsSd')
+const iiCcondition2 = AllenRelation.fromString('sde')
+const iiCondition = iiCondition1.compose(iiCondition2)
+
+const i1 = { start: '2022-11-04', end: '2023-04-12' }
+const i2 = { start: '2021-08-22' }
+
+const iiActual = AllenRelation.relation(i1, i2)
+if (!iiActual.implies(iiCondition)) {
+  throw new Error(`i1 and i2 do no uphold ${iiCondition.toString()}`)
+}
+
+const piCondition1 = PointIntervalRelation.or(PointIntervalRelation.BEFORE, PointIntervalRelation.TERMINATE)
+const piCondition = PointIntervalRelation.compose(piCondition1, iiCcondition2)
+
+const p = '2021-08-15'
+const piActual = PointIntervalRelation.relation(p, i2)
+if (!piActual.implies(piCondition)) {
+  throw new Error(`p and i2 do not uphold ${piCondition.toString()}`)
+}
+```
+
+#### TypeScript
+
 ```ts
 import { Interval } from './Interval'
 import { AllenRelation } from './AllenRelation'
@@ -180,6 +210,10 @@ There are some pitfalls.
 - [Point – Interval Relations]
 - [Allen Relations]
 - [Code documentation]
+
+All functions and methods are protected with explicit `assert`s, that throw when a precondition is violated. Although
+written in TypeScript, types are verified dynamically too, so that type safety is ensured dynamically when the library
+is used with plain JavaScript too.
 
 ## Where to find
 
