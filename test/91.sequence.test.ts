@@ -19,7 +19,8 @@
 import should from 'should'
 import { Interval } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { isSequence } from '../src/sequence'
+import { DOES_NOT_CONCUR, hasSmallerStart, isOrderedSequence, isSequence } from '../src/sequence'
+import { AllenRelation, ltCompare } from '../src'
 
 const sixSymbols = generateSixSymbols('enclosing')
 
@@ -28,7 +29,17 @@ describe('sequence', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
       function callIt (is: Array<Interval<T>>): boolean {
         should(is).be.an.Array()
-        return compareFn !== undefined && compareFn !== null ? isSequence(is, compareFn) : isSequence(is)
+        const result = compareFn !== undefined && compareFn !== null ? isOrderedSequence(is, compareFn) : isSequence(is)
+        const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
+        should(result).equal(
+          is.every(
+            (j: Interval<T>, index: number) =>
+              index === 0 ||
+              (AllenRelation.relation(j, is[index - 1], compare).implies(DOES_NOT_CONCUR) &&
+                hasSmallerStart(is[index - 1], j, compare))
+          )
+        )
+        return result
       }
 
       describe(label, function () {
@@ -61,7 +72,15 @@ describe('sequence', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
       function callIt (is: Array<Interval<T>>): boolean {
         should(is).be.an.Array()
-        return compareFn !== undefined && compareFn !== null ? isSequence(is, compareFn) : isSequence(is)
+        const result = compareFn !== undefined && compareFn !== null ? isSequence(is, compareFn) : isSequence(is)
+        const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
+        should(result).equal(
+          is.every(
+            (j: Interval<T>, index: number) =>
+              index === 0 || AllenRelation.relation(j, is[index - 1], compare).implies(DOES_NOT_CONCUR)
+          )
+        )
+        return result
       }
 
       describe(label, function () {

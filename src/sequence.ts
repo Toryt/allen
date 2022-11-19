@@ -19,7 +19,22 @@ import { Comparator } from './comparator'
 import { Interval } from './Interval'
 import { getCompareIfOk } from './getCompareIfOk'
 
-const DOES_NOT_CONCUR = AllenRelation.CONCURS_WITH.complement()
+export const DOES_NOT_CONCUR = AllenRelation.CONCURS_WITH.complement()
+
+/**
+ * helper
+ *
+ * @internal
+ */
+export function hasSmallerStart<T> (i1: Interval<T>, i2: Interval<T>, compare: Comparator<T>): boolean {
+  if (i1.start === undefined || i1.start === null) {
+    return true
+  }
+  if (i2.start === undefined || i2.start === null) {
+    return false
+  }
+  return compare(i1.start, i2.start) < 0
+}
 
 /**
  * The elements of `is` are discrete (i.e., do not {@link AllenRelation.CONCURS_WITH concur with the previous or next
@@ -34,20 +49,11 @@ const DOES_NOT_CONCUR = AllenRelation.CONCURS_WITH.complement()
 export function isOrderedSequence<T> (is: ReadonlyArray<Interval<T>>, compareFn?: Comparator<T>): boolean {
   const compare: Comparator<T> = getCompareIfOk(is, compareFn)
 
-  function hasSmallerStart (i1: Interval<T>, i2: Interval<T>): boolean {
-    if (i1.start === undefined || i1.start === null) {
-      return true
-    }
-    if (i2.start === undefined || i2.start === null) {
-      return false
-    }
-    return compare(i1.start, i2.start) < 0
-  }
-
   return is.every(
     (j: Interval<T>, index: number) =>
       index === 0 ||
-      (AllenRelation.relation(j, is[index - 1], compare).implies(DOES_NOT_CONCUR) && hasSmallerStart(is[index - 1], j))
+      (AllenRelation.relation(j, is[index - 1], compare).implies(DOES_NOT_CONCUR) &&
+        hasSmallerStart(is[index - 1], j, compare))
   )
 }
 
