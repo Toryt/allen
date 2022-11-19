@@ -170,6 +170,18 @@ describe('sequence', function () {
         { start: points[3], end: points[4] }
       ]).should.be.false()
     })
+    it('returns false for a collection that contains 2 left-indefinite intervals', function () {
+      callIt([{ end: points[1] }, { end: points[2] }]).should.be.false()
+    })
+    it('returns false for a collection that contains a right-indefinite interval with the same definite start as a previous one', function () {
+      callIt([{ start: points[0], end: points[1] }, { start: points[0] }]).should.be.false()
+    })
+    it('returns false for a collection that contains a right-indefinite interval with the same definite start as a later one', function () {
+      callIt([{ start: points[0] }, { start: points[0], end: points[1] }]).should.be.false()
+    })
+    it('returns false for a collection that contains 2 right-indefinite intervals with the same definite start', function () {
+      callIt([{ start: points[0] }, { start: points[0] }]).should.be.false()
+    })
   }
 
   describe('isOrderedSequence', function () {

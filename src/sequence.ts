@@ -73,7 +73,7 @@ export function isSequence<T> (is: ReadonlyArray<Interval<T>>, compareFn?: Compa
       return i1StartVsi2Start
     }
 
-    // start is equal
+    // starts are equal and definite
     if (i1.end === undefined || i1.end === null) {
       if (i2.end !== undefined && i2.end !== null) {
         return +1
