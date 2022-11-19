@@ -113,6 +113,14 @@ describe('sequence', function () {
         { start: points[4], end: points[5] }
       ]).should.be.true()
     })
+    it('returns false when intervals concur, and are out of order', function () {
+      callIt([
+        { start: points[3], end: points[4] },
+        { start: points[0], end: points[2] },
+        { start: points[4], end: points[5] },
+        { start: points[1], end: points[3] }
+      ]).should.be.false()
+    })
     it('returns true for an ordered sequence of that starts with a left-indefinite interval, with a gap', function () {
       callIt([
         { end: points[1] },
