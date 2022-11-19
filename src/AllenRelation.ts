@@ -320,8 +320,10 @@ export class AllenRelation extends Relation {
    * `(oFDseSdfO)` — a non-basic interval relation that is often handy to use, which expresses that and interval `i1`
    * and an interval `i2` are concurrent in some way.
    *
-   * Thus, `i1` does _not_ {@link PRECEDES precede} `I`, does _not_ {@link MEETS meet} `I`, is _not_ {@link MET_BY}, and
-   * is _not_ {@link PRECEDED_BY} `i2`.
+   * Thus, `i1` does _not_ {@link PRECEDES precede} `i2`, does _not_ {@link MEETS meet} `i2`, is _not_ {@link MET_BY},
+   * and is _not_ {@link PRECEDED_BY} `i2`.
+   *
+   * This is the complement of {@link AllenRelation.DOES_NOT_CONCUR_WITH}
    *
    * This relation is introduced because it is the possible result of the composition of 2 basic relations.
    *
@@ -342,6 +344,23 @@ export class AllenRelation extends Relation {
     AllenRelation.FINISHES,
     AllenRelation.OVERLAPPED_BY
   )
+
+  /**
+   * `(pmMP)` — a non-basic interval relation that is often handy to use, which expresses that and interval `i1`
+   * does not concur with an interval `i2`.
+   *
+   * Thus, `i1` {@link PRECEDES precede} `i2`, {@link MEETS meet} `i2`, is {@link MET_BY} `i2`, or is
+   * {@link PRECEDED_BY} `i2`.
+   *
+   * This is the complement of {@link AllenRelation.CONCURS_WITH}
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * DOES_NOT_CONCUR_WITH = or(PRECEDES, MEETS, MET_BY, PRECEDED_BY)
+   * ```
+   */
+  static readonly DOES_NOT_CONCUR_WITH: AllenRelation = AllenRelation.CONCURS_WITH.complement()
 
   /**
    * `(pmoFD)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1` starts

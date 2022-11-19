@@ -45,6 +45,7 @@ describe('AllenRelation', function () {
     ],
     [
       { name: 'CONCURS_WITH', representation: 'oFDseSdfO' },
+      { name: 'DOES_NOT_CONCUR_WITH', representation: 'pmMP' },
       { name: 'STARTS_EARLIER', representation: 'pmoFD' },
       { name: 'START_TOGETHER', representation: 'seS' },
       { name: 'STARTS_LATER', representation: 'dfOMP' },

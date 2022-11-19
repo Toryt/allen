@@ -19,7 +19,7 @@
 import should from 'should'
 import { Interval } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { DOES_NOT_CONCUR, hasSmallerStart, isOrderedSequence, isSequence } from '../src/sequence'
+import { hasSmallerStart, isOrderedSequence, isSequence } from '../src/sequence'
 import { AllenRelation, ltCompare } from '../src'
 
 const sixSymbols = generateSixSymbols('enclosing')
@@ -35,7 +35,7 @@ describe('sequence', function () {
           is.every(
             (j: Interval<T>, index: number) =>
               index === 0 ||
-              (AllenRelation.relation(j, is[index - 1], compare).implies(DOES_NOT_CONCUR) &&
+              (AllenRelation.relation(j, is[index - 1], compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH) &&
                 hasSmallerStart(is[index - 1], j, compare))
           )
         )
@@ -77,7 +77,8 @@ describe('sequence', function () {
         should(result).equal(
           is.every(
             (j: Interval<T>, index: number) =>
-              index === 0 || AllenRelation.relation(j, is[index - 1], compare).implies(DOES_NOT_CONCUR)
+              index === 0 ||
+              AllenRelation.relation(j, is[index - 1], compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH)
           )
         )
         return result

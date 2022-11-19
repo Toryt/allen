@@ -19,8 +19,6 @@ import { Comparator } from './comparator'
 import { Interval } from './Interval'
 import { getCompareIfOk } from './getCompareIfOk'
 
-export const DOES_NOT_CONCUR = AllenRelation.CONCURS_WITH.complement()
-
 /**
  * helper
  *
@@ -52,7 +50,7 @@ export function isOrderedSequence<T> (is: ReadonlyArray<Interval<T>>, compareFn?
   return is.every(
     (j: Interval<T>, index: number) =>
       index === 0 ||
-      (AllenRelation.relation(j, is[index - 1], compare).implies(DOES_NOT_CONCUR) &&
+      (AllenRelation.relation(j, is[index - 1], compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH) &&
         hasSmallerStart(is[index - 1], j, compare))
   )
 }
@@ -72,7 +70,7 @@ export function isSequence<T> (is: ReadonlyArray<Interval<T>>, compareFn?: Compa
 
   return is.every(
     (j: Interval<T>, index: number) =>
-      index === 0 || AllenRelation.relation(j, is[index - 1], compare).implies(DOES_NOT_CONCUR)
+      index === 0 || AllenRelation.relation(j, is[index - 1], compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH)
   )
 }
 
