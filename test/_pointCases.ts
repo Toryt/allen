@@ -77,3 +77,18 @@ export const objectCases = [
 ]
 
 export const pointCases = (dontKnowCases as unknown[]).concat(primitiveCases).concat(objectCases)
+
+export const sixNumbers = [-6, -4.983458, -1, 2, Math.PI, 23455]
+export const sixStrings = ['a smallest', 'b less small', 'c medium', 'd larger', 'e largest', 'f super']
+export const sixDates = [
+  new Date(2006, 9, 3, 19, 49, 34, 848),
+  new Date(2011, 9, 3, 19, 49, 34, 848),
+  new Date(2015, 9, 3, 19, 49, 34, 848),
+  new Date(2018, 9, 3, 19, 49, 34, 848),
+  new Date(2022, 9, 3, 19, 49, 34, 848),
+  new Date(2048, 9, 3, 19, 49, 34, 848)
+]
+export const sixArrays = sixNumbers.map(p => [p])
+export function generateSixSymbols (discriminator: string): symbol[] {
+  return sixStrings.map(s => Symbol(`${s} ${discriminator}`))
+}

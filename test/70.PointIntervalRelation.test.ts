@@ -25,6 +25,7 @@ import { generateRelationTests } from './_generateRelationTests'
 import { AllenRelation } from '../src/AllenRelation'
 import { ltCompare } from '../src'
 import assert from 'assert'
+import { generateSixSymbols, sixArrays, sixDates, sixNumbers, sixStrings } from './_pointCases'
 
 describe('PointIntervalRelation', function () {
   generateRelationTests<PointIntervalRelation>(
@@ -94,9 +95,6 @@ describe('PointIntervalRelation', function () {
   })
 
   describe('relation', function () {
-    const fivePoints = [-6, -4.983458, -1, 2, Math.PI]
-    const fiveStrings = ['a smallest', 'b less small', 'c medium', 'd larger', 'e largest']
-
     function generatePointIntervalRelationTests<T> (
       label: string,
       interval: Interval<T>,
@@ -223,23 +221,15 @@ describe('PointIntervalRelation', function () {
       })
     }
 
-    generateAllPointIntervalRelationTests('number', fivePoints)
-    generateAllPointIntervalRelationTests('string', fiveStrings)
-    generateAllPointIntervalRelationTests('Date', [
-      new Date(2006, 9, 3, 19, 49, 34, 848),
-      new Date(2011, 9, 3, 19, 49, 34, 848),
-      new Date(2015, 9, 3, 19, 49, 34, 848),
-      new Date(2018, 9, 3, 19, 49, 34, 848),
-      new Date(2022, 9, 3, 19, 49, 34, 848)
-    ])
-    generateAllPointIntervalRelationTests(
-      'compare',
-      fivePoints.map(p => [p]),
-      (c1: number[], c2: number[]): number => (c1[0] < c2[0] ? -1 : c1[0] > c2[0] ? +1 : 0)
+    generateAllPointIntervalRelationTests('number', sixNumbers)
+    generateAllPointIntervalRelationTests('string', sixStrings)
+    generateAllPointIntervalRelationTests('Date', sixDates)
+    generateAllPointIntervalRelationTests('compare', sixArrays, (c1: number[], c2: number[]): number =>
+      c1[0] < c2[0] ? -1 : c1[0] > c2[0] ? +1 : 0
     )
     generateAllPointIntervalRelationTests(
       'symbol',
-      fiveStrings.map(s => Symbol(s)),
+      generateSixSymbols('point interval relation'),
       (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
     )
   })

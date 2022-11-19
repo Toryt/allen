@@ -22,6 +22,7 @@ import { AllenRelation } from '../src/AllenRelation'
 import { Interval } from '../src/Interval'
 import { ltCompare } from '../src/ltCompare'
 import { intervalToString } from './_intervalToString'
+import { generateSixSymbols, sixArrays, sixDates, sixNumbers, sixStrings } from './_pointCases'
 
 describe('AllenRelation', function () {
   generateRelationTests<AllenRelation>(
@@ -144,15 +145,6 @@ describe('AllenRelation', function () {
     })
   })
   describe('relation', function () {
-    const fourPoints = [-4.983458, -1, 2, Math.PI]
-    const fourStrings = ['a smallest for ar', 'b less small for ar', 'c larger for ar', 'e largest for ar']
-    const fourDates = [
-      new Date(2006, 9, 3, 19, 49, 34, 848),
-      new Date(2011, 9, 3, 19, 49, 34, 848),
-      new Date(2018, 9, 3, 19, 49, 34, 848),
-      new Date(2022, 9, 3, 19, 49, 34, 848)
-    ]
-
     interface TestIntervals<T> {
       i1: Interval<T>
       i2: Interval<T>
@@ -483,12 +475,15 @@ describe('AllenRelation', function () {
       })
     }
 
-    generateTests<number>('number', fourPoints)
-    generateTests<string>('string', fourStrings)
-    generateTests<Date>('Date', fourDates)
+    generateTests<number>('number', sixNumbers)
+    generateTests<string>('string', sixStrings)
+    generateTests<Date>('Date', sixDates)
+    generateTests('compare', sixArrays, (c1: number[], c2: number[]): number =>
+      c1[0] < c2[0] ? -1 : c1[0] > c2[0] ? +1 : 0
+    )
     generateTests<symbol>(
       'symbol with compare',
-      fourStrings.map(s => Symbol(s)),
+      generateSixSymbols('allen relation'),
       (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
     )
   })

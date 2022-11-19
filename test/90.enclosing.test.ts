@@ -22,25 +22,9 @@ import { AllenRelation } from '../src/AllenRelation'
 import { Interval } from '../src/Interval'
 import { ltCompare } from '../src'
 import assert, { ok } from 'assert'
+import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 
-const sixPoints = [-6, -4.983458, -1, 2, Math.PI, 23455]
-const sixStrings = [
-  'a smallest i point',
-  'b less small i point',
-  'c medium i point',
-  'd larger i point',
-  'e largest i point',
-  'f supper i point'
-]
-const sixDates = [
-  new Date(2006, 9, 3, 19, 49, 34, 848),
-  new Date(2011, 9, 3, 19, 49, 34, 848),
-  new Date(2015, 9, 3, 19, 49, 34, 848),
-  new Date(2018, 9, 3, 19, 49, 34, 848),
-  new Date(2022, 9, 3, 19, 49, 34, 848),
-  new Date(2048, 9, 3, 19, 49, 34, 848)
-]
-const sixSymbols = sixStrings.map(s => Symbol(s))
+const sixSymbols = generateSixSymbols('enclosing')
 
 describe('enclosing', function () {
   describe('ENCLOSES', function () {
@@ -121,7 +105,7 @@ describe('enclosing', function () {
       })
     }
 
-    generateTests<number>('number', sixPoints)
+    generateTests<number>('number', sixNumbers)
     generateTests<string>('string', sixStrings)
     generateTests<Date>('Date', sixDates)
     generateTests<symbol>('symbol', sixSymbols, (s1: Symbol, s2: Symbol): number =>
@@ -258,7 +242,7 @@ describe('enclosing', function () {
       })
     }
 
-    generateTests<number>('number', sixPoints)
+    generateTests<number>('number', sixNumbers)
     generateTests<string>('string', sixStrings)
     generateTests<Date>('Date', sixDates)
     generateTests<symbol>('symbol', sixSymbols, (s1: Symbol, s2: Symbol): number =>
@@ -332,7 +316,7 @@ describe('enclosing', function () {
       })
     }
 
-    generateTests<number>('number', sixPoints)
+    generateTests<number>('number', sixNumbers)
     generateTests<string>('string', sixStrings)
     generateTests<Date>('Date', sixDates)
     generateTests<symbol>('symbol', sixSymbols, (s1: Symbol, s2: Symbol): number =>
