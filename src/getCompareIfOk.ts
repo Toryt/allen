@@ -29,7 +29,7 @@ const haveCommonType: string = 'i1.start, i1.end, i2.start and i2.end must be of
 export function getCompareIfOk<T> (i: ReadonlyArray<Interval<T>>, compareFn?: Comparator<T>): Comparator<T> {
   i.forEach(j => assert(typeof j === 'object' && j !== null))
   assert(
-    i.every(j => isLTComparableOrIndefinite(j.start) && isLTComparableOrIndefinite(j.end)) || compareFn !== undefined,
+    compareFn !== undefined || i.every(j => isLTComparableOrIndefinite(j.start) && isLTComparableOrIndefinite(j.end)),
     '`compareFn` is mandatory when `iN.start` or `iN.end` is a `symbol` or `NaN`'
   )
 
