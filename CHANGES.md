@@ -4,6 +4,11 @@
 
 ### 0.2
 
+#### 0.2.3
+
+- add `isOrderedSequence`
+- add `isSequence`
+
 #### 0.2.2
 
 - add `isMinimalEnclosing`
