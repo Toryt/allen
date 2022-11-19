@@ -19,10 +19,20 @@
 import should from 'should'
 import { Interval } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { hasSmallerStart, isOrderedSequence, isSequence } from '../src/sequence'
-import { AllenRelation, ltCompare } from '../src'
+import { isOrderedSequence, isSequence } from '../src/sequence'
+import { AllenRelation, Comparator, ltCompare } from '../src'
+import assert from 'assert'
 
 const sixSymbols = generateSixSymbols('enclosing')
+
+function hasSmallerStart<T> (i1: Interval<T>, i2: Interval<T>, compare: Comparator<T>): boolean {
+  assert(i2.start !== undefined && i2.start !== null)
+
+  if (i1.start === undefined || i1.start === null) {
+    return true
+  }
+  return compare(i1.start, i2.start) < 0
+}
 
 describe('sequence', function () {
   describe('isOrderedSequence', function () {
