@@ -17,7 +17,7 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { ENCLOSES, isEnclosing, isMinimalEnclosing, minimalEnclosing } from '../src/intervals'
+import { ENCLOSES, isEnclosing, isMinimalEnclosing, minimalEnclosing } from '../src/enclosing'
 import { AllenRelation } from '../src/AllenRelation'
 import { Interval } from '../src/Interval'
 import { ltCompare } from '../src'
