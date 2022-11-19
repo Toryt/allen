@@ -208,10 +208,11 @@ describe('sequence', function () {
         const result = compareFn !== undefined && compareFn !== null ? isSequence(is, compareFn) : isSequence(is)
         const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
         should(result).equal(
-          is.every(
-            (j: Interval<T>, index: number) =>
-              index === 0 ||
-              AllenRelation.relation(j, is[index - 1], compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH)
+          is.every((i: Interval<T>) =>
+            is.every(
+              (j: Interval<T>) =>
+                i === j || AllenRelation.relation(i, j, compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH)
+            )
           )
         )
         return result

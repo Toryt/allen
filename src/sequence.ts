@@ -53,14 +53,13 @@ export function isOrderedSequence<T> (is: ReadonlyArray<Interval<T>>, compareFn?
  *
  * Only 1 element might have an indefinite `start`, and only one element might have an indefinite `end`.
  *
- * @returns is.every((i, j) => j === 0 || relation(i, is[j - 1]).implies(DOES_NOT_CONCUR))
+ * @returns is.every(i => is.every(j => i === j || relation(i, j).implies(DOES_NOT_CONCUR)))
  */
 export function isSequence<T> (is: ReadonlyArray<Interval<T>>, compareFn?: Comparator<T>): boolean {
   const compare: Comparator<T> = getCompareIfOk(is, compareFn)
 
-  return is.every(
-    (j: Interval<T>, index: number) =>
-      index === 0 || AllenRelation.relation(j, is[index - 1], compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH)
+  return is.every((i: Interval<T>) =>
+    is.every(j => i === j || AllenRelation.relation(i, j, compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH))
   )
 }
 
