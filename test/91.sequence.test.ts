@@ -24,6 +24,39 @@ import { isSequence } from '../src/sequence'
 const sixSymbols = generateSixSymbols('enclosing')
 
 describe('sequence', function () {
+  describe('isOrderedSequence', function () {
+    function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
+      function callIt (is: Array<Interval<T>>): boolean {
+        should(is).be.an.Array()
+        return compareFn !== undefined && compareFn !== null ? isSequence(is, compareFn) : isSequence(is)
+      }
+
+      describe(label, function () {
+        it('returns true for the empty collection', function () {
+          callIt([]).should.be.true()
+        })
+        it('returns true for a singleton collection with a fully definite interval', function () {
+          callIt([{ start: points[2], end: points[4] }]).should.be.true()
+        })
+        it('returns true for a singleton collection with a left-indefinite interval', function () {
+          callIt([{ end: points[4] }]).should.be.true()
+        })
+        it('returns true for a singleton collection with a right-indefinite interval', function () {
+          callIt([{ start: points[2] }]).should.be.true()
+        })
+        it('returns true for a singleton collection with a fully indefinite interval', function () {
+          callIt([{}]).should.be.true()
+        })
+      })
+    }
+
+    generateTests<number>('number', sixNumbers)
+    generateTests<string>('string', sixStrings)
+    generateTests<Date>('Date', sixDates)
+    generateTests<symbol>('symbol', sixSymbols, (s1: Symbol, s2: Symbol): number =>
+      s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
+    )
+  })
   describe('isSequence', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
       function callIt (is: Array<Interval<T>>): boolean {
