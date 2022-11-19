@@ -24,7 +24,7 @@ reasoning about their relations, in practice proves to be even much more difficu
 tackled in 1983 by James Allen:
 
 - [Allen, James F. “Maintaining knowledge about temporal intervals”], _Communications of the ACM 26(11) pages 832-843;
-  November 1983_)
+  November 1983_
 
 Good synopses of this theory are
 
