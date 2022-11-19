@@ -42,7 +42,7 @@ const sixDates = [
 ]
 const sixSymbols = sixStrings.map(s => Symbol(s))
 
-describe('intervals', function () {
+describe('enclosing', function () {
   describe('ENCLOSES', function () {
     it('is an AllenRelation', function () {
       should(ENCLOSES).be.an.instanceof(AllenRelation)
