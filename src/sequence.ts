@@ -47,14 +47,17 @@ export function hasSmallerStart<T> (i1: Interval<T>, i2: Interval<T>, compare: C
 export function isOrderedSequence<T> (is: ReadonlyArray<Interval<T>>, compareFn?: Comparator<T>): boolean {
   const compare: Comparator<T> = getCompareIfOk(is, compareFn)
 
-  function endsBefore<T> (i1: Interval<T>, i2: Interval<T>, compare: Comparator<T>): boolean {
-    if (i1.end === undefined || i1.end === null || i2.start === undefined || i2.start === null) {
-      return false
-    }
-    return compare(i1.end, i2.start) <= 0
+  function endsBefore (i1: Interval<T>, i2: Interval<T>): boolean {
+    return (
+      i1.end !== undefined &&
+      i1.end !== null &&
+      i2.start !== undefined &&
+      i2.start !== null &&
+      compare(i1.end, i2.start) <= 0
+    )
   }
 
-  return is.every((j: Interval<T>, index: number) => index === 0 || endsBefore(is[index - 1], j, compare))
+  return is.every((j: Interval<T>, index: number) => index === 0 || endsBefore(is[index - 1], j))
 }
 
 /**
