@@ -17,6 +17,26 @@
 import { Comparator } from './comparator'
 import { Interval } from './Interval'
 import { getCompareIfOk } from './getCompareIfOk'
+import assert from 'assert'
+
+export interface SequenceOptions<T> {
+  compareFn?: Comparator<T>
+  leftDefinite?: boolean
+  rightDefinite?: boolean
+}
+
+function normalizeSequenceOptions<T> (
+  is: ReadonlyArray<Interval<T>>,
+  options?: SequenceOptions<T>
+): Required<SequenceOptions<T>> {
+  assert(options === undefined || typeof options === 'object')
+
+  return {
+    compareFn: getCompareIfOk(is, options?.compareFn), // asserts preconditions
+    leftDefinite: options?.leftDefinite ?? false,
+    rightDefinite: options?.rightDefinite ?? false
+  }
+}
 
 /**
  * The elements of `is` are discrete (i.e., do not {@link AllenRelation.CONCURS_WITH concur with the previous or next
@@ -28,8 +48,8 @@ import { getCompareIfOk } from './getCompareIfOk'
  *
  * @returns is.every((i, j) => j === 0 || relation(i, is[j - 1]).implies(DOES_NOT_CONCUR) && is[j - 1].start < i.start)
  */
-export function isOrderedSequence<T> (is: ReadonlyArray<Interval<T>>, compareFn?: Comparator<T>): boolean {
-  const compare: Comparator<T> = getCompareIfOk(is, compareFn)
+export function isOrderedSequence<T> (is: ReadonlyArray<Interval<T>>, options?: SequenceOptions<T>): boolean {
+  const { compareFn } = normalizeSequenceOptions(is, options)
 
   function endsBefore (i1: Interval<T>, i2: Interval<T>): boolean {
     return (
@@ -37,7 +57,7 @@ export function isOrderedSequence<T> (is: ReadonlyArray<Interval<T>>, compareFn?
       i1.end !== null &&
       i2.start !== undefined &&
       i2.start !== null &&
-      compare(i1.end, i2.start) <= 0
+      compareFn(i1.end, i2.start) <= 0
     )
   }
 
@@ -87,7 +107,7 @@ export function isSequence<T> (is: ReadonlyArray<Interval<T>>, compareFn?: Compa
     return compare(i1.end, i2.end)
   })
 
-  return isOrderedSequence(sortedIs, compareFn)
+  return isOrderedSequence(sortedIs, compareFn ? { compareFn } : undefined)
 }
 
 // /**
