@@ -35,7 +35,11 @@ function hasSmallerStart<T> (i1: Interval<T>, i2: Interval<T>, compare: Comparat
 }
 
 describe('sequence', function () {
-  function generateSequenceTests<T> (callIt: (is: Array<Interval<T>>) => boolean, points: T[], unorderedOk: boolean) {
+  function generateSequenceTests<T> (
+    callIt: (is: Array<Interval<T>>) => boolean,
+    points: T[],
+    unorderedOk: boolean
+  ): void {
     it('returns true for the empty collection', function () {
       callIt([]).should.be.true()
     })
@@ -206,21 +210,7 @@ describe('sequence', function () {
       }
 
       describe(label, function () {
-        it('returns true for the empty collection', function () {
-          callIt([]).should.be.true()
-        })
-        it('returns true for a singleton collection with a fully definite interval', function () {
-          callIt([{ start: points[2], end: points[4] }]).should.be.true()
-        })
-        it('returns true for a singleton collection with a left-indefinite interval', function () {
-          callIt([{ end: points[4] }]).should.be.true()
-        })
-        it('returns true for a singleton collection with a right-indefinite interval', function () {
-          callIt([{ start: points[2] }]).should.be.true()
-        })
-        it('returns true for a singleton collection with a fully indefinite interval', function () {
-          callIt([{}]).should.be.true()
-        })
+        generateSequenceTests(callIt, points, true)
       })
     }
 
