@@ -74,8 +74,8 @@ export function isOrderedSequence<T> (is: ReadonlyArray<Interval<T>>, options?: 
  *
  * @returns is.every(i => is.every(j => i === j || relation(i, j).implies(DOES_NOT_CONCUR)))
  */
-export function isSequence<T> (is: ReadonlyArray<Interval<T>>, compareFn?: Comparator<T>): boolean {
-  const compare: Comparator<T> = getCompareIfOk(is, compareFn)
+export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: SequenceOptions<T>): boolean {
+  const { compareFn } = normalizeSequenceOptions(is, options)
 
   const sortedIs: ReadonlyArray<Interval<T>> = is.slice().sort((i1: Interval<T>, i2: Interval<T>) => {
     if (i1.start === undefined || i1.start === null) {
@@ -88,7 +88,7 @@ export function isSequence<T> (is: ReadonlyArray<Interval<T>>, compareFn?: Compa
       return +1
     }
 
-    const i1StartVsi2Start = compare(i1.start, i2.start)
+    const i1StartVsi2Start = compareFn(i1.start, i2.start)
     if (i1StartVsi2Start !== 0) {
       return i1StartVsi2Start
     }
@@ -104,10 +104,10 @@ export function isSequence<T> (is: ReadonlyArray<Interval<T>>, compareFn?: Compa
       return -1
     }
 
-    return compare(i1.end, i2.end)
+    return compareFn(i1.end, i2.end)
   })
 
-  return isOrderedSequence(sortedIs, compareFn ? { compareFn } : undefined)
+  return isOrderedSequence(sortedIs, options)
 }
 
 // /**

@@ -217,7 +217,7 @@ describe('sequence', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
       function callIt (is: Array<Interval<T>>): boolean {
         should(is).be.an.Array()
-        const result = compareFn !== undefined && compareFn !== null ? isSequence(is, compareFn) : isSequence(is)
+        const result = compareFn !== undefined && compareFn !== null ? isSequence(is, { compareFn }) : isSequence(is)
         const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
         should(result).equal(
           is.every((i: Interval<T>) =>
