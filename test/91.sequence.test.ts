@@ -16,17 +16,19 @@
 
 /* eslint-env mocha */
 
-import { isEnclosing } from '../src/enclosing'
+import should from 'should'
 import { Interval } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
+import { isSequence } from '../src/sequence'
 
 const sixSymbols = generateSixSymbols('enclosing')
 
 describe('sequence', function () {
-  describe('isOrderedSequence', function () {
+  describe('isSequence', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
       function callIt (is: Array<Interval<T>>): boolean {
-        return compareFn !== undefined && compareFn !== null ? isEnclosing(is, compareFn) : isSequence(is)
+        should(is).be.an.Array()
+        return compareFn !== undefined && compareFn !== null ? isSequence(is, compareFn) : isSequence(is)
       }
 
       describe(label, function () {
