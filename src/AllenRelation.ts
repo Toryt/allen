@@ -617,6 +617,27 @@ export class AllenRelation extends Relation {
     AllenRelation.OVERLAPPED_BY
   )
 
+  /**
+   * `(FDeS)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1`
+   * encloses an interval `i2`.
+   *
+   * ```
+   * (i1.start ≠ undefined) ∧ (i1.end ≠ undefined) ∧ (i2.end ≠ undefined) ∧ (i1.start ≤ i2.start) ∧ (i2.end ≤ i1.end)
+   * ```
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * CONTAINS_END == or(CONTAINS, STARTED_BY, OVERLAPPED_BY)
+   * ```
+   */
+  static readonly ENCLOSES: AllenRelation = AllenRelation.or(
+    AllenRelation.FINISHED_BY,
+    AllenRelation.CONTAINS,
+    AllenRelation.EQUALS,
+    AllenRelation.STARTED_BY
+  )
+
   /* endregion */
 
   /**

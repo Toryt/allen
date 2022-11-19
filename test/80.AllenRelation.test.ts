@@ -56,7 +56,8 @@ describe('AllenRelation', function () {
       { name: 'END_TOGETHER', representation: 'Fef' },
       { name: 'ENDS_LATER', representation: 'DSOMP' },
       { name: 'CONTAINS_START', representation: 'oFD' },
-      { name: 'CONTAINS_END', representation: 'DSO' }
+      { name: 'CONTAINS_END', representation: 'DSO' },
+      { name: 'ENCLOSES', representation: 'FDeS' }
     ],
     false // there are 67108864; it takes hours to test all combinations
   )

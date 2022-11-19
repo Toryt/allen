@@ -17,7 +17,7 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { ENCLOSES, isEnclosing, isMinimalEnclosing, minimalEnclosing } from '../src/enclosing'
+import { isEnclosing, isMinimalEnclosing, minimalEnclosing } from '../src/enclosing'
 import { AllenRelation } from '../src/AllenRelation'
 import { Interval } from '../src/Interval'
 import { ltCompare } from '../src'
@@ -27,14 +27,6 @@ import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCa
 const sixSymbols = generateSixSymbols('enclosing')
 
 describe('enclosing', function () {
-  describe('ENCLOSES', function () {
-    it('is an AllenRelation', function () {
-      should(ENCLOSES).be.an.instanceof(AllenRelation)
-    })
-    it('is FDeS', function () {
-      ENCLOSES.toString().should.equal('(FDeS)')
-    })
-  })
   describe('isEnclosing', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
       function callIt (i: Interval<T>, is: Array<Interval<T>>): boolean {
@@ -273,7 +265,7 @@ describe('enclosing', function () {
             const result = callIt(c.is)
 
             result.should.be.ok()
-            c.is.forEach(i => AllenRelation.relation(result, i, compareFn).implies(ENCLOSES))
+            c.is.forEach(i => AllenRelation.relation(result, i, compareFn).implies(AllenRelation.ENCLOSES))
 
             const resultStart = result.start
             assert(resultStart !== null)
