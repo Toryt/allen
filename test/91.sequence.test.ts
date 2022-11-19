@@ -138,6 +138,20 @@ describe('sequence', function () {
         it('returns true for an ordered sequence of that starts and ends with a half-indefinite interval, without a gap', function () {
           callIt([{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }]).should.be.true()
         })
+        it('returns false for a collection that contains a left-indefinite interval in the middle', function () {
+          callIt([
+            { start: points[0], end: points[1] },
+            { end: points[2] },
+            { start: points[2], end: points[3] }
+          ]).should.be.false()
+        })
+        it('returns false for a collection that contains a right-indefinite interval in the middle', function () {
+          callIt([
+            { start: points[0], end: points[1] },
+            { start: points[1] },
+            { start: points[2], end: points[3] }
+          ]).should.be.false()
+        })
       })
     }
 
