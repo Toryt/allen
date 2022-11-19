@@ -35,6 +35,123 @@ function hasSmallerStart<T> (i1: Interval<T>, i2: Interval<T>, compare: Comparat
 }
 
 describe('sequence', function () {
+  function generateSequenceTests<T> (callIt: (is: Array<Interval<T>>) => boolean, points: T[], unorderedOk: boolean) {
+    it('returns true for the empty collection', function () {
+      callIt([]).should.be.true()
+    })
+    it('returns true for a singleton collection with a fully definite interval', function () {
+      callIt([{ start: points[2], end: points[4] }]).should.be.true()
+    })
+    it('returns true for a singleton collection with a left-indefinite interval', function () {
+      callIt([{ end: points[4] }]).should.be.true()
+    })
+    it('returns true for a singleton collection with a right-indefinite interval', function () {
+      callIt([{ start: points[2] }]).should.be.true()
+    })
+    it('returns true for a singleton collection with a fully indefinite interval', function () {
+      callIt([{}]).should.be.true()
+    })
+    it('returns true for an ordered sequence of 4 fully definite intervals, with a gap', function () {
+      callIt([
+        { start: points[0], end: points[1] },
+        { start: points[1], end: points[2] },
+        { start: points[3], end: points[4] },
+        { start: points[4], end: points[5] }
+      ]).should.be.true()
+    })
+    it('returns true for an ordered sequence of 3 fully definite intervals, without a gap', function () {
+      callIt([
+        { start: points[0], end: points[1] },
+        { start: points[1], end: points[2] },
+        { start: points[2], end: points[3] }
+      ]).should.be.true()
+    })
+    it('returns false for an ordered sequence of 4 fully definite intervals with a duplicate', function () {
+      callIt([
+        { start: points[0], end: points[1] },
+        { start: points[1], end: points[2] },
+        { start: points[1], end: points[2] },
+        { start: points[4], end: points[5] }
+      ]).should.be.false()
+    })
+    it(`returns ${
+      unorderedOk ? 'true' : 'false'
+    } for an unordered sequence of 4 fully definite intervals, with a gap`, function () {
+      callIt([
+        { start: points[0], end: points[1] },
+        { start: points[3], end: points[4] },
+        { start: points[1], end: points[2] },
+        { start: points[4], end: points[5] }
+      ]).should.equal(unorderedOk)
+    })
+    it(`returns ${
+      unorderedOk ? 'true' : 'false'
+    } for an unordered sequence of 3 fully definite intervals, without a gap`, function () {
+      callIt([
+        { start: points[2], end: points[3] },
+        { start: points[0], end: points[1] },
+        { start: points[1], end: points[2] }
+      ]).should.equal(unorderedOk)
+    })
+    it('returns true for an ordered sequence of 4 fully definite intervals, with a gap', function () {
+      callIt([
+        { start: points[0], end: points[1] },
+        { start: points[1], end: points[2] },
+        { start: points[3], end: points[4] },
+        { start: points[4], end: points[5] }
+      ]).should.be.true()
+    })
+    it('returns true for an ordered sequence of that starts with a left-indefinite interval, with a gap', function () {
+      callIt([
+        { end: points[1] },
+        { start: points[1], end: points[2] },
+        { start: points[3], end: points[4] }
+      ]).should.be.true()
+    })
+    it('returns true for an ordered sequence of that starts with a left-indefinite interval, without a gap', function () {
+      callIt([
+        { end: points[1] },
+        { start: points[1], end: points[2] },
+        { start: points[2], end: points[4] }
+      ]).should.be.true()
+    })
+    it('returns true for an ordered sequence of that ends with a right-indefinite interval, with a gap', function () {
+      callIt([
+        { start: points[0], end: points[1] },
+        { start: points[1], end: points[2] },
+        { start: points[3] }
+      ]).should.be.true()
+    })
+    it('returns true for an ordered sequence of that ends with a right-indefinite interval, without a gap', function () {
+      callIt([
+        { start: points[0], end: points[1] },
+        { start: points[1], end: points[2] },
+        { start: points[2] }
+      ]).should.be.true()
+    })
+    it('returns true for an ordered sequence of that starts and ends with a half-indefinite interval, with a gap', function () {
+      callIt([{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }]).should.be.true()
+    })
+    it('returns true for an ordered sequence of that starts and ends with a half-indefinite interval, without a gap', function () {
+      callIt([{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }]).should.be.true()
+    })
+    it('returns false for a collection that contains a left-indefinite interval in the middle', function () {
+      callIt([
+        { start: points[0], end: points[1] },
+        { end: points[2] },
+        { start: points[2], end: points[3] }
+      ]).should.be.false()
+    })
+    it('returns false for a collection that contains a right-indefinite interval in the middle', function () {
+      callIt([
+        { start: points[0], end: points[1] },
+        { start: points[1], end: points[2] },
+        { start: points[2] },
+        { start: points[3], end: points[4] }
+      ]).should.be.false()
+    })
+  }
+
   describe('isOrderedSequence', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
       function callIt (is: Array<Interval<T>>): boolean {
@@ -53,116 +170,7 @@ describe('sequence', function () {
       }
 
       describe(label, function () {
-        it('returns true for the empty collection', function () {
-          callIt([]).should.be.true()
-        })
-        it('returns true for a singleton collection with a fully definite interval', function () {
-          callIt([{ start: points[2], end: points[4] }]).should.be.true()
-        })
-        it('returns true for a singleton collection with a left-indefinite interval', function () {
-          callIt([{ end: points[4] }]).should.be.true()
-        })
-        it('returns true for a singleton collection with a right-indefinite interval', function () {
-          callIt([{ start: points[2] }]).should.be.true()
-        })
-        it('returns true for a singleton collection with a fully indefinite interval', function () {
-          callIt([{}]).should.be.true()
-        })
-        it('returns true for an ordered sequence of 4 fully definite intervals, with a gap', function () {
-          callIt([
-            { start: points[0], end: points[1] },
-            { start: points[1], end: points[2] },
-            { start: points[3], end: points[4] },
-            { start: points[4], end: points[5] }
-          ]).should.be.true()
-        })
-        it('returns true for an ordered sequence of 3 fully definite intervals, without a gap', function () {
-          callIt([
-            { start: points[0], end: points[1] },
-            { start: points[1], end: points[2] },
-            { start: points[2], end: points[3] }
-          ]).should.be.true()
-        })
-        it('returns false for an ordered sequence of 4 fully definite intervals with a duplicate', function () {
-          callIt([
-            { start: points[0], end: points[1] },
-            { start: points[1], end: points[2] },
-            { start: points[1], end: points[2] },
-            { start: points[4], end: points[5] }
-          ]).should.be.false()
-        })
-        it('returns false for an unordered sequence of 4 fully definite intervals, with a gap', function () {
-          callIt([
-            { start: points[0], end: points[1] },
-            { start: points[3], end: points[4] },
-            { start: points[1], end: points[2] },
-            { start: points[4], end: points[5] }
-          ]).should.be.false()
-        })
-        it('returns false for an unordered sequence of 3 fully definite intervals, without a gap', function () {
-          callIt([
-            { start: points[2], end: points[3] },
-            { start: points[0], end: points[1] },
-            { start: points[1], end: points[2] }
-          ]).should.be.false()
-        })
-        it('returns true for an ordered sequence of 4 fully definite intervals, with a gap', function () {
-          callIt([
-            { start: points[0], end: points[1] },
-            { start: points[1], end: points[2] },
-            { start: points[3], end: points[4] },
-            { start: points[4], end: points[5] }
-          ]).should.be.true()
-        })
-        it('returns true for an ordered sequence of that starts with a left-indefinite interval, with a gap', function () {
-          callIt([
-            { end: points[1] },
-            { start: points[1], end: points[2] },
-            { start: points[3], end: points[4] }
-          ]).should.be.true()
-        })
-        it('returns true for an ordered sequence of that starts with a left-indefinite interval, without a gap', function () {
-          callIt([
-            { end: points[1] },
-            { start: points[1], end: points[2] },
-            { start: points[2], end: points[4] }
-          ]).should.be.true()
-        })
-        it('returns true for an ordered sequence of that ends with a right-indefinite interval, with a gap', function () {
-          callIt([
-            { start: points[0], end: points[1] },
-            { start: points[1], end: points[2] },
-            { start: points[3] }
-          ]).should.be.true()
-        })
-        it('returns true for an ordered sequence of that ends with a right-indefinite interval, without a gap', function () {
-          callIt([
-            { start: points[0], end: points[1] },
-            { start: points[1], end: points[2] },
-            { start: points[2] }
-          ]).should.be.true()
-        })
-        it('returns true for an ordered sequence of that starts and ends with a half-indefinite interval, with a gap', function () {
-          callIt([{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }]).should.be.true()
-        })
-        it('returns true for an ordered sequence of that starts and ends with a half-indefinite interval, without a gap', function () {
-          callIt([{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }]).should.be.true()
-        })
-        it('returns false for a collection that contains a left-indefinite interval in the middle', function () {
-          callIt([
-            { start: points[0], end: points[1] },
-            { end: points[2] },
-            { start: points[2], end: points[3] }
-          ]).should.be.false()
-        })
-        it('returns false for a collection that contains a right-indefinite interval in the middle', function () {
-          callIt([
-            { start: points[0], end: points[1] },
-            { start: points[1], end: points[2] },
-            { start: points[2] },
-            { start: points[3], end: points[4] }
-          ]).should.be.false()
-        })
+        generateSequenceTests(callIt, points, false)
       })
     }
 
