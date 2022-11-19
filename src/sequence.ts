@@ -18,6 +18,7 @@ import { AllenRelation } from './AllenRelation'
 import { Comparator } from './comparator'
 import { Interval } from './Interval'
 import { getCompareIfOk } from './getCompareIfOk'
+import assert from 'assert'
 
 /**
  * helper
@@ -25,11 +26,10 @@ import { getCompareIfOk } from './getCompareIfOk'
  * @internal
  */
 export function hasSmallerStart<T> (i1: Interval<T>, i2: Interval<T>, compare: Comparator<T>): boolean {
+  assert(i2.start !== undefined && i2.start !== null)
+
   if (i1.start === undefined || i1.start === null) {
     return true
-  }
-  if (i2.start === undefined || i2.start === null) {
-    return false
   }
   return compare(i1.start, i2.start) < 0
 }

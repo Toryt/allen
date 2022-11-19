@@ -148,8 +148,9 @@ describe('sequence', function () {
         it('returns false for a collection that contains a right-indefinite interval in the middle', function () {
           callIt([
             { start: points[0], end: points[1] },
-            { start: points[1] },
-            { start: points[2], end: points[3] }
+            { start: points[1], end: points[2] },
+            { start: points[2] },
+            { start: points[3], end: points[4] }
           ]).should.be.false()
         })
       })
