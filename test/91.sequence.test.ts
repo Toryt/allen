@@ -28,8 +28,8 @@ describe('sequence', function () {
   describe('isOrderedSequence', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
       function callIt (is: Array<Interval<T>>): boolean {
-        should(is).be.an.Array()
-        const result = compareFn !== undefined && compareFn !== null ? isOrderedSequence(is, compareFn) : isSequence(is)
+        const result =
+          compareFn !== undefined && compareFn !== null ? isOrderedSequence(is, compareFn) : isOrderedSequence(is)
         const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
         should(result).equal(
           is.every(
