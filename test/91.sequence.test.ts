@@ -58,6 +58,44 @@ describe('sequence', function () {
         it('returns true for a singleton collection with a fully indefinite interval', function () {
           callIt([{}]).should.be.true()
         })
+        it('returns true for an ordered sequence of 4 fully definite intervals, with a gap', function () {
+          callIt([
+            { start: points[0], end: points[1] },
+            { start: points[1], end: points[2] },
+            { start: points[3], end: points[4] },
+            { start: points[4], end: points[5] }
+          ]).should.be.true()
+        })
+        it('returns true for an ordered sequence of 3 fully definite intervals, without a gap', function () {
+          callIt([
+            { start: points[0], end: points[1] },
+            { start: points[1], end: points[2] },
+            { start: points[2], end: points[3] }
+          ]).should.be.true()
+        })
+        it('returns false for an ordered sequence of 4 fully definite intervals with a duplicate', function () {
+          callIt([
+            { start: points[0], end: points[1] },
+            { start: points[1], end: points[2] },
+            { start: points[1], end: points[2] },
+            { start: points[4], end: points[5] }
+          ]).should.be.false()
+        })
+        it('returns false for an unordered sequence of 4 fully definite intervals, with a gap', function () {
+          callIt([
+            { start: points[0], end: points[1] },
+            { start: points[3], end: points[4] },
+            { start: points[1], end: points[2] },
+            { start: points[4], end: points[5] }
+          ]).should.be.false()
+        })
+        it('returns false for an unordered sequence of 3 fully definite intervals, without a gap', function () {
+          callIt([
+            { start: points[2], end: points[3] },
+            { start: points[0], end: points[1] },
+            { start: points[1], end: points[2] }
+          ]).should.be.false()
+        })
       })
     }
 
