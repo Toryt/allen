@@ -74,6 +74,14 @@ describe('sequence', function () {
         { start: points[4], end: points[5] }
       ]).should.be.false()
     })
+    it('returns false for an ordered sequence of fully definite intervals with a concurrent interval', function () {
+      callIt([
+        { start: points[0], end: points[1] },
+        { start: points[1], end: points[4] },
+        { start: points[1], end: points[2] },
+        { start: points[4], end: points[5] }
+      ]).should.be.false()
+    })
     it(`returns ${
       unorderedOk ? 'true' : 'false'
     } for an unordered sequence of 4 fully definite intervals, with a gap`, function () {
