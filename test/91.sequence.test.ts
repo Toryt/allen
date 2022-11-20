@@ -264,7 +264,10 @@ describe('sequence', function () {
         const result = options === undefined ? isOrderedSequence(is) : isOrderedSequence(is, options)
         const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
         should(result).equal(
-          (is.length <= 0 || !optionsBase?.leftDefinite || (is[0].start !== undefined && is[0].start !== null)) &&
+          (is.length <= 0 ||
+            ((!optionsBase?.leftDefinite || (is[0].start !== undefined && is[0].start !== null)) &&
+              (!optionsBase?.rightDefinite ||
+                (is[is.length - 1].end !== undefined && is[is.length - 1].end !== null)))) &&
             is.every(
               (j: Interval<T>, index: number) =>
                 index === 0 ||
