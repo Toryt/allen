@@ -62,7 +62,7 @@ describe('sequence', function () {
         it('returns true for a singleton collection with a fully definite interval', function () {
           callIt([{ start: points[2], end: points[4] }], optionsBase).should.be.true()
         })
-        it.only(`returns ${
+        it(`returns ${
           optionsBase?.leftDefinite ? 'false' : 'true'
         } for a singleton collection with a left-indefinite interval`, function () {
           callIt([{ end: points[4] }], optionsBase).should.equal(!optionsBase?.leftDefinite)
@@ -264,12 +264,13 @@ describe('sequence', function () {
         const result = options === undefined ? isOrderedSequence(is) : isOrderedSequence(is, options)
         const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
         should(result).equal(
-          is.every(
-            (j: Interval<T>, index: number) =>
-              index === 0 ||
-              (AllenRelation.relation(j, is[index - 1], compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH) &&
-                hasSmallerStart(is[index - 1], j, compare))
-          )
+          (is.length <= 0 || !optionsBase?.leftDefinite || (is[0].start !== undefined && is[0].start !== null)) &&
+            is.every(
+              (j: Interval<T>, index: number) =>
+                index === 0 ||
+                (AllenRelation.relation(j, is[index - 1], compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH) &&
+                  hasSmallerStart(is[index - 1], j, compare))
+            )
         )
         return result
       }
