@@ -2,6 +2,14 @@
 
 ## 0
 
+### 0.3
+
+#### 0.3.0
+
+- make `isSequence` work with an optional `options` object, instead of directly with an optional `compareFn` argument
+- include `leftDefinite` and `rightDefinite` in `options`
+- replace `isOrderedSequence` with the option `ordered` in `isSequence`
+
 ### 0.2
 
 #### 0.2.3
