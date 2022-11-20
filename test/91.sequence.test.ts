@@ -41,7 +41,12 @@ interface OptionCase {
   optionsBase?: OptionsBase
 }
 
-const optionCases: OptionCase[] = [{ label: 'no extra options' }]
+const optionCases: OptionCase[] = [
+  { label: 'no extra options' },
+  { label: 'leftDefinite', optionsBase: { leftDefinite: true } },
+  { label: 'rightDefinite', optionsBase: { rightDefinite: true } },
+  { label: 'left- and rightDefinite', optionsBase: { leftDefinite: true, rightDefinite: true } }
+]
 
 describe('sequence', function () {
   function generateSequenceTests<T> (
@@ -57,14 +62,22 @@ describe('sequence', function () {
         it('returns true for a singleton collection with a fully definite interval', function () {
           callIt([{ start: points[2], end: points[4] }], optionsBase).should.be.true()
         })
-        it('returns true for a singleton collection with a left-indefinite interval', function () {
-          callIt([{ end: points[4] }], optionsBase).should.be.true()
+        it.only(`returns ${
+          optionsBase?.leftDefinite ? 'false' : 'true'
+        } for a singleton collection with a left-indefinite interval`, function () {
+          callIt([{ end: points[4] }], optionsBase).should.equal(!optionsBase?.leftDefinite)
         })
-        it('returns true for a singleton collection with a right-indefinite interval', function () {
-          callIt([{ start: points[2] }], optionsBase).should.be.true()
+        it(`returns ${
+          optionsBase?.rightDefinite ? 'false' : 'true'
+        } for a singleton collection with a right-indefinite interval`, function () {
+          callIt([{ start: points[2] }], optionsBase)
+            .should.equal(!optionsBase?.rightDefinite)
+            .be.true()
         })
-        it('returns true for a singleton collection with a fully indefinite interval', function () {
-          callIt([{}], optionsBase).should.be.true()
+        it(`returns ${
+          optionsBase?.leftDefinite || optionsBase?.rightDefinite ? 'false' : 'true'
+        } for a singleton collection with a fully indefinite interval`, function () {
+          callIt([{}], optionsBase).should.equal(!optionsBase?.leftDefinite && !optionsBase?.rightDefinite)
         })
         it('returns true for an ordered sequence of 4 fully definite intervals, with a gap', function () {
           callIt(
@@ -156,41 +169,53 @@ describe('sequence', function () {
             optionsBase
           ).should.be.false()
         })
-        it('returns true for an ordered sequence of that starts with a left-indefinite interval, with a gap', function () {
+        it(`returns ${
+          optionsBase?.leftDefinite ? 'false' : 'true'
+        } for an ordered sequence of that starts with a left-indefinite interval, with a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3], end: points[4] }],
             optionsBase
-          ).should.be.true()
+          ).should.equal(!optionsBase?.leftDefinite)
         })
-        it('returns true for an ordered sequence of that starts with a left-indefinite interval, without a gap', function () {
+        it(`returns ${
+          optionsBase?.leftDefinite ? 'false' : 'true'
+        } for an ordered sequence of that starts with a left-indefinite interval, without a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[2], end: points[4] }],
             optionsBase
-          ).should.be.true()
+          ).should.equal(!optionsBase?.leftDefinite)
         })
-        it('returns true for an ordered sequence of that ends with a right-indefinite interval, with a gap', function () {
+        it(`returns ${
+          optionsBase?.rightDefinite ? 'false' : 'true'
+        } for an ordered sequence of that ends with a right-indefinite interval, with a gap`, function () {
           callIt(
             [{ start: points[0], end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }],
             optionsBase
-          ).should.be.true()
+          ).should.equal(!optionsBase?.rightDefinite)
         })
-        it('returns true for an ordered sequence of that ends with a right-indefinite interval, without a gap', function () {
+        it(`returns ${
+          optionsBase?.rightDefinite ? 'false' : 'true'
+        } for an ordered sequence of that ends with a right-indefinite interval, without a gap`, function () {
           callIt(
             [{ start: points[0], end: points[1] }, { start: points[1], end: points[2] }, { start: points[2] }],
             optionsBase
-          ).should.be.true()
+          ).should.equal(!optionsBase?.rightDefinite)
         })
-        it('returns true for an ordered sequence of that starts and ends with a half-indefinite interval, with a gap', function () {
+        it(`returns ${
+          optionsBase?.leftDefinite || optionsBase?.rightDefinite ? 'false' : 'true'
+        } for an ordered sequence of that starts and ends with a half-indefinite interval, with a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }],
             optionsBase
-          ).should.be.true()
+          ).should.equal(!optionsBase?.leftDefinite && !optionsBase?.rightDefinite)
         })
-        it('returns true for an ordered sequence of that starts and ends with a half-indefinite interval, without a gap', function () {
+        it(`returns ${
+          optionsBase?.leftDefinite || optionsBase?.rightDefinite ? 'false' : 'true'
+        } for an ordered sequence of that starts and ends with a half-indefinite interval, without a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }],
             optionsBase
-          ).should.be.true()
+          ).should.equal(!optionsBase?.leftDefinite && !optionsBase?.rightDefinite)
         })
         it('returns false for a collection that contains a left-indefinite interval in the middle', function () {
           callIt(
