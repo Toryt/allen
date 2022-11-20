@@ -70,9 +70,7 @@ describe('sequence', function () {
         it(`returns ${
           optionsBase?.rightDefinite ? 'false' : 'true'
         } for a singleton collection with a right-indefinite interval`, function () {
-          callIt([{ start: points[2] }], optionsBase)
-            .should.equal(!optionsBase?.rightDefinite)
-            .be.true()
+          callIt([{ start: points[2] }], optionsBase).should.equal(!optionsBase?.rightDefinite)
         })
         it(`returns ${
           optionsBase?.leftDefinite || optionsBase?.rightDefinite ? 'false' : 'true'
