@@ -64,7 +64,10 @@ export function isOrderedSequence<T> (is: ReadonlyArray<Interval<T>>, options?: 
   if (is.length <= 0) {
     return true
   }
-  if (options?.leftDefinite && (is[0].start === undefined || is[0].start === null)) {
+  if (
+    (options?.leftDefinite && (is[0].start === undefined || is[0].start === null)) ||
+    (options?.rightDefinite && (is[is.length - 1].end === undefined || is[is.length - 1].end === null))
+  ) {
     return false
   }
   return is.every((j: Interval<T>, index: number) => index === 0 || endsBefore(is[index - 1], j))
