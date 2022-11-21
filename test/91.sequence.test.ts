@@ -262,9 +262,9 @@ describe('sequence', function () {
             ? compareFn === undefined || compareFn === null
               ? undefined
               : { compareFn }
-            : compareFn === undefined || compareFn === null
-            ? optionsBase
-            : { ...optionsBase, compareFn }
+            : /* prettier-ignore */ compareFn === undefined || compareFn === null
+              ? optionsBase
+              : { ...optionsBase, compareFn }
         const result = options === undefined ? isSequence(is) : isSequence(is, options)
         const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
         should(result).equal(
