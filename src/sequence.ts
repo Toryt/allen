@@ -19,6 +19,9 @@ import { Interval } from './Interval'
 import { getCompareIfOk } from './getCompareIfOk'
 import assert from 'assert'
 
+/**
+ * Optional options to determine whether an array of {@link Interval}s is a _sequence_ with more or less constraints.
+ */
 export interface SequenceOptions<T> {
   /**
    * Optional compare function with traditional semantics.

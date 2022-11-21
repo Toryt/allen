@@ -29,4 +29,4 @@ export { RelationConstructor, Relation } from './Relation' // ok higher
 export { AllenRelation } from './AllenRelation'
 export { PointIntervalRelation } from './PointIntervalRelation'
 export { isEnclosing, isMinimalEnclosing, minimalEnclosing } from './enclosing'
-export { isSequence } from './sequence'
+export { isSequence, SequenceOptions } from './sequence'

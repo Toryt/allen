@@ -36,6 +36,7 @@ import {
   primitiveTypeRepresentations,
   Relation,
   RelationConstructor,
+  SequenceOptions,
   TypeFor,
   TypeRepresentation
 } from '../src'
@@ -127,6 +128,10 @@ describe('index', function () {
   })
   it('exports minimalEnclosing', function () {
     minimalEnclosing.should.be.a.Function()
+  })
+  it('exports SequenceOptions', function () {
+    const x: SequenceOptions<number> = {}
+    x.should.be.an.Object()
   })
   it('exports isSequence', function () {
     isSequence.should.be.a.Function()
