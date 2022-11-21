@@ -39,6 +39,12 @@ export interface SequenceOptions<T> {
    * or right-indefinite.
    */
   rightDefinite?: boolean
+
+  /**
+   * Optional boolean property. When it is truthy, the sequence must be ordered. When the value is falsy, the sequence
+   * may be ordered or not ordered.
+   */
+  ordered?: boolean
 }
 
 function normalizeSequenceOptions<T> (
@@ -50,7 +56,8 @@ function normalizeSequenceOptions<T> (
   return {
     compareFn: getCompareIfOk(is, options?.compareFn), // asserts preconditions
     leftDefinite: options?.leftDefinite ?? false,
-    rightDefinite: options?.rightDefinite ?? false
+    rightDefinite: options?.rightDefinite ?? false,
+    ordered: options?.ordered ?? false
   }
 }
 
