@@ -21,11 +21,23 @@ import assert from 'assert'
 
 export interface SequenceOptions<T> {
   /**
-   * Compare function with traditional semantics.
+   * Optional compare function with traditional semantics.
    * Mandatory when any point is `NaN`, or symbols are used.
    */
   compareFn?: Comparator<T>
+
+  /**
+   * Optional boolean property. When it is thruthy, the first interval in the sequence, if any, must be
+   * left-definite. If the value is falsy, or does not exist, the first interval in the sequence can be left-definite or
+   * left-indefinite.
+   */
   leftDefinite?: boolean
+
+  /**
+   * Optional boolean property. When it is thruthy, the last interval in the sequence, if any, must be
+   * right-definite. If the value is falsy, or does not exist, the last interval in the sequence can be right-definite
+   * or right-indefinite.
+   */
   rightDefinite?: boolean
 }
 
