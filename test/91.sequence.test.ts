@@ -19,7 +19,7 @@
 import should from 'should'
 import { Interval } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { isOrderedSequence, SequenceOptions } from '../src/sequence'
+import { isSequence, SequenceOptions } from '../src/sequence'
 import { AllenRelation, Comparator, ltCompare } from '../src'
 import assert from 'assert'
 
@@ -263,7 +263,7 @@ describe('sequence', function () {
             : compareFn === undefined || compareFn === null
             ? optionsBase
             : { ...optionsBase, compareFn }
-        const result = options === undefined ? isOrderedSequence(is) : isOrderedSequence(is, options)
+        const result = options === undefined ? isSequence(is) : isSequence(is, options)
         const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
         should(result).equal(
           (is.length <= 0 ||

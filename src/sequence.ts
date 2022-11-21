@@ -72,7 +72,7 @@ function normalizeSequenceOptions<T> (
  * // MUDO fix definition
  * @returns is.every((i, j) => j === 0 || relation(i, is[j - 1]).implies(DOES_NOT_CONCUR) && is[j - 1].start < i.start)
  */
-export function isOrderedSequence<T> (is: ReadonlyArray<Interval<T>>, options?: SequenceOptions<T>): boolean {
+export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: SequenceOptions<T>): boolean {
   const { compareFn } = normalizeSequenceOptions(is, options)
 
   if (is.length <= 0) {
