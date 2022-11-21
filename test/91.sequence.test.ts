@@ -51,10 +51,10 @@ const optionCases: OptionCase[] = [
 describe('sequence', function () {
   function generateSequenceTests<T> (
     callIt: (is: Array<Interval<T>>, optionsBase: OptionsBase | undefined) => boolean,
-    points: T[],
-    unorderedOk: boolean
+    points: T[]
   ): void {
     optionCases.forEach(({ label, optionsBase }: OptionCase) => {
+      const unorderedOk: boolean = !optionsBase?.ordered
       describe(label, function () {
         it('returns true for the empty collection', function () {
           callIt([], optionsBase).should.be.true()
@@ -313,7 +313,7 @@ describe('sequence', function () {
       }
 
       describe(label, function () {
-        generateSequenceTests(callIt, points, true)
+        generateSequenceTests(callIt, points)
       })
     }
 
