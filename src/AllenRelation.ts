@@ -959,6 +959,11 @@ export class AllenRelation extends Relation {
    * - `(dfOMP)`,
    * - `(oFDseSdfOMP)`, or
    * - {@link AllenRelation.fullRelation}.
+   *
+   * @param i1 - the first interval to find the relation with
+   * @param i2 - the second interval to find the relation with
+   * @param compareFn - optional compare function with traditional semantics; mandatory when any point is `NaN`, or
+   *                    symbols are used
    */
   static relation<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): AllenRelation {
     const compare: Comparator<T> = getCompareIfOk([i1, i2], compareFn)

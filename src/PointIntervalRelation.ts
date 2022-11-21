@@ -360,6 +360,11 @@ export class PointIntervalRelation extends Relation {
    * }
    * ...
    * ```
+   *
+   * @param t - the point to find the relation with
+   * @param i - the interval to find the relation with
+   * @param compareFn - optional compare function with traditional semantics; mandatory when any point is `NaN`, or
+   *                    `symbols` are used
    */
   static relation<T> (t: T | undefined | null, i: Interval<T>, compareFn?: Comparator<T>): PointIntervalRelation {
     ok(i)

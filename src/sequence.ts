@@ -20,6 +20,10 @@ import { getCompareIfOk } from './getCompareIfOk'
 import assert from 'assert'
 
 export interface SequenceOptions<T> {
+  /**
+   * Compare function with traditional semantics.
+   * Mandatory when any point is `NaN`, or symbols are used.
+   */
   compareFn?: Comparator<T>
   leftDefinite?: boolean
   rightDefinite?: boolean

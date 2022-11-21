@@ -14,4 +14,13 @@
  limitations under the License.
  */
 
+/**
+ * Function with the traditional comparison semantics.
+ *
+ * - a negative number is returned when `t1` is considered smaller than `t2`,
+ * - a positive number is returned when `t1` is considered larger than `t2`, and
+ * - `0` when `t1` and `t2` are considered equal
+ *
+ * The function is never called with indefinite points (`t1` and `t2` are never `undefined` or `null`).
+ */
 export type Comparator<T> = (t1: T, t2: T) => number
