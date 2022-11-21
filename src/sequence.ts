@@ -47,20 +47,6 @@ export interface SequenceOptions<T> {
   ordered?: boolean
 }
 
-function normalizeSequenceOptions<T> (
-  is: ReadonlyArray<Interval<T>>,
-  options?: SequenceOptions<T>
-): Required<SequenceOptions<T>> {
-  assert(options === undefined || typeof options === 'object')
-
-  return {
-    compareFn: getCompareIfOk(is, options?.compareFn), // asserts preconditions
-    leftDefinite: options?.leftDefinite ?? false,
-    rightDefinite: options?.rightDefinite ?? false,
-    ordered: options?.ordered ?? false
-  }
-}
-
 /**
  * The elements of `is` are discrete (i.e., do not {@link AllenRelation.CONCURS_WITH concur with the previous or next
  * element}), and are ordered from smallest `i.start` to largest `i.end`.
@@ -73,7 +59,11 @@ function normalizeSequenceOptions<T> (
  * @returns is.every((i, j) => j === 0 || relation(i, is[j - 1]).implies(DOES_NOT_CONCUR) && is[j - 1].start < i.start)
  */
 export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: SequenceOptions<T>): boolean {
-  const { compareFn } = normalizeSequenceOptions(is, options)
+  assert(options === undefined || typeof options === 'object')
+  const compareFn: Comparator<T> = getCompareIfOk(is, options?.compareFn) // asserts preconditions
+  const leftDefinite: boolean = options?.leftDefinite ?? false
+  const rightDefinite: boolean = options?.rightDefinite ?? false
+  const ordered: boolean = options?.ordered ?? false
 
   if (is.length <= 0) {
     return true
@@ -109,12 +99,11 @@ export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: Sequenc
     return compareFn(i1.end, i2.end)
   }
 
-  const sortedIs: ReadonlyArray<Interval<T>> = options?.ordered ?? false ? is : is.slice().sort(intervalCompare)
+  const sortedIs: ReadonlyArray<Interval<T>> = ordered ? is : is.slice().sort(intervalCompare)
 
   if (
-    ((options?.leftDefinite ?? false) && (sortedIs[0].start === undefined || sortedIs[0].start === null)) ||
-    ((options?.rightDefinite ?? false) &&
-      (sortedIs[sortedIs.length - 1].end === undefined || sortedIs[sortedIs.length - 1].end === null))
+    (leftDefinite && (sortedIs[0].start === undefined || sortedIs[0].start === null)) ||
+    (rightDefinite && (sortedIs[sortedIs.length - 1].end === undefined || sortedIs[sortedIs.length - 1].end === null))
   ) {
     return false
   }
