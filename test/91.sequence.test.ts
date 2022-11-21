@@ -58,7 +58,9 @@ describe('sequence', function () {
     points: T[]
   ): void {
     optionCases.forEach(({ label, optionsBase }: OptionCase) => {
-      const unorderedOk: boolean = !optionsBase?.ordered
+      const ordered: boolean = optionsBase?.ordered ?? false
+      const leftDefinite: boolean = optionsBase?.leftDefinite ?? false
+      const rightDefinite: boolean = optionsBase?.rightDefinite ?? false
       describe(label, function () {
         it('returns true for the empty collection', function () {
           callIt([], optionsBase).should.be.true()
@@ -67,19 +69,19 @@ describe('sequence', function () {
           callIt([{ start: points[2], end: points[4] }], optionsBase).should.be.true()
         })
         it(`returns ${
-          optionsBase?.leftDefinite ? 'false' : 'true'
+          leftDefinite ? 'false' : 'true'
         } for a singleton collection with a left-indefinite interval`, function () {
-          callIt([{ end: points[4] }], optionsBase).should.equal(!optionsBase?.leftDefinite)
+          callIt([{ end: points[4] }], optionsBase).should.equal(!leftDefinite)
         })
         it(`returns ${
-          optionsBase?.rightDefinite ? 'false' : 'true'
+          rightDefinite ? 'false' : 'true'
         } for a singleton collection with a right-indefinite interval`, function () {
-          callIt([{ start: points[2] }], optionsBase).should.equal(!optionsBase?.rightDefinite)
+          callIt([{ start: points[2] }], optionsBase).should.equal(!rightDefinite)
         })
         it(`returns ${
-          optionsBase?.leftDefinite || optionsBase?.rightDefinite ? 'false' : 'true'
+          leftDefinite || rightDefinite ? 'false' : 'true'
         } for a singleton collection with a fully indefinite interval`, function () {
-          callIt([{}], optionsBase).should.equal(!optionsBase?.leftDefinite && !optionsBase?.rightDefinite)
+          callIt([{}], optionsBase).should.equal(!leftDefinite && !rightDefinite)
         })
         it('returns true for an ordered sequence of 4 fully definite intervals, with a gap', function () {
           callIt(
@@ -125,7 +127,7 @@ describe('sequence', function () {
           ).should.be.false()
         })
         it(`returns ${
-          unorderedOk ? 'true' : 'false'
+          ordered ? 'false' : 'true'
         } for an unordered sequence of 4 fully definite intervals, with a gap`, function () {
           callIt(
             [
@@ -135,10 +137,10 @@ describe('sequence', function () {
               { start: points[4], end: points[5] }
             ],
             optionsBase
-          ).should.equal(unorderedOk)
+          ).should.equal(!ordered)
         })
         it(`returns ${
-          unorderedOk ? 'true' : 'false'
+          ordered ? 'false' : 'true'
         } for an unordered sequence of 3 fully definite intervals, without a gap`, function () {
           callIt(
             [
@@ -147,7 +149,7 @@ describe('sequence', function () {
               { start: points[1], end: points[2] }
             ],
             optionsBase
-          ).should.equal(unorderedOk)
+          ).should.equal(!ordered)
         })
         it('returns true for an ordered sequence of 4 fully definite intervals, with a gap', function () {
           callIt(
@@ -172,52 +174,52 @@ describe('sequence', function () {
           ).should.be.false()
         })
         it(`returns ${
-          optionsBase?.leftDefinite ? 'false' : 'true'
+          leftDefinite ? 'false' : 'true'
         } for an ordered sequence of that starts with a left-indefinite interval, with a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3], end: points[4] }],
             optionsBase
-          ).should.equal(!optionsBase?.leftDefinite)
+          ).should.equal(!leftDefinite)
         })
         it(`returns ${
-          optionsBase?.leftDefinite ? 'false' : 'true'
+          leftDefinite ? 'false' : 'true'
         } for an ordered sequence of that starts with a left-indefinite interval, without a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[2], end: points[4] }],
             optionsBase
-          ).should.equal(!optionsBase?.leftDefinite)
+          ).should.equal(!leftDefinite)
         })
         it(`returns ${
-          optionsBase?.rightDefinite ? 'false' : 'true'
+          rightDefinite ? 'false' : 'true'
         } for an ordered sequence of that ends with a right-indefinite interval, with a gap`, function () {
           callIt(
             [{ start: points[0], end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }],
             optionsBase
-          ).should.equal(!optionsBase?.rightDefinite)
+          ).should.equal(!rightDefinite)
         })
         it(`returns ${
-          optionsBase?.rightDefinite ? 'false' : 'true'
+          rightDefinite ? 'false' : 'true'
         } for an ordered sequence of that ends with a right-indefinite interval, without a gap`, function () {
           callIt(
             [{ start: points[0], end: points[1] }, { start: points[1], end: points[2] }, { start: points[2] }],
             optionsBase
-          ).should.equal(!optionsBase?.rightDefinite)
+          ).should.equal(!rightDefinite)
         })
         it(`returns ${
-          optionsBase?.leftDefinite || optionsBase?.rightDefinite ? 'false' : 'true'
+          leftDefinite || rightDefinite ? 'false' : 'true'
         } for an ordered sequence of that starts and ends with a half-indefinite interval, with a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }],
             optionsBase
-          ).should.equal(!optionsBase?.leftDefinite && !optionsBase?.rightDefinite)
+          ).should.equal(!leftDefinite && !rightDefinite)
         })
         it(`returns ${
-          optionsBase?.leftDefinite || optionsBase?.rightDefinite ? 'false' : 'true'
+          leftDefinite || rightDefinite ? 'false' : 'true'
         } for an ordered sequence of that starts and ends with a half-indefinite interval, without a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }],
             optionsBase
-          ).should.equal(!optionsBase?.leftDefinite && !optionsBase?.rightDefinite)
+          ).should.equal(!leftDefinite && !rightDefinite)
         })
         it('returns false for a collection that contains a left-indefinite interval in the middle', function () {
           callIt(
@@ -252,7 +254,7 @@ describe('sequence', function () {
     })
   }
 
-  describe('isOrderedSequence', function () {
+  describe('isSequence', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
       function callIt (is: Array<Interval<T>>, optionsBase: OptionsBase | undefined): boolean {
         const options: SequenceOptions<T> | undefined =
@@ -267,12 +269,12 @@ describe('sequence', function () {
         const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
         should(result).equal(
           (is.length <= 0 ||
-            ((!optionsBase?.leftDefinite || (is[0].start !== undefined && is[0].start !== null)) &&
-              (!optionsBase?.rightDefinite ||
+            ((!(optionsBase?.leftDefinite ?? false) || (is[0].start !== undefined && is[0].start !== null)) &&
+              (!(optionsBase?.rightDefinite ?? false) ||
                 (is[is.length - 1].end !== undefined && is[is.length - 1].end !== null)))) &&
             is.every(
               (i: Interval<T>, index: number) =>
-                (!optionsBase?.ordered || index === 0 || hasSmallerStart(is[index - 1], i, compare)) &&
+                (!(optionsBase?.ordered ?? false) || index === 0 || hasSmallerStart(is[index - 1], i, compare)) &&
                 is.every(
                   (j: Interval<T>) =>
                     i === j || AllenRelation.relation(i, j, compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH)
