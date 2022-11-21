@@ -74,6 +74,50 @@ function normalizeSequenceOptions<T> (
 export function isOrderedSequence<T> (is: ReadonlyArray<Interval<T>>, options?: SequenceOptions<T>): boolean {
   const { compareFn } = normalizeSequenceOptions(is, options)
 
+  if (is.length <= 0) {
+    return true
+  }
+
+  const sortedIs: ReadonlyArray<Interval<T>> = options?.ordered
+    ? is
+    : is.slice().sort((i1: Interval<T>, i2: Interval<T>) => {
+        if (i1.start === undefined || i1.start === null) {
+          if (i2.start !== undefined && i2.start !== null) {
+            return -1
+          }
+          return 0
+        }
+        if (i2.start === undefined || i2.start === null) {
+          return +1
+        }
+
+        const i1StartVsi2Start = compareFn(i1.start, i2.start)
+        if (i1StartVsi2Start !== 0) {
+          return i1StartVsi2Start
+        }
+
+        // starts are equal and definite
+        if (i1.end === undefined || i1.end === null) {
+          if (i2.end !== undefined && i2.end !== null) {
+            return +1
+          }
+          return 0
+        }
+        if (i2.end === undefined || i2.end === null) {
+          return -1
+        }
+
+        return compareFn(i1.end, i2.end)
+      })
+
+  if (
+    (options?.leftDefinite && (sortedIs[0].start === undefined || sortedIs[0].start === null)) ||
+    (options?.rightDefinite &&
+      (sortedIs[sortedIs.length - 1].end === undefined || sortedIs[sortedIs.length - 1].end === null))
+  ) {
+    return false
+  }
+
   function endsBefore (i1: Interval<T>, i2: Interval<T>): boolean {
     return (
       i1.end !== undefined &&
