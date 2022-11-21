@@ -128,62 +128,7 @@ export function isOrderedSequence<T> (is: ReadonlyArray<Interval<T>>, options?: 
     )
   }
 
-  if (is.length <= 0) {
-    return true
-  }
-  if (
-    (options?.leftDefinite && (is[0].start === undefined || is[0].start === null)) ||
-    (options?.rightDefinite && (is[is.length - 1].end === undefined || is[is.length - 1].end === null))
-  ) {
-    return false
-  }
-  return is.every((j: Interval<T>, index: number) => index === 0 || endsBefore(is[index - 1], j))
-}
-
-/**
- * The elements of `is` are discrete (i.e., do not {@link AllenRelation.CONCURS_WITH concur with the previous or next
- * element}).
- *
- * There might be gaps in the sequence. The intervals in `is` do not have to be ordered.
- *
- * Only 1 element might have an indefinite `start`, and only one element might have an indefinite `end`.
- *
- * @returns is.every(i => is.every(j => i === j || relation(i, j).implies(DOES_NOT_CONCUR)))
- */
-export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: SequenceOptions<T>): boolean {
-  const { compareFn } = normalizeSequenceOptions(is, options)
-
-  const sortedIs: ReadonlyArray<Interval<T>> = is.slice().sort((i1: Interval<T>, i2: Interval<T>) => {
-    if (i1.start === undefined || i1.start === null) {
-      if (i2.start !== undefined && i2.start !== null) {
-        return -1
-      }
-      return 0
-    }
-    if (i2.start === undefined || i2.start === null) {
-      return +1
-    }
-
-    const i1StartVsi2Start = compareFn(i1.start, i2.start)
-    if (i1StartVsi2Start !== 0) {
-      return i1StartVsi2Start
-    }
-
-    // starts are equal and definite
-    if (i1.end === undefined || i1.end === null) {
-      if (i2.end !== undefined && i2.end !== null) {
-        return +1
-      }
-      return 0
-    }
-    if (i2.end === undefined || i2.end === null) {
-      return -1
-    }
-
-    return compareFn(i1.end, i2.end)
-  })
-
-  return isOrderedSequence(sortedIs, options)
+  return sortedIs.every((j: Interval<T>, index: number) => index === 0 || endsBefore(sortedIs[index - 1], j))
 }
 
 // /**

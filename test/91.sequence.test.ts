@@ -19,7 +19,7 @@
 import should from 'should'
 import { Interval } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { isOrderedSequence, isSequence, SequenceOptions } from '../src/sequence'
+import { isOrderedSequence, SequenceOptions } from '../src/sequence'
 import { AllenRelation, Comparator, ltCompare } from '../src'
 import assert from 'assert'
 
@@ -279,42 +279,7 @@ describe('sequence', function () {
                 )
             )
         )
-        return result
-      }
 
-      describe(label, function () {
-        generateSequenceTests(callIt, points, false)
-      })
-    }
-
-    generateTests<number>('number', sixNumbers)
-    generateTests<string>('string', sixStrings)
-    generateTests<Date>('Date', sixDates)
-    generateTests<symbol>('symbol', sixSymbols, (s1: Symbol, s2: Symbol): number =>
-      s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
-    )
-  })
-  describe('isSequence', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
-      function callIt (is: Array<Interval<T>>, optionsBase: OptionsBase | undefined): boolean {
-        const options: SequenceOptions<T> | undefined =
-          optionsBase === undefined
-            ? compareFn === undefined || compareFn === null
-              ? undefined
-              : { compareFn }
-            : compareFn === undefined || compareFn === null
-            ? optionsBase
-            : { ...optionsBase, compareFn }
-        const result = options === undefined ? isSequence(is) : isSequence(is, options)
-        const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
-        should(result).equal(
-          is.every((i: Interval<T>) =>
-            is.every(
-              (j: Interval<T>) =>
-                i === j || AllenRelation.relation(i, j, compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH)
-            )
-          )
-        )
         return result
       }
 
