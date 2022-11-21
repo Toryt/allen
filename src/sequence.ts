@@ -69,6 +69,7 @@ function normalizeSequenceOptions<T> (
  *
  * Only `i[0]` might have an indefinite `start`, and only the last element might have an indefinite `end`.
  *
+ * // MUDO fix definition
  * @returns is.every((i, j) => j === 0 || relation(i, is[j - 1]).implies(DOES_NOT_CONCUR) && is[j - 1].start < i.start)
  */
 export function isOrderedSequence<T> (is: ReadonlyArray<Interval<T>>, options?: SequenceOptions<T>): boolean {
