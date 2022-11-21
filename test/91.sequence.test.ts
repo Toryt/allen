@@ -45,7 +45,11 @@ const optionCases: OptionCase[] = [
   { label: 'no extra options' },
   { label: 'leftDefinite', optionsBase: { leftDefinite: true } },
   { label: 'rightDefinite', optionsBase: { rightDefinite: true } },
-  { label: 'left- and rightDefinite', optionsBase: { leftDefinite: true, rightDefinite: true } }
+  { label: 'left- and rightDefinite', optionsBase: { leftDefinite: true, rightDefinite: true } },
+  { label: 'ordered', optionsBase: { ordered: true } },
+  { label: 'ordered, leftDefinite', optionsBase: { ordered: true, leftDefinite: true } },
+  { label: 'ordered, rightDefinite', optionsBase: { ordered: true, rightDefinite: true } },
+  { label: 'ordered, left- and rightDefinite', optionsBase: { ordered: true, leftDefinite: true, rightDefinite: true } }
 ]
 
 describe('sequence', function () {
@@ -267,10 +271,12 @@ describe('sequence', function () {
               (!optionsBase?.rightDefinite ||
                 (is[is.length - 1].end !== undefined && is[is.length - 1].end !== null)))) &&
             is.every(
-              (j: Interval<T>, index: number) =>
-                index === 0 ||
-                (AllenRelation.relation(j, is[index - 1], compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH) &&
-                  hasSmallerStart(is[index - 1], j, compare))
+              (i: Interval<T>, index: number) =>
+                (!optionsBase?.ordered || index === 0 || hasSmallerStart(is[index - 1], i, compare)) &&
+                is.every(
+                  (j: Interval<T>) =>
+                    i === j || AllenRelation.relation(i, j, compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH)
+                )
             )
         )
         return result
