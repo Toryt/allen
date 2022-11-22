@@ -324,13 +324,12 @@ describe('sequence', function () {
                   (j: Interval<T>) =>
                     i === j ||
                     AllenRelation.relation(i, j, compare).implies(
-                      optionsBase?.separate === undefined
-                        ? AllenRelation.DOES_NOT_CONCUR_WITH
-                        : optionsBase.separate
+                      optionsBase?.separate !== undefined && optionsBase.separate
                         ? AllenRelation.IS_SEPARATE_FROM
-                        : AllenRelation.TOUCHES
+                        : AllenRelation.DOES_NOT_CONCUR_WITH
                     )
                 )
+              // MUDO and must touch if !optionsBase.separate
             )
         )
 
