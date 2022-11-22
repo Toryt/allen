@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-/* eslint env mocha */
+/* eslint-env mocha */
 
 const should = require('should')
 const {
