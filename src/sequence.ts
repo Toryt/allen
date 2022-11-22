@@ -48,6 +48,14 @@ export interface SequenceOptions<T> {
    * may be ordered or not ordered.
    */
   ordered?: boolean
+
+  /**
+   * Tristate. When `true`, intervals in the sequence must be {@link AllenRelation.IS_SEPARATE_FROM separate}. When
+   * `false`, intervals in the sequence must {@link AllenRelation.TOUCHES touch} each other. When not present or
+   * `undefined`, intervals in the sequence can meet or be separate, i.e., must
+   * {@link AllenRelation.DOES_NOT_CONCUR_WITH not concur}.
+   */
+  separate?: boolean
 }
 
 /**
