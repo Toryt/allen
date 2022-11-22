@@ -4,6 +4,10 @@
 
 ### 0.3
 
+#### 0.3.1
+
+- add the option to `isSequence` to demand the sequence to be gapless or not
+
 #### 0.3.0
 
 - make `isSequence` work with an optional `options` object, instead of directly with an optional `compareFn` argument
