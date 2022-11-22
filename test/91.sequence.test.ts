@@ -98,8 +98,8 @@ describe('sequence', function () {
       const ordered: boolean = optionsBase?.ordered ?? false
       const leftDefinite: boolean = optionsBase?.leftDefinite ?? false
       const rightDefinite: boolean = optionsBase?.rightDefinite ?? false
-      const gapsAreOk: boolean = optionsBase?.separate === undefined || !optionsBase.separate
-      const noGapsAreOk: boolean = optionsBase?.separate === undefined || optionsBase.separate
+      const gapsAreOk: boolean = optionsBase?.separate === undefined || optionsBase.separate
+      const noGapsAreOk: boolean = optionsBase?.separate === undefined || !optionsBase.separate
       describe(label, function () {
         it('returns true for the empty collection', function () {
           callIt([], optionsBase).should.be.true()
