@@ -120,13 +120,13 @@ export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: Sequenc
   }
 
   function endsBefore (i1: Interval<T>, i2: Interval<T>): boolean {
-    return (
-      i1.end !== undefined &&
-      i1.end !== null &&
-      i2.start !== undefined &&
-      i2.start !== null &&
-      compareFn(i1.end, i2.start) <= 0
-    )
+    if (i1.end === undefined || i1.end === null || i2.start === undefined || i2.start === null) {
+      return false
+    }
+
+    const comparison: number = compareFn(i1.end, i2.start)
+
+    return options?.separate === undefined ? comparison <= 0 : options.separate ? comparison < 0 : comparison === 0
   }
 
   return sortedIs.every((j: Interval<T>, index: number) => index === 0 || endsBefore(sortedIs[index - 1], j))
