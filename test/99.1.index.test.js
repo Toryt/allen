@@ -14,6 +14,8 @@
  limitations under the License.
  */
 
+/* eslint env mocha */
+
 const should = require('should')
 const {
   primitiveTypeRepresentations,
