@@ -141,7 +141,7 @@ describe('index TS', function () {
   describe('examples', function () {
     it('ts README Allen compiles and works', function () {
       function allenRelationExample (): AllenRelation {
-        const iiCondition1: AllenRelation = AllenRelation.fromString<AllenRelation>('pbsSd')
+        const iiCondition1: AllenRelation = AllenRelation.fromString<AllenRelation>('psSd')
         const iiCondition2: AllenRelation = AllenRelation.fromString<AllenRelation>('sde')
         const iiCondition: AllenRelation = iiCondition1.compose(iiCondition2)
 

@@ -43,7 +43,7 @@ This library does not help with inference.
 const { AllenRelation, PointIntervalRelation } = require('@toryt/allen')
 
 function allenRelationExample () {
-  const iiCondition1 = AllenRelation.fromString('pbsSd')
+  const iiCondition1 = AllenRelation.fromString('psSd')
   const iiCondition2 = AllenRelation.fromString('sde')
   const iiCondition = iiCondition1.compose(iiCondition2)
 
@@ -81,7 +81,7 @@ function pointIntervalExample () {
 import { AllenRelation, Interval, PointIntervalRelation } from '@toryt/allen'
 
 function allenRelationExample (): AllenRelation {
-  const iiCondition1: AllenRelation = AllenRelation.fromString<AllenRelation>('pbsSd')
+  const iiCondition1: AllenRelation = AllenRelation.fromString<AllenRelation>('psSd')
   const iiCondition2: AllenRelation = AllenRelation.fromString<AllenRelation>('sde')
   const iiCondition: AllenRelation = iiCondition1.compose(iiCondition2)
 
