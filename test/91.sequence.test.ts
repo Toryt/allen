@@ -53,21 +53,21 @@ const optionCases: OptionCase[] = [
     label: 'ordered, left- and rightDefinite',
     optionsBase: { ordered: true, leftDefinite: true, rightDefinite: true }
   },
-  { label: 'not separate', optionsBase: { separate: false } },
-  { label: 'leftDefinite, not separate', optionsBase: { leftDefinite: true, separate: false } },
-  { label: 'rightDefinite, not separate', optionsBase: { rightDefinite: true, separate: false } },
+  { label: 'must touch', optionsBase: { separate: false } },
+  { label: 'leftDefinite, must touch', optionsBase: { leftDefinite: true, separate: false } },
+  { label: 'rightDefinite, must touch', optionsBase: { rightDefinite: true, separate: false } },
   {
-    label: 'left- and rightDefinite, not separate',
+    label: 'left- and rightDefinite, must touch',
     optionsBase: { leftDefinite: true, rightDefinite: true, separate: false }
   },
-  { label: 'ordered, not separate', optionsBase: { ordered: true, separate: false } },
-  { label: 'ordered, leftDefinite, not separate', optionsBase: { ordered: true, leftDefinite: true, separate: false } },
+  { label: 'ordered, must touch', optionsBase: { ordered: true, separate: false } },
+  { label: 'ordered, leftDefinite, must touch', optionsBase: { ordered: true, leftDefinite: true, separate: false } },
   {
-    label: 'ordered, rightDefinite, not separate',
+    label: 'ordered, rightDefinite, must touch',
     optionsBase: { ordered: true, rightDefinite: true, separate: false }
   },
   {
-    label: 'ordered, left- and rightDefinite, not separate',
+    label: 'ordered, left- and rightDefinite, must touch',
     optionsBase: { ordered: true, leftDefinite: true, rightDefinite: true, separate: false }
   },
   { label: 'separate', optionsBase: { separate: true } },
