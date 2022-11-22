@@ -314,7 +314,14 @@ describe('sequence', function () {
                 (!(optionsBase?.ordered ?? false) || index === 0 || hasSmallerStart(is[index - 1], i, compare)) &&
                 is.every(
                   (j: Interval<T>) =>
-                    i === j || AllenRelation.relation(i, j, compare).implies(AllenRelation.DOES_NOT_CONCUR_WITH)
+                    i === j ||
+                    AllenRelation.relation(i, j, compare).implies(
+                      optionsBase?.separate === undefined
+                        ? AllenRelation.DOES_NOT_CONCUR_WITH
+                        : optionsBase.separate
+                        ? AllenRelation.IS_SEPARATE_FROM
+                        : AllenRelation.TOUCHES
+                    )
                 )
             )
         )
