@@ -49,7 +49,44 @@ const optionCases: OptionCase[] = [
   { label: 'ordered', optionsBase: { ordered: true } },
   { label: 'ordered, leftDefinite', optionsBase: { ordered: true, leftDefinite: true } },
   { label: 'ordered, rightDefinite', optionsBase: { ordered: true, rightDefinite: true } },
-  { label: 'ordered, left- and rightDefinite', optionsBase: { ordered: true, leftDefinite: true, rightDefinite: true } }
+  {
+    label: 'ordered, left- and rightDefinite',
+    optionsBase: { ordered: true, leftDefinite: true, rightDefinite: true }
+  },
+  { label: 'not separate', optionsBase: { separate: false } },
+  { label: 'leftDefinite, not separate', optionsBase: { leftDefinite: true, separate: false } },
+  { label: 'rightDefinite, not separate', optionsBase: { rightDefinite: true, separate: false } },
+  {
+    label: 'left- and rightDefinite, not separate',
+    optionsBase: { leftDefinite: true, rightDefinite: true, separate: false }
+  },
+  { label: 'ordered, not separate', optionsBase: { ordered: true, separate: false } },
+  { label: 'ordered, leftDefinite, not separate', optionsBase: { ordered: true, leftDefinite: true, separate: false } },
+  {
+    label: 'ordered, rightDefinite, not separate',
+    optionsBase: { ordered: true, rightDefinite: true, separate: false }
+  },
+  {
+    label: 'ordered, left- and rightDefinite, not separate',
+    optionsBase: { ordered: true, leftDefinite: true, rightDefinite: true, separate: false }
+  },
+  { label: 'separate', optionsBase: { separate: true } },
+  { label: 'leftDefinite, separate', optionsBase: { leftDefinite: true, separate: true } },
+  { label: 'rightDefinite, separate', optionsBase: { rightDefinite: true, separate: true } },
+  {
+    label: 'left- and rightDefinite, separate',
+    optionsBase: { leftDefinite: true, rightDefinite: true, separate: true }
+  },
+  { label: 'ordered, separate', optionsBase: { ordered: true, separate: true } },
+  { label: 'ordered, leftDefinite, separate', optionsBase: { ordered: true, leftDefinite: true, separate: true } },
+  {
+    label: 'ordered, rightDefinite, separate',
+    optionsBase: { ordered: true, rightDefinite: true, separate: true }
+  },
+  {
+    label: 'ordered, left- and rightDefinite, separate',
+    optionsBase: { ordered: true, leftDefinite: true, rightDefinite: true, separate: true }
+  }
 ]
 
 describe('sequence', function () {
