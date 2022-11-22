@@ -317,33 +317,32 @@ export class AllenRelation extends Relation {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
-   * `(oFDseSdfO)` — a non-basic interval relation that is often handy to use, which expresses that and interval `i1`
-   * and an interval `i2` are concurrent in some way.
+   * `(mM)` — a non-basic interval relation that is often handy to use, which expresses that and interval `i1`
+   * touches an interval `i2`.
    *
-   * Thus, `i1` does _not_ {@link PRECEDES precede} `i2`, does _not_ {@link MEETS meet} `i2`, is _not_ {@link MET_BY},
-   * and is _not_ {@link PRECEDED_BY} `i2`.
-   *
-   * This is the complement of {@link AllenRelation.DOES_NOT_CONCUR_WITH}
-   *
-   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+   * Thus, `i1` {@link MEETS} `i2`, or is {@link MET_BY} `i2`.
    *
    * ### Invariants
    *
    * ```ts
-   * CONCURS_WITH = or(OVERLAPS, FINISHED_BY, CONTAINS, STARTS, EQUALS, STARTED_BY, DURING, FINISHES, OVERLAPPED_BY)
+   * TOUCHES = or(MEETS, MET_BY)
    * ```
    */
-  static readonly CONCURS_WITH: AllenRelation = AllenRelation.or(
-    AllenRelation.OVERLAPS,
-    AllenRelation.FINISHED_BY,
-    AllenRelation.CONTAINS,
-    AllenRelation.STARTS,
-    AllenRelation.EQUALS,
-    AllenRelation.STARTED_BY,
-    AllenRelation.DURING,
-    AllenRelation.FINISHES,
-    AllenRelation.OVERLAPPED_BY
-  )
+  static readonly TOUCHES: AllenRelation = AllenRelation.or(AllenRelation.MEETS, AllenRelation.MET_BY)
+
+  /**
+   * `(pP)` — a non-basic interval relation that is often handy to use, which expresses that and interval `i1`
+   * is separate from an interval `i2`.
+   *
+   * Thus, `i1` {@link PRECEDES} `i2`, or is {@link PRECEDED_BY} `i2`.
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * IS_SEPARATE_FROM = or(PRECEDES, PRECEDED_BY)
+   * ```
+   */
+  static readonly IS_SEPARATE_FROM: AllenRelation = AllenRelation.or(AllenRelation.PRECEDES, AllenRelation.PRECEDED_BY)
 
   /**
    * `(pmMP)` — a non-basic interval relation that is often handy to use, which expresses that and interval `i1`
@@ -360,7 +359,29 @@ export class AllenRelation extends Relation {
    * DOES_NOT_CONCUR_WITH = or(PRECEDES, MEETS, MET_BY, PRECEDED_BY)
    * ```
    */
-  static readonly DOES_NOT_CONCUR_WITH: AllenRelation = AllenRelation.CONCURS_WITH.complement()
+  static readonly DOES_NOT_CONCUR_WITH: AllenRelation = AllenRelation.or(
+    AllenRelation.TOUCHES,
+    AllenRelation.IS_SEPARATE_FROM
+  )
+
+  /**
+   * `(oFDseSdfO)` — a non-basic interval relation that is often handy to use, which expresses that and interval `i1`
+   * and an interval `i2` are concurrent in some way.
+   *
+   * Thus, `i1` does _not_ {@link PRECEDES precede} `i2`, does _not_ {@link MEETS meet} `i2`, is _not_ {@link MET_BY},
+   * and is _not_ {@link PRECEDED_BY} `i2`.
+   *
+   * This is the complement of {@link AllenRelation.DOES_NOT_CONCUR_WITH}
+   *
+   * This relation is introduced because it is the possible result of the composition of 2 basic relations.
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * CONCURS_WITH = or(OVERLAPS, FINISHED_BY, CONTAINS, STARTS, EQUALS, STARTED_BY, DURING, FINISHES, OVERLAPPED_BY)
+   * ```
+   */
+  static readonly CONCURS_WITH: AllenRelation = AllenRelation.DOES_NOT_CONCUR_WITH.complement()
 
   /**
    * `(pmoFD)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1` starts
