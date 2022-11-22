@@ -41,7 +41,7 @@ import {
   TypeRepresentation
 } from '../src'
 
-describe('index', function () {
+describe('index TS', function () {
   describe('exports', function () {
     it('exports primitiveTypeRepresentations', function () {
       primitiveTypeRepresentations.should.be.an.Array()

@@ -30,7 +30,7 @@ const {
   isSequence
 } = require('../src')
 
-describe('index', function () {
+describe('index JS', function () {
   describe('exports', function () {
     it('exports primitiveTypeRepresentations', function () {
       primitiveTypeRepresentations.should.be.an.Array()
