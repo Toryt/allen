@@ -98,8 +98,9 @@ describe('sequence', function () {
       const ordered: boolean = optionsBase?.ordered ?? false
       const leftDefinite: boolean = optionsBase?.leftDefinite ?? false
       const rightDefinite: boolean = optionsBase?.rightDefinite ?? false
-      const gapsAreOk: boolean = optionsBase?.separate === undefined || optionsBase.separate
-      const noGapsAreOk: boolean = optionsBase?.separate === undefined || !optionsBase.separate
+      const dontCareAboutGaps: boolean = optionsBase?.separate === undefined
+      // MUDO const cannotTouch: boolean = optionsBase?.separate !== undefined && optionsBase.separate
+      const mustTouch: boolean = optionsBase?.separate !== undefined && !optionsBase.separate
       describe(label, function () {
         it('returns true for the empty collection', function () {
           callIt([], optionsBase).should.be.true()
@@ -123,7 +124,7 @@ describe('sequence', function () {
           callIt([{}], optionsBase).should.equal(!leftDefinite && !rightDefinite)
         })
         it(`returns ${
-          gapsAreOk ? 'true' : 'false'
+          dontCareAboutGaps ? 'true' : 'false'
         } for an ordered sequence of 4 fully definite intervals, with a gap`, function () {
           callIt(
             [
@@ -133,10 +134,10 @@ describe('sequence', function () {
               { start: points[4], end: points[5] }
             ],
             optionsBase
-          ).should.equal(gapsAreOk)
+          ).should.equal(dontCareAboutGaps)
         })
         it(`returns ${
-          noGapsAreOk ? 'true' : 'false'
+          dontCareAboutGaps || mustTouch ? 'true' : 'false'
         } for an ordered sequence of 3 fully definite intervals, without a gap`, function () {
           callIt(
             [
@@ -145,7 +146,7 @@ describe('sequence', function () {
               { start: points[2], end: points[3] }
             ],
             optionsBase
-          ).should.equal(noGapsAreOk)
+          ).should.equal(dontCareAboutGaps || mustTouch)
         })
         it('returns false for an ordered sequence of 4 fully definite intervals with a duplicate', function () {
           callIt(
@@ -170,7 +171,7 @@ describe('sequence', function () {
           ).should.be.false()
         })
         it(`returns ${
-          !ordered && gapsAreOk ? 'true' : 'false'
+          !ordered && dontCareAboutGaps ? 'true' : 'false'
         } for an unordered sequence of 4 fully definite intervals, with a gap`, function () {
           callIt(
             [
@@ -180,10 +181,10 @@ describe('sequence', function () {
               { start: points[4], end: points[5] }
             ],
             optionsBase
-          ).should.equal(!ordered && gapsAreOk)
+          ).should.equal(!ordered && dontCareAboutGaps)
         })
         it(`returns ${
-          !ordered && noGapsAreOk ? 'true' : 'false'
+          !ordered && (dontCareAboutGaps || mustTouch) ? 'true' : 'false'
         } for an unordered sequence of 3 fully definite intervals, without a gap`, function () {
           callIt(
             [
@@ -192,10 +193,10 @@ describe('sequence', function () {
               { start: points[1], end: points[2] }
             ],
             optionsBase
-          ).should.equal(!ordered && noGapsAreOk)
+          ).should.equal(!ordered && (dontCareAboutGaps || mustTouch))
         })
         it(`returns ${
-          gapsAreOk ? 'true' : 'false'
+          dontCareAboutGaps ? 'true' : 'false'
         } for an ordered sequence of 4 fully definite intervals, with a gap`, function () {
           callIt(
             [
@@ -205,7 +206,7 @@ describe('sequence', function () {
               { start: points[4], end: points[5] }
             ],
             optionsBase
-          ).should.equal(gapsAreOk)
+          ).should.equal(dontCareAboutGaps)
         })
         it('returns false when intervals concur, and are out of order', function () {
           callIt(
@@ -219,52 +220,52 @@ describe('sequence', function () {
           ).should.be.false()
         })
         it(`returns ${
-          !leftDefinite && gapsAreOk ? 'true' : 'false'
+          !leftDefinite && dontCareAboutGaps ? 'true' : 'false'
         } for an ordered sequence that starts with a left-indefinite interval, with a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3], end: points[4] }],
             optionsBase
-          ).should.equal(!leftDefinite && gapsAreOk)
+          ).should.equal(!leftDefinite && dontCareAboutGaps)
         })
         it(`returns ${
-          !leftDefinite && noGapsAreOk ? 'true' : 'false'
+          !leftDefinite && (dontCareAboutGaps || mustTouch) ? 'true' : 'false'
         } for an ordered sequence of that starts with a left-indefinite interval, without a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[2], end: points[4] }],
             optionsBase
-          ).should.equal(!leftDefinite && noGapsAreOk)
+          ).should.equal(!leftDefinite && (dontCareAboutGaps || mustTouch))
         })
         it(`returns ${
-          !rightDefinite && gapsAreOk ? 'true' : 'false'
+          !rightDefinite && dontCareAboutGaps ? 'true' : 'false'
         } for an ordered sequence of that ends with a right-indefinite interval, with a gap`, function () {
           callIt(
             [{ start: points[0], end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }],
             optionsBase
-          ).should.equal(!rightDefinite && gapsAreOk)
+          ).should.equal(!rightDefinite && dontCareAboutGaps)
         })
         it(`returns ${
-          !rightDefinite && noGapsAreOk ? 'true' : 'false'
+          !rightDefinite && (dontCareAboutGaps || mustTouch) ? 'true' : 'false'
         } for an ordered sequence of that ends with a right-indefinite interval, without a gap`, function () {
           callIt(
             [{ start: points[0], end: points[1] }, { start: points[1], end: points[2] }, { start: points[2] }],
             optionsBase
-          ).should.equal(!rightDefinite && noGapsAreOk)
+          ).should.equal(!rightDefinite && (dontCareAboutGaps || mustTouch))
         })
         it(`returns ${
-          !leftDefinite && !rightDefinite && gapsAreOk ? 'true' : 'false'
+          !leftDefinite && !rightDefinite && dontCareAboutGaps ? 'true' : 'false'
         } for an ordered sequence of that starts and ends with a half-indefinite interval, with a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }],
             optionsBase
-          ).should.equal(!leftDefinite && !rightDefinite && gapsAreOk)
+          ).should.equal(!leftDefinite && !rightDefinite && dontCareAboutGaps)
         })
         it(`returns ${
-          !leftDefinite && !rightDefinite && noGapsAreOk ? 'true' : 'false'
+          !leftDefinite && !rightDefinite && (dontCareAboutGaps || mustTouch) ? 'true' : 'false'
         } for an ordered sequence of that starts and ends with a half-indefinite interval, without a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }],
             optionsBase
-          ).should.equal(!leftDefinite && !rightDefinite && noGapsAreOk)
+          ).should.equal(!leftDefinite && !rightDefinite && (dontCareAboutGaps || mustTouch))
         })
         it('returns false for a collection that contains a left-indefinite interval in the middle', function () {
           callIt(
