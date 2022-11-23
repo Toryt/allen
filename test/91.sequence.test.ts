@@ -313,6 +313,7 @@ describe('sequence', function () {
               : { ...optionsBase, compareFn }
         const result = options === undefined ? isSequence(is) : isSequence(is, options)
         const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
+        const earlier = AllenRelation.fromString<AllenRelation>('mp')
         should(result).equal(
           (is.length <= 0 ||
             ((!(optionsBase?.leftDefinite ?? false) || (is[0].start !== undefined && is[0].start !== null)) &&
@@ -329,8 +330,18 @@ describe('sequence', function () {
                         ? AllenRelation.IS_SEPARATE_FROM
                         : AllenRelation.DOES_NOT_CONCUR_WITH
                     )
-                )
-              // MUDO and must touch if !optionsBase.separate
+                ) &&
+                (optionsBase?.separate === undefined ||
+                  optionsBase.separate ||
+                  is.length <= 1 ||
+                  // is first
+                  i ===
+                    is.reduce(
+                      (acc: Interval<T>, j: Interval<T>) =>
+                        AllenRelation.relation(acc, j, compare).implies(earlier) ? acc : j,
+                      i
+                    ) ||
+                  is.some((j: Interval<T>) => AllenRelation.relation(i, j, compare).implies(AllenRelation.MEETS)))
             )
         )
 
