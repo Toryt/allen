@@ -27,6 +27,7 @@ definitions:
   caches:
     npm16: ~/.npm
     npm18: ~/.npm
+    npm19: ~/.npm
   branches:
     - branch: &fullTestAndTag
         - parallel:
@@ -42,6 +43,12 @@ definitions:
                 image: node:18
                 caches:
                   - npm18
+            - step:
+                <<: *test
+                name: Latest Node 19
+                image: node:19
+                caches:
+                  - npm19
         - step:
             name: Tag & Push to Github
             caches:
