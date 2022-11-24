@@ -99,7 +99,7 @@ describe('sequence', function () {
       const leftDefinite: boolean = optionsBase?.leftDefinite ?? false
       const rightDefinite: boolean = optionsBase?.rightDefinite ?? false
       const dontCareAboutGaps: boolean = optionsBase?.gaps === undefined
-      // MUDO const cannotTouch: boolean = optionsBase?.separate !== undefined && optionsBase.separate
+      const cannotTouch: boolean = optionsBase?.gaps !== undefined && optionsBase.gaps
       const mustTouch: boolean = optionsBase?.gaps !== undefined && !optionsBase.gaps
       describe(label, function () {
         it('returns true for the empty collection', function () {
@@ -147,6 +147,18 @@ describe('sequence', function () {
             ],
             optionsBase
           ).should.equal(dontCareAboutGaps || mustTouch)
+        })
+        it(`returns ${
+          dontCareAboutGaps || cannotTouch ? 'true' : 'false'
+        } for an ordered sequence of 3 fully definite separated intervals`, function () {
+          callIt(
+            [
+              { start: points[0], end: points[1] },
+              { start: points[2], end: points[3] },
+              { start: points[4], end: points[5] }
+            ],
+            optionsBase
+          ).should.equal(dontCareAboutGaps || cannotTouch)
         })
         it('returns false for an ordered sequence of 4 fully definite intervals with a duplicate', function () {
           callIt(
@@ -208,6 +220,18 @@ describe('sequence', function () {
             optionsBase
           ).should.equal(dontCareAboutGaps)
         })
+        it(`returns ${
+          !ordered && (dontCareAboutGaps || cannotTouch) ? 'true' : 'false'
+        } for an unordered sequence of 3 fully definite separated intervals`, function () {
+          callIt(
+            [
+              { start: points[2], end: points[3] },
+              { start: points[4], end: points[5] },
+              { start: points[0], end: points[1] }
+            ],
+            optionsBase
+          ).should.equal(!ordered && (dontCareAboutGaps || cannotTouch))
+        })
         it('returns false when intervals concur, and are out of order', function () {
           callIt(
             [
@@ -236,6 +260,14 @@ describe('sequence', function () {
           ).should.equal(!leftDefinite && (dontCareAboutGaps || mustTouch))
         })
         it(`returns ${
+          !leftDefinite && (dontCareAboutGaps || cannotTouch) ? 'true' : 'false'
+        } for an ordered sequence that starts with a left-indefinite interval, with separated intervals`, function () {
+          callIt(
+            [{ end: points[0] }, { start: points[1], end: points[2] }, { start: points[3], end: points[4] }],
+            optionsBase
+          ).should.equal(!leftDefinite && (dontCareAboutGaps || cannotTouch))
+        })
+        it(`returns ${
           !rightDefinite && dontCareAboutGaps ? 'true' : 'false'
         } for an ordered sequence that ends with a right-indefinite interval, with a gap`, function () {
           callIt(
@@ -252,6 +284,14 @@ describe('sequence', function () {
           ).should.equal(!rightDefinite && (dontCareAboutGaps || mustTouch))
         })
         it(`returns ${
+          !rightDefinite && (dontCareAboutGaps || cannotTouch) ? 'true' : 'false'
+        } for an ordered sequence that end with a right-indefinite interval, with separated intervals`, function () {
+          callIt(
+            [{ start: points[0], end: points[1] }, { start: points[2], end: points[3] }, { start: points[4] }],
+            optionsBase
+          ).should.equal(!rightDefinite && (dontCareAboutGaps || cannotTouch))
+        })
+        it(`returns ${
           !leftDefinite && !rightDefinite && dontCareAboutGaps ? 'true' : 'false'
         } for an ordered sequence that starts and ends with a half-indefinite interval, with a gap`, function () {
           callIt(
@@ -266,6 +306,19 @@ describe('sequence', function () {
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[2] }],
             optionsBase
           ).should.equal(!leftDefinite && !rightDefinite && (dontCareAboutGaps || mustTouch))
+        })
+        it(`returns ${
+          !leftDefinite && !rightDefinite && (dontCareAboutGaps || cannotTouch) ? 'true' : 'false'
+        } for an ordered sequence that starts and ends with a half-indefinite interval, with separated intervals`, function () {
+          callIt(
+            [
+              { end: points[0] },
+              { start: points[1], end: points[2] },
+              { start: points[3], end: points[4] },
+              { start: points[5] }
+            ],
+            optionsBase
+          ).should.equal(!leftDefinite && !rightDefinite && (dontCareAboutGaps || cannotTouch))
         })
         it('returns false for a collection that contains a left-indefinite interval in the middle', function () {
           callIt(
