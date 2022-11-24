@@ -264,7 +264,7 @@ describe('sequence', function () {
           !leftDefinite && !rightDefinite && (dontCareAboutGaps || mustTouch) ? 'true' : 'false'
         } for an ordered sequence that starts and ends with a half-indefinite interval, without a gap`, function () {
           callIt(
-            [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }],
+            [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[2] }],
             optionsBase
           ).should.equal(!leftDefinite && !rightDefinite && (dontCareAboutGaps || mustTouch))
         })
