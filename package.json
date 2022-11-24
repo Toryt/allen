@@ -1,6 +1,6 @@
 {
   "name": "@toryt/allen",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Reason and validate the relations between intervals, and points and intervals, in JavaScript and TypeScript.",
   "keywords": [
     "allen",
