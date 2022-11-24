@@ -22,6 +22,7 @@ import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCa
 import { isSequence, SequenceOptions } from '../src/sequence'
 import { AllenRelation, Comparator, ltCompare } from '../src'
 import assert from 'assert'
+import { intervalToString } from './_intervalToString'
 
 const sixSymbols = generateSixSymbols('enclosing')
 
@@ -313,7 +314,55 @@ describe('sequence', function () {
               : { ...optionsBase, compareFn }
         const result = options === undefined ? isSequence(is) : isSequence(is, options)
         const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
-        const earlier = AllenRelation.fromString<AllenRelation>('mp')
+        const EARLIER = AllenRelation.fromString<AllenRelation>('mp')
+        // the definition, split in parts
+        if (is.length <= 0) {
+          result.should.be.true()
+        } else {
+          if ((optionsBase?.leftDefinite ?? false) && (is[0].start === undefined || is[0].start === null)) {
+            result.should.be.false()
+          }
+          if (
+            (optionsBase?.rightDefinite ?? false) &&
+            (is[is.length - 1].end === undefined || is[is.length - 1].end === null)
+          ) {
+            result.should.be.false()
+          }
+          const first: Interval<T> = is.reduce(
+            (acc: Interval<T>, j: Interval<T>) => (AllenRelation.relation(acc, j, compare).implies(EARLIER) ? acc : j),
+            is[0]
+          )
+          is.forEach((i: Interval<T>, index: number) => {
+            if (
+              optionsBase?.ordered === true &&
+              index !== 0 &&
+              i.start !== undefined &&
+              i.start !== null &&
+              !hasSmallerStart(is[index - 1], i, compare)
+            ) {
+              result.should.be.false()
+            } else {
+              const expected =
+                optionsBase?.gaps !== undefined && optionsBase.gaps
+                  ? AllenRelation.IS_SEPARATE_FROM
+                  : AllenRelation.DOES_NOT_CONCUR_WITH
+              is.forEach((j: Interval<T>) => {
+                const ij: AllenRelation = AllenRelation.relation(i, j, compare)
+                if (i !== j && !ij.implies(expected)) {
+                  result.should.be.false()
+                }
+              })
+              if (
+                optionsBase?.gaps === false &&
+                i !== first &&
+                // must have a predecessor
+                !is.some((j: Interval<T>) => AllenRelation.relation(j, i, compare).implies(AllenRelation.MEETS))
+              ) {
+                result.should.be.false()
+              }
+            }
+          })
+        }
         should(result).equal(
           (is.length <= 0 ||
             ((!(optionsBase?.leftDefinite ?? false) || (is[0].start !== undefined && is[0].start !== null)) &&
@@ -338,10 +387,11 @@ describe('sequence', function () {
                   i ===
                     is.reduce(
                       (acc: Interval<T>, j: Interval<T>) =>
-                        AllenRelation.relation(acc, j, compare).implies(earlier) ? acc : j,
-                      i
+                        AllenRelation.relation(acc, j, compare).implies(EARLIER) ? acc : j,
+                      is[0]
                     ) ||
-                  is.some((j: Interval<T>) => AllenRelation.relation(i, j, compare).implies(AllenRelation.MEETS)))
+                  // must have a predecessor
+                  is.some((j: Interval<T>) => AllenRelation.relation(j, i, compare).implies(AllenRelation.MEETS)))
             )
         )
 
