@@ -53,39 +53,39 @@ const optionCases: OptionCase[] = [
     label: 'ordered, left- and rightDefinite',
     optionsBase: { ordered: true, leftDefinite: true, rightDefinite: true }
   },
-  { label: 'must touch', optionsBase: { separate: false } },
-  { label: 'leftDefinite, must touch', optionsBase: { leftDefinite: true, separate: false } },
-  { label: 'rightDefinite, must touch', optionsBase: { rightDefinite: true, separate: false } },
+  { label: 'must touch', optionsBase: { gaps: false } },
+  { label: 'leftDefinite, must touch', optionsBase: { leftDefinite: true, gaps: false } },
+  { label: 'rightDefinite, must touch', optionsBase: { rightDefinite: true, gaps: false } },
   {
     label: 'left- and rightDefinite, must touch',
-    optionsBase: { leftDefinite: true, rightDefinite: true, separate: false }
+    optionsBase: { leftDefinite: true, rightDefinite: true, gaps: false }
   },
-  { label: 'ordered, must touch', optionsBase: { ordered: true, separate: false } },
-  { label: 'ordered, leftDefinite, must touch', optionsBase: { ordered: true, leftDefinite: true, separate: false } },
+  { label: 'ordered, must touch', optionsBase: { ordered: true, gaps: false } },
+  { label: 'ordered, leftDefinite, must touch', optionsBase: { ordered: true, leftDefinite: true, gaps: false } },
   {
     label: 'ordered, rightDefinite, must touch',
-    optionsBase: { ordered: true, rightDefinite: true, separate: false }
+    optionsBase: { ordered: true, rightDefinite: true, gaps: false }
   },
   {
     label: 'ordered, left- and rightDefinite, must touch',
-    optionsBase: { ordered: true, leftDefinite: true, rightDefinite: true, separate: false }
+    optionsBase: { ordered: true, leftDefinite: true, rightDefinite: true, gaps: false }
   },
-  { label: 'separate', optionsBase: { separate: true } },
-  { label: 'leftDefinite, separate', optionsBase: { leftDefinite: true, separate: true } },
-  { label: 'rightDefinite, separate', optionsBase: { rightDefinite: true, separate: true } },
+  { label: 'separate', optionsBase: { gaps: true } },
+  { label: 'leftDefinite, separate', optionsBase: { leftDefinite: true, gaps: true } },
+  { label: 'rightDefinite, separate', optionsBase: { rightDefinite: true, gaps: true } },
   {
     label: 'left- and rightDefinite, separate',
-    optionsBase: { leftDefinite: true, rightDefinite: true, separate: true }
+    optionsBase: { leftDefinite: true, rightDefinite: true, gaps: true }
   },
-  { label: 'ordered, separate', optionsBase: { ordered: true, separate: true } },
-  { label: 'ordered, leftDefinite, separate', optionsBase: { ordered: true, leftDefinite: true, separate: true } },
+  { label: 'ordered, separate', optionsBase: { ordered: true, gaps: true } },
+  { label: 'ordered, leftDefinite, separate', optionsBase: { ordered: true, leftDefinite: true, gaps: true } },
   {
     label: 'ordered, rightDefinite, separate',
-    optionsBase: { ordered: true, rightDefinite: true, separate: true }
+    optionsBase: { ordered: true, rightDefinite: true, gaps: true }
   },
   {
     label: 'ordered, left- and rightDefinite, separate',
-    optionsBase: { ordered: true, leftDefinite: true, rightDefinite: true, separate: true }
+    optionsBase: { ordered: true, leftDefinite: true, rightDefinite: true, gaps: true }
   }
 ]
 
@@ -98,9 +98,9 @@ describe('sequence', function () {
       const ordered: boolean = optionsBase?.ordered ?? false
       const leftDefinite: boolean = optionsBase?.leftDefinite ?? false
       const rightDefinite: boolean = optionsBase?.rightDefinite ?? false
-      const dontCareAboutGaps: boolean = optionsBase?.separate === undefined
+      const dontCareAboutGaps: boolean = optionsBase?.gaps === undefined
       // MUDO const cannotTouch: boolean = optionsBase?.separate !== undefined && optionsBase.separate
-      const mustTouch: boolean = optionsBase?.separate !== undefined && !optionsBase.separate
+      const mustTouch: boolean = optionsBase?.gaps !== undefined && !optionsBase.gaps
       describe(label, function () {
         it('returns true for the empty collection', function () {
           callIt([], optionsBase).should.be.true()
@@ -326,13 +326,13 @@ describe('sequence', function () {
                   (j: Interval<T>) =>
                     i === j ||
                     AllenRelation.relation(i, j, compare).implies(
-                      optionsBase?.separate !== undefined && optionsBase.separate
+                      optionsBase?.gaps !== undefined && optionsBase.gaps
                         ? AllenRelation.IS_SEPARATE_FROM
                         : AllenRelation.DOES_NOT_CONCUR_WITH
                     )
                 ) &&
-                (optionsBase?.separate === undefined ||
-                  optionsBase.separate ||
+                (optionsBase?.gaps === undefined ||
+                  optionsBase.gaps ||
                   is.length <= 1 ||
                   // is first
                   i ===

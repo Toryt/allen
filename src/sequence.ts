@@ -50,12 +50,12 @@ export interface SequenceOptions<T> {
   ordered?: boolean
 
   /**
-   * Tristate. When `true`, intervals in the sequence must be {@link AllenRelation.IS_SEPARATE_FROM separate}. When
-   * `false`, intervals in the sequence must {@link AllenRelation.TOUCHES touch} each other. When not present or
+   * Tristate. When `true`, intervals in the sequence must be {@link AllenRelation.TOUCHES touch} each other. When
+   * `false`, intervals in the sequence must  {@link AllenRelation.IS_SEPARATE_FROM separate}. When not present or
    * `undefined`, intervals in the sequence can meet or be separate, i.e., must
    * {@link AllenRelation.DOES_NOT_CONCUR_WITH not concur}.
    */
-  separate?: boolean
+  gaps?: boolean
 }
 
 /**
@@ -126,7 +126,7 @@ export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: Sequenc
 
     const comparison: number = compareFn(i1.end, i2.start)
 
-    return options?.separate === undefined ? comparison <= 0 : options.separate ? comparison < 0 : comparison === 0
+    return options?.gaps === undefined ? comparison <= 0 : options.gaps ? comparison < 0 : comparison === 0
   }
 
   return sortedIs.every((j: Interval<T>, index: number) => index === 0 || endsBefore(sortedIs[index - 1], j))
