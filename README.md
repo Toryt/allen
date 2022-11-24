@@ -33,6 +33,8 @@ Good synopses of this theory are
 
 This library does not help with inference.
 
+[ppwcode dotnet-util-allen] offers a C# version of the functionality of this library.
+
 ## How to use
 
 ### Example
@@ -291,3 +293,4 @@ last updated in December 2008.
 [standard]: https://standardjs.com
 [eslint-config-standard-with-typescript]: https://github.com/standard/eslint-config-standard-with-typescript
 [license]: ./LICENSE
+[ppwcode dotnet-util-allen]: https://bitbucket.org/ppwcode/dotnet-util-allen
