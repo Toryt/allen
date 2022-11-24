@@ -22,7 +22,6 @@ import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCa
 import { isSequence, SequenceOptions } from '../src/sequence'
 import { AllenRelation, Comparator, ltCompare } from '../src'
 import assert from 'assert'
-import { intervalToString } from './_intervalToString'
 
 const sixSymbols = generateSixSymbols('enclosing')
 
