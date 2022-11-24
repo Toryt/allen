@@ -230,7 +230,7 @@ describe('sequence', function () {
         })
         it(`returns ${
           !leftDefinite && (dontCareAboutGaps || mustTouch) ? 'true' : 'false'
-        } for an ordered sequence of that starts with a left-indefinite interval, without a gap`, function () {
+        } for an ordered sequence that starts with a left-indefinite interval, without a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[2], end: points[4] }],
             optionsBase
@@ -238,7 +238,7 @@ describe('sequence', function () {
         })
         it(`returns ${
           !rightDefinite && dontCareAboutGaps ? 'true' : 'false'
-        } for an ordered sequence of that ends with a right-indefinite interval, with a gap`, function () {
+        } for an ordered sequence that ends with a right-indefinite interval, with a gap`, function () {
           callIt(
             [{ start: points[0], end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }],
             optionsBase
@@ -246,7 +246,7 @@ describe('sequence', function () {
         })
         it(`returns ${
           !rightDefinite && (dontCareAboutGaps || mustTouch) ? 'true' : 'false'
-        } for an ordered sequence of that ends with a right-indefinite interval, without a gap`, function () {
+        } for an ordered sequence that ends with a right-indefinite interval, without a gap`, function () {
           callIt(
             [{ start: points[0], end: points[1] }, { start: points[1], end: points[2] }, { start: points[2] }],
             optionsBase
@@ -254,7 +254,7 @@ describe('sequence', function () {
         })
         it(`returns ${
           !leftDefinite && !rightDefinite && dontCareAboutGaps ? 'true' : 'false'
-        } for an ordered sequence of that starts and ends with a half-indefinite interval, with a gap`, function () {
+        } for an ordered sequence that starts and ends with a half-indefinite interval, with a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }],
             optionsBase
@@ -262,7 +262,7 @@ describe('sequence', function () {
         })
         it(`returns ${
           !leftDefinite && !rightDefinite && (dontCareAboutGaps || mustTouch) ? 'true' : 'false'
-        } for an ordered sequence of that starts and ends with a half-indefinite interval, without a gap`, function () {
+        } for an ordered sequence that starts and ends with a half-indefinite interval, without a gap`, function () {
           callIt(
             [{ end: points[1] }, { start: points[1], end: points[2] }, { start: points[3] }],
             optionsBase
