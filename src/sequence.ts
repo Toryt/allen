@@ -66,8 +66,36 @@ export interface SequenceOptions<T> {
  *
  * Only `i[0]` might have an indefinite `start`, and only the last element might have an indefinite `end`.
  *
- * // MUDO fix definition
- * @returns is.every((i, j) => j === 0 || relation(i, is[j - 1]).implies(DOES_NOT_CONCUR) && is[j - 1].start < i.start)
+ * // IDEA maybe make the definition more readable by splittin it in parts
+ * @returns (is.length <= 0 ||
+ *             ((!(optionsBase?.leftDefinite ?? false) || (is[0].start !== undefined && is[0].start !== null)) &&
+ *               (!(optionsBase?.rightDefinite ?? false) ||
+ *                 (is[is.length - 1].end !== undefined && is[is.length - 1].end !== null)))) &&
+ *             is.every(
+ *               (i: Interval<T>, index: number) =>
+ *                 (!(optionsBase?.ordered ?? false) || index === 0 || hasSmallerStart(is[index - 1], i, compare)) &&
+ *                 is.every(
+ *                   (j: Interval<T>) =>
+ *                     i === j ||
+ *                     AllenRelation.relation(i, j, compare).implies(
+ *                       optionsBase?.gaps !== undefined && optionsBase.gaps
+ *                         ? AllenRelation.IS_SEPARATE_FROM
+ *                         : AllenRelation.DOES_NOT_CONCUR_WITH
+ *                     )
+ *                 ) &&
+ *                 (optionsBase?.gaps === undefined ||
+ *                   optionsBase.gaps ||
+ *                   is.length <= 1 ||
+ *                   // is first
+ *                   i ===
+ *                     is.reduce(
+ *                       (acc: Interval<T>, j: Interval<T>) =>
+ *                         AllenRelation.relation(acc, j, compare).implies(EARLIER) ? acc : j,
+ *                       is[0]
+ *                     ) ||
+ *                   // must have a predecessor
+ *                   is.some((j: Interval<T>) => AllenRelation.relation(j, i, compare).implies(AllenRelation.MEETS)))
+ *             )
  */
 export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: SequenceOptions<T>): boolean {
   assert(options === undefined || typeof options === 'object')
