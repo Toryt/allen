@@ -15,24 +15,6 @@
  */
 
 // /**
-//  * The elements of `i` {@link AllenRelation.MEETS}, and are ordered from smallest `i.start` to largest `i.end`.
-//  *
-//  * There are no gaps in the sequence.
-//  *
-//  * Only `i[0]` might have an indefinite `start`, and only the last element might have an indefinite `end`.
-//  */
-// export function isChain<T> (i: Interval<T>[], compareFn?: Comparator<T>): boolean {
-//   const compare: Comparator<T> = getCompareIfOk(i, compareFn)
-//
-//   return i.every(
-//     (j: Interval<T>, index: number) =>
-//       index === 0 || AllenRelation.relation(j, i[index - 1], compare).implies(AllenRelation.MEETS)
-//   )
-// }
-//
-// isOrderedChain
-//
-// /**
 //  * Turn the _set_ of intervals `i` into a {@link isSequence sequence}. This is a chain, with gaps filled up with
 //  * maximal interval.
 //  *
