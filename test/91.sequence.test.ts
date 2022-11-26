@@ -136,10 +136,9 @@ describe('sequence', function () {
           )} and fullfils the definition`, function () {
             const result = callIt(i1, i2)
             const calculatedRelation = AllenRelation.relation(i1, i2, compareFn)
-            console.log(calculatedRelation.toString())
-            console.log(relation.toString())
+            calculatedRelation.should.equal(relation)
             result.should.equal(comparison)
-            should(crossReference26.get(relation)).containEql(result)
+            should(crossReference26.get(calculatedRelation)).containEql(result)
           })
         })
       })
@@ -425,8 +424,8 @@ describe('sequence', function () {
                 ? undefined
                 : { compareFn }
               : /* prettier-ignore */ compareFn === undefined || compareFn === null
-              ? optionsBase
-              : { ...optionsBase, compareFn }
+                ? optionsBase
+                : { ...optionsBase, compareFn }
           const result = options === undefined ? isSequence(is) : isSequence(is, options)
           const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
           const EARLIER = AllenRelation.fromString<AllenRelation>('mp')
