@@ -145,7 +145,7 @@ export class AllenRelation extends Relation {
    *
    * ```
    * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
-   *   (i1.start < i2.start) ∧ (i1.end = i2.end)
+   *   i1.start < i2.start ∧ i1.end = i2.end
    * ```
    *
    * ![is finished by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-finishedBy.png)
@@ -217,7 +217,7 @@ export class AllenRelation extends Relation {
    *
    * ```
    * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
-   *   i1.start = i2.start ∧ (i2.end < i1.end)
+   *   i1.start = i2.start ∧ i2.end < i1.end
    * ```
    *
    * ![is started by](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/AllenRelation-startedBy.png)
