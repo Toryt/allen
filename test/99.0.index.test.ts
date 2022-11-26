@@ -19,6 +19,7 @@ import {
   AllenRelation,
   commonTypeRepresentation,
   Comparator,
+  compareIntervals,
   Constructor,
   Indefinite,
   Interval,
@@ -129,6 +130,9 @@ describe('index TS', function () {
     })
     it('exports minimalEnclosing', function () {
       minimalEnclosing.should.be.a.Function()
+    })
+    it('exports compareIntervals', function () {
+      compareIntervals.should.be.a.Function()
     })
     it('exports SequenceOptions', function () {
       const x: SequenceOptions<number> = {}

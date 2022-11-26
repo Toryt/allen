@@ -29,7 +29,8 @@ const {
   isEnclosing,
   isMinimalEnclosing,
   minimalEnclosing,
-  isSequence
+  isSequence,
+  compareIntervals
 } = require('../src')
 
 describe('index JS', function () {
@@ -65,6 +66,9 @@ describe('index JS', function () {
     })
     it('exports minimalEnclosing', function () {
       isMinimalEnclosing.should.be.a.Function()
+    })
+    it('exports compareIntervals', function () {
+      compareIntervals.should.be.a.Function()
     })
     it('exports minimalEnclosing', function () {
       minimalEnclosing.should.be.a.Function()
