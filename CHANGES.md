@@ -4,6 +4,10 @@
 
 ### 0.3
 
+#### 0.3.2
+
+- make `compareIntervals` a first order function
+
 #### 0.3.1
 
 - add the option to `isSequence` to demand the sequence to be gapless or not
