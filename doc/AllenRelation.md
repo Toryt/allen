@@ -32,57 +32,21 @@ algebra&quot;</cite></a>, on which the conventions used here are based.
 
 Allen finds that there are 13 _basic relations_ possible between definite intervals:
 
-- `I1` `PRECEDES` `I2` (`p`)
-
-  ![precedes](AllenRelation-precedes.png)
-
-- `I1` `MEETS` `I2` (`m`)
-
-  ![meets](AllenRelation-meets.png)
-
-- `I1` `OVERLAPS` `I2` (`o`)
-
-  ![in](AllenRelation-overlaps.png)
-
-- `I1` is `FINISHED_BY` `I2` (`F`)
-
-  ![is finished by](AllenRelation-finishedBy.png)
-
-- `I1` `CONTAINS` `I2` (`D`)
-
-  ![contains](AllenRelation-contains.png)
-
-- `I1` `STARTS` `I2` (`s`)
-
-  ![starts](AllenRelation-starts.png)
-
-- `I1` `EQUALS` `I2` (`e`)
-
-  ![equals](AllenRelation-equals.png)
-
-- `I1` is `STARTED_BY` `I2` (`S`)
-
-  ![is started by](AllenRelation-startedBy.png)
-
-- `I1` is `DURING` `I2` (`d`)
-
-  ![is during](AllenRelation-during.png)
-
-- `I1` `FINISHES` `I2` (`f`)
-
-  ![finishes](AllenRelation-finishes.png)
-
-- `I1` is `OVERLAPPED_BY` `I2` (`O`)
-
-  ![is overlapped by](AllenRelation-overlappedBy.png)
-
-- `I1` is `MET_BY` `I2` (`M`)
-
-  ![is met by](AllenRelation-metBy.png)
-
-- `I1` is `PRECEDED_BY` `I2` (`P`)
-
-  ![is preceded by](AllenRelation-precededBy.png)
+| Basic relation             | `(.)` | Illustration                                        | Definition (mentioned properties must be definite, and …)   |
+| -------------------------- | ----- | --------------------------------------------------- | ----------------------------------------------------------- |
+| `i1` precedes `i2`         | `(p)` | ![precedes](AllenRelation-precedes.png)             | `i1.end < i2.start`                                         |
+| `i1` meets `i2`            | `(m)` | ![meets](AllenRelation-meets.png)                   | `i1.end = i2.start`                                         |
+| `i1` overlaps `i2`         | `(o)` | ![overlaps](AllenRelation-overlaps.png)             | `i1.start < i2.start ∧ i2.start < i1.end ∧ i1.end < i2.end` |
+| `i1` is finished by `i2`   | `(F)` | ![is finished by](AllenRelation-finishedBy.png)     | `i1.start < i2.start ∧ i1.end = i2.end`                     |
+| `i1` contains `i2`         | `(D)` | ![contains](AllenRelation-contains.png)             | `i1.start < i2.start ∧ i2.end < i1.end`                     |
+| `i1` starts `i2`           | `(s)` | ![starts](AllenRelation-starts.png)                 | `i1.start = i2.start ∧ i1.end < i2.end`                     |
+| `i1` equals `i2`           | `(e)` | ![equals](AllenRelation-equals.png)                 | `i1.start = i2.start ∧ i1.end = i2.end`                     |
+| `i1` is started by `i2`    | `(S)` | ![is started by](AllenRelation-startedBy.png)       | `i2.start = i1.start ∧ i2.end < i1.end`                     |
+| `i1` during `i2`           | `(d)` | ![during](AllenRelation-during.png)                 | `i2.start < i1.start ∧ i1.end < i2.end`                     |
+| `i1` finishes `i2`         | `(f)` | ![finishes](AllenRelation-finishes.png)             | `i2.start < i1.start ∧ i1.end = i2.end`                     |
+| `i1` is overlapped by `i2` | `(O)` | ![is overlapped by](AllenRelation-overlappedBy.png) | `i2.start < i1.start ∧ i1.start < i2.end ∧ i2.end < i1.end` |
+| `i1` is met by `i2`        | `(M)` | ![is met by](AllenRelation-metBy.png)               | `i2.end = i1.start`                                         |
+| `i1` is preceded by `i2`   | `(P)` | ![is preceded by](AllenRelation-precededBy.png)     | `i2.end < i1.start`                                         |
 
 These basic relations can be compared to the relations `<`, `=`, and `>` between 2 points.
 
