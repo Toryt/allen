@@ -147,7 +147,7 @@ const trueCases: Array<Case<TypeRepresentation>> = [
 
 const notAnIntervalCandidate = stuffWithUndefined.filter(s => typeof s !== 'object' && typeof s !== 'function')
 
-describe('interval (1)', function () {
+describe('interval', function () {
   describe('isInterval', function () {
     describe('not an object', function () {
       typeRepresentations.forEach(ptr => {

@@ -15,9 +15,52 @@
  */
 
 import { Comparator } from './comparator'
-import { compareIntervals, Interval } from './Interval'
+import { Interval } from './Interval'
 import { getCompareIfOk } from './getCompareIfOk'
 import assert from 'assert'
+
+/**
+ * Compare function with the traditional semantics for intervals.
+ *
+ * This imposes _a_ [strict total order](https://en.wikipedia.org/wiki/Total¬_order) on {@link Interval Intervals}. This
+ * order in general is not “natural”, but just a possible order. A general “natural” order for
+ * {@link Interval Intervals} does not exist. That is the whole reason why Allen defined 13 basic relations between
+ * intervals. Other orders are possible.
+ *
+ * This is however a natural [strict total order](https://en.wikipedia.org/wiki/Total¬_order) for
+ * {@link Interval Intervals} in a {@link isSequence}.
+ */
+export function compareIntervals<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): number {
+  const compare: Comparator<T> = getCompareIfOk([i1, i2], compareFn) // asserts preconditions
+
+  if (i1.start === undefined || i1.start === null) {
+    if (i2.start !== undefined && i2.start !== null) {
+      return -1
+    }
+    return 0
+  }
+  if (i2.start === undefined || i2.start === null) {
+    return +1
+  }
+
+  const i1StartVsi2Start = compare(i1.start, i2.start)
+  if (i1StartVsi2Start !== 0) {
+    return i1StartVsi2Start
+  }
+
+  // starts are equal and definite
+  if (i1.end === undefined || i1.end === null) {
+    if (i2.end !== undefined && i2.end !== null) {
+      return +1
+    }
+    return 0
+  }
+  if (i2.end === undefined || i2.end === null) {
+    return -1
+  }
+
+  return compare(i1.end, i2.end)
+}
 
 /**
  * Optional options to determine whether an array of {@link Interval}s is a _sequence_ with more or less constraints.
