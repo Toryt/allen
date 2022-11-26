@@ -86,6 +86,17 @@ export function isInterval<TR extends TypeRepresentation> (
   return startBeforeEnd(pi.start, pi.end, compareFn ?? ltCompare)
 }
 
+/**
+ * Compare function with the traditional semantics for intervals.
+ *
+ * This imposes _a_ [strict total order](https://en.wikipedia.org/wiki/Total¬_order) on {@link Interval Intervals}. This
+ * order in general is not “natural”, but just a possible order. A general “natural” order for
+ * {@link Interval Intervals} does not exist. That is the whole reason why Allen defined 13 basic relations between
+ * intervals. Other orders are possible.
+ *
+ * This is however a natural [strict total order](https://en.wikipedia.org/wiki/Total¬_order) for
+ * {@link Interval Intervals} in a {@link isSequence}.
+ */
 export function compareIntervals<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): number {
   const compare: Comparator<T> = getCompareIfOk([i1, i2], compareFn) // asserts preconditions
 
