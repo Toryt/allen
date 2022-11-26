@@ -16,7 +16,6 @@
 
 /* eslint-env mocha */
 
-/* eslint-env mocha */
 import 'should'
 import { inspect } from 'util'
 import { stuff, stuffWithUndefined } from './_stuff'
@@ -148,7 +147,7 @@ const trueCases: Array<Case<TypeRepresentation>> = [
 
 const notAnIntervalCandidate = stuffWithUndefined.filter(s => typeof s !== 'object' && typeof s !== 'function')
 
-describe('interval', function () {
+describe('interval (1)', function () {
   describe('isInterval', function () {
     describe('not an object', function () {
       typeRepresentations.forEach(ptr => {
