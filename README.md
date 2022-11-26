@@ -144,57 +144,21 @@ We find that there are 5 _basic relations_ possible between a definite point and
 
 and that there are 13 _basic relations_ possible between definite intervals:
 
-- `I1` `PRECEDES` `I2` (`p`)
-
-  ![precedes](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precedes.png)
-
-- `I1` `MEETS` `I2` (`m`)
-
-  ![meets](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-meets.png)
-
-- `I1` `OVERLAPS` `I2` (`o`)
-
-  ![in](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlaps.png)
-
-- `I1` is `FINISHED_BY` `I2` (`F`)
-
-  ![is finished by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishedBy.png)
-
-- `I1` `CONTAINS` `I2` (`D`)
-
-  ![contains](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-contains.png)
-
-- `I1` `STARTS` `I2` (`s`)
-
-  ![starts](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-starts.png)
-
-- `I1` `EQUALS` `I2` (`e`)
-
-  ![equals](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-equals.png)
-
-- `I1` is `STARTED_BY` `I2` (`S`)
-
-  ![is started by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-startedBy.png)
-
-- `I1` is `DURING` `I2` (`d`)
-
-  ![is during](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-during.png)
-
-- `I1` `FINISHES` `I2` (`f`)
-
-  ![finishes](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishes.png)
-
-- `I1` is `OVERLAPPED_BY` `I2` (`O`)
-
-  ![is overlapped by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlappedBy.png)
-
-- `I1` is `MET_BY` `I2` (`M`)
-
-  ![is met by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-metBy.png)
-
-- `I1` is `PRECEDED_BY` `I2` (`P`)
-
-  ![is preceded by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precededBy.png)
+| Basic relation             | `(.)` | Illustration                                                                                                                           |
+| -------------------------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `i1` precedes `i2`         | `(p)` | ![precedes](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precedes.png)             |
+| `i1` meets `i2`            | `(m)` | ![meets](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-meets.png)                   |
+| `i1` overlaps `i2`         | `(o)` | ![overlaps](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlaps.png)             |
+| `i1` is finished by `i2`   | `(F)` | ![is finished by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishedBy.png)     |
+| `i1` contains `i2`         | `(D)` | ![contains](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-contains.png)             |
+| `i1` starts `i2`           | `(s)` | ![starts](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-starts.png)                 |
+| `i1` equals `i2`           | `(e)` | ![equals](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-equals.png)                 |
+| `i1` is started by `i2`    | `(S)` | ![is started by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-startedBy.png)       |
+| `i1` during `i2`           | `(d)` | ![during](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-during.png)                 |
+| `i1` finishes `i2`         | `(f)` | ![finishes](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishes.png)             |
+| `i1` is overlapped by `i2` | `(O)` | ![is overlapped by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlappedBy.png) |
+| `i1` is met by `i2`        | `(M)` | ![is met by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-metBy.png)               |
+| `i1` is preceded by `i2`   | `(P)` | ![is preceded by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precededBy.png)     |
 
 These 5, respectively 13, _basic relations_ are an orthogonal basis for all possible _general_ relation-conditions
 between a point and an interval (`PointIntervalRelation`), respectively between two intervals (`AllenRelation`).
