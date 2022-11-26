@@ -24,11 +24,34 @@ import assert from 'assert'
  *
  * This imposes _a_ [strict total order](https://en.wikipedia.org/wiki/Total¬_order) on {@link Interval Intervals}. This
  * order in general is not “natural”, but just a possible order. A general “natural” order for
- * {@link Interval Intervals} does not exist. That is the whole reason why Allen defined 13 basic relations between
- * intervals. Other orders are possible.
+ * {@link Interval Intervals} does not exist. That is the whole reason why Allen defined
+ * {@link AllenRelation.BASIC_RELATIONS 13 basic relations} between intervals. Other orders are possible.
  *
- * This is however a natural [strict total order](https://en.wikipedia.org/wiki/Total¬_order) for
- * {@link Interval Intervals} in a {@link isSequence}.
+ * This is a natural [strict total order](https://en.wikipedia.org/wiki/Total¬_order) for {@link Interval Intervals} in
+ * a {@link isSequence sequence}.
+ *
+ * The main intention of this function is to make other algorithms easier, not to express an interesting semantics,
+ * outside its use for {@link isSequence sequences}.
+ *
+ * First, the {@link Interval#start}s are compared, interpreting an indefinite {@link Interval#start} as the smallest
+ * possible value. When the {@link Interval#start}s are equal, the {@link Interval#end}s are compared, interpreting an
+ * indefinite `end` as the largest possible value. When both {@link Interval#start}s are indefinite, or both
+ * {@link Interval#end}s are indefinite, they are considered equal. This is not a true representation of their
+ * semantics (don't know 🤷), but the intention of this code is to get a deterministic order for all possible intervals,
+ * and this does the trick.
+ *
+ * The 26 possible results of {@link AllenRelation.relation} can be mapped to the result of this function:
+ *
+ * | Allen relations                                                                                         | result          |
+ * | ------------------------------------------------------------------------------------------------------- | --------------- |
+ * | `(p)`, `(m)`, `(o)`, `(F)`, `(D)`, `(s)`, `(pmoFD)`, `(pmosd)`, `(osd)`, `(oFD)`                        | `-1`            |
+ * | `(e)`                                                                                                   | `0`             |
+ * | `(S)`, `(d)`, `(f)`, `(O)`, `(M)`, `(P)`, `(pmoFDseSdfO)`, `(oFDseSdfOMP)`, `(dfO)`, `(DSO)`, `(dfOMP)` | `+1`            |
+ * | `(Fef)`                                                                                                 | `-1`, `0`       |
+ * | `(DSOMP)`, `(seS)`                                                                                      | `-1`, `+1`      |
+ * | `full`                                                                                                  | `-1`, `0`, `+1` |
+ *
+ * If the result is `0`, the actual relation is implied by `(e)`. There are no other meaningful correlations.
  */
 export function compareIntervals<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): number {
   const compare: Comparator<T> = getCompareIfOk([i1, i2], compareFn) // asserts preconditions
