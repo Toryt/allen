@@ -42,14 +42,14 @@ import assert from 'assert'
  *
  * The 26 possible results of {@link AllenRelation.relation} can be mapped to the result of this function:
  *
- * | Allen relations                                                                                         | result          |
- * | ------------------------------------------------------------------------------------------------------- | --------------- |
- * | `(p)`, `(m)`, `(o)`, `(F)`, `(D)`, `(s)`, `(pmoFD)`, `(pmosd)`, `(osd)`, `(oFD)`                        | `-1`            |
- * | `(e)`                                                                                                   | `0`             |
- * | `(S)`, `(d)`, `(f)`, `(O)`, `(M)`, `(P)`, `(pmoFDseSdfO)`, `(oFDseSdfOMP)`, `(dfO)`, `(DSO)`, `(dfOMP)` | `+1`            |
- * | `(Fef)`                                                                                                 | `-1`, `0`       |
- * | `(DSOMP)`, `(seS)`                                                                                      | `-1`, `+1`      |
- * | `full`                                                                                                  | `-1`, `0`, `+1` |
+ * | Allen relations                                                                                                                                                                                                             | result          |
+ * | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+ * | `(p)`, `(m)`, `(o)`, `(F)`, `(D)`, `(s)`, {@link AllenRelation.STARTS_EARLIER `(pmoFD)`}, {@link AllenRelation.ENDS_EARLIER `(pmosd)`}, {@link AllenRelation.ENDS_IN `(osd)`}, {@link AllenRelation.CONTAINS_START `(oFD)`} | `-1`            |
+ * | `(e)`                                                                                                                                                                                                                       | `0`             |
+ * | `(S)`, `(d)`, `(f)`, `(O)`, `(M)`, `(P)`, `(pmoFDseSdfO)`, `(oFDseSdfOMP)`, {@link AllenRelation.STARTS_IN `(dfO)`}, {@link AllenRelation.CONTAINS_END `(DSO)`}, {@link AllenRelation.STARTS_LATER `(dfOMP)`}               | `+1`            |
+ * | {@link AllenRelation.END_TOGETHER `(Fef)`}                                                                                                                                                                                  | `-1`, `0`       |
+ * | {@link AllenRelation.ENDS_LATER `(DSOMP)`}, {@link AllenRelation.START_TOGETHER `(seS)`}                                                                                                                                    | `-1`, `+1`      |
+ * | `full`                                                                                                                                                                                                                      | `-1`, `0`, `+1` |
  *
  * If the result is `0`, the actual relation is implied by `(e)`. There are no other meaningful correlations.
  */

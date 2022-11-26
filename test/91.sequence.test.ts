@@ -92,10 +92,41 @@ const optionCases: OptionCase[] = [
 describe('sequence', function () {
   describe('compareIntervals', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
+      const crossReference26 = new Map<AllenRelation, number[]>()
+      crossReference26.set(AllenRelation.PRECEDES, [-1])
+      crossReference26.set(AllenRelation.MEETS, [-1])
+      crossReference26.set(AllenRelation.OVERLAPS, [-1])
+      crossReference26.set(AllenRelation.FINISHED_BY, [-1])
+      crossReference26.set(AllenRelation.CONTAINS, [-1])
+      crossReference26.set(AllenRelation.STARTS, [-1])
+      crossReference26.set(AllenRelation.STARTS_EARLIER, [-1])
+      crossReference26.set(AllenRelation.ENDS_EARLIER, [-1])
+      crossReference26.set(AllenRelation.ENDS_IN, [-1])
+      crossReference26.set(AllenRelation.CONTAINS_START, [-1])
+      crossReference26.set(AllenRelation.EQUALS, [0])
+      crossReference26.set(AllenRelation.STARTED_BY, [+1])
+      crossReference26.set(AllenRelation.DURING, [+1])
+      crossReference26.set(AllenRelation.FINISHES, [+1])
+      crossReference26.set(AllenRelation.OVERLAPPED_BY, [+1])
+      crossReference26.set(AllenRelation.MET_BY, [+1])
+      crossReference26.set(AllenRelation.PRECEDED_BY, [+1])
+      crossReference26.set(AllenRelation.fromString<AllenRelation>('pmoFDseSdfO'), [+1])
+      crossReference26.set(AllenRelation.fromString<AllenRelation>('oFDseSdfOMP'), [+1])
+      crossReference26.set(AllenRelation.STARTS_IN, [+1])
+      crossReference26.set(AllenRelation.CONTAINS_END, [+1])
+      crossReference26.set(AllenRelation.STARTS_LATER, [+1])
+      crossReference26.set(AllenRelation.END_TOGETHER, [-1, 0])
+      crossReference26.set(AllenRelation.ENDS_LATER, [-1, +1])
+      crossReference26.set(AllenRelation.START_TOGETHER, [-1, +1])
+      crossReference26.set(AllenRelation.fullRelation<AllenRelation>(), [-1, 0, +1])
+
       function callIt (i1: Interval<T>, i2: Interval<T>): number {
-        return compareFn !== undefined && compareFn !== null
-          ? /* prettier-ignore */ compareIntervals(i1, i2, compareFn)
-          : compareIntervals(i1, i2)
+        const result: number =
+          compareFn !== undefined && compareFn !== null
+            ? /* prettier-ignore */ compareIntervals(i1, i2, compareFn)
+            : compareIntervals(i1, i2)
+        should(crossReference26.get(AllenRelation.relation(i1, i2, compareFn))).containEql(result)
+        return result
       }
       describe(label, function () {
         it('returns -1 and fullfils the definition', function () {
