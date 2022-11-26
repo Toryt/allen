@@ -37,10 +37,10 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     { i1: {}, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: 0 },
 
     /* 1 definite */
-    { i1: { start: pts[0] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: -1 },
-    { i1: { end: pts[0] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: +1 },
+    { i1: { start: pts[0] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: +1 },
+    { i1: { end: pts[0] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: -1 },
     { i1: {}, i2: { start: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: -1 },
-    { i1: {}, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: -1 },
+    { i1: {}, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: +1 },
 
     /* 2 definite */
     {
@@ -170,7 +170,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
       i1: { start: pts[0] },
       i2: { start: pts[2], end: pts[3] },
       relation: AllenRelation.fromString<AllenRelation>('pmoFD'),
-      comparison: +1
+      comparison: -1
     },
     {
       i1: { start: pts[0] },

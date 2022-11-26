@@ -102,7 +102,6 @@ describe('sequence', function () {
       crossReference26.set(AllenRelation.CONTAINS, [-1])
       crossReference26.set(AllenRelation.STARTS, [-1])
       crossReference26.set(AllenRelation.STARTS_EARLIER, [-1])
-      crossReference26.set(AllenRelation.ENDS_EARLIER, [-1])
       crossReference26.set(AllenRelation.ENDS_IN, [-1])
       crossReference26.set(AllenRelation.CONTAINS_START, [-1])
       crossReference26.set(AllenRelation.EQUALS, [0])
@@ -113,13 +112,14 @@ describe('sequence', function () {
       crossReference26.set(AllenRelation.MET_BY, [+1])
       crossReference26.set(AllenRelation.PRECEDED_BY, [+1])
       crossReference26.set(AllenRelation.fromString<AllenRelation>('pmoFDseSdfO'), [+1])
-      crossReference26.set(AllenRelation.fromString<AllenRelation>('oFDseSdfOMP'), [+1])
       crossReference26.set(AllenRelation.STARTS_IN, [+1])
       crossReference26.set(AllenRelation.CONTAINS_END, [+1])
       crossReference26.set(AllenRelation.STARTS_LATER, [+1])
-      crossReference26.set(AllenRelation.END_TOGETHER, [-1, 0])
+      crossReference26.set(AllenRelation.ENDS_EARLIER, [-1, +1])
       crossReference26.set(AllenRelation.ENDS_LATER, [-1, +1])
-      crossReference26.set(AllenRelation.START_TOGETHER, [-1, +1])
+      crossReference26.set(AllenRelation.fromString<AllenRelation>('oFDseSdfOMP'), [-1, +1])
+      crossReference26.set(AllenRelation.START_TOGETHER, [-1, 0, +1])
+      crossReference26.set(AllenRelation.END_TOGETHER, [-1, 0, +1])
       crossReference26.set(AllenRelation.fullRelation<AllenRelation>(), [-1, 0, +1])
 
       const cases = createIntervalCoupleCases<T>(points)
@@ -130,13 +130,16 @@ describe('sequence', function () {
           : compareIntervals(i1, i2)
       }
       describe(label, function () {
-        cases.forEach(({ i1, i2, comparison }: NonDegenerateTestIntervals<T>) => {
+        cases.forEach(({ i1, i2, relation, comparison }: NonDegenerateTestIntervals<T>) => {
           it(`returns ${comparison} for ${intervalToString(i1)}, ${intervalToString(
             i2
           )} and fullfils the definition`, function () {
             const result = callIt(i1, i2)
-            should(crossReference26.get(AllenRelation.relation(i1, i2, compareFn))).containEql(result)
+            const calculatedRelation = AllenRelation.relation(i1, i2, compareFn)
+            console.log(calculatedRelation.toString())
+            console.log(relation.toString())
             result.should.equal(comparison)
+            should(crossReference26.get(relation)).containEql(result)
           })
         })
       })
