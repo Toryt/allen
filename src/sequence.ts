@@ -15,7 +15,7 @@
  */
 
 import { Comparator } from './comparator'
-import { Interval } from './Interval'
+import { compareIntervals, Interval } from './Interval'
 import { getCompareIfOk } from './getCompareIfOk'
 import assert from 'assert'
 
@@ -109,33 +109,7 @@ export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: Sequenc
   }
 
   function intervalCompare (i1: Interval<T>, i2: Interval<T>): number {
-    if (i1.start === undefined || i1.start === null) {
-      if (i2.start !== undefined && i2.start !== null) {
-        return -1
-      }
-      return 0
-    }
-    if (i2.start === undefined || i2.start === null) {
-      return +1
-    }
-
-    const i1StartVsi2Start = compareFn(i1.start, i2.start)
-    if (i1StartVsi2Start !== 0) {
-      return i1StartVsi2Start
-    }
-
-    // starts are equal and definite
-    if (i1.end === undefined || i1.end === null) {
-      if (i2.end !== undefined && i2.end !== null) {
-        return +1
-      }
-      return 0
-    }
-    if (i2.end === undefined || i2.end === null) {
-      return -1
-    }
-
-    return compareFn(i1.end, i2.end)
+    return compareIntervals(i1, i2, options?.compareFn)
   }
 
   const sortedIs: ReadonlyArray<Interval<T>> = ordered ? is : is.slice().sort(intervalCompare)

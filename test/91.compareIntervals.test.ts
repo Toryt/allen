@@ -19,6 +19,7 @@
 import 'should'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import { Interval } from '../src'
+import { compareIntervals } from '../src/Interval'
 
 /* NOTE: Separated from Interval test, because in the test we use a dependency on AllenRealtion for the definition, and
          we only want to run these after also AllenRelation is tested, and before we run the tests regarding sequence,
