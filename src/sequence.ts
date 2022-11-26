@@ -46,8 +46,8 @@ import assert from 'assert'
  * | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
  * | `(p)`, `(m)`, `(o)`, `(F)`, `(D)`, `(s)`, {@link AllenRelation.STARTS_EARLIER `(pmoFD)`}, {@link AllenRelation.ENDS_IN `(osd)`}, {@link AllenRelation.CONTAINS_START `(oFD)`}                | `-1`            |
  * | `(e)`                                                                                                                                                                                        | `0`             |
- * | `(S)`, `(d)`, `(f)`, `(O)`, `(M)`, `(P)`, `(pmoFDseSdfO)`, {@link AllenRelation.STARTS_IN `(dfO)`}, {@link AllenRelation.CONTAINS_END `(DSO)`}, {@link AllenRelation.STARTS_LATER `(dfOMP)`} | `+1`            |
- * | {@link AllenRelation.ENDS_LATER `(DSOMP)`}, {@link AllenRelation.ENDS_EARLIER `(pmosd)`}, `(oFDseSdfOMP)`                                                                                    | `-1`, `+1`      |
+ * | `(S)`, `(d)`, `(f)`, `(O)`, `(M)`, `(P)`, `(pmoFDseSdfO)`, {@link AllenRelation.CONTAINS_END `(DSO)`}, {@link AllenRelation.STARTS_IN `(dfO)`}, {@link AllenRelation.STARTS_LATER `(dfOMP)`} | `+1`            |
+ * | {@link AllenRelation.ENDS_EARLIER `(pmosd)`}, {@link AllenRelation.ENDS_LATER `(DSOMP)`}, `(oFDseSdfOMP)`                                                                                    | `-1`, `+1`      |
  * | {@link AllenRelation.START_TOGETHER `(seS)`}, {@link AllenRelation.END_TOGETHER `(Fef)`}, `full`                                                                                             | `-1`, `0`, `+1` |
  *
  * If the result is `0`, the actual relation is implied by `(e)`. There are no other meaningful correlations.
