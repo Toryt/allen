@@ -23,6 +23,7 @@ export interface TestIntervals<T> {
 
 export interface NonDegenerateTestIntervals<T> extends TestIntervals<T> {
   relation: AllenRelation
+  comparison: number
 }
 
 /**
@@ -33,173 +34,312 @@ export interface NonDegenerateTestIntervals<T> extends TestIntervals<T> {
 export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTestIntervals<T>> {
   return [
     /* all indefinite */
-    { i1: {}, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>() },
+    { i1: {}, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: 0 },
 
     /* 1 definite */
-    { i1: { start: pts[0] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>() },
-    { i1: { end: pts[0] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>() },
-    { i1: {}, i2: { start: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>() },
-    { i1: {}, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>() },
+    { i1: { start: pts[0] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: -1 },
+    { i1: { end: pts[0] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: +1 },
+    { i1: {}, i2: { start: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: -1 },
+    { i1: {}, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: -1 },
 
     /* 2 definite */
-    { i1: { start: pts[0], end: pts[1] }, i2: {}, relation: AllenRelation.fullRelation<AllenRelation>() },
+    {
+      i1: { start: pts[0], end: pts[1] },
+      i2: {},
+      relation: AllenRelation.fullRelation<AllenRelation>(),
+      comparison: +1
+    },
 
-    { i1: { start: pts[1] }, i2: { start: pts[0] }, relation: AllenRelation.fromString<AllenRelation>('dfOMP') },
-    { i1: { start: pts[1] }, i2: { start: pts[1] }, relation: AllenRelation.fromString<AllenRelation>('seS') },
+    {
+      i1: { start: pts[1] },
+      i2: { start: pts[0] },
+      relation: AllenRelation.fromString<AllenRelation>('dfOMP'),
+      comparison: +1
+    },
+    {
+      i1: { start: pts[1] },
+      i2: { start: pts[1] },
+      relation: AllenRelation.fromString<AllenRelation>('seS'),
+      comparison: 0
+    },
     {
       i1: { start: pts[1] },
       i2: { start: pts[2] },
-      relation: AllenRelation.fromString<AllenRelation>('dfOMP').converse()
+      relation: AllenRelation.fromString<AllenRelation>('dfOMP').converse(),
+      comparison: -1
     },
 
-    { i1: { start: pts[1] }, i2: { end: pts[0] }, relation: AllenRelation.fromString<AllenRelation>('P') },
-    { i1: { start: pts[1] }, i2: { end: pts[1] }, relation: AllenRelation.fromString<AllenRelation>('M') },
+    {
+      i1: { start: pts[1] },
+      i2: { end: pts[0] },
+      relation: AllenRelation.fromString<AllenRelation>('P'),
+      comparison: +1
+    },
+    {
+      i1: { start: pts[1] },
+      i2: { end: pts[1] },
+      relation: AllenRelation.fromString<AllenRelation>('M'),
+      comparison: +1
+    },
     {
       i1: { start: pts[1] },
       i2: { end: pts[2] },
-      relation: AllenRelation.fromString<AllenRelation>('pmoFDseSdfO')
+      relation: AllenRelation.fromString<AllenRelation>('pmoFDseSdfO'),
+      comparison: +1
     },
 
     {
       i1: { end: pts[1] },
       i2: { start: pts[0] },
-      relation: AllenRelation.fromString<AllenRelation>('oFDseSdfOMP')
+      relation: AllenRelation.fromString<AllenRelation>('oFDseSdfOMP'),
+      comparison: -1
     },
-    { i1: { end: pts[1] }, i2: { start: pts[1] }, relation: AllenRelation.fromString<AllenRelation>('m') },
-    { i1: { end: pts[1] }, i2: { start: pts[2] }, relation: AllenRelation.fromString<AllenRelation>('p') },
+    {
+      i1: { end: pts[1] },
+      i2: { start: pts[1] },
+      relation: AllenRelation.fromString<AllenRelation>('m'),
+      comparison: -1
+    },
+    {
+      i1: { end: pts[1] },
+      i2: { start: pts[2] },
+      relation: AllenRelation.fromString<AllenRelation>('p'),
+      comparison: -1
+    },
 
-    { i1: { end: pts[1] }, i2: { end: pts[0] }, relation: AllenRelation.fromString<AllenRelation>('DSOMP') },
-    { i1: { end: pts[1] }, i2: { end: pts[1] }, relation: AllenRelation.fromString<AllenRelation>('Fef') },
-    { i1: { end: pts[1] }, i2: { end: pts[2] }, relation: AllenRelation.fromString<AllenRelation>('pmosd') },
+    {
+      i1: { end: pts[1] },
+      i2: { end: pts[0] },
+      relation: AllenRelation.fromString<AllenRelation>('DSOMP'),
+      comparison: +1
+    },
+    {
+      i1: { end: pts[1] },
+      i2: { end: pts[1] },
+      relation: AllenRelation.fromString<AllenRelation>('Fef'),
+      comparison: 0
+    },
+    {
+      i1: { end: pts[1] },
+      i2: { end: pts[2] },
+      relation: AllenRelation.fromString<AllenRelation>('pmosd'),
+      comparison: -1
+    },
 
-    { i1: {}, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.fullRelation<AllenRelation>() },
+    {
+      i1: {},
+      i2: { start: pts[0], end: pts[1] },
+      relation: AllenRelation.fullRelation<AllenRelation>(),
+      comparison: -1
+    },
 
     /* 3 definite */
     // i1 start indefinite
     {
       i1: { end: pts[1] },
       i2: { start: pts[2], end: pts[3] },
-      relation: AllenRelation.fromString<AllenRelation>('p')
+      relation: AllenRelation.fromString<AllenRelation>('p'),
+      comparison: -1
     },
     {
       i1: { end: pts[1] },
       i2: { start: pts[1], end: pts[3] },
-      relation: AllenRelation.fromString<AllenRelation>('m')
+      relation: AllenRelation.fromString<AllenRelation>('m'),
+      comparison: -1
     },
     {
       i1: { end: pts[2] },
       i2: { start: pts[1], end: pts[3] },
-      relation: AllenRelation.fromString<AllenRelation>('osd')
+      relation: AllenRelation.fromString<AllenRelation>('osd'),
+      comparison: -1
     },
     {
       i1: { end: pts[3] },
       i2: { start: pts[2], end: pts[3] },
-      relation: AllenRelation.fromString<AllenRelation>('Fef')
+      relation: AllenRelation.fromString<AllenRelation>('Fef'),
+      comparison: -1
     },
     {
       i1: { end: pts[3] },
       i2: { start: pts[1], end: pts[2] },
-      relation: AllenRelation.fromString<AllenRelation>('DSOMP')
+      relation: AllenRelation.fromString<AllenRelation>('DSOMP'),
+      comparison: -1
     },
     // i1 end indefinite
     {
       i1: { start: pts[0] },
       i2: { start: pts[2], end: pts[3] },
-      relation: AllenRelation.fromString<AllenRelation>('pmoFD')
+      relation: AllenRelation.fromString<AllenRelation>('pmoFD'),
+      comparison: +1
     },
     {
       i1: { start: pts[0] },
       i2: { start: pts[0], end: pts[3] },
-      relation: AllenRelation.fromString<AllenRelation>('seS')
+      relation: AllenRelation.fromString<AllenRelation>('seS'),
+      comparison: +1
     },
     {
       i1: { start: pts[1] },
       i2: { start: pts[0], end: pts[3] },
-      relation: AllenRelation.fromString<AllenRelation>('dfO')
+      relation: AllenRelation.fromString<AllenRelation>('dfO'),
+      comparison: +1
     },
     {
       i1: { start: pts[1] },
       i2: { start: pts[0], end: pts[1] },
-      relation: AllenRelation.fromString<AllenRelation>('M')
+      relation: AllenRelation.fromString<AllenRelation>('M'),
+      comparison: +1
     },
     {
       i1: { start: pts[2] },
       i2: { start: pts[0], end: pts[1] },
-      relation: AllenRelation.fromString<AllenRelation>('P')
+      relation: AllenRelation.fromString<AllenRelation>('P'),
+      comparison: +1
     },
     // i2 start indefinite
     {
       i1: { start: pts[0], end: pts[1] },
       i2: { end: pts[3] },
-      relation: AllenRelation.fromString<AllenRelation>('pmosd')
+      relation: AllenRelation.fromString<AllenRelation>('pmosd'),
+      comparison: +1
     },
     {
       i1: { start: pts[0], end: pts[3] },
       i2: { end: pts[3] },
-      relation: AllenRelation.fromString<AllenRelation>('Fef')
+      relation: AllenRelation.fromString<AllenRelation>('Fef'),
+      comparison: +1
     },
     {
       i1: { start: pts[0], end: pts[3] },
       i2: { end: pts[2] },
-      relation: AllenRelation.fromString<AllenRelation>('DSO')
+      relation: AllenRelation.fromString<AllenRelation>('DSO'),
+      comparison: +1
     },
     {
       i1: { start: pts[1], end: pts[2] },
       i2: { end: pts[1] },
-      relation: AllenRelation.fromString<AllenRelation>('M')
+      relation: AllenRelation.fromString<AllenRelation>('M'),
+      comparison: +1
     },
     {
       i1: { start: pts[2], end: pts[3] },
       i2: { end: pts[1] },
-      relation: AllenRelation.fromString<AllenRelation>('P')
+      relation: AllenRelation.fromString<AllenRelation>('P'),
+      comparison: +1
     },
     // i2 end indefinite
     {
       i1: { start: pts[0], end: pts[1] },
       i2: { start: pts[2] },
-      relation: AllenRelation.fromString<AllenRelation>('p')
+      relation: AllenRelation.fromString<AllenRelation>('p'),
+      comparison: -1
     },
     {
       i1: { start: pts[0], end: pts[1] },
       i2: { start: pts[1] },
-      relation: AllenRelation.fromString<AllenRelation>('m')
+      relation: AllenRelation.fromString<AllenRelation>('m'),
+      comparison: -1
     },
     {
       i1: { start: pts[0], end: pts[2] },
       i2: { start: pts[1] },
-      relation: AllenRelation.fromString<AllenRelation>('oFD')
+      relation: AllenRelation.fromString<AllenRelation>('oFD'),
+      comparison: -1
     },
     {
       i1: { start: pts[0], end: pts[1] },
       i2: { start: pts[0] },
-      relation: AllenRelation.fromString<AllenRelation>('seS')
+      relation: AllenRelation.fromString<AllenRelation>('seS'),
+      comparison: -1
     },
     {
       i1: { start: pts[1], end: pts[2] },
       i2: { start: pts[0] },
-      relation: AllenRelation.fromString<AllenRelation>('dfOMP')
+      relation: AllenRelation.fromString<AllenRelation>('dfOMP'),
+      comparison: +1
     },
 
     /* 4 definite → 13 basic relations */
-    { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[2], end: pts[3] }, relation: AllenRelation.PRECEDES },
-    { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.MEETS },
-    { i1: { start: pts[0], end: pts[2] }, i2: { start: pts[1], end: pts[3] }, relation: AllenRelation.OVERLAPS },
-    { i1: { start: pts[0], end: pts[3] }, i2: { start: pts[2], end: pts[3] }, relation: AllenRelation.FINISHED_BY },
-    { i1: { start: pts[0], end: pts[3] }, i2: { start: pts[1], end: pts[2] }, relation: AllenRelation.CONTAINS },
-    { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.STARTS },
-    { i1: { start: pts[0], end: pts[1] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.EQUALS },
-    { i1: { start: pts[0], end: pts[3] }, i2: { start: pts[0], end: pts[2] }, relation: AllenRelation.STARTED_BY },
-    { i1: { start: pts[1], end: pts[2] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.DURING },
-    { i1: { start: pts[1], end: pts[3] }, i2: { start: pts[0], end: pts[3] }, relation: AllenRelation.FINISHES },
+    {
+      i1: { start: pts[0], end: pts[1] },
+      i2: { start: pts[2], end: pts[3] },
+      relation: AllenRelation.PRECEDES,
+      comparison: -1
+    },
+    {
+      i1: { start: pts[0], end: pts[1] },
+      i2: { start: pts[1], end: pts[3] },
+      relation: AllenRelation.MEETS,
+      comparison: -1
+    },
+    {
+      i1: { start: pts[0], end: pts[2] },
+      i2: { start: pts[1], end: pts[3] },
+      relation: AllenRelation.OVERLAPS,
+      comparison: -1
+    },
+    {
+      i1: { start: pts[0], end: pts[3] },
+      i2: { start: pts[2], end: pts[3] },
+      relation: AllenRelation.FINISHED_BY,
+      comparison: -1
+    },
+    {
+      i1: { start: pts[0], end: pts[3] },
+      i2: { start: pts[1], end: pts[2] },
+      relation: AllenRelation.CONTAINS,
+      comparison: -1
+    },
+    {
+      i1: { start: pts[0], end: pts[1] },
+      i2: { start: pts[0], end: pts[3] },
+      relation: AllenRelation.STARTS,
+      comparison: -1
+    },
+    {
+      i1: { start: pts[0], end: pts[1] },
+      i2: { start: pts[0], end: pts[1] },
+      relation: AllenRelation.EQUALS,
+      comparison: 0
+    },
+    {
+      i1: { start: pts[0], end: pts[3] },
+      i2: { start: pts[0], end: pts[2] },
+      relation: AllenRelation.STARTED_BY,
+      comparison: +1
+    },
+    {
+      i1: { start: pts[1], end: pts[2] },
+      i2: { start: pts[0], end: pts[3] },
+      relation: AllenRelation.DURING,
+      comparison: +1
+    },
+    {
+      i1: { start: pts[1], end: pts[3] },
+      i2: { start: pts[0], end: pts[3] },
+      relation: AllenRelation.FINISHES,
+      comparison: +1
+    },
     {
       i1: { start: pts[1], end: pts[3] },
       i2: { start: pts[0], end: pts[2] },
-      relation: AllenRelation.OVERLAPPED_BY
+      relation: AllenRelation.OVERLAPPED_BY,
+      comparison: +1
     },
-    { i1: { start: pts[1], end: pts[2] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.MET_BY },
-    { i1: { start: pts[2], end: pts[3] }, i2: { start: pts[0], end: pts[1] }, relation: AllenRelation.PRECEDED_BY },
+    {
+      i1: { start: pts[1], end: pts[2] },
+      i2: { start: pts[0], end: pts[1] },
+      relation: AllenRelation.MET_BY,
+      comparison: +1
+    },
+    {
+      i1: { start: pts[2], end: pts[3] },
+      i2: { start: pts[0], end: pts[1] },
+      relation: AllenRelation.PRECEDED_BY,
+      comparison: +1
+    },
 
     /* test with null */
-    { i1: { start: null }, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>() }
+    { i1: { start: null }, i2: { end: pts[0] }, relation: AllenRelation.fullRelation<AllenRelation>(), comparison: +1 }
   ]
 }

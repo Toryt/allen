@@ -22,6 +22,8 @@ import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCa
 import { compareIntervals, isSequence, SequenceOptions } from '../src/sequence'
 import { AllenRelation, Comparator, ltCompare } from '../src'
 import assert from 'assert'
+import { createIntervalCoupleCases, NonDegenerateTestIntervals } from './_createIntervalCoupleCases'
+import { intervalToString } from './_intervalToString'
 
 const sixSymbols = generateSixSymbols('enclosing')
 
@@ -120,17 +122,22 @@ describe('sequence', function () {
       crossReference26.set(AllenRelation.START_TOGETHER, [-1, +1])
       crossReference26.set(AllenRelation.fullRelation<AllenRelation>(), [-1, 0, +1])
 
+      const cases = createIntervalCoupleCases<T>(points)
+
       function callIt (i1: Interval<T>, i2: Interval<T>): number {
-        const result: number =
-          compareFn !== undefined && compareFn !== null
-            ? /* prettier-ignore */ compareIntervals(i1, i2, compareFn)
-            : compareIntervals(i1, i2)
-        should(crossReference26.get(AllenRelation.relation(i1, i2, compareFn))).containEql(result)
-        return result
+        return compareFn !== undefined && compareFn !== null
+          ? /* prettier-ignore */ compareIntervals(i1, i2, compareFn)
+          : compareIntervals(i1, i2)
       }
       describe(label, function () {
-        it('returns -1 and fullfils the definition', function () {
-          callIt({ start: points[0], end: points[1] }, { start: points[1], end: points[2] }).should.equal(-1)
+        cases.forEach(({ i1, i2, comparison }: NonDegenerateTestIntervals<T>) => {
+          it(`returns ${comparison} for ${intervalToString(i1)}, ${intervalToString(
+            i2
+          )} and fullfils the definition`, function () {
+            const result = callIt(i1, i2)
+            should(crossReference26.get(AllenRelation.relation(i1, i2, compareFn))).containEql(result)
+            result.should.equal(comparison)
+          })
         })
       })
     }
