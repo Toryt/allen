@@ -42,15 +42,16 @@ import assert from 'assert'
  *
  * The 26 possible results of {@link AllenRelation.relation} can be mapped to the result of this function:
  *
- * | Allen relations                                                                                                                                                                              | result          |
- * | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
- * | `(p)`, `(m)`, `(o)`, `(F)`, `(D)`, `(s)`, {@link AllenRelation.STARTS_EARLIER `(pmoFD)`}, {@link AllenRelation.ENDS_IN `(osd)`}, {@link AllenRelation.CONTAINS_START `(oFD)`}                | `-1`            |
- * | `(e)`                                                                                                                                                                                        | `0`             |
- * | `(S)`, `(d)`, `(f)`, `(O)`, `(M)`, `(P)`, `(pmoFDseSdfO)`, {@link AllenRelation.CONTAINS_END `(DSO)`}, {@link AllenRelation.STARTS_IN `(dfO)`}, {@link AllenRelation.STARTS_LATER `(dfOMP)`} | `+1`            |
- * | {@link AllenRelation.ENDS_EARLIER `(pmosd)`}, {@link AllenRelation.ENDS_LATER `(DSOMP)`}, `(oFDseSdfOMP)`                                                                                    | `-1`, `+1`      |
- * | {@link AllenRelation.START_TOGETHER `(seS)`}, {@link AllenRelation.END_TOGETHER `(Fef)`}, `full`                                                                                             | `-1`, `0`, `+1` |
+ * | Allen relations                                                                                                                                                                                | result          |
+ * | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+ * | `(p)`, `(m)`, `(o)`, `(F)`, `(D)`, `(s)`, {@link AllenRelation.STARTS_EARLIER `(pmoFD)`}, {@link AllenRelation.ENDS_IN `(osd)`}, {@link AllenRelation.CONTAINS_START `(oFD)`}, `(oFDseSdfOMP)` | `-1`            |
+ * | `(e)`                                                                                                                                                                                          | `0`             |
+ * | `(pmoFDseSdfO)`, {@link AllenRelation.CONTAINS_END `(DSO)`}, {@link AllenRelation.STARTS_IN `(dfO)`}, {@link AllenRelation.STARTS_LATER `(dfOMP)`}, `(S)`, `(d)`, `(f)`, `(O)`, `(M)`, `(P)`   | `+1`            |
+ * | {@link AllenRelation.ENDS_EARLIER `(pmosd)`}, {@link AllenRelation.ENDS_LATER `(DSOMP)`}                                                                                                       | `-1`, `+1`      |
+ * | {@link AllenRelation.START_TOGETHER `(seS)`}, {@link AllenRelation.END_TOGETHER `(Fef)`}, `full`                                                                                               | `-1`, `0`, `+1` |
  *
- * If the result is `0`, the actual relation is implied by `(e)`. There are no other meaningful correlations.
+ * If the result is `0`, the actual relation is implied by `(e)`. There are no other meaningful correlations, but the
+ * table shows the symmetry.
  */
 export function compareIntervals<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): number {
   const compare: Comparator<T> = getCompareIfOk([i1, i2], compareFn) // asserts preconditions
