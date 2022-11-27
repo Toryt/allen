@@ -15,10 +15,8 @@
  */
 
 import { Comparator, SafeComparator } from './Comparator'
-import assert from 'assert'
 import { ltCompare } from './ltCompare'
 import { commonTypeRepresentation, TypeRepresentation } from './typeRepresentation'
-import { Interval } from './Interval'
 import { ChainInterval, compareChainIntervals, isChainInterval } from './ChainInterval'
 
 /**
@@ -56,24 +54,24 @@ export function isChain<T> (candidate: unknown, compareFn?: SafeComparator<T>): 
   return sorted.every((ci: ChainInterval<T>, index) => index === 0 || compare(sorted[index - 1].start, ci.start) < 0)
 }
 
-/**
- * Returns a  ordered, left-definite, right-indefinite gapless {@link isSequence sequence} from a {@link Chain}.
- * Elements of the result reference the {@link ChainInterval} they represent.
- */
-export function chainToGaplessLeftDefiniteSequence<T> (
-  cis: ReadonlyArray<ChainInterval<T>>,
-  compareFn?: SafeComparator<T>
-): ReadonlyArray<Interval<T>> {
-  assert(isChain(cis, compareFn))
-
-  return cis.map((ci, index) =>
-    index < cis.length - 1
-      ? /* prettier-ignore */ Object.create(ci, {
-        end: {
-          enumerable: true,
-          value: cis[index + 1].start
-        }
-      })
-      : cis
-  )
-}
+// /**
+//  * Returns a  ordered, left-definite, right-indefinite gapless {@link isSequence sequence} from a {@link Chain}.
+//  * Elements of the result reference the {@link ChainInterval} they represent.
+//  */
+// export function chainToGaplessLeftDefiniteSequence<T> (
+//   cis: ReadonlyArray<ChainInterval<T>>,
+//   compareFn?: SafeComparator<T>
+// ): ReadonlyArray<Interval<T>> {
+//   assert(isChain(cis, compareFn))
+//
+//   return cis.map((ci, index) =>
+//     index < cis.length - 1
+//       ? /* prettier-ignore */ Object.create(ci, {
+//         end: {
+//           enumerable: true,
+//           value: cis[index + 1].start
+//         }
+//       })
+//       : cis
+//   )
+// }
