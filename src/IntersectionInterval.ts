@@ -14,19 +14,11 @@
  limitations under the License.
  */
 
-import { Interval } from './Interval'
-
-export interface IntersectionSources<T> {
-  [origin: string]: ReadonlyArray<Interval<T>>
-}
+import { Interval, ReferenceIntervals } from './Interval'
 
 /**
  * An `IntersectionInterval` is an {@link Interval} that refers to the {@link Interval}s it is the intersection of.
  */
-export type IntersectionInterval<
-  T,
-  I extends IntersectionSources<T>
-> = /* prettier-ignore */ Interval<T> &
-{
-  [Source in keyof I]: Interval<T>
+export interface IntersectionInterval<T> extends Interval<T> {
+  readonly referenceIntervals: ReferenceIntervals<T>
 }
