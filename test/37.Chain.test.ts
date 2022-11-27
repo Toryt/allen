@@ -119,10 +119,7 @@ describe('Chain', function () {
           const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
-          should(result[0]).have.property('referenceIntervals')
-          should(result[0].referenceIntervals).be.an.Object()
-          should(result[0].referenceIntervals).have.property('chainInterval')
-          should(result[0].referenceIntervals?.['chainInterval']).equal(chain[0])
+          should(Object.getPrototypeOf(result[0])).equal(chain[0])
         })
         it('returns the expected sequence for an ordered chain', function () {
           const chain: any[] = [{ start: points[0] }, { start: points[1] }, { start: points[2] }]
@@ -131,10 +128,7 @@ describe('Chain', function () {
           isSequence<T>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
           result.forEach((ci, index) => {
-            ci.should.have.property('referenceIntervals')
-            should(ci.referenceIntervals).be.an.Object()
-            should(ci.referenceIntervals).have.property('chainInterval')
-            should(ci.referenceIntervals?.['chainInterval']).equal(chain[index])
+            should(Object.getPrototypeOf(ci)).equal(chain[index])
           })
         })
         it('returns the expected sequence for an unordered chain', function () {
@@ -147,10 +141,7 @@ describe('Chain', function () {
             compareChainIntervals(ci1, ci2, compareFn)
           )
           result.forEach((ci, index) => {
-            ci.should.have.property('referenceIntervals')
-            should(ci.referenceIntervals).be.an.Object()
-            should(ci.referenceIntervals).have.property('chainInterval')
-            should(ci.referenceIntervals?.['chainInterval']).equal(sorted[index])
+            should(Object.getPrototypeOf(ci)).equal(sorted[index])
           })
         })
       })

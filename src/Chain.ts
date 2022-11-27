@@ -58,7 +58,7 @@ export function isChain<T> (candidate: unknown, compareFn?: SafeComparator<T>): 
 
 /**
  * Returns an ordered, left-definite, right-indefinite gapless {@link isSequence sequence} from a {@link Chain}.
- * Elements of the result reference the {@link ChainInterval} they represent.
+ * Elements of the result have the {@link ChainInterval} they represent as prototype.
  */
 export function chainToGaplessLeftDefiniteSequence<T> (
   cis: Chain<T>,
