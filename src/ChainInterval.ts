@@ -23,7 +23,7 @@ import {
   typeRepresentationOf
 } from './typeRepresentation'
 import { TypeFor } from './type'
-import { Comparator, SafeComparator } from './comparator'
+import { Comparator, SafeComparator } from './Comparator'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 
 /**

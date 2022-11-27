@@ -16,7 +16,7 @@
 
 import { AllenRelation } from './AllenRelation'
 import { Interval } from './Interval'
-import { Comparator } from './comparator'
+import { Comparator } from './Comparator'
 import assert from 'assert'
 import { getCompareIfOk } from './getCompareIfOk'
 

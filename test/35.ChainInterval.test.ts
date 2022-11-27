@@ -22,7 +22,9 @@ import { inspect } from 'util'
 import { stuffWithUndefined } from './_stuff'
 import { ChainInterval, compareChainIntervals, isChainInterval } from '../src/ChainInterval'
 import { A, B, C } from './_someClasses'
-import { SafeComparator, TypeFor, TypeRepresentation } from '../src'
+import { TypeFor } from '../src/type'
+import { TypeRepresentation } from '../src/typeRepresentation'
+import { SafeComparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 
 const notAnIntervalCandidate = stuffWithUndefined.filter(s => typeof s !== 'object' && typeof s !== 'function')

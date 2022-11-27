@@ -17,7 +17,7 @@
 /* eslint-env mocha */
 
 import 'should'
-import { SafeComparator } from '../src'
+import { SafeComparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import { isChain } from '../src/Chain'
 

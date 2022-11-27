@@ -22,7 +22,7 @@ export {
   commonTypeRepresentation
 } from './typeRepresentation'
 export { TypeFor, Indefinite } from './type'
-export { Comparator, SafeComparator } from './comparator'
+export { Comparator, SafeComparator } from './Comparator'
 export { LTComparablePrimitive, LTComparable, isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 export { Interval, isInterval } from './Interval'
 export { RelationConstructor, Relation } from './Relation' // ok higher

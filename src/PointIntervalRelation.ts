@@ -16,7 +16,7 @@
 
 import assert, { ok } from 'assert'
 import { Interval, isInterval } from './Interval'
-import { Comparator } from './comparator'
+import { Comparator } from './Comparator'
 import { commonTypeRepresentation } from './typeRepresentation'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { Relation } from './Relation'

@@ -23,7 +23,7 @@ import {
 import { Indefinite, TypeFor } from './type'
 import assert from 'assert'
 import { isLTComparableOrIndefinite, LTComparable, ltCompare } from './ltCompare'
-import { Comparator } from './comparator'
+import { Comparator } from './Comparator'
 
 /**
  * Intervals have `start` and an `end` {@link commonTypeRepresentation _of the same type_}, which can be

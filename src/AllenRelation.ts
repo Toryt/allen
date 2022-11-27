@@ -18,7 +18,7 @@ import assert from 'assert'
 import { Relation } from './Relation'
 import { basicRelationBitPatterns, relationBitPatterns, reverse } from './bitPattern'
 import { Interval } from './Interval'
-import { Comparator } from './comparator'
+import { Comparator } from './Comparator'
 import { Indefinite } from './type'
 import { getCompareIfOk } from './getCompareIfOk'
 

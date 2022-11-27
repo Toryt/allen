@@ -24,7 +24,7 @@ import { typeRepresentations } from './_typeRepresentationCases'
 import { representsSuperType, TypeRepresentation, typeRepresentationOf } from '../src/typeRepresentation'
 import { TypeFor } from '../src/type'
 import { A, B, C } from './_someClasses'
-import { Comparator } from '../src/comparator'
+import { Comparator } from '../src/Comparator'
 import { ltCompare } from '../src/ltCompare'
 import { ok } from 'assert'
 

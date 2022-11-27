@@ -23,7 +23,7 @@ import { inspect } from 'util'
 import { intervalToString } from './_intervalToString'
 import { generateRelationTests } from './_generateRelationTests'
 import { AllenRelation } from '../src/AllenRelation'
-import { ltCompare } from '../src'
+import { ltCompare } from '../src/ltCompare'
 import assert from 'assert'
 import { generateSixSymbols, sixArrays, sixDates, sixNumbers, sixStrings } from './_pointCases'
 

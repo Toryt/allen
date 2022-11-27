@@ -20,7 +20,7 @@ import should from 'should'
 import { isEnclosing, isMinimalEnclosing, minimalEnclosing } from '../src/enclosing'
 import { AllenRelation } from '../src/AllenRelation'
 import { Interval } from '../src/Interval'
-import { ltCompare } from '../src'
+import { ltCompare } from '../src/ltCompare'
 import assert, { ok } from 'assert'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 

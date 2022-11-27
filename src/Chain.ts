@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import { Comparator, SafeComparator } from './comparator'
+import { Comparator, SafeComparator } from './Comparator'
 import assert from 'assert'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { commonTypeRepresentation, TypeRepresentation } from './typeRepresentation'
