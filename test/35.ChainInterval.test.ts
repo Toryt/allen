@@ -22,7 +22,7 @@ import { inspect } from 'util'
 import { stuffWithUndefined } from './_stuff'
 import { ChainInterval, compareChainIntervals, isChainInterval } from '../src/ChainInterval'
 import { A, B, C } from './_someClasses'
-import { Comparator, TypeFor, TypeRepresentation } from '../src'
+import { SafeComparator, TypeFor, TypeRepresentation } from '../src'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 
 const notAnIntervalCandidate = stuffWithUndefined.filter(s => typeof s !== 'object' && typeof s !== 'function')
@@ -89,7 +89,7 @@ describe('ChainInterval', function () {
     })
   })
   describe('compareChainIntervals', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>) {
+    function generateTests<T> (label: string, points: T[], compareFn?: SafeComparator<T>) {
       function callIt (ci1: ChainInterval<T>, ci2: ChainInterval<T>): number {
         return compareFn === undefined || compareFn === null
           ? compareChainIntervals(ci1, ci2)
