@@ -2,12 +2,15 @@
 
 ## 0
 
-### 0.3
+### 0.4
 
-#### 0.3.4
+#### 0.4.0
 
+- `Comparator` file name is changed
 - add `compareChainIntervals`
 - add `SafeComparator`
+
+### 0.3
 
 #### 0.3.3
 
