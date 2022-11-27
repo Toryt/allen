@@ -22,6 +22,7 @@ import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCa
 import { isChain } from '../src/Chain'
 import { stuffWithUndefined } from './_stuff'
 import { inspect } from 'util'
+import { Interval, isSequence, SequenceOptions } from '../src'
 
 describe('Chain', function () {
   describe('isChain', function () {
@@ -88,5 +89,44 @@ describe('Chain', function () {
       s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
     )
   })
-  describe('isChain', function () {})
+  describe('chainToGaplessLeftDefiniteSequence', function () {
+    function generateTests<T> (label: string, points: T[], compareFn?: SafeComparator<T>): void {
+      function callIt (cis: unknown): ReadonlyArray<Interval<T>> {
+        return compareFn === undefined || compareFn === null
+          ? chainToGaplessLeftDefiniteSequence(cis)
+          : chainToGaplessLeftDefiniteSequence(cis, compareFn)
+      }
+
+      const sequenceOptions: SequenceOptions<T> = { leftDefinite: true, ordered: true, gaps: false }
+      if (compareFn !== undefined && compareFn !== null) {
+        sequenceOptions.compareFn = compareFn
+      }
+
+      describe(label, function () {
+        it('returns the expected sequence for the empty collection', function () {
+          const result = callIt([])
+          isSequence<T>(result, sequenceOptions)
+        })
+        it('returns the expected sequence for a singleton', function () {
+          const result = callIt([{ start: points[0] }])
+          isSequence<T>(result, sequenceOptions)
+        })
+        it('returns the expected sequence for an ordered chain', function () {
+          const result = callIt([{ start: points[0] }, { start: points[1] }, { start: points[2] }])
+          isSequence<T>(result, sequenceOptions)
+        })
+        it('returns the expected sequence for an unordered chain', function () {
+          const result = callIt([{ start: points[0] }, { start: points[4] }, { start: points[2] }])
+          isSequence<T>(result, sequenceOptions)
+        })
+      })
+    }
+
+    generateTests('numbers', sixNumbers)
+    generateTests('string', sixStrings)
+    generateTests('dates', sixDates)
+    generateTests('symbols', generateSixSymbols('compare chain intervals'), (s1: Symbol, s2: Symbol): number =>
+      s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
+    )
+  })
 })
