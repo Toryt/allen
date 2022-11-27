@@ -4,6 +4,10 @@
 
 ### 0.4
 
+#### 0.4.1
+
+- add `chainToGaplessLeftDefiniteSequence`
+
 #### 0.4.0
 
 - `Comparator` file name is changed (this is the incompatibility)
