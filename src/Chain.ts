@@ -67,12 +67,16 @@ export function chainToGaplessLeftDefiniteSequence<T> (
 ): ReadonlyArray<Interval<T>> {
   assert(isChain(cis, compareFn))
 
-  return cis.map((ci, index) =>
-    index < cis.length - 1
+  const sorted = cis
+    .slice()
+    .sort((ci1: ChainInterval<T>, ci2: ChainInterval<T>) => compareChainIntervals(ci1, ci2, compareFn))
+
+  return sorted.map((ci, index) =>
+    index < sorted.length - 1
       ? /* prettier-ignore */ Object.create(ci, {
         end: {
           enumerable: true,
-          value: cis[index + 1].start
+          value: sorted[index + 1].start
         }
       })
       : Object.create(ci)
