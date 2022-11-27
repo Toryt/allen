@@ -4,6 +4,10 @@
 
 ### 0.4
 
+#### 0.4.2
+
+- add `ReferenceIntervals`
+
 #### 0.4.1
 
 - add `chainToGaplessLeftDefiniteSequence`
