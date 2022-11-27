@@ -17,6 +17,7 @@
 import should from 'should'
 import {
   AllenRelation,
+  Chain,
   ChainInterval,
   commonTypeRepresentation,
   Comparator,
@@ -24,6 +25,7 @@ import {
   Constructor,
   Indefinite,
   Interval,
+  isChain,
   isChainInterval,
   isEnclosing,
   isInterval,
@@ -44,6 +46,7 @@ import {
   TypeFor,
   TypeRepresentation
 } from '../src'
+import assert from 'assert'
 
 describe('index TS', function () {
   describe('exports', function () {
@@ -160,6 +163,15 @@ describe('index TS', function () {
     })
     it('exports isChainInterval', function () {
       isChainInterval.should.be.a.Function()
+    })
+    it('exports Chain', function () {
+      const x: ReadonlyArray<ChainInterval<number>> = [{ start: 8 }]
+      assert(isChain(x))
+      const y: Chain<number> = x
+      y.should.be.an.Array()
+    })
+    it('exports isChain', function () {
+      isChain.should.be.a.Function()
     })
   })
   describe('examples', function () {

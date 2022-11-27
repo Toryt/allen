@@ -6,10 +6,10 @@
 
 #### 0.4.0
 
-- `Comparator` file name is changed
+- `Comparator` file name is changed (this is the incompatibility)
 - add `compareChainIntervals`
 - add `SafeComparator`
-- add `isChain`
+- add `Chain` and `isChain`
 
 ### 0.3
 

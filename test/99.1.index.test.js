@@ -31,7 +31,8 @@ const {
   minimalEnclosing,
   isSequence,
   compareIntervals,
-  isChainInterval
+  isChainInterval,
+  isChain
 } = require('../src')
 
 describe('index JS', function () {
@@ -79,6 +80,9 @@ describe('index JS', function () {
     })
     it('exports isChainInterval', function () {
       isChainInterval.should.be.a.Function()
+    })
+    it('exports isChain', function () {
+      isChain.should.be.a.Function()
     })
   })
   describe('examples', function () {

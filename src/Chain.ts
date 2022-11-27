@@ -26,7 +26,7 @@ import { ChainInterval, compareChainIntervals, isChainInterval } from './ChainIn
  *
  * All elements have to have a different `start`.
  */
-type Chain<T> = ReadonlyArray<ChainInterval<T>> & { __brand: 'ChainIntervalChain' }
+export type Chain<T> = ReadonlyArray<ChainInterval<T>> & { __brand: 'ChainIntervalChain' }
 
 export function isChain<T> (candidate: unknown, compareFn?: SafeComparator<T>): candidate is Chain<T> {
   if (!Array.isArray(candidate)) {
