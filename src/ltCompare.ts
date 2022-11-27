@@ -32,6 +32,7 @@ const noNaN: string = 'default ltComparator cannot compare NaN'
 const noSymbol: string = 'default ltComparator cannot compare symbols'
 const haveCommonType: string = 't1 and t2 must be of a common type'
 
+// MUDO T should extend LTComparable
 export function ltCompare<T> (t1: T, t2: T): number {
   notStrictEqual(t1, undefined, noUndefined)
   notStrictEqual(t2, undefined, noUndefined)
