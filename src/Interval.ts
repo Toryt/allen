@@ -25,6 +25,10 @@ import assert from 'assert'
 import { isLTComparableOrIndefinite, LTComparable, ltCompare } from './ltCompare'
 import { Comparator } from './Comparator'
 
+export interface ReferenceIntervals<T> {
+  [reference: string]: Interval<T>
+}
+
 /**
  * Intervals have `start` and an `end` {@link commonTypeRepresentation _of the same type_}, which can be
  * {@link Indefinite indefinite}.
@@ -35,6 +39,7 @@ import { Comparator } from './Comparator'
 export interface Interval<T> {
   readonly start?: Indefinite<T>
   readonly end?: Indefinite<T>
+  readonly referenceIntervals?: ReferenceIntervals<T>
 }
 
 /**

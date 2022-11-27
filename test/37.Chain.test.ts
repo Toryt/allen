@@ -22,8 +22,10 @@ import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCa
 import { Chain, chainToGaplessLeftDefiniteSequence, isChain } from '../src/Chain'
 import { stuffWithUndefined } from './_stuff'
 import { inspect } from 'util'
-import { Interval, isSequence, SequenceOptions } from '../src'
+import { ChainInterval, Interval, isSequence, SequenceOptions } from '../src'
 import assert from 'assert'
+import { compareChainIntervals } from '../src/ChainInterval'
+import should from 'should'
 
 describe('Chain', function () {
   describe('isChain', function () {
@@ -105,28 +107,51 @@ describe('Chain', function () {
 
       describe(label, function () {
         it('returns the expected sequence for the empty collection', function () {
-          const empty: any[] = []
-          assert(isChain<T>(empty))
-          const result = callIt(empty)
+          const chain: any[] = []
+          assert(isChain<T>(chain))
+          const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
+          result.length.should.equal(chain.length)
         })
         it('returns the expected sequence for a singleton', function () {
-          const singleton: any[] = [[{ start: points[0] }]]
-          assert(isChain<T>(singleton))
-          const result = callIt(singleton)
+          const chain: any[] = [[{ start: points[0] }]]
+          assert(isChain<T>(chain))
+          const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
+          result.length.should.equal(chain.length)
+          should(result[0]).have.property('referenceIntervals')
+          should(result[0].referenceIntervals).be.an.Object()
+          should(result[0].referenceIntervals).have.property('chainInterval')
+          should(result[0].referenceIntervals?.['chainInterval']).equal(chain[0])
         })
         it('returns the expected sequence for an ordered chain', function () {
-          const orderedChain: any[] = [{ start: points[0] }, { start: points[1] }, { start: points[2] }]
-          assert(isChain<T>(orderedChain))
-          const result = callIt(orderedChain)
+          const chain: any[] = [{ start: points[0] }, { start: points[1] }, { start: points[2] }]
+          assert(isChain<T>(chain))
+          const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
+          result.length.should.equal(chain.length)
+          result.forEach((ci, index) => {
+            ci.should.have.property('referenceIntervals')
+            should(ci.referenceIntervals).be.an.Object()
+            should(ci.referenceIntervals).have.property('chainInterval')
+            should(ci.referenceIntervals?.['chainInterval']).equal(chain[index])
+          })
         })
         it('returns the expected sequence for an unordered chain', function () {
-          const unorderedChain: any[] = [{ start: points[0] }, { start: points[4] }, { start: points[2] }]
-          assert(isChain<T>(unorderedChain))
-          const result = callIt(unorderedChain)
+          const chain: any[] = [{ start: points[0] }, { start: points[4] }, { start: points[2] }]
+          assert(isChain<T>(chain))
+          const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
+          result.length.should.equal(chain.length)
+          const sorted = chain.sort((ci1: ChainInterval<T>, ci2: ChainInterval<T>) =>
+            compareChainIntervals(ci1, ci2, compareFn)
+          )
+          result.forEach((ci, index) => {
+            ci.should.have.property('referenceIntervals')
+            should(ci.referenceIntervals).be.an.Object()
+            should(ci.referenceIntervals).have.property('chainInterval')
+            should(ci.referenceIntervals?.['chainInterval']).equal(sorted[index])
+          })
         })
       })
     }
