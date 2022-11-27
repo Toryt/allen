@@ -108,14 +108,14 @@ describe('Chain', function () {
       describe(label, function () {
         it('returns the expected sequence for the empty collection', function () {
           const chain: any[] = []
-          assert(isChain<T>(chain))
+          assert(isChain<T>(chain, compareFn))
           const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
         })
         it('returns the expected sequence for a singleton', function () {
           const chain: any[] = [{ start: points[0] }]
-          assert(isChain<T>(chain))
+          assert(isChain<T>(chain, compareFn))
           const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
@@ -123,7 +123,7 @@ describe('Chain', function () {
         })
         it('returns the expected sequence for an ordered chain', function () {
           const chain: any[] = [{ start: points[0] }, { start: points[1] }, { start: points[2] }]
-          assert(isChain<T>(chain))
+          assert(isChain<T>(chain, compareFn))
           const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
@@ -133,7 +133,7 @@ describe('Chain', function () {
         })
         it('returns the expected sequence for an unordered chain', function () {
           const chain: any[] = [{ start: points[0] }, { start: points[4] }, { start: points[2] }]
-          assert(isChain<T>(chain))
+          assert(isChain<T>(chain, compareFn))
           const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
