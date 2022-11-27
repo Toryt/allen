@@ -14,9 +14,9 @@
  limitations under the License.
  */
 
-import { Comparator } from './comparator'
+import { Comparator, SafeComparator } from './comparator'
 import assert from 'assert'
-import { isLTComparableOrIndefinite, LTComparable, ltCompare } from './ltCompare'
+import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { commonTypeRepresentation, TypeRepresentation } from './typeRepresentation'
 import { Interval } from './Interval'
 import { ChainInterval, isChainInterval } from './ChainInterval'
@@ -30,10 +30,7 @@ import { ChainInterval, isChainInterval } from './ChainInterval'
  */
 type Chain<T> = ReadonlyArray<ChainInterval<T>> & { __brand: 'ChainIntervalChain' }
 
-export function isChain<T> (
-  cis: unknown,
-  compareFn?: T extends LTComparable ? Comparator<T> | undefined : Comparator<T>
-): cis is Chain<T> {
+export function isChain<T> (cis: unknown, compareFn?: SafeComparator<T>): cis is Chain<T> {
   if (!Array.isArray(cis)) {
     return false
   }
@@ -56,12 +53,12 @@ export function isChain<T> (
 }
 
 /**
- * Returns an ordered gapless {@link isSequence sequence} from a {@link Chain}. Elements of the result reference the
- * {@link ChainInterval} they represent.
+ * Returns a  ordered, left-definite, right-indefinite gapless {@link isSequence sequence} from a {@link Chain}.
+ * Elements of the result reference the {@link ChainInterval} they represent.
  */
-export function chainToSequence<T> (
+export function chainToGaplessLeftDefiniteSequence<T> (
   cis: ReadonlyArray<ChainInterval<T>>,
-  compareFn?: T extends LTComparable ? Comparator<T> | undefined : Comparator<T>
+  compareFn?: SafeComparator<T>
 ): ReadonlyArray<Interval<T>> {
   assert(isChain(cis, compareFn))
 
