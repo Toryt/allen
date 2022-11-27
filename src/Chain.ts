@@ -34,6 +34,9 @@ export function isChain<T> (cis: unknown, compareFn?: SafeComparator<T>): cis is
   if (!Array.isArray(cis)) {
     return false
   }
+  if (cis.length <= 0) {
+    return true
+  }
 
   assert(
     cis.every(ci => ci !== undefined && ci !== null && isLTComparableOrIndefinite(ci.start)) || compareFn !== undefined,
