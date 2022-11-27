@@ -38,20 +38,20 @@ export function isChain<T> (cis: unknown, compareFn?: SafeComparator<T>): cis is
     return true
   }
 
+  const cType: TypeRepresentation | undefined | false = commonTypeRepresentation(...cis.map(ci => ci.start))
+  if (cType === false || cType === undefined) {
+    return false
+  }
+
   assert(
     cis.every(ci => ci !== undefined && ci !== null && isLTComparableOrIndefinite(ci.start)) || compareFn !== undefined,
     '`compareFn` is mandatory when a start is a `symbol` or `NaN`'
   )
   const compare: Comparator<T> = compareFn ?? ltCompare
 
-  const cType: TypeRepresentation | undefined | false = commonTypeRepresentation(...cis.map(ci => ci.start))
-  return (
-    cType !== false &&
-    cType !== undefined &&
-    cis.every(
-      (ci: ChainInterval<T>, index) =>
-        isChainInterval(ci, cType) && (index === 0 || compare(cis[index - 1].start, ci.start) < 0)
-    )
+  return cis.every(
+    (ci: ChainInterval<T>, index) =>
+      isChainInterval(ci, cType) && (index === 0 || compare(cis[index - 1].start, ci.start) < 0)
   )
 }
 
