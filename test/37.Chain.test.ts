@@ -94,15 +94,15 @@ describe('Chain', function () {
   })
   describe('chainToGaplessLeftDefiniteSequence', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: SafeComparator<T>): void {
+      const sequenceOptions: SequenceOptions<T> = { gaps: false, leftDefinite: true, ordered: true }
+      if (compareFn !== undefined && compareFn !== null) {
+        sequenceOptions.compareFn = compareFn
+      }
+
       function callIt (cis: Chain<T>): ReadonlyArray<Interval<T>> {
         return compareFn === undefined || compareFn === null
           ? chainToGaplessLeftDefiniteSequence(cis)
           : chainToGaplessLeftDefiniteSequence(cis, compareFn)
-      }
-
-      const sequenceOptions: SequenceOptions<T> = { leftDefinite: true, ordered: true, gaps: false }
-      if (compareFn !== undefined && compareFn !== null) {
-        sequenceOptions.compareFn = compareFn
       }
 
       describe(label, function () {
@@ -114,7 +114,7 @@ describe('Chain', function () {
           result.length.should.equal(chain.length)
         })
         it('returns the expected sequence for a singleton', function () {
-          const chain: any[] = [[{ start: points[0] }]]
+          const chain: any[] = [{ start: points[0] }]
           assert(isChain<T>(chain))
           const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
