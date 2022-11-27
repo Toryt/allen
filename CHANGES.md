@@ -4,6 +4,10 @@
 
 ### 0.3
 
+#### 0.3.4
+
+- add `SafeComparator`
+
 #### 0.3.3
 
 - add `ChainInterval` interface, and `isChainInterval`
