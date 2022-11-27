@@ -91,7 +91,7 @@ describe('ChainInterval', function () {
     })
   })
   describe('compareChainIntervals', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: SafeComparator<T>) {
+    function generateTests<T> (label: string, points: T[], compareFn?: SafeComparator<T>): void {
       function callIt (ci1: ChainInterval<T>, ci2: ChainInterval<T>): number {
         return compareFn === undefined || compareFn === null
           ? compareChainIntervals(ci1, ci2)

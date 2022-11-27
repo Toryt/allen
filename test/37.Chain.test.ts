@@ -23,7 +23,7 @@ import { isChain } from '../src/Chain'
 
 describe('Chain', function () {
   describe('isChain', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: SafeComparator<T>) {
+    function generateTests<T> (label: string, points: T[], compareFn?: SafeComparator<T>): void {
       function callIt (cis: unknown): boolean {
         return compareFn === undefined || compareFn === null ? isChain(cis) : isChain(cis, compareFn)
       }
