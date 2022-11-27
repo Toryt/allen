@@ -24,6 +24,7 @@ import {
   Constructor,
   Indefinite,
   Interval,
+  isChainInterval,
   isEnclosing,
   isInterval,
   isLTComparableOrIndefinite,
@@ -145,6 +146,9 @@ describe('index TS', function () {
     it('exports ChainInterval', function () {
       const x: ChainInterval<number> = { start: 8 }
       x.should.be.an.Object()
+    })
+    it('exports isChainInterval', function () {
+      isChainInterval.should.be.a.Function()
     })
   })
   describe('examples', function () {
