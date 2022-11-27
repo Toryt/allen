@@ -16,10 +16,10 @@
 
 import { Comparator, SafeComparator } from './Comparator'
 import assert from 'assert'
-import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
+import { ltCompare } from './ltCompare'
 import { commonTypeRepresentation, TypeRepresentation } from './typeRepresentation'
 import { Interval } from './Interval'
-import { ChainInterval, isChainInterval } from './ChainInterval'
+import { ChainInterval, compareChainIntervals, isChainInterval } from './ChainInterval'
 
 /**
  * An array of {@link ChainInterval} elements. Each element has a definite `start`. The `end` of each element is
@@ -30,29 +30,30 @@ import { ChainInterval, isChainInterval } from './ChainInterval'
  */
 type Chain<T> = ReadonlyArray<ChainInterval<T>> & { __brand: 'ChainIntervalChain' }
 
-export function isChain<T> (cis: unknown, compareFn?: SafeComparator<T>): cis is Chain<T> {
-  if (!Array.isArray(cis)) {
+export function isChain<T> (candidate: unknown, compareFn?: SafeComparator<T>): candidate is Chain<T> {
+  if (!Array.isArray(candidate)) {
     return false
   }
-  if (cis.length <= 0) {
+  if (candidate.length <= 0) {
     return true
   }
 
-  const cType: TypeRepresentation | undefined | false = commonTypeRepresentation(...cis.map(ci => ci.start))
+  const cType: TypeRepresentation | undefined | false = commonTypeRepresentation(...candidate.map(ci => ci.start))
   if (cType === false || cType === undefined) {
     return false
   }
 
-  assert(
-    cis.every(ci => ci !== undefined && ci !== null && isLTComparableOrIndefinite(ci.start)) || compareFn !== undefined,
-    '`compareFn` is mandatory when a start is a `symbol` or `NaN`'
-  )
-  const compare: Comparator<T> = compareFn ?? ltCompare
+  if (!candidate.every(ciCandidate => isChainInterval(ciCandidate, cType))) {
+    return false
+  }
 
-  return cis.every(
-    (ci: ChainInterval<T>, index) =>
-      isChainInterval(ci, cType) && (index === 0 || compare(cis[index - 1].start, ci.start) < 0)
-  )
+  const sorted: ReadonlyArray<ChainInterval<T>> = candidate
+    .slice()
+    .sort((ci1: ChainInterval<T>, ci2: ChainInterval<T>) => compareChainIntervals(ci1, ci2, compareFn))
+
+  // no equal starts
+  const compare: Comparator<T> = compareFn ?? ltCompare
+  return sorted.every((ci: ChainInterval<T>, index) => index === 0 || compare(sorted[index - 1].start, ci.start) < 0)
 }
 
 /**
