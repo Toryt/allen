@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import { primitiveTypeRepresentations, TypeRepresentation } from '../src/typeRepresentation'
+import { primitiveTypeRepresentations, TypeRepresentation } from '../src/TypeRepresentation'
 import { A, B, C } from './_someClasses'
 
 const pptsAsTypeRepresentations: readonly TypeRepresentation[] = primitiveTypeRepresentations

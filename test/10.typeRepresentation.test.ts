@@ -25,7 +25,7 @@ import {
   representsSuperType,
   TypeRepresentation,
   typeRepresentationOf
-} from '../src/typeRepresentation'
+} from '../src/TypeRepresentation'
 import { inspect } from 'util'
 import should from 'should'
 import { idiotTypeRepresentations, typeRepresentations } from './_typeRepresentationCases'
@@ -120,7 +120,7 @@ const falseCases: Array<Case<unknown>> = [
   { label: 'mixed', elements: [{}, null, 34] }
 ]
 
-describe('typeRepresentation', function () {
+describe('TypeRepresentation', function () {
   describe('primitiveTypeRepresentations', function () {
     it('is an array of strings', function () {
       primitiveTypeRepresentations.should.be.an.Array()

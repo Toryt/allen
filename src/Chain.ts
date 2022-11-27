@@ -16,7 +16,7 @@
 
 import { Comparator, SafeComparator } from './Comparator'
 import { ltCompare } from './ltCompare'
-import { commonTypeRepresentation, TypeRepresentation } from './typeRepresentation'
+import { commonTypeRepresentation, TypeRepresentation } from './TypeRepresentation'
 import { ChainInterval, compareChainIntervals, isChainInterval } from './ChainInterval'
 import { Interval } from './Interval'
 import assert from 'assert'

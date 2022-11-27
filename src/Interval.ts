@@ -19,7 +19,7 @@ import {
   isTypeRepresentation,
   representsSuperType,
   TypeRepresentation
-} from './typeRepresentation'
+} from './TypeRepresentation'
 import { Indefinite, TypeFor } from './type'
 import assert from 'assert'
 import { isLTComparableOrIndefinite, LTComparable, ltCompare } from './ltCompare'

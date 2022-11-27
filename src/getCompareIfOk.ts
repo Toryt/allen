@@ -18,7 +18,7 @@ import assert from 'assert'
 import { Interval, isInterval } from './Interval'
 import { Comparator } from './Comparator'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
-import { commonTypeRepresentation } from './typeRepresentation'
+import { commonTypeRepresentation } from './TypeRepresentation'
 import { Indefinite } from './type'
 
 const haveCommonType: string = 'i1.start, i1.end, i2.start and i2.end must be of a common type'

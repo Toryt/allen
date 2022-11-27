@@ -15,7 +15,7 @@
  */
 
 import { notStrictEqual, ok } from 'assert'
-import { commonTypeRepresentation } from './typeRepresentation'
+import { commonTypeRepresentation } from './TypeRepresentation'
 import { Indefinite } from './type'
 
 export type LTComparablePrimitive = number | bigint | string | boolean

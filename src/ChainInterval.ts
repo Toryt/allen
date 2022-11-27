@@ -21,7 +21,7 @@ import {
   representsSuperType,
   TypeRepresentation,
   typeRepresentationOf
-} from './typeRepresentation'
+} from './TypeRepresentation'
 import { TypeFor } from './type'
 import { Comparator, SafeComparator } from './Comparator'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'

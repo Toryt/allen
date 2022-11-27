@@ -23,7 +23,7 @@ import { stuffWithUndefined } from './_stuff'
 import { ChainInterval, compareChainIntervals, isChainInterval } from '../src/ChainInterval'
 import { A, B, C } from './_someClasses'
 import { TypeFor } from '../src/type'
-import { TypeRepresentation } from '../src/typeRepresentation'
+import { TypeRepresentation } from '../src/TypeRepresentation'
 import { SafeComparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 

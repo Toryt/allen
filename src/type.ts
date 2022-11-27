@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import { Constructor, TypeRepresentation } from './typeRepresentation'
+import { Constructor, TypeRepresentation } from './TypeRepresentation'
 
 export type TypeFor<
   T extends TypeRepresentation

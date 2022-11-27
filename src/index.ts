@@ -20,7 +20,7 @@ export {
   TypeRepresentation,
   isTypeRepresentation,
   commonTypeRepresentation
-} from './typeRepresentation'
+} from './TypeRepresentation'
 export { TypeFor, Indefinite } from './type'
 export { Comparator, SafeComparator } from './Comparator'
 export { LTComparablePrimitive, LTComparable, isLTComparableOrIndefinite, ltCompare } from './ltCompare'

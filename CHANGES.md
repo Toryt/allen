@@ -2,6 +2,12 @@
 
 ## 0
 
+### 0.5
+
+#### 0.5.0
+
+- `TypeRepresentation` file name is changed (this is the incompatibility)
+
 ### 0.4
 
 #### 0.4.2
