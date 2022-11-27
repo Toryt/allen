@@ -24,7 +24,7 @@ export {
 export { TypeFor, Indefinite } from './type'
 export { Comparator, SafeComparator } from './Comparator'
 export { LTComparablePrimitive, LTComparable, isLTComparableOrIndefinite, ltCompare } from './ltCompare'
-export { Interval, isInterval } from './Interval'
+export { ReferenceIntervals, Interval, isInterval } from './Interval'
 export { RelationConstructor, Relation } from './Relation' // ok higher
 export { AllenRelation } from './AllenRelation'
 export { PointIntervalRelation } from './PointIntervalRelation'

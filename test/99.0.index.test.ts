@@ -40,6 +40,7 @@ import {
   minimalEnclosing,
   PointIntervalRelation,
   primitiveTypeRepresentations,
+  ReferenceIntervals,
   Relation,
   RelationConstructor,
   SafeComparator,
@@ -111,6 +112,10 @@ describe('index TS', function () {
     })
     it('exports ltCompare', function () {
       ltCompare.should.be.a.Function()
+    })
+    it('exports ReferenceIntervals', function () {
+      const x: ReferenceIntervals<string> = { aReference: { start: 'the start' } }
+      x.should.be.an.Object()
     })
     it('exports Interval', function () {
       const x: Interval<string> = { start: 'the start' }
