@@ -17,6 +17,7 @@
 import should from 'should'
 import {
   AllenRelation,
+  ChainInterval,
   commonTypeRepresentation,
   Comparator,
   compareIntervals,
@@ -140,6 +141,10 @@ describe('index TS', function () {
     })
     it('exports isSequence', function () {
       isSequence.should.be.a.Function()
+    })
+    it('exports ChainInterval', function () {
+      const x: ChainInterval<number> = { start: 8 }
+      x.should.be.an.Object()
     })
   })
   describe('examples', function () {
