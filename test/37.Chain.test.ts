@@ -31,15 +31,6 @@ describe('Chain', function () {
       }
 
       describe(label, function () {
-        describe('bogus', function () {
-          stuffWithUndefined
-            .filter(s => !Array.isArray(s) || s.length > 0)
-            .forEach(s => {
-              it(`returns false for ${inspect(s)}`, function () {
-                callIt(s).should.be.false()
-              })
-            })
-        })
         it('returns true for the empty collection', function () {
           callIt([]).should.be.true()
         })
@@ -70,6 +61,22 @@ describe('Chain', function () {
             { start: points[2] },
             { start: points[1] }
           ]).should.be.false()
+        })
+        it('returns false for a collection with an aberrant start', function () {
+          callIt([
+            { start: points[0] },
+            { start: label === 'numbers' ? 'a string' : 4533452 },
+            { start: points[2] }
+          ]).should.be.false()
+        })
+        describe('bogus', function () {
+          stuffWithUndefined
+            .filter(s => !Array.isArray(s) || s.length > 0)
+            .forEach(s => {
+              it(`returns false for ${inspect(s)}`, function () {
+                callIt(s).should.be.false()
+              })
+            })
         })
       })
     }
