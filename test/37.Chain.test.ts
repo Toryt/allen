@@ -20,6 +20,8 @@ import 'should'
 import { SafeComparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import { isChain } from '../src/Chain'
+import { stuffWithUndefined } from './_stuff'
+import { inspect } from 'util'
 
 describe('Chain', function () {
   describe('isChain', function () {
@@ -29,6 +31,15 @@ describe('Chain', function () {
       }
 
       describe(label, function () {
+        describe('bogus', function () {
+          stuffWithUndefined
+            .filter(s => !Array.isArray(s) || s.length > 0)
+            .forEach(s => {
+              it(`returns false for ${inspect(s)}`, function () {
+                callIt(s).should.be.false()
+              })
+            })
+        })
         it('returns true for the empty collection', function () {
           callIt([]).should.be.true()
         })
