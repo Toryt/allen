@@ -19,10 +19,11 @@
 import 'should'
 import { SafeComparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { isChain } from '../src/Chain'
+import { Chain, chainToGaplessLeftDefiniteSequence, isChain } from '../src/Chain'
 import { stuffWithUndefined } from './_stuff'
 import { inspect } from 'util'
 import { Interval, isSequence, SequenceOptions } from '../src'
+import assert from 'assert'
 
 describe('Chain', function () {
   describe('isChain', function () {
@@ -91,7 +92,7 @@ describe('Chain', function () {
   })
   describe('chainToGaplessLeftDefiniteSequence', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: SafeComparator<T>): void {
-      function callIt (cis: unknown): ReadonlyArray<Interval<T>> {
+      function callIt (cis: Chain<T>): ReadonlyArray<Interval<T>> {
         return compareFn === undefined || compareFn === null
           ? chainToGaplessLeftDefiniteSequence(cis)
           : chainToGaplessLeftDefiniteSequence(cis, compareFn)
@@ -104,20 +105,28 @@ describe('Chain', function () {
 
       describe(label, function () {
         it('returns the expected sequence for the empty collection', function () {
-          const result = callIt([])
-          isSequence<T>(result, sequenceOptions)
+          const empty: any[] = []
+          assert(isChain<T>(empty))
+          const result = callIt(empty)
+          isSequence<T>(result, sequenceOptions).should.be.true()
         })
         it('returns the expected sequence for a singleton', function () {
-          const result = callIt([{ start: points[0] }])
-          isSequence<T>(result, sequenceOptions)
+          const singleton: any[] = [[{ start: points[0] }]]
+          assert(isChain<T>(singleton))
+          const result = callIt(singleton)
+          isSequence<T>(result, sequenceOptions).should.be.true()
         })
         it('returns the expected sequence for an ordered chain', function () {
-          const result = callIt([{ start: points[0] }, { start: points[1] }, { start: points[2] }])
-          isSequence<T>(result, sequenceOptions)
+          const orderedChain: any[] = [{ start: points[0] }, { start: points[1] }, { start: points[2] }]
+          assert(isChain<T>(orderedChain))
+          const result = callIt(orderedChain)
+          isSequence<T>(result, sequenceOptions).should.be.true()
         })
         it('returns the expected sequence for an unordered chain', function () {
-          const result = callIt([{ start: points[0] }, { start: points[4] }, { start: points[2] }])
-          isSequence<T>(result, sequenceOptions)
+          const unorderedChain: any[] = [{ start: points[0] }, { start: points[4] }, { start: points[2] }]
+          assert(isChain<T>(unorderedChain))
+          const result = callIt(unorderedChain)
+          isSequence<T>(result, sequenceOptions).should.be.true()
         })
       })
     }
