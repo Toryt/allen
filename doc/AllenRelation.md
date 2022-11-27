@@ -181,6 +181,77 @@ point representation with another, definite or indefinite point representation, 
 we do not know where on the number line this interval is located, we cannot limit the relation more, and the result is
 `(pmeMP)`.
 
+## Comparing points with intervals
+
+We can also compare point representations with regular intervals. Consider the `start` and `end` of intervals as point
+representations, representing intervals of fixed minimum length `pl`. We then know (with right half-open intervals):
+
+```
+i.start (s) i
+i.end (M) i
+```
+
+We can now compose the relationship of a point representation `p` with `i.start` and `i.end` with these relations, to
+find the relation with `i`.
+
+| point – point | start – interval `(s)` | end — interval `(M)` |
+| ------------- | ---------------------- | -------------------- |
+| < `(pm)`      | `(pm)`                 | `(pmoFsedf)`         |
+| = `(e)`       | `(s)`                  | `(M)`                |
+| > `(MP)`      | `(dfOMP)`              | `(P)`                |
+| 🤷 `(pmeMP)`  | `(pmsdfOMP)`           | `(pmoFsedfMP)`       |
+
+| point – start | point – end   | point — interval            | conjunction |
+| ------------- | ------------- | --------------------------- | ----------- |
+| < `(pm)`      | < `(pm)`      | `(pm) ∧ (pmoFsedf)`         | `(pm)`      |
+|               | = `(e)`       | `(pm) ∧ (M)`                | `()`        |
+|               | > `(MP)`      | `(pm) ∧ (P)`                | `()`        |
+|               | 🤷 don't know | `(pm) ∧ (pmoFsedfMP)`       | `(pm)`      |
+| = `(e)`       | < `(pm)`      | `(s) ∧ (pmoFsedf)`          | `(s)`       |
+|               | = `(e)`       | `(s) ∧ (M)`                 | `()`        |
+|               | > `(MP)`      | `(s) ∧ (P)`                 | `()`        |
+|               | 🤷 don't know | `(s) ∧ (pmoFsedfMP)`        | `(s)`       |
+| > `(MP)`      | < `(pm)`      | `(dfOMP) ∧ (pmoFsedf)`      | `(df)`      |
+|               | = `(e)`       | `(dfOMP) ∧ (M)`             | `(M)`       |
+|               | > `(MP)`      | `(dfOMP) ∧ (P)`             | `(P)`       |
+|               | 🤷 don't know | `(dfOMP) ∧ (pmoFsedfMP)`    | `(dfMP)`    |
+| 🤷 don't know | < `(pm)`      | `(pmsdfOMP) ∧ (pmoFsedf)`   | `(pmsdf)`   |
+|               | = `(e)`       | `(pmsdfOMP) ∧ (M)`          | `(M)`       |
+|               | > `(MP)`      | `(pmsdfOMP) ∧ (P)`          | `(P)`       |
+|               | 🤷 don't know | `(pmsdfOMP) ∧ (pmoFsedfMP)` | `(pmsdfMP)` |
+
+|     | `[start,` |     | `end[` |     | actual    |             |
+| --- | --------- | --- | ------ | --- | --------- | ----------- |
+| `p` |           |     |        |     | `(b)`     | `(pm)`      |
+|     | `p`       |     |        |     | `(c)`     | `(s)`       |
+|     |           | `p` |        |     | `(i)`     | `(df)`      |
+|     |           |     | `p`    |     | `(t)`     | `(M)`       |
+|     |           |     |        | `p` | `(a)`     | `(P)`       |
+| 🤷  | 🤷        | 🤷  | 🤷     | 🤷  | `(bcita)` | `(pmsdfMP)` |
+
+| `[🤷,` | `end[` |     | actual    |             |
+| ------ | ------ | --- | --------- | ----------- |
+| `p`    |        |     | `(bci)`   | `(pmsdf)`   |
+|        | `p`    |     | `(t)`     | `(M)`       |
+|        |        | `p` | `(a)`     | `(P)`       |
+| 🤷     | 🤷     | 🤷  | `(bcita)` | `(pmsdfMP)` |
+
+|     | `[start,` | `🤷[` | actual    |             |
+| --- | --------- | ----- | --------- | ----------- |
+| `p` |           |       | `(b)`     | `(pm)`      |
+|     | `p`       |       | `(c)`     | `(s)`       |
+|     |           | `p`   | `(ita)`   | `(dfMP)`    |
+| 🤷  | 🤷        | 🤷    | `(bcita)` | `(pmsdfMP)` |
+
+// MUDO
+
+- Why `pm` for `(b)`? why the `m`? WHY THE `m`!!!!
+- Why `df` for `(i)`? no other possibilities "in" the other interval
+
+`(o)`, `(O)` not possible, because would require length > `pl`
+
+`(F)`, `(c)`, `(e)`, `(S)` not possible because of very small, cannot contain other, which is non-degenerate
+
 ## Inference
 
 **Be aware that, in general, inference over intervals, also using Allen relations, is NP-complete.** This means that the
