@@ -32,7 +32,8 @@ const {
   isSequence,
   compareIntervals,
   isChainInterval,
-  isChain
+  isChain,
+  chainToGaplessLeftDefiniteSequence
 } = require('../src')
 
 describe('index JS', function () {
@@ -83,6 +84,9 @@ describe('index JS', function () {
     })
     it('exports isChain', function () {
       isChain.should.be.a.Function()
+    })
+    it('exports chainToGaplessLeftDefiniteSequence', function () {
+      chainToGaplessLeftDefiniteSequence.should.be.a.Function()
     })
   })
   describe('examples', function () {

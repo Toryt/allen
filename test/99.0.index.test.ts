@@ -19,6 +19,7 @@ import {
   AllenRelation,
   Chain,
   ChainInterval,
+  chainToGaplessLeftDefiniteSequence,
   commonTypeRepresentation,
   Comparator,
   compareIntervals,
@@ -172,6 +173,9 @@ describe('index TS', function () {
     })
     it('exports isChain', function () {
       isChain.should.be.a.Function()
+    })
+    it('exports chainToGaplessLeftDefiniteSequence', function () {
+      chainToGaplessLeftDefiniteSequence.should.be.a.Function()
     })
   })
   describe('examples', function () {
