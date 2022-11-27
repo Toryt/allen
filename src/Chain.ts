@@ -58,7 +58,8 @@ export function isChain<T> (candidate: unknown, compareFn?: SafeComparator<T>): 
 
 /**
  * Returns an ordered, left-definite, right-indefinite gapless {@link isSequence sequence} from a {@link Chain}.
- * Elements of the result have the {@link ChainInterval} they represent as prototype.
+ * Elements of the result have the {@link ChainInterval} they represent as prototype. The last one does not have an
+ * `end`.
  */
 export function chainToGaplessLeftDefiniteSequence<T> (
   cis: Chain<T>,
@@ -74,6 +75,6 @@ export function chainToGaplessLeftDefiniteSequence<T> (
           value: cis[index + 1].start
         }
       })
-      : cis
+      : Object.create(ci)
   )
 }
