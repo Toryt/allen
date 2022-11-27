@@ -6,6 +6,7 @@
 
 #### 0.3.4
 
+- add `compareChainIntervals`
 - add `SafeComparator`
 
 #### 0.3.3
