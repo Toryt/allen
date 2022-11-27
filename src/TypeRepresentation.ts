@@ -45,7 +45,7 @@ export type TypeRepresentation = typeof primitiveTypeRepresentations[number] | C
  */
 export function isTypeRepresentation (u: unknown): boolean {
   return (
-    ((primitiveTypeRepresentations as unknown) as unknown[]).includes(u) ||
+    (primitiveTypeRepresentations as unknown as unknown[]).includes(u) ||
     (typeof u === 'function' && 'prototype' in u && 'constructor' in u.prototype && u.prototype.constructor === u)
   )
 }
