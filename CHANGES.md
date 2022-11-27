@@ -4,6 +4,10 @@
 
 ### 0.3
 
+#### 0.3.3
+
+- add `ChainInterval` interface, and `isChainInterval`
+
 #### 0.3.2
 
 - make `compareIntervals` a first order function
