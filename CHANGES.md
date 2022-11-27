@@ -9,6 +9,7 @@
 - `Comparator` file name is changed
 - add `compareChainIntervals`
 - add `SafeComparator`
+- add `isChain`
 
 ### 0.3
 
