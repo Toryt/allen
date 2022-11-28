@@ -100,7 +100,7 @@ describe('Chain', function () {
     function generateTests<TR extends TypeRepresentation> (
       label: string,
       ptr: TR,
-      points: TypeFor<TR>[],
+      points: Array<TypeFor<TR>>,
       compareFn?: Comparator<TypeFor<TR>>
     ): void {
       const sequenceOptions: SequenceOptions<TypeFor<TR>> = { gaps: false, leftDefinite: true, ordered: true }
