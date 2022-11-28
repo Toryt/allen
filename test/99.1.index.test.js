@@ -92,7 +92,9 @@ describe('index JS', function () {
   describe('examples', function () {
     it('ts README Allen compiles and works', function () {
       function allenRelationExample () {
+        /** @type {AllenRelation} */
         const iiCondition1 = AllenRelation.fromString('psSd')
+        /** @type {AllenRelation} */
         const iiCondition2 = AllenRelation.fromString('sde')
         const iiCondition = iiCondition1.compose(iiCondition2)
 
@@ -111,7 +113,9 @@ describe('index JS', function () {
     })
     it('ts README point-interval compiles and works', function () {
       function pointIntervalExample () {
+        /** @type {PointIntervalRelation} */
         const piCondition1 = PointIntervalRelation.or(PointIntervalRelation.BEFORE, PointIntervalRelation.TERMINATES)
+        /** @type {AllenRelation} */
         const iiCondition2 = AllenRelation.fromString('sde')
         const piCondition = piCondition1.compose(iiCondition2)
 
