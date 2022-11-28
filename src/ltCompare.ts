@@ -22,6 +22,19 @@ export type LTComparablePrimitive = number | bigint | string | boolean
 
 export type LTComparable = LTComparablePrimitive | Object | Function
 
+/**
+ * Dynamicly test whether we can apply `<` to `u`.
+ *
+ * This cannot be enforced with a type. First of all, `NaN` does not have a separate type.
+ * But secondly, a type `number | bigint | string | boolean  | Object | Function`, that “excludes” `symbol` is still
+ * assignable with `symbol`s by coercion:
+ *
+ * ```ts
+ * const number | bigint | string | boolean  | Object | Function: LTComparable = Symbol('s')
+ * ```
+ *
+ * is accepted by TypeScript. There is no way in TypeScript to express “not a `symbol`”.
+ */
 export function isLTComparableOrIndefinite (u: unknown): u is Indefinite<LTComparable> {
   return u === undefined || u === null || (typeof u !== 'symbol' && !Number.isNaN(u))
 }
@@ -32,7 +45,11 @@ const noNaN: string = 'default ltComparator cannot compare NaN'
 const noSymbol: string = 'default ltComparator cannot compare symbols'
 const haveCommonType: string = 't1 and t2 must be of a common type'
 
-export function ltCompare<T extends LTComparable> (t1: T, t2: T): number {
+/**
+ * This function cannot be used with `symbol` valus or `NaN` (unless some methods used by the `<` operator are
+ * overridden in a very clever way).
+ */
+export function ltCompare<T> (t1: T, t2: T): number {
   notStrictEqual(t1, undefined, noUndefined)
   notStrictEqual(t2, undefined, noUndefined)
   notStrictEqual(t1, null, noNull)
