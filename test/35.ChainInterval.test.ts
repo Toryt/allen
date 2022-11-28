@@ -25,7 +25,7 @@ import { A, B, C } from './_someClasses'
 import { TypeFor } from '../src/type'
 import { TypeRepresentation } from '../src/TypeRepresentation'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { Comparator } from '../src'
+import { Comparator } from '../src/Comparator'
 
 const notAnIntervalCandidate = stuffWithUndefined.filter(s => typeof s !== 'object' && typeof s !== 'function')
 

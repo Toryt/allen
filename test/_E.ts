@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import { Relation } from '../src'
+import { Relation } from '../src/Relation'
 import { basicRelationBitPatterns, relationBitPatterns } from '../src/bitPattern'
 
 export class E extends Relation {

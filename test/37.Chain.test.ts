@@ -21,9 +21,10 @@ import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCa
 import { Chain, chainToGaplessLeftDefiniteSequence, isChain } from '../src/Chain'
 import { stuffWithUndefined } from './_stuff'
 import { inspect } from 'util'
-import { ChainInterval, Interval, isSequence, SequenceOptions } from '../src'
+import { ChainInterval, compareChainIntervals } from '../src/ChainInterval'
+import { Interval } from '../src/Interval'
+import { isSequence, SequenceOptions } from '../src/sequence'
 import assert from 'assert'
-import { compareChainIntervals } from '../src/ChainInterval'
 import should from 'should'
 
 describe('Chain', function () {

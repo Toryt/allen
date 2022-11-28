@@ -14,7 +14,8 @@
  limitations under the License.
  */
 
-import { AllenRelation, Interval } from '../src'
+import { AllenRelation } from '../src/AllenRelation'
+import { Interval } from '../src/Interval'
 
 export interface TestIntervals<T> {
   i1: Interval<T>
