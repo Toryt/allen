@@ -22,8 +22,8 @@ export {
   commonTypeRepresentation
 } from './TypeRepresentation'
 export { TypeFor, Indefinite } from './type'
-export { Comparator, SafeComparator } from './Comparator'
-export { LTComparablePrimitive, LTComparable, isLTComparableOrIndefinite, ltCompare } from './ltCompare'
+export { Comparator } from './Comparator'
+export { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 export { ReferenceIntervals, Interval, isInterval } from './Interval'
 export { RelationConstructor, Relation } from './Relation' // ok higher
 export { AllenRelation } from './AllenRelation'

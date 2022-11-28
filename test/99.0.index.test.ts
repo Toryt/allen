@@ -34,8 +34,6 @@ import {
   isMinimalEnclosing,
   isSequence,
   isTypeRepresentation,
-  LTComparable,
-  LTComparablePrimitive,
   ltCompare,
   minimalEnclosing,
   PointIntervalRelation,
@@ -43,7 +41,6 @@ import {
   ReferenceIntervals,
   Relation,
   RelationConstructor,
-  SafeComparator,
   SequenceOptions,
   TypeFor,
   TypeRepresentation
@@ -88,24 +85,6 @@ describe('index TS', function () {
         return n1 + n2
       }
       x.should.be.a.Function()
-    })
-    it('exports SafeComparator', function () {
-      const x: SafeComparator<number> = function (n1: number, n2: number): number {
-        return n1 + n2
-      }
-      x.should.be.a.Function()
-      const y: SafeComparator<symbol> = function (n1: symbol, n2: symbol): number {
-        return (n1.toString() + n2.toString()).includes('a') ? -1 : 0
-      }
-      y.should.be.a.Function()
-    })
-    it('exports LTComparablePrimitive', function () {
-      const x: LTComparablePrimitive = true
-      x.should.be.a.Boolean()
-    })
-    it('exports LTComparable', function () {
-      const x: LTComparable = 4
-      x.should.be.a.Number()
     })
     it('exports isLTComparableOrIndefinite', function () {
       isLTComparableOrIndefinite(NaN).should.be.false()

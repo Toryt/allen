@@ -22,7 +22,7 @@ import {
 } from './TypeRepresentation'
 import { Indefinite, TypeFor } from './type'
 import assert from 'assert'
-import { isLTComparableOrIndefinite, LTComparable, ltCompare } from './ltCompare'
+import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { Comparator } from './Comparator'
 
 export interface ReferenceIntervals<T> {
@@ -54,7 +54,7 @@ export interface Interval<T> {
 export function isInterval<TR extends TypeRepresentation> (
   i: unknown,
   pointType: TR,
-  compareFn?: TypeFor<TR> extends LTComparable ? Comparator<TypeFor<TR>> | undefined : Comparator<TypeFor<TR>>
+  compareFn?: Comparator<TypeFor<TR>>
 ): i is Interval<TypeFor<TR>> {
   assert(isTypeRepresentation(pointType))
 

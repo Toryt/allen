@@ -23,7 +23,7 @@ import {
   typeRepresentationOf
 } from './TypeRepresentation'
 import { TypeFor } from './type'
-import { Comparator, SafeComparator } from './Comparator'
+import { Comparator } from './Comparator'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 
 /**
@@ -60,7 +60,7 @@ const haveCommonType: string = 'i1.start and i2.start must be of a common type'
 /**
  * Assert that the parameters are acceptable, and return the {@link Comparator} to use.
  */
-export function getCompareIfOk<T> (cis: ReadonlyArray<ChainInterval<T>>, compareFn?: SafeComparator<T>): Comparator<T> {
+export function getCompareIfOk<T> (cis: ReadonlyArray<ChainInterval<T>>, compareFn?: Comparator<T>): Comparator<T> {
   cis.forEach(ci => assert(typeof ci === 'object' && ci !== null))
   assert(
     compareFn !== undefined || cis.every(ci => isLTComparableOrIndefinite(ci.start)),
@@ -84,7 +84,7 @@ export function getCompareIfOk<T> (cis: ReadonlyArray<ChainInterval<T>>, compare
 export function compareChainIntervals<T> (
   i1: ChainInterval<T>,
   i2: ChainInterval<T>,
-  compareFn?: SafeComparator<T>
+  compareFn?: Comparator<T>
 ): number {
   const compare: Comparator<T> = getCompareIfOk([i1, i2], compareFn) // asserts preconditions
 

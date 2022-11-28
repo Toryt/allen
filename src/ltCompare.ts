@@ -16,11 +16,6 @@
 
 import { notStrictEqual, ok } from 'assert'
 import { commonTypeRepresentation } from './TypeRepresentation'
-import { Indefinite } from './type'
-
-export type LTComparablePrimitive = number | bigint | string | boolean
-
-export type LTComparable = LTComparablePrimitive | Object | Function
 
 /**
  * Dynamicly test whether we can apply `<` to `u`.
@@ -35,7 +30,7 @@ export type LTComparable = LTComparablePrimitive | Object | Function
  *
  * is accepted by TypeScript. There is no way in TypeScript to express “not a `symbol`”.
  */
-export function isLTComparableOrIndefinite (u: unknown): u is Indefinite<LTComparable> {
+export function isLTComparableOrIndefinite (u: unknown): boolean {
   return u === undefined || u === null || (typeof u !== 'symbol' && !Number.isNaN(u))
 }
 

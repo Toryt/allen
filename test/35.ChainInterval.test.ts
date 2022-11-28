@@ -24,8 +24,8 @@ import { ChainInterval, compareChainIntervals, isChainInterval } from '../src/Ch
 import { A, B, C } from './_someClasses'
 import { TypeFor } from '../src/type'
 import { TypeRepresentation } from '../src/TypeRepresentation'
-import { SafeComparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
+import { Comparator } from '../src'
 
 const notAnIntervalCandidate = stuffWithUndefined.filter(s => typeof s !== 'object' && typeof s !== 'function')
 
@@ -91,7 +91,7 @@ describe('ChainInterval', function () {
     })
   })
   describe('compareChainIntervals', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: SafeComparator<T>): void {
+    function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
       function callIt (ci1: ChainInterval<T>, ci2: ChainInterval<T>): number {
         return compareFn === undefined || compareFn === null
           ? compareChainIntervals(ci1, ci2)

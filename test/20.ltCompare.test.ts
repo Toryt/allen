@@ -17,17 +17,17 @@
 /* eslint-env mocha */
 
 import 'should'
-import { isLTComparableOrIndefinite, LTComparable, ltCompare } from '../src/ltCompare'
+import { isLTComparableOrIndefinite, ltCompare } from '../src/ltCompare'
 import { inspect } from 'util'
 import { stuffWithUndefined } from './_stuff'
 
-interface Case<T extends LTComparable> {
+interface Case<T> {
   label: string
   smaller: T
   larger: T
 }
 
-const cases: Array<Case<LTComparable>> = [
+const cases: Array<Case<unknown>> = [
   { label: 'number', smaller: -4, larger: Math.PI },
   { label: 'number with -∞', smaller: Number.NEGATIVE_INFINITY, larger: Math.PI },
   { label: 'number with +∞', smaller: -4, larger: Number.POSITIVE_INFINITY },
@@ -49,7 +49,7 @@ const cases: Array<Case<LTComparable>> = [
 
 describe('ltComparator', function () {
   describe('ltComparator', function () {
-    cases.forEach((c: Case<LTComparable>) => {
+    cases.forEach((c: Case<unknown>) => {
       describe(c.label, function () {
         it(`returns a negative number when the first argument (${inspect(
           c.smaller

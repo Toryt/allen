@@ -16,7 +16,7 @@
 
 /* eslint-env mocha */
 
-import { SafeComparator } from '../src/Comparator'
+import { Comparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import { Chain, chainToGaplessLeftDefiniteSequence, isChain } from '../src/Chain'
 import { stuffWithUndefined } from './_stuff'
@@ -28,7 +28,7 @@ import should from 'should'
 
 describe('Chain', function () {
   describe('isChain', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: SafeComparator<T>): void {
+    function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
       function callIt (cis: unknown): boolean {
         return compareFn === undefined || compareFn === null ? isChain(cis) : isChain(cis, compareFn)
       }
@@ -92,7 +92,7 @@ describe('Chain', function () {
     )
   })
   describe('chainToGaplessLeftDefiniteSequence', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: SafeComparator<T>): void {
+    function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
       const sequenceOptions: SequenceOptions<T> = { gaps: false, leftDefinite: true, ordered: true }
       if (compareFn !== undefined && compareFn !== null) {
         sequenceOptions.compareFn = compareFn

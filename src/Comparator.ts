@@ -14,8 +14,6 @@
  limitations under the License.
  */
 
-import { LTComparable } from './ltCompare'
-
 /**
  * Function with the traditional comparison semantics.
  *
@@ -26,5 +24,3 @@ import { LTComparable } from './ltCompare'
  * The function is never called with indefinite points (`t1` and `t2` are never `undefined` or `null`).
  */
 export type Comparator<T> = (t1: T, t2: T) => number
-
-export type SafeComparator<T> = T extends LTComparable ? Comparator<T> | undefined : Comparator<T>

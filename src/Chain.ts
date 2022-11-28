@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import { Comparator, SafeComparator } from './Comparator'
+import { Comparator } from './Comparator'
 import { ltCompare } from './ltCompare'
 import { commonTypeRepresentation, TypeRepresentation } from './TypeRepresentation'
 import { ChainInterval, compareChainIntervals, isChainInterval } from './ChainInterval'
@@ -30,7 +30,7 @@ import assert from 'assert'
  */
 export type Chain<T> = ReadonlyArray<ChainInterval<T>> & { __brand: 'ChainIntervalChain' }
 
-export function isChain<T> (candidate: unknown, compareFn?: SafeComparator<T>): candidate is Chain<T> {
+export function isChain<T> (candidate: unknown, compareFn?: Comparator<T>): candidate is Chain<T> {
   if (!Array.isArray(candidate)) {
     return false
   }
@@ -63,7 +63,7 @@ export function isChain<T> (candidate: unknown, compareFn?: SafeComparator<T>): 
  */
 export function chainToGaplessLeftDefiniteSequence<T> (
   cis: Chain<T>,
-  compareFn?: SafeComparator<T>
+  compareFn?: Comparator<T>
 ): ReadonlyArray<Interval<T>> {
   assert(isChain(cis, compareFn))
 
