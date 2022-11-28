@@ -76,8 +76,6 @@ export const objectCases = [
   Object
 ]
 
-export const pointCases = (dontKnowCases as unknown[]).concat(primitiveCases).concat(objectCases)
-
 export const sixNumbers = [-6, -4.983458, -1, 2, Math.PI, 23455]
 export const sixStrings = ['a smallest', 'b less small', 'c medium', 'd larger', 'e largest', 'f super']
 export const sixDates = [
