@@ -206,11 +206,3 @@ export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: Sequenc
 
   return sortedIs.every((j: Interval<T>, index: number) => index === 0 || endsBefore(sortedIs[index - 1], j))
 }
-
-// /**
-//  * Turn the _set_ of intervals `i` into a {@link isSequence seqyence}.
-//  *
-//  * Intervals that {@link AllenRelation.CONCURS_WITH concur with} each other are replaced by distinct
-//  * {@link AllenRelation.MEETS meeting} intervals (the “intersections“).
-//  */
-// export function toSequence<T> (i: Interval<T>[], compareFn?: Comparator<T>): Interval<T>[] {}
