@@ -16,10 +16,10 @@
 
 import { Comparator } from './Comparator'
 import { ltCompare } from './ltCompare'
-import { commonTypeRepresentation, TypeRepresentation } from './TypeRepresentation'
+import { commonTypeRepresentation, isTypeRepresentation, TypeRepresentation } from './TypeRepresentation'
 import { ChainInterval, compareChainIntervals, isChainInterval } from './ChainInterval'
 import { Interval } from './Interval'
-import assert from 'assert'
+import assert, { notEqual, ok } from 'assert'
 
 /**
  * An array of {@link ChainInterval} elements. Each element has a definite `start`. The `end` of each element is
@@ -30,7 +30,13 @@ import assert from 'assert'
  */
 export type Chain<T> = ReadonlyArray<ChainInterval<T>> & { __brand: 'ChainIntervalChain' }
 
-export function isChain<T> (candidate: unknown, compareFn?: Comparator<T>): candidate is Chain<T> {
+export function isChain<T> (
+  candidate: unknown,
+  pointType: TypeRepresentation,
+  compareFn?: Comparator<T>
+): candidate is Chain<T> {
+  assert(isTypeRepresentation(pointType))
+
   if (!Array.isArray(candidate)) {
     return false
   }
@@ -39,7 +45,7 @@ export function isChain<T> (candidate: unknown, compareFn?: Comparator<T>): cand
   }
 
   const cType: TypeRepresentation | undefined | false = commonTypeRepresentation(...candidate.map(ci => ci.start))
-  if (cType === false || cType === undefined) {
+  if (cType !== pointType) {
     return false
   }
 
@@ -65,7 +71,16 @@ export function chainToGaplessLeftDefiniteSequence<T> (
   cis: Chain<T>,
   compareFn?: Comparator<T>
 ): ReadonlyArray<Interval<T>> {
-  assert(isChain(cis, compareFn))
+  assert(Array.isArray(cis), '`cis` must be an array')
+  if (cis.length <= 0) {
+    return []
+  }
+
+  const cType: TypeRepresentation | undefined | false = commonTypeRepresentation(...cis.map(ci => ci.start))
+  notEqual(cType, false, 'the `start` properties of `cis` elements have to have a commong type')
+  ok(cType)
+
+  assert(isChain(cis, cType, compareFn))
 
   const sorted = cis
     .slice()

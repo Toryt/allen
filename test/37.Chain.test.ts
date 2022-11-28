@@ -26,12 +26,13 @@ import { Interval } from '../src/Interval'
 import { isSequence, SequenceOptions } from '../src/sequence'
 import assert from 'assert'
 import should from 'should'
+import { TypeRepresentation } from '../src'
 
 describe('Chain', function () {
   describe('isChain', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
+    function generateTests<T> (label: string, ptr: TypeRepresentation, points: T[], compareFn?: Comparator<T>): void {
       function callIt (cis: unknown): boolean {
-        return compareFn === undefined || compareFn === null ? isChain(cis) : isChain(cis, compareFn)
+        return compareFn === undefined || compareFn === null ? isChain(cis, ptr) : isChain(cis, ptr, compareFn)
       }
 
       describe(label, function () {
@@ -85,15 +86,18 @@ describe('Chain', function () {
       })
     }
 
-    generateTests('numbers', sixNumbers)
-    generateTests('string', sixStrings)
-    generateTests('dates', sixDates)
-    generateTests('symbols', generateSixSymbols('compare chain intervals'), (s1: Symbol, s2: Symbol): number =>
-      s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
+    generateTests('numbers', 'number', sixNumbers)
+    generateTests('string', 'string', sixStrings)
+    generateTests('dates', Date, sixDates)
+    generateTests(
+      'symbols',
+      'symbol',
+      generateSixSymbols('compare chain intervals'),
+      (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
     )
   })
   describe('chainToGaplessLeftDefiniteSequence', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
+    function generateTests<T> (label: string, ptr: TypeRepresentation, points: T[], compareFn?: Comparator<T>): void {
       const sequenceOptions: SequenceOptions<T> = { gaps: false, leftDefinite: true, ordered: true }
       if (compareFn !== undefined && compareFn !== null) {
         sequenceOptions.compareFn = compareFn
@@ -108,14 +112,14 @@ describe('Chain', function () {
       describe(label, function () {
         it('returns the expected sequence for the empty collection', function () {
           const chain: any[] = []
-          assert(isChain<T>(chain, compareFn))
+          assert(isChain<T>(chain, ptr, compareFn))
           const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
         })
         it('returns the expected sequence for a singleton', function () {
           const chain: any[] = [{ start: points[0] }]
-          assert(isChain<T>(chain, compareFn))
+          assert(isChain<T>(chain, ptr, compareFn))
           const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
@@ -123,7 +127,7 @@ describe('Chain', function () {
         })
         it('returns the expected sequence for an ordered chain', function () {
           const chain: any[] = [{ start: points[0] }, { start: points[1] }, { start: points[2] }]
-          assert(isChain<T>(chain, compareFn))
+          assert(isChain<T>(chain, ptr, compareFn))
           const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
@@ -133,7 +137,7 @@ describe('Chain', function () {
         })
         it('returns the expected sequence for an unordered chain', function () {
           const chain: any[] = [{ start: points[0] }, { start: points[4] }, { start: points[2] }]
-          assert(isChain<T>(chain, compareFn))
+          assert(isChain<T>(chain, ptr, compareFn))
           const result = callIt(chain)
           isSequence<T>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
@@ -147,11 +151,14 @@ describe('Chain', function () {
       })
     }
 
-    generateTests('numbers', sixNumbers)
-    generateTests('string', sixStrings)
-    generateTests('dates', sixDates)
-    generateTests('symbols', generateSixSymbols('compare chain intervals'), (s1: Symbol, s2: Symbol): number =>
-      s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
+    generateTests('numbers', 'number', sixNumbers)
+    generateTests('string', 'string', sixStrings)
+    generateTests('dates', Date, sixDates)
+    generateTests(
+      'symbols',
+      'symbol',
+      generateSixSymbols('compare chain intervals'),
+      (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
     )
   })
 })
