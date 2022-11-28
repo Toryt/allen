@@ -50,7 +50,7 @@ definitions:
                 caches:
                   - npm19
         - step:
-            name: Tag & Push to Github
+            name: Tag & Push to GitHub
             caches:
               - node
             script:

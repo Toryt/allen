@@ -228,8 +228,8 @@ relations we found for point interval relations:
 | terminates | `(t)`                     | `(M)`          |
 | after      | `(a)`                     | `(P)`          |
 
-Note the assymmetry. This is a consequence of our choice to work with right half-open intervals. Had we choosen
-differently, the same reasoning applies, but the results would be different basic relations.
+Note the assymmetry. This is a consequence of our choice to work with right half-open intervals. With another choice,
+the same reasoning applies, but we would find different basic relations.
 
 Given 5 basic relations, we get 32 (= 2<sup>5</sup>) possible general relations between points and intervals. This
 includes the EMPTY relation `()`, and a full relation, which is `(pmsdfMP)` for point – interval relations.

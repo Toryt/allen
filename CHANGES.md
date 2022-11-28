@@ -98,7 +98,7 @@ Degenerate intervals in any interpretation should be barred from the domain repr
 
 #### 0.1.0
 
-- tweak definitions of basic relations so they work unambiguously with degenerate intervals
+- tweak definitions of basic relations, so they work unambiguously with degenerate intervals
 
 ### 0.0
 

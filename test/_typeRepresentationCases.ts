@@ -32,6 +32,7 @@ export function notAConstructor1 (): string {
   return 'not a constructor 1'
 }
 
+// noinspection JSUnusedGlobalSymbols
 notAConstructor1.prototype.constructor = A
 
 export function notAConstructor2 (): string {
