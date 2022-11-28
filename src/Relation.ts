@@ -169,15 +169,15 @@ export interface RelationConstructor<R extends Relation> extends Function {
  * reference equality (‘`===`’) can be used to compare relations. Instances are obtained using the constants this module
  * offers, or using
  *
- * - the combination methods
- *   - {@link or},
- *   - {@link and},
- *   - {@link min}, and
- * - the unary methods
- *   - {@link complement},
- *   - `converse` (only when the instances express relations that are internal, i.e., between instances of the same
+ * * the combination methods
+ *   * {@link or},
+ *   * {@link and},
+ *   * {@link min}, and
+ * * the unary methods
+ *   * {@link complement},
+ *   * `converse` (only when the instances express relations that are internal, i.e., between instances of the same
  *      type), and
- *   - `compose`
+ *   * `compose`
  *
  * All instance methods in this class are _O(1)_, i.e., work in constant time, and all static methods are _O(n)_, i.e.,
  * work in linear time.
@@ -208,7 +208,7 @@ export class Relation {
      involved. */
 
   /**
-   * Only the NR_OF_BITS lowest bits are used. The other (32 - NR_OF_BITS) are 0.
+   * Only the lowest NR_OF_BITS bits are used. The other (32 - NR_OF_BITS) are 0.
    */
   protected readonly bitPattern: number
 
@@ -511,7 +511,7 @@ export class Relation {
     // noinspection SuspiciousTypeOfGuard
     assert(gr.every(grr => grr instanceof this))
 
-    return ((this as unknown) as RelationConstructor<R>).RELATIONS[
+    return (this as unknown as RelationConstructor<R>).RELATIONS[
       gr.reduce((acc: number, grr): number => acc | grr.bitPattern, EMPTY_BIT_PATTERN)
     ]
   }
@@ -529,7 +529,7 @@ export class Relation {
     // noinspection SuspiciousTypeOfGuard
     assert(gr.every(grr => grr instanceof this))
 
-    const typedThis = (this as unknown) as RelationConstructor<R>
+    const typedThis = this as unknown as RelationConstructor<R>
     return typedThis.RELATIONS[
       gr.reduce((acc: number, grr: R): number => acc & grr.bitPattern, fullBitPattern(typedThis.NR_OF_BITS))
     ]

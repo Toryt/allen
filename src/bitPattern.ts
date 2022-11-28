@@ -21,9 +21,9 @@ import assert from 'assert'
 
 /* limited by
 
-   - number size (< 2^(32 - 1) < Math.log2(Number.MAX_SAFE_INTEGER),
-   - address space for arrays, and
-   - reasonability
+   • number size (< 2^(32 - 1) < Math.log2(Number.MAX_SAFE_INTEGER),
+   • address space for arrays, and
+   • reasonability
 
    only. See also `bitCount`.  */
 export const largestNrOfBits = 16

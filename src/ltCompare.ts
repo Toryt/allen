@@ -22,7 +22,7 @@ import { commonTypeRepresentation } from './TypeRepresentation'
  *
  * This cannot be enforced with a type. First of all, `NaN` does not have a separate type.
  * But secondly, a type `number | bigint | string | boolean  | Object | Function`, that “excludes” `symbol` is still
- * assignable with `symbol`s by coercion:
+ * assignable with `symbol`-s by coercion:
  *
  * ```ts
  * const number | bigint | string | boolean  | Object | Function: LTComparable = Symbol('s')

@@ -45,8 +45,8 @@ export interface Interval<T> {
 /**
  * If both `start` and `end` are definite,
  *
- * - `start` and `end` must be “of the same type”
- * - `start` must be before `end`
+ * * `start` and `end` must be “of the same type”
+ * * `start` must be before `end`
  *
  * To compare `start` and `end`, the optional `compareFn` is used when given, or {@link ltCompare} when not. When
  * `start` and `end` are `symbols`, or one of the values is `NaN`, a `compareFn` parameter is mandatory.

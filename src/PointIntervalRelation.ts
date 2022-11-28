@@ -88,7 +88,7 @@ export class PointIntervalRelation extends Relation {
    *
    * ![before](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-before.png)
    *
-   * The short representation of this point – interval relation is `b`.
+   * The short representation of this point – interval relation is `(b)`.
    */
   public static readonly BEFORE: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[0]
   // Bit pattern: 1 = '00001'
@@ -103,7 +103,7 @@ export class PointIntervalRelation extends Relation {
    *
    * ![commences](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-commences.png)
    *
-   * The short representation of this point – interval relation is `c`.
+   * The short representation of this point – interval relation is `(c)`.
    *
    * The interval may be degenerate.
    */
@@ -120,7 +120,7 @@ export class PointIntervalRelation extends Relation {
    *
    * ![in](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-in.png)
    *
-   * The short representation of this point – interval relation is `i`.
+   * The short representation of this point – interval relation is `(i)`.
    */
   public static readonly IN: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[2]
   // Bit pattern: 4 = '00100'
@@ -135,7 +135,7 @@ export class PointIntervalRelation extends Relation {
    *
    * ![ends](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-terminates.png)
    *
-   * The short representation of this point – interval relation is `t`.
+   * The short representation of this point – interval relation is `(t)`.
    */
   public static readonly TERMINATES: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[3]
   // Bit pattern: 8 = '01000'
@@ -150,7 +150,7 @@ export class PointIntervalRelation extends Relation {
    *
    * ![after](https://bitbucket.org/toryt/allen/raw/c00cab429681246b7718a462b94c4a68094e967c/doc/PointIntervalRelation-after.png)
    *
-   * The short representation of this point – interval relation is `a`.
+   * The short representation of this point – interval relation is `(a)`.
    */
   public static readonly AFTER: PointIntervalRelation = PointIntervalRelation.BASIC_RELATIONS[4]
   // Bit pattern: 16 = '10000'
