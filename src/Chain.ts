@@ -20,6 +20,7 @@ import { commonTypeRepresentation, isTypeRepresentation, TypeRepresentation } fr
 import { ChainInterval, compareChainIntervals, isChainInterval } from './ChainInterval'
 import { Interval } from './Interval'
 import assert, { notEqual, ok } from 'assert'
+import { TypeFor } from './type'
 
 /**
  * An array of {@link ChainInterval} elements. Each element has a definite `start`. The `end` of each element is
@@ -30,11 +31,11 @@ import assert, { notEqual, ok } from 'assert'
  */
 export type Chain<T> = ReadonlyArray<ChainInterval<T>> & { __brand: 'ChainIntervalChain' }
 
-export function isChain<T> (
+export function isChain<TR extends TypeRepresentation> (
   candidate: unknown,
-  pointType: TypeRepresentation,
-  compareFn?: Comparator<T>
-): candidate is Chain<T> {
+  pointType: TR,
+  compareFn?: Comparator<TypeFor<TR>>
+): candidate is Chain<TypeFor<TR>> {
   assert(isTypeRepresentation(pointType))
 
   if (!Array.isArray(candidate)) {
@@ -53,13 +54,17 @@ export function isChain<T> (
     return false
   }
 
-  const sorted: ReadonlyArray<ChainInterval<T>> = candidate
+  const sorted: ReadonlyArray<ChainInterval<TypeFor<TR>>> = candidate
     .slice()
-    .sort((ci1: ChainInterval<T>, ci2: ChainInterval<T>) => compareChainIntervals(ci1, ci2, compareFn))
+    .sort((ci1: ChainInterval<TypeFor<TR>>, ci2: ChainInterval<TypeFor<TR>>) =>
+      compareChainIntervals(ci1, ci2, compareFn)
+    )
 
   // no equal starts
-  const compare: Comparator<T> = compareFn ?? ltCompare
-  return sorted.every((ci: ChainInterval<T>, index) => index === 0 || compare(sorted[index - 1].start, ci.start) < 0)
+  const compare: Comparator<TypeFor<TR>> = compareFn ?? ltCompare
+  return sorted.every(
+    (ci: ChainInterval<TypeFor<TR>>, index) => index === 0 || compare(sorted[index - 1].start, ci.start) < 0
+  )
 }
 
 /**

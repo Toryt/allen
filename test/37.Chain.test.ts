@@ -26,7 +26,7 @@ import { Interval } from '../src/Interval'
 import { isSequence, SequenceOptions } from '../src/sequence'
 import assert from 'assert'
 import should from 'should'
-import { TypeRepresentation } from '../src'
+import { TypeFor, TypeRepresentation } from '../src'
 
 describe('Chain', function () {
   describe('isChain', function () {
@@ -97,13 +97,18 @@ describe('Chain', function () {
     )
   })
   describe('chainToGaplessLeftDefiniteSequence', function () {
-    function generateTests<T> (label: string, ptr: TypeRepresentation, points: T[], compareFn?: Comparator<T>): void {
-      const sequenceOptions: SequenceOptions<T> = { gaps: false, leftDefinite: true, ordered: true }
+    function generateTests<TR extends TypeRepresentation> (
+      label: string,
+      ptr: TR,
+      points: TypeFor<TR>[],
+      compareFn?: Comparator<TypeFor<TR>>
+    ): void {
+      const sequenceOptions: SequenceOptions<TypeFor<TR>> = { gaps: false, leftDefinite: true, ordered: true }
       if (compareFn !== undefined && compareFn !== null) {
         sequenceOptions.compareFn = compareFn
       }
 
-      function callIt (cis: Chain<T>): ReadonlyArray<Interval<T>> {
+      function callIt (cis: Chain<TypeFor<TR>>): ReadonlyArray<Interval<TypeFor<TR>>> {
         return compareFn === undefined || compareFn === null
           ? chainToGaplessLeftDefiniteSequence(cis)
           : chainToGaplessLeftDefiniteSequence(cis, compareFn)
@@ -112,24 +117,24 @@ describe('Chain', function () {
       describe(label, function () {
         it('returns the expected sequence for the empty collection', function () {
           const chain: any[] = []
-          assert(isChain<T>(chain, ptr, compareFn))
+          assert(isChain<TR>(chain, ptr, compareFn))
           const result = callIt(chain)
-          isSequence<T>(result, sequenceOptions).should.be.true()
+          isSequence<TypeFor<TR>>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
         })
         it('returns the expected sequence for a singleton', function () {
           const chain: any[] = [{ start: points[0] }]
-          assert(isChain<T>(chain, ptr, compareFn))
+          assert(isChain<TR>(chain, ptr, compareFn))
           const result = callIt(chain)
-          isSequence<T>(result, sequenceOptions).should.be.true()
+          isSequence<TypeFor<TR>>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
           should(Object.getPrototypeOf(result[0])).equal(chain[0])
         })
         it('returns the expected sequence for an ordered chain', function () {
           const chain: any[] = [{ start: points[0] }, { start: points[1] }, { start: points[2] }]
-          assert(isChain<T>(chain, ptr, compareFn))
+          assert(isChain<TR>(chain, ptr, compareFn))
           const result = callIt(chain)
-          isSequence<T>(result, sequenceOptions).should.be.true()
+          isSequence<TypeFor<TR>>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
           result.forEach((ci, index) => {
             should(Object.getPrototypeOf(ci)).equal(chain[index])
@@ -137,11 +142,11 @@ describe('Chain', function () {
         })
         it('returns the expected sequence for an unordered chain', function () {
           const chain: any[] = [{ start: points[0] }, { start: points[4] }, { start: points[2] }]
-          assert(isChain<T>(chain, ptr, compareFn))
+          assert(isChain<TR>(chain, ptr, compareFn))
           const result = callIt(chain)
-          isSequence<T>(result, sequenceOptions).should.be.true()
+          isSequence<TypeFor<TR>>(result, sequenceOptions).should.be.true()
           result.length.should.equal(chain.length)
-          const sorted = chain.sort((ci1: ChainInterval<T>, ci2: ChainInterval<T>) =>
+          const sorted = chain.sort((ci1: ChainInterval<TypeFor<TR>>, ci2: ChainInterval<TypeFor<TR>>) =>
             compareChainIntervals(ci1, ci2, compareFn)
           )
           result.forEach((ci, index) => {
