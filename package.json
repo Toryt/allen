@@ -20,7 +20,6 @@
   "types": "lib/index.d.js",
   "files": [
     "doc",
-    "docs",
     "lib",
     "CHANGES.md",
     "LICENSE"
