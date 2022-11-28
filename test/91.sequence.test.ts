@@ -404,10 +404,10 @@ describe('sequence', function () {
           it('returns false for a collection that contains 2 left-indefinite intervals', function () {
             callIt([{ end: points[1] }, { end: points[2] }], optionsBase).should.be.false()
           })
-          it('returns false for a collection that contains a right-indefinite interval with the same definite start as a previous one', function () {
+          it('returns false for a collection that contains a right-indefinite interval with the same definite start as one before', function () {
             callIt([{ start: points[0], end: points[1] }, { start: points[0] }], optionsBase).should.be.false()
           })
-          it('returns false for a collection that contains a right-indefinite interval with the same definite start as a later one', function () {
+          it('returns false for a collection that contains a right-indefinite interval with the same definite start as one after it', function () {
             callIt([{ start: points[0] }, { start: points[0], end: points[1] }], optionsBase).should.be.false()
           })
           it('returns false for a collection that contains 2 right-indefinite intervals with the same definite start', function () {
