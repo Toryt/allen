@@ -357,11 +357,13 @@ export class Relation {
    * gr.complement().complement() = gr
    * ```
    *
+   * The mathematical notation used for the complement of a general relation `gr` is `~gr`.
+   *
    * **Be aware that the complement has in general a different meaning than a logic negation.** For a basic relation
    * `br` and a general point – interval relation `condition`, it is true that
    *
    * ```
-   * (br ⊆ condition) ⇔ (br ⊈ condition.complement)
+   * (br ⊆ condition) ⇔ (br ⊈ ~condition)
    * ```
    *
    * **This is however not so for non-basic, and thus general relations**, as the following counterexample proofs.
@@ -375,7 +377,7 @@ export class Relation {
    * set
    *
    * ```
-   * br ∈ gr ⇔ br ∉ gr.complement
+   * br ∈ gr ⇔ br ∉ ~gr
    * ```
    *
    * Suppose `gr = (xy)`. Then we can rewrite in the following way:
@@ -384,16 +386,16 @@ export class Relation {
    *   gr ⊆ condition
    * ⇔ (xy) ⊆ condition
    * ⇔ x ∈ condition ∧ y ∈ condition
-   * ⇔ x ∉ condition.complement ∧ y ∉ condition.complement (1)
+   * ⇔ x ∉ ~condition ∧ y ∉ ~condition (1)
    * ```
    *
    * While, from the other side:
    *
    * ```
-   *   gr ⊈ condition.complement
-   * ⇔ (xy) ⊈ condition.complement
-   * ⇔ ¬(x ∈ condition.complement ∧ y ∈ condition.complement)
-   * ⇔ x ∉ condition.complement ∨ y ∉ condition.complement (2)
+   *   gr ⊈ ~condition
+   * ⇔ (xy) ⊈ ~condition
+   * ⇔ ¬(x ∈ ~condition ∧ y ∈ ~condition)
+   * ⇔ x ∉ ~condition ∨ y ∉ ~condition (2)
    * ```
    *
    * It is clear that _(1)_ is incompatible with _(2)_, except for the case where the initial relation is basic (x and
@@ -405,14 +407,14 @@ export class Relation {
    * ```
    *   actual ⊆ br
    * ⇔ actual = br ∧ actual = ∅
-   * ⇔ actual.complement = br.complement ∨ actual.complement = FULL (3)
+   * ⇔ ~actual = ~br ∨ ~actual = FULL (3)
    * ```
    *
    * From the other side:
    *
    * ```
-   *   actual.complement ⊈ br
-   * ⇔ actual.complement ≠ br ∧ actual.complement ≠ ∅ (4)
+   *   ~actual ⊈ br
+   * ⇔ ~actual ≠ br ∧ ~actual ≠ ∅ (4)
    * ```
    *
    * It is clear that _(3)_ expresses something completely different from _(4)_, and this effect is even stronger with
