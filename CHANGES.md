@@ -2,6 +2,20 @@
 
 ## 0
 
+### 0.6
+
+#### 0.6.0
+
+- Remove type `LTComparablePrimitive`, `LTComparable`, and `SafeComparator`
+
+The intention of these types was to have TypeScript warn the user when the default comparison would not work, and a
+`compareFn` was explicitly necessary. This is so only when `symbol`s or `NaN` are used as point representations, which
+is a border case in any way. The type system in any case could only detect this for `symbol`, since `NaN` is not a
+separate type, but just a `number`. I was today years old when I learned this doesn't even work for `symbol`s, since
+they are coerced to `Object`. Please imagine a rant about type systems in general, and this one in particular, here.
+
+The removed types thus have no function. This condition is checked at run time anyway.
+
 ### 0.5
 
 #### 0.5.0
