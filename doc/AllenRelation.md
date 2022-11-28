@@ -62,11 +62,11 @@ two intervals. It is needed for consistency with some algebraic operations on re
 
 ## Interval constraints
 
-<div style="background-color: red; color: yellow"><strong>MUDO: port remaining text</strong></div>
+<div style="background-color: red; color: yellow;"><strong>MUDO: port remaining text</strong></div>
 
 ## Reasoning with unknown but constrained start and end point
 
-<div style="background-color: red; color: yellow"><strong>MUDO: port remaining text</strong></div>
+<div style="background-color: red; color: yellow;"><strong>MUDO: port remaining text</strong></div>
 
 ## Points as intervals
 
