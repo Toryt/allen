@@ -46,6 +46,7 @@ import {
   TypeRepresentation
 } from '../src'
 import assert from 'assert'
+import { basicRelationBitPatterns, relationBitPatterns } from '../src/bitPattern'
 
 describe('index TS', function () {
   describe('exports', function () {
@@ -110,7 +111,22 @@ describe('index TS', function () {
       x.should.be.a.Function()
     })
     it('exports Relation', function () {
-      function x (x: Relation): string {
+      class RR extends Relation {
+        public static readonly NR_OF_BITS = 1
+        public static readonly BASIC_REPRESENTATIONS = Object.freeze(['r'] as const)
+
+        public static readonly RELATIONS: readonly RR[] = Object.freeze(
+          relationBitPatterns(this.NR_OF_BITS).map(bitPattern => new RR(bitPattern))
+        )
+
+        public static readonly R: RR = RR.RELATIONS[1]
+
+        public static readonly BASIC_RELATIONS: readonly RR[] = Object.freeze(
+          basicRelationBitPatterns(this.NR_OF_BITS).map(bitPattern => RR.RELATIONS[bitPattern])
+        )
+      }
+
+      function x (x: RR): string {
         return x.toString()
       }
       x.should.be.a.Function()
