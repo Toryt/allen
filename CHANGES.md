@@ -2,6 +2,12 @@
 
 ## 0
 
+### 0.7
+
+#### 0.7.0
+
+- `isChain` now requires an explicit runtime TypeRepresentation argument
+
 ### 0.6
 
 #### 0.6.0
