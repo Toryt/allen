@@ -151,9 +151,9 @@ describe('index TS', function () {
     })
     it('exports Chain', function () {
       const x: ReadonlyArray<ChainInterval<number>> = [{ start: 8 }]
-      assert(isChain(x))
-      const y: Chain<number> = x
-      y.should.be.an.Array()
+      assert(isChain(x, 'number'))
+      const chain: Chain<number> = x
+      chain.should.be.an.Array()
     })
     it('exports isChain', function () {
       isChain.should.be.a.Function()
