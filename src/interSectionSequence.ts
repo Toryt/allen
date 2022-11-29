@@ -14,15 +14,11 @@
  limitations under the License.
  */
 
-import { Interval } from './Interval'
+import { Interval, ReferenceIntervals } from './Interval'
 import { Comparator } from './Comparator'
 import { equal, ok } from 'assert'
 import { getCompareIfOk } from './getCompareIfOk'
 import { compareIntervals } from './sequence'
-
-export interface SourceIntervals<T> {
-  [reference: string]: Array<Interval<T>>
-}
 
 /**
  * Return a sequence that has the fewest possible intervals, that are intersections of intervals provided in the
@@ -39,7 +35,10 @@ export interface SourceIntervals<T> {
  *
  * The resulting sequence is ordered, might have gaps, and might be left- and / or right-indefinite.
  */
-export function interSectionSequence<T> (sources: SourceIntervals<T>, compareFn?: Comparator<T>): Array<Interval<T>> {
+export function interSectionSequence<T> (
+  sources: ReferenceIntervals<T>,
+  compareFn?: Comparator<T>
+): Array<Interval<T>> {
   ok(sources)
   equal(typeof sources, 'object')
   // TODO isSourceIntervals
