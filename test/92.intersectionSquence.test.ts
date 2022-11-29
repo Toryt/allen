@@ -42,6 +42,17 @@ describe('interSectionSequence', function () {
         result.length.should.equal(1)
         // MUDO more tests
       })
+      it('returns the sequence with 1 source', function () {
+        const aSource = [
+          { start: points[0], end: points[1] },
+          { start: points[1], end: points[2] },
+          { start: points[3], end: points[4] }
+        ]
+        const result = callIt({ aSource })
+        result.should.be.an.Array()
+        result.length.should.equal(3)
+        // MUDO more tests
+      })
     })
   }
 
