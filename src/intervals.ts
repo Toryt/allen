@@ -16,6 +16,8 @@
 
 import { Interval } from './Interval'
 import { Comparator } from './Comparator'
+import {compareIntervals} from "./sequence";
+import {AllenRelation} from "./AllenRelation";
 
 export interface SourceIntervals<T> {
   [reference: string]: Array<Interval<T>>
@@ -40,7 +42,25 @@ export interface SourceIntervals<T> {
  * The resulting sequence is ordered, might have gaps, and might be left- and / or right-indefinite.
  */
 export function interSectionSequence<T> (sources: SourceIntervals<T>, compareFn?: Comparator<T>): Interval<T>[] {
-  return []
+  function intervalCompare (i1: Interval<T>, i2: Interval<T>): number {
+    return compareIntervals(i1, i2, compareFn)
+  }
+
+
+  function one(is:Interval<T>[]): Interval<T> {
+    const sorted = is.slice().sort(intervalCompare)
+
+    return sorted.reduce((acc: Interval<T>[], i: Interval<T>) => {
+      const relationWithLast = AllenRelation.relation<T>(i, acc[acc.length-1])
+      if (!relationWithLast.implies(AllenRelation.DOES_NOT_CONCUR_WITH)) {
+        const previous = acc.pop()
+        acc.push({start: previous.start,}) // 2 or 3 new intervals
+      }
+      return acc
+    },[])
+  }
+
+  return Object.keys(sources).reduce((acc, key) => ,[])
 }
 // /**
 //  * Turn the _set_ of intervals `i` into a {@link isSequence seqyence}.
