@@ -100,27 +100,27 @@ export interface SequenceOptions<T> {
    * Optional compare function with traditional semantics.
    * Mandatory when any point is `NaN`, or symbols are used.
    */
-  compareFn?: Comparator<T>
+  compareFn?: Comparator<T> | undefined
 
   /**
    * Optional boolean property. When it is thruthy, the first interval in the sequence, if any, must be
    * left-definite. If the value is falsy, or does not exist, the first interval in the sequence can be left-definite or
    * left-indefinite.
    */
-  leftDefinite?: boolean
+  leftDefinite?: boolean | undefined
 
   /**
    * Optional boolean property. When it is thruthy, the last interval in the sequence, if any, must be
    * right-definite. If the value is falsy, or does not exist, the last interval in the sequence can be right-definite
    * or right-indefinite.
    */
-  rightDefinite?: boolean
+  rightDefinite?: boolean | undefined
 
   /**
    * Optional boolean property. When it is truthy, the sequence must be ordered. When the value is falsy, the sequence
    * may be ordered or not ordered.
    */
-  ordered?: boolean
+  ordered?: boolean | undefined
 
   /**
    * Tristate. When `true`, intervals in the sequence must be {@link AllenRelation.TOUCHES touch} each other. When
@@ -128,7 +128,7 @@ export interface SequenceOptions<T> {
    * `undefined`, intervals in the sequence can meet or be separate, i.e., must
    * {@link AllenRelation.DOES_NOT_CONCUR_WITH not concur}.
    */
-  gaps?: boolean
+  gaps?: boolean | undefined
 }
 
 /**
