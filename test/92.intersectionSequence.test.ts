@@ -17,29 +17,60 @@
 /* eslint-env mocha */
 
 import 'should'
-import { Interval } from '../src/Interval'
+import { Interval, ReferenceIntervals } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { Comparator } from '../src'
-import { interSectionSequence, SourceIntervals } from '../src/interSectionSequence'
+import { AllenRelation, Comparator, isSequence } from '../src'
+import { interSectionSequence } from '../src/interSectionSequence'
+import { ok } from 'assert'
+
+const sedf = AllenRelation.fromString<AllenRelation>('sedf')
 
 describe('interSectionSequence', function () {
   function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
-    function callIt (sources: SourceIntervals<T>): Array<Interval<T>> {
+    function validateResult (sources: ReferenceIntervals<T>, result: Array<Interval<T>>, gaps?: boolean): void {
+      isSequence(result, { ordered: true, gaps, compareFn }).should.be.true()
+      const allSourceIntervals: Array<Interval<T>> = Object.values<Array<Interval<T>>>(sources).flat()
+      result.forEach(ir => {
+        const referenceIntervals: ReferenceIntervals<T> | undefined = ir.referenceIntervals
+        ok(referenceIntervals)
+        const allReferenceIntervals: Array<Interval<T>> = Object.values<Array<Interval<T>>>(referenceIntervals).flat()
+        allSourceIntervals.forEach((is: Interval<T>) => {
+          const irRis = AllenRelation.relation(ir, is, compareFn)
+          if (allReferenceIntervals.includes(is)) {
+            irRis.implies(sedf).should.be.true()
+            // MUDO and refers to correct name
+          } else {
+            irRis.implies(AllenRelation.DOES_NOT_CONCUR_WITH)
+          }
+        })
+      })
+      allSourceIntervals.forEach(is => {
+        result.some(ir => AllenRelation.relation(ir, is, compareFn).implies(sedf)).should.be.true()
+        // MUDO and refers
+      })
+    }
+
+    function callIt (sources: ReferenceIntervals<T>): Array<Interval<T>> {
       return compareFn !== undefined && compareFn !== null
         ? /* prettier-ignore */ interSectionSequence(sources, compareFn)
         : interSectionSequence(sources)
     }
+
     describe(label, function () {
       it('returns the empty sequence without sources', function () {
-        const result = callIt({})
+        const sources: ReferenceIntervals<T> = {}
+        const result = callIt(sources)
         result.should.be.an.Array()
         result.length.should.equal(0)
+        validateResult(sources, result)
       })
       it('returns the sequence with 1 singleton source', function () {
         const aSource = [{ start: points[0], end: points[1] }]
-        const result = callIt({ aSource })
+        const sources: ReferenceIntervals<T> = { aSource }
+        const result = callIt(sources)
         result.should.be.an.Array()
         result.length.should.equal(1)
+        validateResult(sources, result)
         // MUDO more tests
       })
       it('returns the sequence with 1 source', function () {
@@ -48,9 +79,11 @@ describe('interSectionSequence', function () {
           { start: points[1], end: points[2] },
           { start: points[3], end: points[4] }
         ]
-        const result = callIt({ aSource })
+        const sources: ReferenceIntervals<T> = { aSource }
+        const result = callIt(sources)
         result.should.be.an.Array()
         result.length.should.equal(3)
+        validateResult(sources, result)
         // MUDO more tests
       })
     })
