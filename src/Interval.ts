@@ -26,7 +26,7 @@ import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { Comparator } from './Comparator'
 
 export interface ReferenceIntervals<T> {
-  [reference: string]: Interval<T>
+  [reference: string]: Array<Interval<T>>
 }
 
 /**

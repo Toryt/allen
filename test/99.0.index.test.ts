@@ -94,7 +94,7 @@ describe('index TS', function () {
       ltCompare.should.be.a.Function()
     })
     it('exports ReferenceIntervals', function () {
-      const x: ReferenceIntervals<string> = { aReference: { start: 'the start' } }
+      const x: ReferenceIntervals<string> = { aReference: [{ start: 'the start' }] }
       x.should.be.an.Object()
     })
     it('exports Interval', function () {

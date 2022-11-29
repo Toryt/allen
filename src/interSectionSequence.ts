@@ -37,9 +37,6 @@ export interface SourceIntervals<T> {
  * Since the `sources` do not have to be sequences themselves, one interval in the result might be the intersection of
  * more than one interval of the same `source`.
  *
- * MUDO so the whole naming the sources thing does not make sense? It sure does in usage! But each reference can be an
- * array!
- *
  * The resulting sequence is ordered, might have gaps, and might be left- and / or right-indefinite.
  */
 export function interSectionSequence<T> (sources: SourceIntervals<T>, compareFn?: Comparator<T>): Array<Interval<T>> {
