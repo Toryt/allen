@@ -16,6 +16,7 @@
 
 /* eslint-env mocha */
 
+import 'should'
 import { Interval } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import { Comparator } from '../src'
@@ -23,7 +24,7 @@ import { interSectionSequence, SourceIntervals } from '../src/interSectionSequen
 
 describe('interSectionSequence', function () {
   function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
-    function callIt (sources: SourceIntervals<T>): Interval<T>[] {
+    function callIt (sources: SourceIntervals<T>): Array<Interval<T>> {
       return compareFn !== undefined && compareFn !== null
         ? /* prettier-ignore */ interSectionSequence(sources, compareFn)
         : interSectionSequence(sources)
@@ -33,6 +34,13 @@ describe('interSectionSequence', function () {
         const result = callIt({})
         result.should.be.an.Array()
         result.length.should.equal(0)
+      })
+      it('returns the sequence with 1 singleton source', function () {
+        const aSource = [{ start: points[0], end: points[1] }]
+        const result = callIt({ aSource })
+        result.should.be.an.Array()
+        result.length.should.equal(1)
+        // MUDO more tests
       })
     })
   }

@@ -16,8 +16,9 @@
 
 import { Interval } from './Interval'
 import { Comparator } from './Comparator'
-import {compareIntervals} from "./sequence";
-import {AllenRelation} from "./AllenRelation";
+import { equal, ok } from 'assert'
+import { getCompareIfOk } from './getCompareIfOk'
+import { compareIntervals } from './sequence'
 
 export interface SourceIntervals<T> {
   [reference: string]: Array<Interval<T>>
@@ -41,26 +42,22 @@ export interface SourceIntervals<T> {
  *
  * The resulting sequence is ordered, might have gaps, and might be left- and / or right-indefinite.
  */
-export function interSectionSequence<T> (sources: SourceIntervals<T>, compareFn?: Comparator<T>): Interval<T>[] {
+export function interSectionSequence<T> (sources: SourceIntervals<T>, compareFn?: Comparator<T>): Array<Interval<T>> {
+  ok(sources)
+  equal(typeof sources, 'object')
+  // TODO isSourceIntervals
+
+  const pile = Object.values(sources).flat()
+
+  const compare: Comparator<T> = getCompareIfOk(pile, compareFn) // asserts preconditions
+
   function intervalCompare (i1: Interval<T>, i2: Interval<T>): number {
-    return compareIntervals(i1, i2, compareFn)
+    return compareIntervals(i1, i2, compare)
   }
 
+  const sorted = pile.sort(intervalCompare)
 
-  function one(is:Interval<T>[]): Interval<T> {
-    const sorted = is.slice().sort(intervalCompare)
-
-    return sorted.reduce((acc: Interval<T>[], i: Interval<T>) => {
-      const relationWithLast = AllenRelation.relation<T>(i, acc[acc.length-1])
-      if (!relationWithLast.implies(AllenRelation.DOES_NOT_CONCUR_WITH)) {
-        const previous = acc.pop()
-        acc.push({start: previous.start,}) // 2 or 3 new intervals
-      }
-      return acc
-    },[])
-  }
-
-  return Object.keys(sources).reduce((acc, key) => ,[])
+  return sorted
 }
 // /**
 //  * Turn the _set_ of intervals `i` into a {@link isSequence seqyence}.
