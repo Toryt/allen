@@ -51,7 +51,9 @@ export function interSectionSequence<T> (
     return compareIntervals(i1, i2, compare)
   }
 
-  const sorted = pile.sort(intervalCompare)
+  const sorted = pile
+    .sort(intervalCompare)
+    .map(is => ({ start: is.start, end: is.end, referenceIntervals: { lala: [is] } }))
 
   return sorted
 }
