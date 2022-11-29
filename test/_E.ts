@@ -15,22 +15,27 @@
  */
 
 import { Relation } from '../src/Relation'
-import { basicRelationBitPatterns, relationBitPatterns } from '../src/bitPattern'
+import { basicRelationBitPatterns } from '../src/bitPattern'
+
+const RELATIONS_CACHE: E[] = []
 
 export class E extends Relation {
   public static readonly NR_OF_BITS = 3
   public static readonly BASIC_REPRESENTATIONS = Object.freeze(['x', 'y', 'z'] as const)
 
-  public static readonly RELATIONS: readonly E[] = Object.freeze(
-    relationBitPatterns(this.NR_OF_BITS).map(bitPattern => new E(bitPattern))
-  )
+  public static generalRelation (index: number): E {
+    if (RELATIONS_CACHE[index] === undefined) {
+      RELATIONS_CACHE[index] = new E(index)
+    }
+    return RELATIONS_CACHE[index]
+  }
 
-  public static readonly X: E = E.RELATIONS[1]
-  public static readonly Y: E = E.RELATIONS[2]
-  public static readonly Z: E = E.RELATIONS[4]
+  public static readonly X: E = E.generalRelation(1)
+  public static readonly Y: E = E.generalRelation(2)
+  public static readonly Z: E = E.generalRelation(4)
 
   public static readonly BASIC_RELATIONS: readonly E[] = Object.freeze(
-    basicRelationBitPatterns(this.NR_OF_BITS).map(bitPattern => E.RELATIONS[bitPattern])
+    basicRelationBitPatterns(this.NR_OF_BITS).map(bitPattern => E.generalRelation(bitPattern))
   )
 
   extraMethod (): number {
@@ -47,16 +52,16 @@ export class E extends Relation {
 
   thisParamReturnsThisType (t: this): this {
     if (this.implies(t)) {
-      return this.typedConstructor().RELATIONS[this.bitPattern & t.bitPattern]
+      return this.typedConstructor().generalRelation(this.bitPattern & t.bitPattern)
     }
-    return this.typedConstructor().RELATIONS[this.bitPattern | t.bitPattern]
+    return this.typedConstructor().generalRelation(this.bitPattern | t.bitPattern)
   }
 
   thisParamReturnsE (t: this): E {
     if (this.implies(t)) {
-      return this.typedConstructor().RELATIONS[this.bitPattern & t.bitPattern]
+      return this.typedConstructor().generalRelation(this.bitPattern & t.bitPattern)
     }
-    return this.typedConstructor().RELATIONS[this.bitPattern | t.bitPattern]
+    return this.typedConstructor().generalRelation(this.bitPattern | t.bitPattern)
   }
 
   // NOTE: This is not possible; t is of type E, but implies requires the `this` type as parameter. In subclasses that

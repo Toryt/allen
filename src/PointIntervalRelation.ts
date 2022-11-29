@@ -14,16 +14,17 @@
  limitations under the License.
  */
 
-import assert, { ok } from 'assert'
+import assert, { equal, ok } from 'assert'
 import { Interval, isInterval } from './Interval'
 import { Comparator } from './Comparator'
 import { commonTypeRepresentation } from './TypeRepresentation'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { Relation } from './Relation'
-import { basicRelationBitPatterns, relationBitPatterns } from './bitPattern'
+import { basicRelationBitPatterns, EMPTY_BIT_PATTERN, fullBitPattern } from './bitPattern'
 import { AllenRelation } from './AllenRelation'
 
 const haveCommonType: string = 't, i.start and i.end must be of a common type'
+const RELATIONS_CACHE: PointIntervalRelation[] = []
 
 /**
  * Support for reasoning about relations between points and intervals, and constraints on those relations.
@@ -49,9 +50,17 @@ export class PointIntervalRelation extends Relation {
    *
    * There are no other `PointIntervalRelation`s than the instances of this array.
    */
-  public static readonly RELATIONS: readonly PointIntervalRelation[] = Object.freeze(
-    relationBitPatterns(this.NR_OF_BITS).map(bitPattern => new PointIntervalRelation(bitPattern))
-  )
+  public static generalRelation (index: number): PointIntervalRelation {
+    equal(typeof index, 'number')
+    assert(Number.isInteger(index))
+    assert(index >= EMPTY_BIT_PATTERN)
+    assert(index <= fullBitPattern(this.NR_OF_BITS))
+
+    if (RELATIONS_CACHE[index] === undefined) {
+      RELATIONS_CACHE[index] = new PointIntervalRelation(index)
+    }
+    return RELATIONS_CACHE[index]
+  }
 
   /**
    * All possible basic point – interval relations.
@@ -72,7 +81,7 @@ export class PointIntervalRelation extends Relation {
    * There are no other basic `PointIntervalRelation`s than the instances of this array.
    */
   public static readonly BASIC_RELATIONS: readonly PointIntervalRelation[] = Object.freeze(
-    basicRelationBitPatterns(this.NR_OF_BITS).map(bitPattern => PointIntervalRelation.RELATIONS[bitPattern])
+    basicRelationBitPatterns(this.NR_OF_BITS).map(bitPattern => this.generalRelation(bitPattern))
   )
 
   /* region basic relations */

@@ -17,7 +17,7 @@
 /* eslint-env mocha */
 
 import 'should'
-import { nrOfRelations } from '../src/bitPattern'
+import { nrOfRelations, relationBitPatterns } from '../src/bitPattern'
 import { Relation, RelationConstructor } from '../src/Relation'
 
 export interface RelationExpectations {
@@ -32,6 +32,9 @@ export function generateRelationTests<R extends Relation> (
   secondaryRelationConstants: RelationExpectations[],
   fullCombinationTest: boolean
 ): void {
+  const allRelations: readonly R[] = relationBitPatterns(RConstructor.NR_OF_BITS).map(bitPattern =>
+    RConstructor.generalRelation(bitPattern)
+  )
   const EMPTY: R = RConstructor.emptyRelation()
   const FULL: R = RConstructor.fullRelation()
 
@@ -57,21 +60,20 @@ export function generateRelationTests<R extends Relation> (
       []
     )
 
-    this[
-      'grCombinations'
-    ] = /* prettier-ignore */ fullCombinationTest
-      ? RConstructor.RELATIONS.reduce(
-        (acc1: RCombination[], gr1: R) =>
-          RConstructor.RELATIONS.reduce((acc2: RCombination[], gr2: R) => {
-            acc2.push({ r1: gr1, r2: gr2 })
-            return acc2
-          }, acc1),
-        []
-      )
-      : RConstructor.RELATIONS.map((r1, i) => ({
-        r1,
-        r2: RConstructor.RELATIONS[RConstructor.RELATIONS.length - i - 1]
-      }))
+    this['grCombinations'] =
+      /* prettier-ignore */ fullCombinationTest
+        ? allRelations.reduce(
+          (acc1: RCombination[], gr1: R) =>
+            allRelations.reduce((acc2: RCombination[], gr2: R) => {
+              acc2.push({ r1: gr1, r2: gr2 })
+              return acc2
+            }, acc1),
+          []
+        )
+        : allRelations.map((r1, i) => ({
+          r1,
+          r2: allRelations[allRelations.length - i - 1]
+        }))
   })
   describe('nr of test cases', function () {
     it('sparse basic relations', function () {
@@ -123,14 +125,10 @@ export function generateRelationTests<R extends Relation> (
           relationConstant(name).should.be.instanceof(RConstructor)
         })
         it(`is a basic ${relationName}`, function () {
-          relationConstant(name)
-            .isBasic()
-            .should.be.true()
+          relationConstant(name).isBasic().should.be.true()
         })
         it(`has ${i} as ordinal`, function () {
-          relationConstant(name)
-            .ordinal()
-            .should.equal(i)
+          relationConstant(name).ordinal().should.equal(i)
         })
         it(`has an integer ordinal [0, ${RConstructor.NR_OF_BITS}[`, function () {
           const o = relationConstant(name).ordinal()
@@ -142,26 +140,22 @@ export function generateRelationTests<R extends Relation> (
           RConstructor.BASIC_RELATIONS[relationConstant(name).ordinal()].should.equal(relationConstant(name))
         })
         it(`has '${representation}' as representation`, function () {
-          relationConstant(name)
-            .toString()
-            .should.equal(`(${representation})`)
-          relationConstant(name)
-            .toString()
-            .should.equal(`(${RConstructor.BASIC_REPRESENTATIONS[i]})`)
+          relationConstant(name).toString().should.equal(`(${representation})`)
+          relationConstant(name).toString().should.equal(`(${RConstructor.BASIC_REPRESENTATIONS[i]})`)
         })
       })
     })
   })
 
   describe('RELATIONS', function () {
-    it('is an array', function () {
-      RConstructor.RELATIONS.should.be.an.Array()
-    })
-    it('contains the exact amount of instances', function () {
-      RConstructor.RELATIONS.length.should.equal(nrOfRelations(RConstructor.NR_OF_BITS))
-    })
+    // it('is an array', function () {
+    //   allRelations.should.be.an.Array()
+    // })
+    // it('contains the exact amount of instances', function () {
+    //   allRelations.length.should.equal(nrOfRelations(RConstructor.NR_OF_BITS))
+    // })
     it(`contains only ${relationName}s, which report as !isBasic and has NaN as ordinal, unless they are basic`, function () {
-      RConstructor.RELATIONS.forEach(gr => {
+      allRelations.forEach(gr => {
         gr.should.be.instanceof(RConstructor)
         if (!RConstructor.BASIC_RELATIONS.includes(gr)) {
           gr.isBasic().should.be.false()
@@ -174,7 +168,7 @@ export function generateRelationTests<R extends Relation> (
                Set. */
       const gathering = new Set<R>()
 
-      RConstructor.RELATIONS.forEach((gr, i) => {
+      allRelations.forEach((gr, i) => {
         gathering.size.should.equal(i)
         gathering.has(gr).should.be.false()
         gathering.add(gr)
@@ -182,7 +176,7 @@ export function generateRelationTests<R extends Relation> (
     })
     it('contains all basic relations', function () {
       RConstructor.BASIC_RELATIONS.forEach(br => {
-        RConstructor.RELATIONS.includes(br)
+        allRelations.includes(br)
       })
     })
   })
@@ -192,7 +186,7 @@ export function generateRelationTests<R extends Relation> (
         EMPTY.should.be.instanceof(RConstructor)
       })
       it('is not implied by anything', function () {
-        RConstructor.RELATIONS.forEach(gr => {
+        allRelations.forEach(gr => {
           if (gr !== EMPTY) {
             EMPTY.impliedBy(gr).should.be.false()
           } else {
@@ -206,7 +200,7 @@ export function generateRelationTests<R extends Relation> (
         FULL.should.be.instanceof(RConstructor)
       })
       it('is implied by everything', function () {
-        RConstructor.RELATIONS.forEach(gr => {
+        allRelations.forEach(gr => {
           FULL.impliedBy(gr).should.be.true()
         })
       })
@@ -237,7 +231,7 @@ export function generateRelationTests<R extends Relation> (
       FULL.uncertainty().should.equal(1)
     })
     it('has the expected uncertainty for all relations', function () {
-      RConstructor.RELATIONS.forEach(gr => {
+      allRelations.forEach(gr => {
         if (gr !== EMPTY) {
           const expected =
             RConstructor.BASIC_RELATIONS.reduce((acc, br) => (br.implies(gr) ? acc + 1 : acc), -1) /
@@ -249,7 +243,7 @@ export function generateRelationTests<R extends Relation> (
   })
   describe('#impliedBy', function () {
     it('no relations, except EMPTY, are implied by EMPTY', function () {
-      RConstructor.RELATIONS.forEach(gr => {
+      allRelations.forEach(gr => {
         if (gr === EMPTY) {
           EMPTY.impliedBy(gr).should.be.true()
         } else {
@@ -288,7 +282,7 @@ export function generateRelationTests<R extends Relation> (
   })
   describe('#implies', function () {
     it('EMPTY implies all relations', function () {
-      RConstructor.RELATIONS.forEach(gr => {
+      allRelations.forEach(gr => {
         EMPTY.implies(gr).should.be.true()
       })
     })
@@ -329,7 +323,7 @@ export function generateRelationTests<R extends Relation> (
   })
   describe('#complement', function () {
     it('the complement of each relation is implied by all basic relations that are not implied by it', function () {
-      RConstructor.RELATIONS.forEach(gr => {
+      allRelations.forEach(gr => {
         const result = gr.complement()
         RConstructor.BASIC_RELATIONS.forEach(br => {
           gr.impliedBy(br).should.equal(!result.impliedBy(br))
@@ -337,10 +331,8 @@ export function generateRelationTests<R extends Relation> (
       })
     })
     it('all relations are their own complement‘s complement', function () {
-      RConstructor.RELATIONS.forEach(gr => {
-        gr.complement()
-          .complement()
-          .should.equal(gr)
+      allRelations.forEach(gr => {
+        gr.complement().complement().should.equal(gr)
       })
     })
   })
@@ -381,7 +373,7 @@ export function generateRelationTests<R extends Relation> (
       result.should.equal(FULL)
     })
     it('the or of all relations is FULL', function () {
-      const result = RConstructor.or(...RConstructor.RELATIONS)
+      const result = RConstructor.or(...allRelations)
       result.should.equal(FULL)
     })
   })
@@ -405,13 +397,13 @@ export function generateRelationTests<R extends Relation> (
       result.should.equal(EMPTY)
     })
     it('the and of all relations is EMPTY', function () {
-      const result = RConstructor.and(...RConstructor.RELATIONS)
+      const result = RConstructor.and(...allRelations)
       result.should.equal(EMPTY)
     })
   })
   describe('fromString', function () {
     it('each relation can be found with its own toString', function () {
-      RConstructor.RELATIONS.forEach(gr => {
+      allRelations.forEach(gr => {
         RConstructor.fromString(gr.toString()).should.equal(gr)
       })
     })

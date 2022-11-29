@@ -24,6 +24,7 @@ import { ltCompare } from '../src/ltCompare'
 import { intervalToString } from './_intervalToString'
 import { generateSixSymbols, sixArrays, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import { createIntervalCoupleCases, NonDegenerateTestIntervals, TestIntervals } from './_createIntervalCoupleCases'
+import { relationBitPatterns } from '../src/bitPattern'
 
 describe('AllenRelation', function () {
   generateRelationTests<AllenRelation>(
@@ -67,6 +68,10 @@ describe('AllenRelation', function () {
   )
 
   describe('#converse', function () {
+    const allRelations: readonly AllenRelation[] = relationBitPatterns(AllenRelation.NR_OF_BITS).map(bitPattern =>
+      AllenRelation.generalRelation(bitPattern)
+    )
+
     it('the converse of each basic relation is at the same index in the reversed BASIC_RELATIONS array', function () {
       const lastIndex = AllenRelation.NR_OF_BITS - 1
       AllenRelation.BASIC_RELATIONS.forEach((br, i) => {
@@ -74,7 +79,7 @@ describe('AllenRelation', function () {
       })
     })
     it('the converse of each relation is implied by the converse of all basic relations that are implied by it', function () {
-      AllenRelation.RELATIONS.forEach(gr => {
+      allRelations.forEach(gr => {
         const result = gr.converse()
         AllenRelation.BASIC_RELATIONS.forEach(br => {
           if (gr.impliedBy(br)) {
@@ -84,7 +89,7 @@ describe('AllenRelation', function () {
       })
     })
     it('each relation is implied by all basic relations whose converse are implied by the relations converse', function () {
-      AllenRelation.RELATIONS.forEach(gr => {
+      allRelations.forEach(gr => {
         const result = gr.converse()
         AllenRelation.BASIC_RELATIONS.forEach(br => {
           if (result.impliedBy(br.converse())) {
@@ -94,7 +99,7 @@ describe('AllenRelation', function () {
       })
     })
     it('all relations are their own converse‘s converse', function () {
-      AllenRelation.RELATIONS.forEach(gr => {
+      allRelations.forEach(gr => {
         gr.converse().converse().should.equal(gr)
       })
     })
@@ -133,8 +138,8 @@ describe('AllenRelation', function () {
     // })
     it('composes some relations as expected', function () {
       function testACombination (nr1: number, nr2: number): void {
-        const ar1: AllenRelation = AllenRelation.RELATIONS[nr1]
-        const ar: AllenRelation = AllenRelation.RELATIONS[nr2]
+        const ar1: AllenRelation = AllenRelation.generalRelation(nr1)
+        const ar: AllenRelation = AllenRelation.generalRelation(nr2)
         validateCompose(ar1, ar, ar1.compose(ar))
       }
 

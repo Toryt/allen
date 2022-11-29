@@ -39,23 +39,29 @@ export interface RelationConstructor<R extends Relation> extends Function {
    * ### Invariants
    *
    * ```
-   * Array.isArray(RELATIONS)
-   * RELATIONS.length === NR_OF_RELATIONS
-   * RELATIONS.every(gr => gr instanceof R)
-   * RELATIONS.every((gr1, i1) => RELATIONS.every((gr2, i2) => i2 <= i1 || gr1 !== gr2))
+   * ∀ index ∈ ℕ: 0 ≤ index < nrOfRelations(this.NR_OF_BITS):
+   *  (generalRelation(index) instanceof R) ∧ (∀ j ∈ ℕ: 0 ≤ j < index: generalRelation(index) !== generalRelation(j))
    * ```
    *
-   * There are no other relations than the instances of this array.
+   * There are no other relations than the instances returned by this function.
    *
    * Realize as
    *
    * ```ts
-   * public static readonly RELATIONS: readonly R[] = Object.freeze(
-   *   relationBitPatterns(this.NR_OF_BITS).map(bitPattern => new R(bitPattern))
-   * )
+   * public static generalRelation (index: number): R {
+   *   equal(typeof index, 'number')
+   *   assert(Number.isInteger(index))
+   *   assert(index >= EMPTY_BIT_PATTERN)
+   *   assert(index <= fullBitPattern(this.NR_OF_BITS))
+   *
+   *   if (RELATIONS_CACHE[index] === undefined) {
+   *     RELATIONS_CACHE[index] = new R(index)
+   *   }
+   *   return RELATIONS_CACHE[index]
+   * }
    * ```
    */
-  readonly RELATIONS: readonly R[]
+  generalRelation: (index: number) => R
 
   /**
    * All possible basic relations.
@@ -223,7 +229,7 @@ export class Relation {
 
   /**
    * There is only 1 constructor, that constructs the wrapper object
-   * around the bitpattern. This is used exclusively in {@link RelationConstructor.RELATIONS} initialization code.
+   * around the bitpattern. This is used exclusively in {@link RelationConstructor.generalRelation} initialization code.
    */
   protected constructor (bitPattern: number) {
     assert(bitPattern >= EMPTY_BIT_PATTERN)
@@ -231,6 +237,25 @@ export class Relation {
 
     this.bitPattern = bitPattern
   }
+
+  // public static generalRelation<
+  //   R extends Relation,
+  //   RC extends RelationConstructor<R> & (new (bitPattern: number) => R)
+  // > (this: RC, index: number): R {
+  //   equal(typeof index, 'number')
+  //   assert(Number.isInteger(index))
+  //   assert(index >= EMPTY_BIT_PATTERN)
+  //   assert(index <= fullBitPattern(this.NR_OF_BITS))
+  //
+  //   if (!RELATIONS_CACHE.has(this)) {
+  //     RELATIONS_CACHE.set(this, [])
+  //   }
+  //   const typeCache: R[] = RELATIONS_CACHE.get(this) as R[]
+  //   if (typeCache[index] === undefined) {
+  //     typeCache[index] = new this(index)
+  //   }
+  //   return typeCache[index]
+  // }
 
   /* region instance methods */
   // -------------------------------------------------------------------------------------------------------------------
@@ -429,7 +454,7 @@ export class Relation {
      * implemented as the XOR of the FULL bit pattern with this bit pattern;
      * this simply replaces 0 with 1 and 1 with 0.
      */
-    return this.typedConstructor().RELATIONS[fullBitPattern(this.nrOfBits()) ^ this.bitPattern]
+    return this.typedConstructor().generalRelation(fullBitPattern(this.nrOfBits()) ^ this.bitPattern)
   }
 
   /**
@@ -443,7 +468,7 @@ export class Relation {
         and 00000 01000 */
     const xor = this.bitPattern ^ gr.bitPattern
     const min = this.bitPattern & xor
-    return this.typedConstructor().RELATIONS[min]
+    return this.typedConstructor().generalRelation(min)
   }
 
   /**
@@ -476,7 +501,7 @@ export class Relation {
    * ```
    */
   public static emptyRelation<R extends Relation> (this: RelationConstructor<R>): R {
-    return this.RELATIONS[EMPTY_BIT_PATTERN]
+    return this.generalRelation(EMPTY_BIT_PATTERN)
   }
 
   /**
@@ -489,7 +514,7 @@ export class Relation {
    * ```
    */
   public static fullRelation<R extends Relation> (this: RelationConstructor<R>): R {
-    return this.RELATIONS[fullBitPattern(this.NR_OF_BITS)]
+    return this.generalRelation(fullBitPattern(this.NR_OF_BITS))
   }
 
   /* endregion */
@@ -513,9 +538,9 @@ export class Relation {
     // noinspection SuspiciousTypeOfGuard
     assert(gr.every(grr => grr instanceof this))
 
-    return (this as unknown as RelationConstructor<R>).RELATIONS[
+    return (this as unknown as RelationConstructor<R>).generalRelation(
       gr.reduce((acc: number, grr): number => acc | grr.bitPattern, EMPTY_BIT_PATTERN)
-    ]
+    )
   }
 
   /**
@@ -532,9 +557,9 @@ export class Relation {
     assert(gr.every(grr => grr instanceof this))
 
     const typedThis = this as unknown as RelationConstructor<R>
-    return typedThis.RELATIONS[
+    return typedThis.generalRelation(
       gr.reduce((acc: number, grr: R): number => acc & grr.bitPattern, fullBitPattern(typedThis.NR_OF_BITS))
-    ]
+    )
   }
 
   /**

@@ -78,8 +78,8 @@ describe('PointIntervalRelation', function () {
     // })
     it('composes some relations as expected', function () {
       function testACombination (pirNr: number, arNumber: number): void {
-        const pir: PointIntervalRelation = PointIntervalRelation.RELATIONS[pirNr]
-        const ar: AllenRelation = AllenRelation.RELATIONS[arNumber]
+        const pir: PointIntervalRelation = PointIntervalRelation.generalRelation(pirNr)
+        const ar: AllenRelation = AllenRelation.generalRelation(arNumber)
         validateCompose(pir, ar, pir.compose(ar))
       }
 

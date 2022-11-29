@@ -14,13 +14,15 @@
  limitations under the License.
  */
 
-import assert from 'assert'
+import assert, { equal } from 'assert'
 import { Relation } from './Relation'
-import { basicRelationBitPatterns, relationBitPatterns, reverse } from './bitPattern'
+import { basicRelationBitPatterns, EMPTY_BIT_PATTERN, fullBitPattern, reverse } from './bitPattern'
 import { Interval } from './Interval'
 import { Comparator } from './Comparator'
 import { Indefinite } from './type'
 import { getCompareIfOk } from './getCompareIfOk'
+
+const RELATIONS_CACHE: AllenRelation[] = []
 
 /**
  * Support for reasoning about Allen relations, i.e., relations between intervals, and constraints on those relations.
@@ -60,9 +62,17 @@ export class AllenRelation extends Relation {
    *
    * There are no other `AllenRelation`s than the instances of this array.
    */
-  public static readonly RELATIONS: readonly AllenRelation[] = Object.freeze(
-    relationBitPatterns(this.NR_OF_BITS).map(bitPattern => new AllenRelation(bitPattern))
-  )
+  public static generalRelation (index: number): AllenRelation {
+    equal(typeof index, 'number')
+    assert(Number.isInteger(index))
+    assert(index >= EMPTY_BIT_PATTERN)
+    assert(index <= fullBitPattern(this.NR_OF_BITS))
+
+    if (RELATIONS_CACHE[index] === undefined) {
+      RELATIONS_CACHE[index] = new AllenRelation(index)
+    }
+    return RELATIONS_CACHE[index]
+  }
 
   /**
    * All possible basic Allen relations.
@@ -83,7 +93,7 @@ export class AllenRelation extends Relation {
    * There are no other basic `AllenRelation`s than the instances of this array.
    */
   public static readonly BASIC_RELATIONS: readonly AllenRelation[] = Object.freeze(
-    basicRelationBitPatterns(this.NR_OF_BITS).map(bitPattern => AllenRelation.RELATIONS[bitPattern])
+    basicRelationBitPatterns(this.NR_OF_BITS).map(bitPattern => this.generalRelation(bitPattern))
   )
 
   /* region basic relations */
@@ -704,7 +714,7 @@ export class AllenRelation extends Relation {
     /* Given the order in which the basic relations occur in the bit pattern, the converse is the reverse bit pattern
        (read the bit pattern from left to right instead of right to left). We need to add a `32 - NR_OF_BITS` bit shift
        to compensate for the fact that we store the `NR_OF_BITS` bit bitpattern in a 32 bit int. */
-    return this.typedConstructor().RELATIONS[reverse(this.nrOfBits(), this.bitPattern)]
+    return this.typedConstructor().generalRelation(reverse(this.nrOfBits(), this.bitPattern))
   }
 
   /**

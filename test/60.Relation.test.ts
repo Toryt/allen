@@ -35,7 +35,7 @@ function isEAsExpected (e: E, isBasic?: boolean, noRecursion?: boolean): void {
     isEAsExpected(thisType, false, true)
     const eType: E = e.noParamReturnsE()
     isEAsExpected(eType, false, true)
-    const other: E = E.RELATIONS[3]
+    const other: E = E.generalRelation(3)
     const thisParamThisType: E = e.thisParamReturnsThisType(other)
     isEAsExpected(thisParamThisType, false, true)
     const thisParamE: E = e.thisParamReturnsE(other)
@@ -66,11 +66,11 @@ describe('Relation', function () {
       const br: E = basicRelations[0]
       isEAsExpected(br, true)
     })
-    it('has typed relations', function () {
-      const relations: readonly E[] = E.RELATIONS
-      const br: E = relations[1]
-      isEAsExpected(br)
-    })
+    // it('has typed relations', function () {
+    //   const relations: readonly E[] = E.RELATIONS
+    //   const br: E = relations[1]
+    //   isEAsExpected(br)
+    // })
     it('has a typed EMPTY', function () {
       const EMPTY: E = E.emptyRelation<E>()
       isEAsExpected(EMPTY)
@@ -80,22 +80,19 @@ describe('Relation', function () {
       isEAsExpected(FULL)
     })
     it('supports implied by', function () {
-      const relations = E.RELATIONS
-      const one: E = relations[3]
-      const other = relations[5]
+      const one: E = E.generalRelation(3)
+      const other = E.generalRelation(5)
       one.impliedBy(other).should.be.a.Boolean()
     })
     it('supports implies', function () {
-      const relations = E.RELATIONS
-      const one: E = relations[3]
-      const other: E = relations[5]
+      const one: E = E.generalRelation(3)
+      const other = E.generalRelation(5)
       one.implies(other).should.be.a.Boolean()
     })
     it('supports min', function () {
-      const relations = E.RELATIONS
-      const one = relations[3]
-      const other = relations[5]
-      const third = relations[7]
+      const one: E = E.generalRelation(3)
+      const other = E.generalRelation(5)
+      const third = E.generalRelation(7)
       const result1 = one.min(other)
       result1.should.be.instanceof(E)
       const result2 = third.min(result1)
@@ -104,10 +101,9 @@ describe('Relation', function () {
       result3.should.be.instanceof(E)
     })
     it('supports or', function () {
-      const relations = E.RELATIONS
-      const one = relations[3]
-      const other = relations[5]
-      const third = relations[7]
+      const one: E = E.generalRelation(3)
+      const other = E.generalRelation(5)
+      const third = E.generalRelation(7)
       const result1 = E.or(one, other)
       result1.should.be.instanceof(E)
       const result2: E = E.or(result1, third)
@@ -118,10 +114,9 @@ describe('Relation', function () {
       result1.should.be.equal(E.emptyRelation<E>())
     })
     it('supports and', function () {
-      const relations = E.RELATIONS
-      const one = relations[3]
-      const other = relations[5]
-      const third = relations[7]
+      const one: E = E.generalRelation(3)
+      const other = E.generalRelation(5)
+      const third = E.generalRelation(7)
       const result1: E = E.and(one, other)
       result1.should.be.instanceof(E)
       const result2: E = E.and(third, result1)
