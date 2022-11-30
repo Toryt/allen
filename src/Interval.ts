@@ -29,6 +29,50 @@ export interface ReferenceIntervals<T> {
   [reference: string]: Array<Interval<T>>
 }
 
+export function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation> (
+  u: unknown,
+  pointType: TR,
+  compareFn: Comparator<TypeFor<TR>> | undefined,
+  visitedIntervals: unknown[], // loop protection
+  visitedReferenceIntervals: unknown[] // loop protection
+) {
+  assert(isTypeRepresentation(pointType))
+  assert(compareFn === undefined || typeof compareFn === 'function')
+  assert(visitedReferenceIntervals === undefined || Array.isArray(visitedReferenceIntervals))
+
+  if (visitedReferenceIntervals.includes(u)) {
+    return true
+  }
+
+  if (
+    u === undefined ||
+    u === null ||
+    typeof u !== 'object' ||
+    !Object.entries(u).every(([key, value]: [string, unknown]) => typeof key === 'string' && Array.isArray(value))
+  ) {
+    return false
+  }
+
+  const pile: unknown[] = Object.values(u).flat()
+
+  // tail recursion
+  visitedReferenceIntervals.push(u)
+  return pile.every(ue =>
+    loopProtectedIsInterval<TR>(ue, pointType, compareFn, visitedIntervals, visitedReferenceIntervals)
+  )
+}
+
+export function isReferenceIntervals<TR extends TypeRepresentation> (
+  u: unknown,
+  pointType: TR,
+  compareFn?: Comparator<TypeFor<TR>>
+) {
+  assert(isTypeRepresentation(pointType))
+  assert(compareFn === undefined || typeof compareFn === 'function')
+
+  return loopProtectedIsReferenceIntervals(u, pointType, compareFn, [], [])
+}
+
 /**
  * Intervals have `start` and an `end` {@link commonTypeRepresentation _of the same type_}, which can be
  * {@link Indefinite indefinite}.
@@ -42,21 +86,16 @@ export interface Interval<T> {
   readonly referenceIntervals?: ReferenceIntervals<T>
 }
 
-/**
- * If both `start` and `end` are definite,
- *
- * * `start` and `end` must be “of the same type”
- * * `start` must be before `end`
- *
- * To compare `start` and `end`, the optional `compareFn` is used when given, or {@link ltCompare} when not. When
- * `start` and `end` are `symbols`, or one of the values is `NaN`, a `compareFn` parameter is mandatory.
- */
-export function isInterval<TR extends TypeRepresentation> (
-  i: unknown,
+function loopProtectedIsInterval<TR extends TypeRepresentation> (
+  u: unknown,
   pointType: TR,
-  compareFn?: Comparator<TypeFor<TR>>
-): i is Interval<TypeFor<TR>> {
-  assert(isTypeRepresentation(pointType))
+  compareFn: Comparator<TypeFor<TR>> | undefined,
+  visitedIntervals: unknown[], // loop protection
+  visitedReferenceIntervals: unknown[] // loop protection
+): u is Interval<TypeFor<TR>> {
+  if (visitedIntervals.includes(u)) {
+    return true
+  }
 
   function startBeforeEnd (
     start: Indefinite<TypeFor<TR>>,
@@ -66,11 +105,11 @@ export function isInterval<TR extends TypeRepresentation> (
     return start === undefined || start === null || end === undefined || end === null || compare(start, end) < 0
   }
 
-  if (i === undefined || i === null || (typeof i !== 'object' && typeof i !== 'function')) {
+  if (u === undefined || u === null || (typeof u !== 'object' && typeof u !== 'function')) {
     return false
   }
 
-  const pi = i as Partial<Interval<TypeFor<TR>>>
+  const pi = u as Partial<Interval<TypeFor<TR>>>
   const cType = commonTypeRepresentation(pi.start, pi.end)
   if (cType === false) {
     return false
@@ -87,5 +126,39 @@ export function isInterval<TR extends TypeRepresentation> (
     '`compareFn` is mandatory when `i.start` or `i.end` is a `symbol` or `NaN`'
   )
 
-  return startBeforeEnd(pi.start, pi.end, compareFn ?? ltCompare)
+  if (!startBeforeEnd(pi.start, pi.end, compareFn ?? ltCompare)) {
+    return false
+  }
+
+  // tail recursion
+  visitedIntervals.push(pi)
+  return (
+    pi.referenceIntervals === undefined ||
+    loopProtectedIsReferenceIntervals<TR>(
+      pi.referenceIntervals,
+      pointType,
+      compareFn,
+      visitedIntervals,
+      visitedReferenceIntervals
+    )
+  )
+}
+/**
+ * If both `start` and `end` are definite,
+ *
+ * * `start` and `end` must be “of the same type”
+ * * `start` must be before `end`
+ *
+ * To compare `start` and `end`, the optional `compareFn` is used when given, or {@link ltCompare} when not. When
+ * `start` and `end` are `symbols`, or one of the values is `NaN`, a `compareFn` parameter is mandatory.
+ */
+export function isInterval<TR extends TypeRepresentation> (
+  i: unknown,
+  pointType: TR,
+  compareFn?: Comparator<TypeFor<TR>>
+): i is Interval<TypeFor<TR>> {
+  assert(isTypeRepresentation(pointType))
+  assert(compareFn === undefined || typeof compareFn === 'function')
+
+  return loopProtectedIsInterval(i, pointType, compareFn, [], [])
 }
