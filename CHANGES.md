@@ -4,6 +4,19 @@
 
 ### 0.7
 
+#### 0.7.1
+
+- We now no longer require supplied intervals to have readonly properties, but we do promise throughout the library not
+  to change intervals that are offered to us.
+
+`start` and `end` points might be objects (e.g., `Date`) too. We now promise that we will not change the `start` or
+`end` of intervals, but we should also promise that we will not change the points themselves. Sadly, we do not seem to
+be able to do that. Ultimately, the points are used in a `Comparator`, and it is logical for a `Comparator` to promise
+that it will leave the argument alone. Our comparator type thus would require a signature with `ReadOnly` arguments. The
+only `Comparator` we offer ourselves is `ltCompare`. To change the signature of this function turns out not to be that
+easy. Tests call it with `any` arguments. That takes more time to change, but it makes we wonder whether this would not
+also impose annoying work for users. To be revisited.
+
 #### 0.7.0
 
 - `isChain` now requires an explicit runtime TypeRepresentation argument
