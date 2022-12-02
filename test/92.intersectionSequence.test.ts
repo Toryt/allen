@@ -65,11 +65,12 @@ describe('interSectionSequence', function () {
         gaps?: boolean
       ): void {
         isSequence(result, { ordered: true, gaps, compareFn }).should.be.true()
-        const allSourceIntervals: Array<Interval<T>> = Object.values<Array<Interval<T>>>(sources).flat()
+        const allSourceIntervals: Array<Interval<T>> = Object.values<ReadonlyArray<Interval<T>>>(sources).flat()
         result.forEach(ir => {
           const referenceIntervals: ReferenceIntervals<T> | undefined = ir.referenceIntervals
           ok(referenceIntervals)
-          const allReferenceIntervals: Array<Interval<T>> = Object.values<Array<Interval<T>>>(referenceIntervals).flat()
+          const allReferenceIntervals: ReadonlyArray<Interval<T>> =
+            Object.values<ReadonlyArray<Interval<T>>>(referenceIntervals).flat()
           allSourceIntervals.forEach((is: Interval<T>) => {
             const irRis = AllenRelation.relation(ir, is, compareFn)
             if (allReferenceIntervals.includes(is)) {

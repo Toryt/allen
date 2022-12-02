@@ -34,7 +34,7 @@ import { Comparator } from './Comparator'
  * however, _is_ allowed.
  */
 export interface ReferenceIntervals<T> {
-  [reference: string]: Array<Interval<T>>
+  [reference: string]: ReadonlyArray<Interval<T>>
 }
 
 export function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation> (
