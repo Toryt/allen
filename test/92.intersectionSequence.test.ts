@@ -56,6 +56,26 @@ describe('interSectionSequence', function () {
         e.interval.should.equal(orderedAProperty[i])
       })
     })
+    it('returns the expected result with 3 properties', function () {
+      const property1: ReadonlyArray<Interval<number>> = [
+        { start: 32, end: 334 },
+        { start: 22, end: 23 },
+        { start: -1 }
+      ]
+      const property2: ReadonlyArray<Interval<number>> = [{ start: 32 }, { start: 24, end: 26 }]
+      const property3: ReadonlyArray<Interval<number>> = [{ end: 32 }, { start: 122, end: 144 }]
+      const result = transposeAndOrder({ property1, property2, property3 }, 'number', ltCompare)
+      result.should.be.an.Array()
+      result.length.should.equal(property1.length + property2.length + property3.length)
+      const ordered: ReadonlyArray<Interval<number>> = property1
+        .concat(property2)
+        .concat(property3)
+        .sort(compareIntervals)
+      result.forEach((e, i) => {
+        // e.reference.should.equal('aProperty')
+        e.interval.should.equal(ordered[i])
+      })
+    })
   })
   describe('interSectionSequence', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
