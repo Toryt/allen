@@ -49,15 +49,13 @@ export function transposeAndOrder<TR extends TypeRepresentation> (
 
   let result: Array<ReferencedInterval<TypeFor<TR>>> = []
   for (const reference in sources) {
-    const transposed: ReadonlyArray<Readonly<ReferencedInterval<TypeFor<TR>>>> = sources[reference]
-      .map(interval => ({
-        interval,
-        reference
-      }))
-      .sort(compareReferencedIntervals)
+    const transposed: ReadonlyArray<Readonly<ReferencedInterval<TypeFor<TR>>>> = sources[reference].map(interval => ({
+      interval,
+      reference
+    }))
     result = result.concat(transposed)
   }
-  return result
+  return result.sort(compareReferencedIntervals)
 }
 
 /**
