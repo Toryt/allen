@@ -50,22 +50,30 @@ export function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation>
     return true
   }
 
-  if (
-    u === undefined ||
-    u === null ||
-    typeof u !== 'object' ||
-    !Object.entries(u).every(([key, value]: [string, unknown]) => typeof key === 'string' && Array.isArray(value))
-  ) {
+  if (u === undefined || u === null || typeof u !== 'object') {
     return false
   }
 
-  const pile: unknown[] = Object.values(u).flat()
-
-  // tail recursion
+  // explicitly use for .. in, not Object.values, to also get inherited enumerable properties
   visitedReferenceIntervals.push(u)
-  return pile.every(ue =>
-    loopProtectedIsInterval<TR>(ue, pointType, compareFn, visitedIntervals, visitedReferenceIntervals)
-  )
+  for (const key in u) {
+    // keys are always strings
+    const keyValue: unknown = (u as any)[key]
+    if (!Array.isArray(keyValue)) {
+      return false
+    }
+
+    // tail recursion
+    if (
+      !keyValue.every(ue =>
+        loopProtectedIsInterval<TR>(ue, pointType, compareFn, visitedIntervals, visitedReferenceIntervals)
+      )
+    ) {
+      return false
+    }
+  }
+
+  return true
 }
 
 /**
