@@ -38,7 +38,7 @@ import { compareIntervals } from './sequence'
 export function interSectionSequence<T> (
   sources: Readonly<ReferenceIntervals<T>>,
   compareFn?: Comparator<T>
-): readonly Readonly<Interval<T>>[] {
+): ReadonlyArray<Readonly<Interval<T>>> {
   ok(sources)
   equal(typeof sources, 'object')
   // TODO isSourceIntervals

@@ -29,7 +29,7 @@ describe('interSectionSequence', function () {
   function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
     function validateResult (
       sources: Readonly<ReferenceIntervals<T>>,
-      result: readonly Readonly<Interval<T>>[],
+      result: ReadonlyArray<Readonly<Interval<T>>>,
       gaps?: boolean
     ): void {
       isSequence(result, { ordered: true, gaps, compareFn }).should.be.true()
@@ -54,7 +54,7 @@ describe('interSectionSequence', function () {
       })
     }
 
-    function callIt (sources: Readonly<ReferenceIntervals<T>>): readonly Readonly<Interval<T>>[] {
+    function callIt (sources: Readonly<ReferenceIntervals<T>>): ReadonlyArray<Readonly<Interval<T>>> {
       return compareFn !== undefined && compareFn !== null
         ? /* prettier-ignore */ interSectionSequence(sources, compareFn)
         : interSectionSequence(sources)

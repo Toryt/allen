@@ -27,7 +27,7 @@ import { getCompareIfOk } from './getCompareIfOk'
  */
 export function isEnclosing<T> (
   i: Readonly<Interval<T>>,
-  is: readonly Readonly<Interval<T>>[],
+  is: ReadonlyArray<Readonly<Interval<T>>>,
   compareFn?: Comparator<T>
 ): boolean {
   assert(Array.isArray(is))
@@ -58,7 +58,7 @@ export function isEnclosing<T> (
  */
 export function isMinimalEnclosing<T> (
   i: Readonly<Interval<T>>,
-  is: readonly Readonly<Interval<T>>[],
+  is: ReadonlyArray<Readonly<Interval<T>>>,
   compareFn?: Comparator<T>
 ): boolean {
   assert(Array.isArray(is))
@@ -114,7 +114,7 @@ export function isMinimalEnclosing<T> (
  * ```
  */
 export function minimalEnclosing<T> (
-  is: readonly Readonly<Interval<T>>[],
+  is: ReadonlyArray<Readonly<Interval<T>>>,
   compareFn?: Comparator<T>
 ): Readonly<Interval<T>> {
   const compare: Comparator<T> = getCompareIfOk(is, compareFn)

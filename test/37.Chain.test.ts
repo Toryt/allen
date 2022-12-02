@@ -108,7 +108,7 @@ describe('Chain', function () {
         sequenceOptions.compareFn = compareFn
       }
 
-      function callIt (cis: Chain<TypeFor<TR>>): readonly Readonly<Interval<TypeFor<TR>>>[] {
+      function callIt (cis: Chain<TypeFor<TR>>): ReadonlyArray<Readonly<Interval<TypeFor<TR>>>> {
         return compareFn === undefined || compareFn === null
           ? chainToGaplessLeftDefiniteSequence(cis)
           : chainToGaplessLeftDefiniteSequence(cis, compareFn)

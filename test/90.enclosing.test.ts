@@ -187,7 +187,7 @@ describe('enclosing', function () {
       //   return compareFn !== undefined && compareFn !== null ? compareFn(t1, t2) : ltCompare(t1, t2)
       // }
 
-      function callIt (i: Readonly<Interval<T>>, is: readonly Readonly<Interval<T>>[]): boolean {
+      function callIt (i: Readonly<Interval<T>>, is: ReadonlyArray<Readonly<Interval<T>>>): boolean {
         return compareFn !== undefined && compareFn !== null
           ? isMinimalEnclosing(i, is, compareFn)
           : isMinimalEnclosing(i, is)
@@ -247,11 +247,11 @@ describe('enclosing', function () {
         return compareFn !== undefined && compareFn !== null ? compareFn(t1, t2) : ltCompare(t1, t2)
       }
 
-      function callIt (is: readonly Readonly<Interval<T>>[]): Readonly<Interval<T>> {
+      function callIt (is: ReadonlyArray<Readonly<Interval<T>>>): Readonly<Interval<T>> {
         return compareFn !== undefined && compareFn !== null ? minimalEnclosing(is, compareFn) : minimalEnclosing(is)
       }
 
-      function callIsMinimalEnclosing (i: Readonly<Interval<T>>, is: readonly Readonly<Interval<T>>[]): boolean {
+      function callIsMinimalEnclosing (i: Readonly<Interval<T>>, is: ReadonlyArray<Readonly<Interval<T>>>): boolean {
         return compareFn !== undefined && compareFn !== null
           ? isMinimalEnclosing(i, is, compareFn)
           : isMinimalEnclosing(i, is)

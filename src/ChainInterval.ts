@@ -61,7 +61,7 @@ const haveCommonType: string = 'i1.start and i2.start must be of a common type'
  * Assert that the parameters are acceptable, and return the {@link Comparator} to use.
  */
 export function getCompareIfOk<T> (
-  cis: readonly Readonly<ChainInterval<T>>[],
+  cis: ReadonlyArray<Readonly<ChainInterval<T>>>,
   compareFn?: Comparator<T>
 ): Comparator<T> {
   cis.forEach(ci => assert(typeof ci === 'object' && ci !== null))

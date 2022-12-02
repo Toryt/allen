@@ -174,7 +174,7 @@ export interface SequenceOptions<T> {
  *                   is.some((j: Interval<T>) => AllenRelation.relation(j, i, compare).implies(AllenRelation.MEETS)))
  *             )
  */
-export function isSequence<T> (is: readonly Readonly<Interval<T>>[], options?: SequenceOptions<T>): boolean {
+export function isSequence<T> (is: ReadonlyArray<Readonly<Interval<T>>>, options?: SequenceOptions<T>): boolean {
   assert(options === undefined || typeof options === 'object')
   const compareFn: Comparator<T> = getCompareIfOk(is, options?.compareFn) // asserts preconditions
   const leftDefinite: boolean = options?.leftDefinite ?? false
@@ -189,7 +189,7 @@ export function isSequence<T> (is: readonly Readonly<Interval<T>>[], options?: S
     return compareIntervals(i1, i2, options?.compareFn)
   }
 
-  const sortedIs: readonly Readonly<Interval<T>>[] = ordered ? is : is.slice().sort(intervalCompare)
+  const sortedIs: ReadonlyArray<Readonly<Interval<T>>> = ordered ? is : is.slice().sort(intervalCompare)
 
   if (
     (leftDefinite && (sortedIs[0].start === undefined || sortedIs[0].start === null)) ||

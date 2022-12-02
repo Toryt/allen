@@ -166,7 +166,7 @@ describe('index TS', function () {
       isChainInterval.should.be.a.Function()
     })
     it('exports Chain', function () {
-      const x: readonly ChainInterval<number>[] = [{ start: 8 }]
+      const x: ReadonlyArray<ChainInterval<number>> = [{ start: 8 }]
       assert(isChain(x, 'number'))
       const chain: Chain<number> = x
       chain.should.be.an.Array()
