@@ -32,6 +32,7 @@ import {
   isInterval,
   isLTComparableOrIndefinite,
   isMinimalEnclosing,
+  isReferenceIntervals,
   isSequence,
   isTypeRepresentation,
   ltCompare,
@@ -96,6 +97,9 @@ describe('index TS', function () {
     it('exports ReferenceIntervals', function () {
       const x: ReferenceIntervals<string> = { aReference: [{ start: 'the start' }] }
       x.should.be.an.Object()
+    })
+    it('exports isReferenceIntervals', function () {
+      isReferenceIntervals<'string'>({ aProperty: [{ start: 'a' }] }, 'string').should.be.true()
     })
     it('exports Interval', function () {
       const x: Interval<string> = { start: 'the start' }

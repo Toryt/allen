@@ -6,6 +6,7 @@
 
 #### 0.7.1
 
+- add `isReferenceIntervals` to supported API
 - We now no longer require supplied intervals to have readonly properties, but we do promise throughout the library not
   to change intervals that are offered to us.
 

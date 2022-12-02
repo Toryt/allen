@@ -23,6 +23,7 @@ const {
   commonTypeRepresentation,
   isLTComparableOrIndefinite,
   ltCompare,
+  isReferenceIntervals,
   isInterval,
   AllenRelation,
   PointIntervalRelation,
@@ -52,6 +53,9 @@ describe('index JS', function () {
     })
     it('exports ltCompare', function () {
       ltCompare.should.be.a.Function()
+    })
+    it('exports isReferenceIntervals', function () {
+      isReferenceIntervals({ aProperty: [{ start: 'a' }] }, 'string').should.be.true()
     })
     it('exports isInterval', function () {
       isInterval({ start: 4 }, 'string').should.be.false()
