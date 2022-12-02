@@ -22,7 +22,7 @@ import { compareIntervals } from './compareIntervals'
 import { isTypeRepresentation, TypeRepresentation } from './TypeRepresentation'
 import { TypeFor } from './type'
 
-interface ReferencedInterval<T> {
+export interface ReferencedInterval<T> {
   readonly interval: Readonly<Interval<T>>
   readonly reference: string
 }
@@ -35,7 +35,7 @@ export function transposeAndOrder<TR extends TypeRepresentation> (
   sources: Readonly<ReferenceIntervals<TypeFor<TR>>>,
   pointType: TR,
   compareFn?: Comparator<TypeFor<TR>>
-): ReadonlyArray<ReferencedInterval<TypeFor<TR>>> {
+): ReadonlyArray<Readonly<ReferencedInterval<TypeFor<TR>>>> {
   assert(isTypeRepresentation(pointType))
   assert(compareFn === undefined || typeof compareFn === 'function')
   assert(isReferenceIntervals(sources, pointType, compareFn))
@@ -63,8 +63,8 @@ export function transposeAndOrder<TR extends TypeRepresentation> (
  * `sources`, so that the every interval in the `sources` is “covered” by a gapless subsequence of one or more intervals
  * in the result.
  *
- * Each interval in the result `ir` refers to the intervals `is` in the `sources` in its `referenceIntervals` that cause
- * it to appear (`ir (sedf) is`). `ir` {@link AllenRelation.DOES_NOT_CONCUR_WITH does not concurr with} any other
+ * Each interval in the result `ri` refers to the intervals `si` in the `sources` in its `referenceIntervals` that cause
+ * it to appear (`ri (sedf) si`). `ri` {@link AllenRelation.DOES_NOT_CONCUR_WITH does not concurr with} any other
  * interval in the sources (`(pmMP)`) . In other words, the relation of an interval of the result with any interval in
  * the sources is implied by `(pmsedfMP)`.
  *
