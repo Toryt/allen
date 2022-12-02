@@ -1,0 +1,13 @@
+{
+  "entryPoints": ["./src"],
+  "out": "typedoc",
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "includeVersion": true,
+  "searchInComments": true,
+  "sort": [
+    "visibility",
+    "static-first",
+    "source-order"
+  ]
+}
