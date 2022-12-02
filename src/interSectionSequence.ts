@@ -14,11 +14,34 @@
  limitations under the License.
  */
 
-import { Interval, ReferenceIntervals } from './Interval'
+import { Interval, isReferenceIntervals, ReferenceIntervals } from './Interval'
 import { Comparator } from './Comparator'
-import { equal, ok } from 'assert'
+import assert, { equal, ok } from 'assert'
 import { getCompareIfOk } from './getCompareIfOk'
 import { compareIntervals } from './sequence'
+import { isTypeRepresentation, TypeRepresentation } from './TypeRepresentation'
+import { TypeFor } from './type'
+
+interface ReferencedInterval<T> {
+  readonly interval: Readonly<Interval<T>>
+  readonly reference: string
+}
+
+/**
+ * Turn a {@link ReferenceIntervals} instance into an array of {@link ReferencedInterval} instances, ordered with
+ * {@link compareIntervals} on their `interval` values.
+ */
+export function transposeAndOrder<TR extends TypeRepresentation> (
+  sources: Readonly<ReferenceIntervals<TypeFor<TR>>>,
+  pointType: TR,
+  compareFn?: Comparator<TypeFor<TR>>
+): ReadonlyArray<ReferencedInterval<TypeFor<TR>>> {
+  assert(isTypeRepresentation(pointType))
+  assert(compareFn === undefined || typeof compareFn === 'function')
+  assert(isReferenceIntervals(sources, pointType, compareFn))
+
+  return []
+}
 
 /**
  * Return a sequence that has the fewest possible intervals, that are intersections of intervals provided in the
