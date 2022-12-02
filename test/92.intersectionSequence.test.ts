@@ -72,7 +72,15 @@ describe('interSectionSequence', function () {
         .concat(property3)
         .sort(compareIntervals)
       result.forEach((e, i) => {
-        // e.reference.should.equal('aProperty')
+        const expectedReference =
+          /* prettier-ignore */ property1.includes(e.interval)
+            ? 'property1'
+            : property2.includes(e.interval)
+              ? 'property2'
+              : property3.includes(e.interval)
+                ? 'property3'
+                : 'error'
+        e.reference.should.equal(expectedReference)
         e.interval.should.equal(ordered[i])
       })
     })
