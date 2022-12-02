@@ -34,6 +34,7 @@ const constructorPrivateSymbol = Symbol('private constructor AllenRelation')
  */
 export class AllenRelation extends Relation {
   /**
+   * @hidden
    * A `private` or `protected` constructor is an impossible concept in JavaScript, since the “constructor” _is_ the
    * type. Hiding it would make `typeof` impossible. We can, however, make it impossible to call at runtime.
    * `privateSymbol` must be equal to `constructorPrivateSymbol` for the call to pass, but `constructorPrivateSymbol` is
