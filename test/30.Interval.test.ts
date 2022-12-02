@@ -1,12 +1,12 @@
 /*
  Copyright © 2022 by Jan Dockx
-
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -219,6 +219,78 @@ describe('Interval', function () {
       const twoDeepInterval: Interval<number> = oneDeep['something1Deep'][0]
       twoDeepInterval.referenceIntervals = me
       isReferenceIntervals(me, 'number').should.be.false()
+    })
+    describe('true', function () {
+      it('returns true for the empty object', function () {
+        isReferenceIntervals({}, Date).should.be.true()
+      })
+      it('returns true with one property that is the empty array', function () {
+        isReferenceIntervals({ aProperty: [] }, Date).should.be.true()
+      })
+      it('returns true with a symbol as property key', function () {
+        const aSymbol = Symbol('a symbol as property')
+        const candidate = { [aSymbol]: [{ start: 6, end: 12 }] }
+        isReferenceIntervals(candidate, 'number').should.be.true()
+      })
+      it('returns true with a symbol as property key, that contains an idiot value', function () {
+        // these properties are not taken into account
+        const aSymbol = Symbol('a symbol as property')
+        const candidate = { [aSymbol]: 'not an array of intervals at all' }
+        isReferenceIntervals(candidate, 'number').should.be.true()
+      })
+    })
+    describe('false', function () {
+      stuffWithUndefined
+        .filter(s => !Array.isArray(s) || s.length > 0)
+        .forEach(s => {
+          it(`returns false when a property value is ${inspect(s)}`, function () {
+            const ri = {
+              something: [{ start: -4, end: -2, referenceIntervals: { something1Deep: [{ start: 4, end: 6 }] } }],
+              s,
+              other: [
+                { start: 15, end: 88 },
+                { start: 6, end: 12 }
+              ]
+            }
+            isReferenceIntervals(ri, 'number').should.be.false()
+          })
+        })
+      stuffWithUndefined
+        .filter(
+          s => typeof s !== 'object' || s === null || s instanceof Date || Array.isArray(s) || Object.keys(s).length > 0
+        )
+        .forEach(s => {
+          it(`returns false when an array value contains ${inspect(s)}`, function () {
+            const ri = {
+              something: [s]
+            }
+            isReferenceIntervals(ri, 'number').should.be.false()
+          })
+          it(`returns false when an array value contains ${inspect(s)}, 2 deep`, function () {
+            const ri = {
+              something: [
+                {
+                  start: -4,
+                  end: -2,
+                  referenceIntervals: {
+                    something1Deep: [
+                      {
+                        start: 4,
+                        end: 6,
+                        referenceInterval: { something2Deep: [{ start: 11, end: 99 }, s, { start: 12 }] }
+                      }
+                    ]
+                  }
+                }
+              ],
+              other: [
+                { start: 15, end: 88 },
+                { start: 6, end: 12 }
+              ]
+            }
+            isReferenceIntervals(ri, 'number').should.be.false()
+          })
+        })
     })
   })
 
