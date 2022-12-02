@@ -40,12 +40,21 @@ export function transposeAndOrder<TR extends TypeRepresentation> (
   assert(compareFn === undefined || typeof compareFn === 'function')
   assert(isReferenceIntervals(sources, pointType, compareFn))
 
+  function compareReferencedIntervals (
+    ri1: Readonly<ReferencedInterval<TypeFor<TR>>>,
+    ri2: Readonly<ReferencedInterval<TypeFor<TR>>>
+  ): number {
+    return compareIntervals(ri1.interval, ri2.interval, compareFn)
+  }
+
   let result: ReferencedInterval<TypeFor<TR>>[] = []
   for (const reference in sources) {
-    const transposed: ReadonlyArray<Readonly<ReferencedInterval<TypeFor<TR>>>> = sources[reference].map(interval => ({
-      interval,
-      reference
-    }))
+    const transposed: ReadonlyArray<Readonly<ReferencedInterval<TypeFor<TR>>>> = sources[reference]
+      .map(interval => ({
+        interval,
+        reference
+      }))
+      .sort(compareReferencedIntervals)
     result = result.concat(transposed)
   }
   return result

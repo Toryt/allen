@@ -38,7 +38,7 @@ describe('interSectionSequence', function () {
       const orderedAProperty = aProperty.slice().sort(compareIntervals)
       result.forEach((e, i) => {
         e.reference.should.equal('aProperty')
-        e.should.equal(orderedAProperty[i])
+        e.interval.should.equal(orderedAProperty[i])
       })
     })
   })
