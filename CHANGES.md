@@ -2,6 +2,15 @@
 
 ## 0
 
+### 0.8
+
+#### 0.8.0
+
+- correct `main` and `types` references
+
+This is intended to resolve the issue that the library could not be used with `require('@toryt/allen')`, but required
+`require('@toryt/allen/lib')`. If this fix works, it is breaking.
+
 ### 0.7
 
 #### 0.7.1
