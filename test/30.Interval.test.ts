@@ -21,7 +21,12 @@ import { inspect } from 'util'
 import { stuff, stuffWithUndefined } from './_stuff'
 import { Interval, isInterval } from '../src/Interval'
 import { typeRepresentations } from './_typeRepresentationCases'
-import { representsSuperType, TypeRepresentation, typeRepresentationOf } from '../src/TypeRepresentation'
+import {
+  commonTypeRepresentation,
+  representsSuperType,
+  TypeRepresentation,
+  typeRepresentationOf
+} from '../src/TypeRepresentation'
 import { TypeFor } from '../src/type'
 import { A, B, C } from './_someClasses'
 import { Comparator } from '../src/Comparator'
@@ -261,17 +266,22 @@ describe('Interval', function () {
             })
 
             describe('with referenceIntervals', function () {
-              it('returns true with one reference interval that is a copy of me', function () {
+              const actualType: TypeRepresentation | undefined | false = commonTypeRepresentation(p1, p2)
+              const psSubtypeOfTarget =
+                actualType !== false && (actualType === undefined || representsSuperType(targetPointType, actualType))
+                  ? 'true'
+                  : 'false'
+              it(`returns ${psSubtypeOfTarget} with one reference interval that is a copy of me`, function () {
                 callIt({
                   start: p1,
                   end: p2,
                   referenceIntervals: { aSource: [{ start: p1, end: p2 }] }
-                }).should.be.true()
+                }).should.be[psSubtypeOfTarget]()
               })
-              it('returns true with one reference interval that me, 1 deep', function () {
+              it(`returns ${psSubtypeOfTarget} with one reference interval that me, 1 deep`, function () {
                 const i: Interval<any> = { start: p1, end: p2 }
                 i.referenceIntervals = { aSource: [i] }
-                callIt(i).should.be.true()
+                callIt(i).should.be[psSubtypeOfTarget]()
               })
             })
           })
