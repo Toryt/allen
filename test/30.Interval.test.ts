@@ -294,7 +294,7 @@ describe('Interval', function () {
                     {
                       start: 4,
                       end: 6,
-                      referenceInterval: { something2Deep: [{ start: 11, end: 99 }, s, { start: 12 }] }
+                      referenceIntervals: { something2Deep: [{ start: 11, end: 99 }, s, { start: 12 }] }
                     }
                   ]
                 }
