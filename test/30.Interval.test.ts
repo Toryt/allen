@@ -162,8 +162,11 @@ describe('Interval', function () {
               s =>
                 typeof s !== 'object' ||
                 s === null ||
-                Array.isArray(s) ||
+                s instanceof Array ||
                 s instanceof Date ||
+                s instanceof A ||
+                s instanceof B ||
+                s instanceof C ||
                 Object.keys(s).length > 0
             )
             .forEach(s => {

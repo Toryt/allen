@@ -25,6 +25,12 @@ import assert from 'assert'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { Comparator } from './Comparator'
 
+/**
+ * Map where each property holds a collection of Intervals. The property name is often used to refer to the collection.
+ * This takes into account own and inherited enumerable properties.
+ *
+ * **Note:** Arrays are not `ReferenceIntervals`. An array index is not a `string` property name.
+ */
 export interface ReferenceIntervals<T> {
   [reference: string]: Array<Interval<T>>
 }
@@ -62,6 +68,11 @@ export function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation>
   )
 }
 
+/**
+ * This takes into account own and inherited enumerable properties.
+ *
+ * **Note:** Arrays are not `ReferenceIntervals`. An array index is not a `string` property name.
+ */
 export function isReferenceIntervals<TR extends TypeRepresentation> (
   u: unknown,
   pointType: TR,
@@ -80,8 +91,8 @@ export function isReferenceIntervals<TR extends TypeRepresentation> (
  * Invariant: `start` must be before `end`, if both are definite, with any {@link Comparator} that is
  * used where the interval is involved.
  *
- * **Note:** Objects that have neither a `start`, `end`, or `referenceIntervals` property, e.g., a `Date`,  _are_
- * considered fully indefinite intervals!
+ * **Note:** Objects that have neither a `start`, `end`, or `referenceIntervals` property, e.g., a `Date` or an array,
+ * _are_ considered fully indefinite intervals!
  */
 export interface Interval<T> {
   start?: Indefinite<T>
@@ -155,8 +166,8 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
  * To compare `start` and `end`, the optional `compareFn` is used when given, or {@link ltCompare} when not. When
  * `start` and `end` are `symbols`, or one of the values is `NaN`, a `compareFn` parameter is mandatory.
  *
- * **Note:** Objects that have neither a `start`, `end`, or `referenceIntervals` property, e.g., a `Date`,  _are_
- * considered fully indefinite intervals!
+ * **Note:** Objects that have neither a `start`, `end`, or `referenceIntervals` property, e.g., a `Date` or an array,
+ * _are_ considered fully indefinite intervals!
  */
 export function isInterval<TR extends TypeRepresentation> (
   i: unknown,
