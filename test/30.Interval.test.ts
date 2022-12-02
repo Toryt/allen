@@ -162,8 +162,7 @@ describe('Interval', function () {
               s =>
                 typeof s !== 'object' ||
                 s === null ||
-                s instanceof Array ||
-                s instanceof Date ||
+                (s instanceof Array && s.length > 0) ||
                 s instanceof A ||
                 s instanceof B ||
                 s instanceof C ||
@@ -249,6 +248,16 @@ describe('Interval', function () {
         const aSymbol = Symbol('a symbol as property')
         const candidate = { [aSymbol]: 'not an array of intervals at all' }
         isReferenceIntervals(candidate, 'number').should.be.true()
+      })
+      it('returns true for the empty array', function () {
+        // border case
+        const a: unknown[] = []
+        isReferenceIntervals(a, 'number').should.be.true()
+      })
+      it('returns true for a Date', function () {
+        // border case
+        const d: Date = new Date(65746779)
+        isReferenceIntervals(d, 'number').should.be.true()
       })
     })
     describe('false', function () {

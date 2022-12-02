@@ -29,7 +29,9 @@ import { Comparator } from './Comparator'
  * Map where each property holds a collection of Intervals. The property name is often used to refer to the collection.
  * This takes into account own and inherited enumerable properties.
  *
- * **Note:** Arrays are not `ReferenceIntervals`. An array index is not a `string` property name.
+ * **Note:** According to TypeScript, arrays are not `ReferenceIntervals`. An array index is not a `string` property
+ * name. Also, e.g., `Date` instances do not have any `string` property name, and are not allowed. The empty object `{}`
+ * however, _is_ allowed.
  */
 export interface ReferenceIntervals<T> {
   [reference: string]: Array<Interval<T>>
@@ -79,7 +81,12 @@ export function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation>
 /**
  * This takes into account own and inherited enumerable properties.
  *
- * **Note:** Arrays are not `ReferenceIntervals`. An array index is not a `string` property name.
+ * **Note:** According to TypeScript, objects that have no `string` property names, such as arrays
+ * or `Date` instances are not allowed. The empty object `{}` is allowed. This function returns true
+ * however for objects that _have no enumerable properties_, such as the empty array, or `Date`
+ * instances. There is no general code possible to bar these instances. (We could explicitly bar
+ * arrays and `Date` instances, but there are infinitely many other object types possible that have
+ * no enumerable properties.) Yet, we cannot allow these types in TypeScript for a map object.
  */
 export function isReferenceIntervals<TR extends TypeRepresentation> (
   u: unknown,
