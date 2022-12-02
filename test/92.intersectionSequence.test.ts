@@ -27,7 +27,11 @@ const sedf = AllenRelation.fromString<AllenRelation>('sedf')
 
 describe('interSectionSequence', function () {
   function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
-    function validateResult (sources: ReferenceIntervals<T>, result: Array<Interval<T>>, gaps?: boolean): void {
+    function validateResult (
+      sources: Readonly<ReferenceIntervals<T>>,
+      result: readonly Readonly<Interval<T>>[],
+      gaps?: boolean
+    ): void {
       isSequence(result, { ordered: true, gaps, compareFn }).should.be.true()
       const allSourceIntervals: Array<Interval<T>> = Object.values<Array<Interval<T>>>(sources).flat()
       result.forEach(ir => {
@@ -50,7 +54,7 @@ describe('interSectionSequence', function () {
       })
     }
 
-    function callIt (sources: ReferenceIntervals<T>): Array<Interval<T>> {
+    function callIt (sources: Readonly<ReferenceIntervals<T>>): readonly Readonly<Interval<T>>[] {
       return compareFn !== undefined && compareFn !== null
         ? /* prettier-ignore */ interSectionSequence(sources, compareFn)
         : interSectionSequence(sources)

@@ -53,10 +53,14 @@ import assert from 'assert'
  * If the result is `0`, the actual relation is implied by `(e)`. There are no other meaningful correlations, but the
  * table shows the symmetry.
  */
-export function compareIntervals<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): number {
+export function compareIntervals<T> (
+  i1: Readonly<Interval<T>>,
+  i2: Readonly<Interval<T>>,
+  compareFn?: Comparator<T>
+): number {
   const compare: Comparator<T> = getCompareIfOk([i1, i2], compareFn) // asserts preconditions
 
-  function compareEnd (i1: Interval<T>, i2: Interval<T>): number {
+  function compareEnd (i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): number {
     if (i1.end === undefined || i1.end === null) {
       if (i2.end !== undefined && i2.end !== null) {
         return +1
@@ -170,7 +174,7 @@ export interface SequenceOptions<T> {
  *                   is.some((j: Interval<T>) => AllenRelation.relation(j, i, compare).implies(AllenRelation.MEETS)))
  *             )
  */
-export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: SequenceOptions<T>): boolean {
+export function isSequence<T> (is: readonly Readonly<Interval<T>>[], options?: SequenceOptions<T>): boolean {
   assert(options === undefined || typeof options === 'object')
   const compareFn: Comparator<T> = getCompareIfOk(is, options?.compareFn) // asserts preconditions
   const leftDefinite: boolean = options?.leftDefinite ?? false
@@ -181,11 +185,11 @@ export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: Sequenc
     return true
   }
 
-  function intervalCompare (i1: Interval<T>, i2: Interval<T>): number {
+  function intervalCompare (i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): number {
     return compareIntervals(i1, i2, options?.compareFn)
   }
 
-  const sortedIs: ReadonlyArray<Interval<T>> = ordered ? is : is.slice().sort(intervalCompare)
+  const sortedIs: readonly Readonly<Interval<T>>[] = ordered ? is : is.slice().sort(intervalCompare)
 
   if (
     (leftDefinite && (sortedIs[0].start === undefined || sortedIs[0].start === null)) ||
@@ -194,7 +198,7 @@ export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: Sequenc
     return false
   }
 
-  function endsBefore (i1: Interval<T>, i2: Interval<T>): boolean {
+  function endsBefore (i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): boolean {
     if (i1.end === undefined || i1.end === null || i2.start === undefined || i2.start === null) {
       return false
     }
@@ -204,5 +208,5 @@ export function isSequence<T> (is: ReadonlyArray<Interval<T>>, options?: Sequenc
     return options?.gaps === undefined ? comparison <= 0 : options.gaps ? comparison < 0 : comparison === 0
   }
 
-  return sortedIs.every((j: Interval<T>, index: number) => index === 0 || endsBefore(sortedIs[index - 1], j))
+  return sortedIs.every((j: Readonly<Interval<T>>, index: number) => index === 0 || endsBefore(sortedIs[index - 1], j))
 }

@@ -29,7 +29,7 @@ import { TypeFor } from './type'
  *
  * All elements have to have a different `start`.
  */
-export type Chain<T> = ReadonlyArray<ChainInterval<T>> & { __brand: 'ChainIntervalChain' }
+export type Chain<T> = readonly Readonly<ChainInterval<T>>[] & { __brand: 'ChainIntervalChain' }
 
 export function isChain<TR extends TypeRepresentation> (
   candidate: unknown,
@@ -54,7 +54,7 @@ export function isChain<TR extends TypeRepresentation> (
     return false
   }
 
-  const sorted: ReadonlyArray<ChainInterval<TypeFor<TR>>> = candidate
+  const sorted: readonly ChainInterval<TypeFor<TR>>[] = candidate
     .slice()
     .sort((ci1: ChainInterval<TypeFor<TR>>, ci2: ChainInterval<TypeFor<TR>>) =>
       compareChainIntervals(ci1, ci2, compareFn)
@@ -75,7 +75,7 @@ export function isChain<TR extends TypeRepresentation> (
 export function chainToGaplessLeftDefiniteSequence<T> (
   cis: Chain<T>,
   compareFn?: Comparator<T>
-): ReadonlyArray<Interval<T>> {
+): readonly Readonly<Interval<T>>[] {
   assert(Array.isArray(cis), '`cis` must be an array')
   if (cis.length <= 0) {
     return []

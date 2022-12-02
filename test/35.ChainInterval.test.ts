@@ -34,7 +34,7 @@ interface StartCase<TR extends TypeRepresentation> {
   okFor: TR[]
 }
 
-const startCases: ReadonlyArray<StartCase<any>> = [
+const startCases: readonly StartCase<any>[] = [
   { start: 3, okFor: ['number'] },
   { start: 389579784n, okFor: ['bigint'] },
   { start: 'a string', okFor: ['string'] },

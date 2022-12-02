@@ -19,7 +19,7 @@
 import 'should'
 import { inspect } from 'util'
 import { stuff, stuffWithUndefined } from './_stuff'
-import { isInterval } from '../src/Interval'
+import { Interval, isInterval } from '../src/Interval'
 import { typeRepresentations } from './_typeRepresentationCases'
 import { representsSuperType, TypeRepresentation, typeRepresentationOf } from '../src/TypeRepresentation'
 import { TypeFor } from '../src/type'
@@ -257,6 +257,21 @@ describe('Interval', function () {
                 it(`returns false for [${inspect(s)}, ${inspect(p2)}[`, function () {
                   callIt({ start: s, end: p2 }).should.be.false()
                 })
+              })
+            })
+
+            describe('with referenceIntervals', function () {
+              it('returns true with one reference interval that is a copy of me', function () {
+                callIt({
+                  start: p1,
+                  end: p2,
+                  referenceIntervals: { aSource: [{ start: p1, end: p2 }] }
+                }).should.be.true()
+              })
+              it('returns true with one reference interval that me, 1 deep', function () {
+                const i: Interval<any> = { start: p1, end: p2 }
+                i.referenceIntervals = { aSource: [i] }
+                callIt(i).should.be.true()
               })
             })
           })

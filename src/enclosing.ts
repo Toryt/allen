@@ -25,7 +25,11 @@ import { getCompareIfOk } from './getCompareIfOk'
  *
  * When any interval is fully or partially indefinite, this cannot be guaranteed, and `false` is returned.
  */
-export function isEnclosing<T> (i: Interval<T>, is: ReadonlyArray<Interval<T>>, compareFn?: Comparator<T>): boolean {
+export function isEnclosing<T> (
+  i: Readonly<Interval<T>>,
+  is: readonly Readonly<Interval<T>>[],
+  compareFn?: Comparator<T>
+): boolean {
   assert(Array.isArray(is))
   const compare: Comparator<T> = getCompareIfOk<T>(is.concat([i]), compareFn)
 
@@ -53,8 +57,8 @@ export function isEnclosing<T> (i: Interval<T>, is: ReadonlyArray<Interval<T>>, 
  * ```
  */
 export function isMinimalEnclosing<T> (
-  i: Interval<T>,
-  is: ReadonlyArray<Interval<T>>,
+  i: Readonly<Interval<T>>,
+  is: readonly Readonly<Interval<T>>[],
   compareFn?: Comparator<T>
 ): boolean {
   assert(Array.isArray(is))
@@ -109,7 +113,10 @@ export function isMinimalEnclosing<T> (
  * result.end === undefined || is.every(i => i.end !== undefined && i.end !== null && !(result.end < i.end))
  * ```
  */
-export function minimalEnclosing<T> (is: ReadonlyArray<Interval<T>>, compareFn?: Comparator<T>): Interval<T> {
+export function minimalEnclosing<T> (
+  is: readonly Readonly<Interval<T>>[],
+  compareFn?: Comparator<T>
+): Readonly<Interval<T>> {
   const compare: Comparator<T> = getCompareIfOk(is, compareFn)
 
   if (is.length <= 0) {

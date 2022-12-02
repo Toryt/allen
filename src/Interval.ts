@@ -35,7 +35,7 @@ export function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation>
   compareFn: Comparator<TypeFor<TR>> | undefined,
   visitedIntervals: unknown[], // loop protection
   visitedReferenceIntervals: unknown[] // loop protection
-) {
+): u is Readonly<ReferenceIntervals<TypeFor<TR>>> {
   assert(isTypeRepresentation(pointType))
   assert(compareFn === undefined || typeof compareFn === 'function')
   assert(visitedReferenceIntervals === undefined || Array.isArray(visitedReferenceIntervals))
@@ -66,7 +66,7 @@ export function isReferenceIntervals<TR extends TypeRepresentation> (
   u: unknown,
   pointType: TR,
   compareFn?: Comparator<TypeFor<TR>>
-) {
+): u is Readonly<ReferenceIntervals<TypeFor<TR>>> {
   assert(isTypeRepresentation(pointType))
   assert(compareFn === undefined || typeof compareFn === 'function')
 
@@ -81,9 +81,9 @@ export function isReferenceIntervals<TR extends TypeRepresentation> (
  * used where the interval is involved.
  */
 export interface Interval<T> {
-  readonly start?: Indefinite<T>
-  readonly end?: Indefinite<T>
-  readonly referenceIntervals?: ReferenceIntervals<T>
+  start?: Indefinite<T>
+  end?: Indefinite<T>
+  referenceIntervals?: ReferenceIntervals<T>
 }
 
 function loopProtectedIsInterval<TR extends TypeRepresentation> (
@@ -92,7 +92,7 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
   compareFn: Comparator<TypeFor<TR>> | undefined,
   visitedIntervals: unknown[], // loop protection
   visitedReferenceIntervals: unknown[] // loop protection
-): u is Interval<TypeFor<TR>> {
+): u is Readonly<Interval<TypeFor<TR>>> {
   if (visitedIntervals.includes(u)) {
     return true
   }
@@ -109,7 +109,7 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
     return false
   }
 
-  const pi = u as Partial<Interval<TypeFor<TR>>>
+  const pi = u as Readonly<Partial<Interval<TypeFor<TR>>>>
   const cType = commonTypeRepresentation(pi.start, pi.end)
   if (cType === false) {
     return false

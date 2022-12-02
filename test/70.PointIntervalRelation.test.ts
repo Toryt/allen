@@ -102,7 +102,7 @@ describe('PointIntervalRelation', function () {
       expected: PointIntervalRelation[],
       compareFn?: (a1: T, a2: T) => number
     ): void {
-      function callIt (t: T | undefined | null, i: Interval<T>): PointIntervalRelation {
+      function callIt (t: Readonly<T> | undefined | null, i: Readonly<Interval<T>>): PointIntervalRelation {
         return compareFn !== undefined && compareFn !== null
           ? /* prettier-ignore */ PointIntervalRelation.relation(t, i, compareFn)
           : PointIntervalRelation.relation(t, i)
@@ -201,8 +201,8 @@ describe('PointIntervalRelation', function () {
           [bci, bci, bci, PointIntervalRelation.TERMINATES, PointIntervalRelation.AFTER],
           compare
         )
-        const t: T = points[0]
-        const i: Interval<T> = { start: points[1], end: points[1] }
+        const t: Readonly<T> = points[0]
+        const i: Readonly<Interval<T>> = { start: points[1], end: points[1] }
         describe(`degenerate interval ${intervalToString(i)}`, function () {
           it('balks with a degenerate interval', function () {
             if (compare !== undefined && compare !== null) {

@@ -22,5 +22,7 @@
  * - `0` when `t1` and `t2` are considered equal
  *
  * The function is never called with indefinite points (`t1` and `t2` are never `undefined` or `null`).
+ *
+ * We cannot use `ReadOnly<T>` as type for the arguments, because `ltCompare` allows `unknown`.
  */
 export type Comparator<T> = (t1: T, t2: T) => number

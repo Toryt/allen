@@ -375,7 +375,11 @@ export class PointIntervalRelation extends Relation {
    * @param compareFn - optional compare function with traditional semantics; mandatory when any point is `NaN`, or
    *                    `symbols` are used
    */
-  static relation<T> (t: T | undefined | null, i: Interval<T>, compareFn?: Comparator<T>): PointIntervalRelation {
+  static relation<T> (
+    t: Readonly<T> | undefined | null,
+    i: Readonly<Interval<T>>,
+    compareFn?: Comparator<T>
+  ): PointIntervalRelation {
     ok(i)
     assert(
       (isLTComparableOrIndefinite(t) && isLTComparableOrIndefinite(i.start) && isLTComparableOrIndefinite(i.end)) ||

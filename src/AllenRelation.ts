@@ -996,7 +996,7 @@ export class AllenRelation extends Relation {
    * @param compareFn - optional compare function with traditional semantics; mandatory when any point is `NaN`, or
    *                    symbols are used
    */
-  static relation<T> (i1: Interval<T>, i2: Interval<T>, compareFn?: Comparator<T>): AllenRelation {
+  static relation<T> (i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>, compareFn?: Comparator<T>): AllenRelation {
     const compare: Comparator<T> = getCompareIfOk([i1, i2], compareFn)
 
     const i1Start: Indefinite<T> = i1.start

@@ -126,7 +126,7 @@ describe('sequence', function () {
 
       const cases = createIntervalCoupleCases<T>(points)
 
-      function callIt (i1: Interval<T>, i2: Interval<T>): number {
+      function callIt (i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): number {
         return compareFn !== undefined && compareFn !== null
           ? /* prettier-ignore */ compareIntervals(i1, i2, compareFn)
           : compareIntervals(i1, i2)
