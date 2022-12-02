@@ -90,7 +90,7 @@ export function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation>
  */
 export function isReferenceIntervals<TR extends TypeRepresentation> (
   u: unknown,
-  pointType: TR,
+  pointType: TR, // MUDO must support explicit `undefined`, meaning all intervals fully indefinite
   compareFn?: Comparator<TypeFor<TR>>
 ): u is Readonly<ReferenceIntervals<TypeFor<TR>>> {
   assert(isTypeRepresentation(pointType))
