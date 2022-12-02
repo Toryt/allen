@@ -168,7 +168,7 @@ describe('Interval', function () {
     describe('recursive', function () {
       it('returns true with a recursion, 1 deep', function () {
         const me: ReferenceIntervals<number> = {
-          something: [{ start: -4, end: -2, referenceIntervals: { something1deep: [{ start: 2, end: 6 }] } }],
+          something: [{ start: -4, end: -2, referenceIntervals: { something1Deep: [{ start: 2, end: 6 }] } }],
           other: [
             { start: 15, end: 88 },
             { start: 6, end: 12 }
@@ -178,7 +178,22 @@ describe('Interval', function () {
         isReferenceIntervals(me, 'number').should.be.true()
       })
     })
+    it('returns true with a recursion, 2 deep', function () {
+      const me: ReferenceIntervals<number> = {
+        something: [{ start: -4, end: -2, referenceIntervals: { something1Deep: [{ start: 2, end: 6 }] } }],
+        other: [
+          { start: 15, end: 88 },
+          { start: 6, end: 12 }
+        ]
+      }
+      const oneDeep: ReferenceIntervals<number> | undefined = me['something'][0].referenceIntervals
+      ok(oneDeep)
+      const twoDeepInterval: Interval<number> = oneDeep['something1Deep'][0]
+      twoDeepInterval.referenceIntervals = me
+      isReferenceIntervals(me, 'number').should.be.true()
+    })
   })
+
   describe('isInterval', function () {
     describe('not an object', function () {
       typeRepresentations.forEach(ptr => {
