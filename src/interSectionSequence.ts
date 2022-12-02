@@ -17,7 +17,6 @@
 import { Interval, isReferenceIntervals, ReferenceIntervals } from './Interval'
 import { Comparator } from './Comparator'
 import assert, { equal, ok } from 'assert'
-import { getCompareIfOk } from './getCompareIfOk'
 import { compareIntervals } from './compareIntervals'
 import { isTypeRepresentation, TypeRepresentation } from './TypeRepresentation'
 import { TypeFor } from './type'
@@ -33,7 +32,7 @@ export interface ReferencedInterval<T> {
  */
 export function transposeAndOrder<TR extends TypeRepresentation> (
   sources: Readonly<ReferenceIntervals<TypeFor<TR>>>,
-  pointType: TR,
+  pointType: TR, // MUDO we cannot have this argument here
   compareFn?: Comparator<TypeFor<TR>>
 ): ReadonlyArray<Readonly<ReferencedInterval<TypeFor<TR>>>> {
   assert(isTypeRepresentation(pointType))
@@ -55,6 +54,7 @@ export function transposeAndOrder<TR extends TypeRepresentation> (
     }))
     result = result.concat(transposed)
   }
+
   return result.sort(compareReferencedIntervals)
 }
 
@@ -79,21 +79,14 @@ export function interSectionSequence<T> (
 ): ReadonlyArray<Readonly<Interval<T>>> {
   ok(sources)
   equal(typeof sources, 'object')
-  // TODO isSourceIntervals
 
-  const pile = Object.values(sources).flat()
+  const pile: ReadonlyArray<Readonly<ReferencedInterval<TypeFor<TR>>>> = transposeAndOrder(sources, 'number', compareFn) // validate preconditions
 
-  const compare: Comparator<T> = getCompareIfOk(pile, compareFn) // asserts preconditions
-
-  function intervalCompare (i1: Interval<T>, i2: Interval<T>): number {
-    return compareIntervals(i1, i2, compare)
-  }
-
-  const sorted = pile
-    .sort(intervalCompare)
-    .map(is => ({ start: is.start, end: is.end, referenceIntervals: { lala: [is] } }))
-
-  return sorted
+  return pile.map(({ interval, reference }: Readonly<ReferencedInterval<TypeFor<TR>>>) => ({
+    start: interval.start,
+    end: interval.end,
+    [reference]: [interval]
+  }))
 }
 // /**
 //  * Turn the _set_ of intervals `i` into a {@link isSequence seqyence}.
