@@ -19,7 +19,7 @@
 import 'should'
 import { Interval, ReferenceIntervals } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { AllenRelation, Comparator, compareIntervals, isSequence } from '../src'
+import { AllenRelation, Comparator, compareIntervals, isSequence, ltCompare } from '../src'
 import { interSectionSequence, transposeAndOrder } from '../src/interSectionSequence'
 import { ok } from 'assert'
 
@@ -33,6 +33,17 @@ describe('interSectionSequence', function () {
     it('returns an array for 1 property, sorted', function () {
       const aProperty = [{ start: 32, end: 334 }, { start: 22, end: 23 }, { start: -1 }]
       const result = transposeAndOrder({ aProperty }, 'number')
+      result.should.be.an.Array()
+      result.length.should.equal(aProperty.length)
+      const orderedAProperty = aProperty.slice().sort(compareIntervals)
+      result.forEach((e, i) => {
+        e.reference.should.equal('aProperty')
+        e.interval.should.equal(orderedAProperty[i])
+      })
+    })
+    it('returns an array for 1 property, sorted, with a comparator', function () {
+      const aProperty = [{ start: 32, end: 334 }, { start: 22, end: 23 }, { start: -1 }]
+      const result = transposeAndOrder({ aProperty }, 'number', ltCompare)
       result.should.be.an.Array()
       result.length.should.equal(aProperty.length)
       const orderedAProperty = aProperty.slice().sort(compareIntervals)
