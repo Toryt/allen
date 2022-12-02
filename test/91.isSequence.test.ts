@@ -363,8 +363,8 @@ describe('isSequence', function () {
             ? undefined
             : { compareFn }
           : /* prettier-ignore */ compareFn === undefined || compareFn === null
-                ? optionsBase
-                : { ...optionsBase, compareFn }
+            ? optionsBase
+            : { ...optionsBase, compareFn }
       const result = options === undefined ? isSequence(is) : isSequence(is, options)
       const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
       const EARLIER = AllenRelation.fromString<AllenRelation>('mp')
