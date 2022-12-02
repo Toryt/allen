@@ -157,11 +157,20 @@ describe('Interval', function () {
     describe('not an object', function () {
       typeRepresentations.forEach(ptr => {
         describe(inspect(ptr), function () {
-          stuffWithUndefined.forEach(s => {
-            it(`returns false for ${inspect(s)}`, function () {
-              isReferenceIntervals(s, ptr).should.be.false()
+          stuffWithUndefined
+            .filter(
+              s =>
+                typeof s !== 'object' ||
+                s === null ||
+                Array.isArray(s) ||
+                s instanceof Date ||
+                Object.keys(s).length > 0
+            )
+            .forEach(s => {
+              it(`returns false for ${inspect(s)}`, function () {
+                isReferenceIntervals(s, ptr).should.be.false()
+              })
             })
-          })
         })
       })
     })
