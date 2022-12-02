@@ -100,25 +100,43 @@ describe('interSectionSequence', function () {
         gaps?: boolean
       ): void {
         isSequence(result, { ordered: true, gaps, compareFn }).should.be.true()
-        const allSourceIntervals: Array<Interval<T>> = Object.values<ReadonlyArray<Interval<T>>>(sources).flat()
-        result.forEach(ir => {
-          const referenceIntervals: ReferenceIntervals<T> | undefined = ir.referenceIntervals
-          ok(referenceIntervals)
-          const allReferenceIntervals: ReadonlyArray<Interval<T>> =
-            Object.values<ReadonlyArray<Interval<T>>>(referenceIntervals).flat()
-          allSourceIntervals.forEach((is: Interval<T>) => {
-            const irRis = AllenRelation.relation(ir, is, compareFn)
-            if (allReferenceIntervals.includes(is)) {
-              irRis.implies(sedf).should.be.true()
-              // MUDO and refers to correct name
+        const sourceReferencedIntervals: ReadonlyArray<Readonly<ReferencedInterval<TypeFor<TR>>>> = transposeAndOrder(
+          sources,
+          ptr,
+          compareFn
+        )
+        result.forEach(resultInterval => {
+          should(resultInterval).have.ownProperty('referenceIntervals')
+          const resultIntervalReferenceIntervals: ReferenceIntervals<TypeFor<TR>> | undefined =
+            resultInterval.referenceIntervals
+          ok(resultIntervalReferenceIntervals)
+          sourceReferencedIntervals.forEach((sourceReferencedInterval: Readonly<ReferencedInterval<TypeFor<TR>>>) => {
+            const sourceInterval: Interval<TypeFor<TR>> = sourceReferencedInterval.interval
+            const sourceReference: string = sourceReferencedInterval.reference
+            sourceReference.should.be.a.String()
+            const rRs = AllenRelation.relation(resultInterval, sourceInterval, compareFn)
+            if (
+              resultIntervalReferenceIntervals[sourceReference] !== undefined &&
+              resultIntervalReferenceIntervals[sourceReference].includes(sourceInterval)
+            ) {
+              rRs.implies(sedf).should.be.true()
             } else {
-              irRis.implies(AllenRelation.DOES_NOT_CONCUR_WITH)
+              rRs.implies(AllenRelation.DOES_NOT_CONCUR_WITH)
             }
           })
         })
-        allSourceIntervals.forEach(is => {
-          result.some(ir => AllenRelation.relation(ir, is, compareFn).implies(sedf)).should.be.true()
-          // MUDO and refers
+        sourceReferencedIntervals.forEach((sourceReferencedInterval: Readonly<ReferencedInterval<TypeFor<TR>>>) => {
+          const sourceInterval: Interval<TypeFor<TR>> = sourceReferencedInterval.interval
+          const sourceReference: string = sourceReferencedInterval.reference
+          result
+            .some(
+              resultInterval =>
+                AllenRelation.relation(resultInterval, sourceInterval, compareFn).implies(sedf) &&
+                resultInterval.referenceIntervals !== undefined &&
+                resultInterval.referenceIntervals[sourceReference] !== undefined &&
+                resultInterval.referenceIntervals[sourceReference].includes(sourceInterval)
+            )
+            .should.be.true()
         })
       }
 
