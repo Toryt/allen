@@ -24,8 +24,10 @@ import { ltCompare } from '../src/ltCompare'
 import { AllenRelation } from '../src/AllenRelation'
 import { compareIntervals } from '../src/compareIntervals'
 import { isSequence } from '../src/isSequence'
-import { interSectionSequence, transposeAndOrder } from '../src/interSectionSequence'
+import { interSectionSequence, ReferencedInterval, transposeAndOrder } from '../src/interSectionSequence'
 import { ok } from 'assert'
+import { TypeFor, TypeRepresentation } from '../src'
+import should from 'should'
 
 const sedf = AllenRelation.fromString<AllenRelation>('sedf')
 
@@ -86,10 +88,15 @@ describe('interSectionSequence', function () {
     })
   })
   describe('interSectionSequence', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
+    function generateTests<TR extends TypeRepresentation> (
+      label: string,
+      ptr: TR,
+      points: TypeFor<TR>[],
+      compareFn?: Comparator<TypeFor<TR>>
+    ): void {
       function validateResult (
-        sources: Readonly<ReferenceIntervals<T>>,
-        result: ReadonlyArray<Readonly<Interval<T>>>,
+        sources: Readonly<ReferenceIntervals<TypeFor<TR>>>,
+        result: ReadonlyArray<Readonly<Interval<TypeFor<TR>>>>,
         gaps?: boolean
       ): void {
         isSequence(result, { ordered: true, gaps, compareFn }).should.be.true()
@@ -115,7 +122,9 @@ describe('interSectionSequence', function () {
         })
       }
 
-      function callIt (sources: Readonly<ReferenceIntervals<T>>): ReadonlyArray<Readonly<Interval<T>>> {
+      function callIt (
+        sources: Readonly<ReferenceIntervals<TypeFor<TR>>>
+      ): ReadonlyArray<Readonly<Interval<TypeFor<TR>>>> {
         return compareFn !== undefined && compareFn !== null
           ? /* prettier-ignore */ interSectionSequence(sources, compareFn)
           : interSectionSequence(sources)
@@ -123,7 +132,7 @@ describe('interSectionSequence', function () {
 
       describe(label, function () {
         it('returns the empty sequence without sources', function () {
-          const sources: ReferenceIntervals<T> = {}
+          const sources: ReferenceIntervals<TypeFor<TR>> = {}
           const result = callIt(sources)
           result.should.be.an.Array()
           result.length.should.equal(0)
@@ -131,7 +140,7 @@ describe('interSectionSequence', function () {
         })
         it('returns the sequence with 1 singleton source', function () {
           const aSource = [{ start: points[0], end: points[1] }]
-          const sources: ReferenceIntervals<T> = { aSource }
+          const sources: ReferenceIntervals<TypeFor<TR>> = { aSource }
           const result = callIt(sources)
           result.should.be.an.Array()
           result.length.should.equal(1)
@@ -144,7 +153,7 @@ describe('interSectionSequence', function () {
             { start: points[1], end: points[2] },
             { start: points[3], end: points[4] }
           ]
-          const sources: ReferenceIntervals<T> = { aSource }
+          const sources: ReferenceIntervals<TypeFor<TR>> = { aSource }
           const result = callIt(sources)
           result.should.be.an.Array()
           result.length.should.equal(3)
@@ -154,11 +163,14 @@ describe('interSectionSequence', function () {
       })
     }
 
-    generateTests<number>('number', sixNumbers)
-    generateTests<string>('string', sixStrings)
-    generateTests<Date>('Date', sixDates)
-    generateTests<symbol>('symbol', generateSixSymbols('interSectionSequence'), (s1: Symbol, s2: Symbol): number =>
-      s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
+    generateTests<'number'>('number', 'number', sixNumbers)
+    generateTests<'string'>('string', 'string', sixStrings)
+    generateTests<typeof Date>('Date', Date, sixDates)
+    generateTests<'symbol'>(
+      'symbol',
+      'symbol',
+      generateSixSymbols('interSectionSequence'),
+      (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
     )
   })
 })
