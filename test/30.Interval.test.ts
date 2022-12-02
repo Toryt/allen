@@ -1,12 +1,12 @@
 /*
  Copyright © 2022 by Jan Dockx
- 
+
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
- 
+
  http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -157,7 +157,7 @@ describe('Interval', function () {
     describe('not an object', function () {
       typeRepresentations.forEach(ptr => {
         describe(inspect(ptr), function () {
-          notAnIntervalCandidate.forEach(s => {
+          stuffWithUndefined.forEach(s => {
             it(`returns false for ${inspect(s)}`, function () {
               isReferenceIntervals(s, ptr).should.be.false()
             })
@@ -255,42 +255,38 @@ describe('Interval', function () {
             isReferenceIntervals(ri, 'number').should.be.false()
           })
         })
-      stuffWithUndefined
-        .filter(
-          s => typeof s !== 'object' || s === null || s instanceof Date || Array.isArray(s) || Object.keys(s).length > 0
-        )
-        .forEach(s => {
-          it(`returns false when an array value contains ${inspect(s)}`, function () {
-            const ri = {
-              something: [s]
-            }
-            isReferenceIntervals(ri, 'number').should.be.false()
-          })
-          it(`returns false when an array value contains ${inspect(s)}, 2 deep`, function () {
-            const ri = {
-              something: [
-                {
-                  start: -4,
-                  end: -2,
-                  referenceIntervals: {
-                    something1Deep: [
-                      {
-                        start: 4,
-                        end: 6,
-                        referenceInterval: { something2Deep: [{ start: 11, end: 99 }, s, { start: 12 }] }
-                      }
-                    ]
-                  }
-                }
-              ],
-              other: [
-                { start: 15, end: 88 },
-                { start: 6, end: 12 }
-              ]
-            }
-            isReferenceIntervals(ri, 'number').should.be.false()
-          })
+      notAnIntervalCandidate.forEach(s => {
+        it(`returns false when an array value contains ${inspect(s)}`, function () {
+          const ri = {
+            something: [s]
+          }
+          isReferenceIntervals(ri, 'number').should.be.false()
         })
+        it(`returns false when an array value contains ${inspect(s)}, 2 deep`, function () {
+          const ri = {
+            something: [
+              {
+                start: -4,
+                end: -2,
+                referenceIntervals: {
+                  something1Deep: [
+                    {
+                      start: 4,
+                      end: 6,
+                      referenceInterval: { something2Deep: [{ start: 11, end: 99 }, s, { start: 12 }] }
+                    }
+                  ]
+                }
+              }
+            ],
+            other: [
+              { start: 15, end: 88 },
+              { start: 6, end: 12 }
+            ]
+          }
+          isReferenceIntervals(ri, 'number').should.be.false()
+        })
+      })
     })
   })
 
