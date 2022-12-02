@@ -22,7 +22,8 @@ import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCa
 import { Comparator } from '../src/Comparator'
 import { ltCompare } from '../src/ltCompare'
 import { AllenRelation } from '../src/AllenRelation'
-import { compareIntervals, isSequence } from '../src/sequence'
+import { compareIntervals } from '../src/compareIntervals'
+import { isSequence } from '../src/sequence'
 import { interSectionSequence, transposeAndOrder } from '../src/interSectionSequence'
 import { ok } from 'assert'
 

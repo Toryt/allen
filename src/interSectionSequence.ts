@@ -18,7 +18,7 @@ import { Interval, isReferenceIntervals, ReferenceIntervals } from './Interval'
 import { Comparator } from './Comparator'
 import assert, { equal, ok } from 'assert'
 import { getCompareIfOk } from './getCompareIfOk'
-import { compareIntervals } from './sequence'
+import { compareIntervals } from './compareIntervals'
 import { isTypeRepresentation, TypeRepresentation } from './TypeRepresentation'
 import { TypeFor } from './type'
 

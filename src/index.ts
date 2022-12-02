@@ -29,6 +29,7 @@ export { RelationConstructor, Relation } from './Relation' // ok higher
 export { AllenRelation } from './AllenRelation'
 export { PointIntervalRelation } from './PointIntervalRelation'
 export { isEnclosing, isMinimalEnclosing, minimalEnclosing } from './enclosing'
-export { compareIntervals, isSequence, SequenceOptions } from './sequence'
+export { compareIntervals } from './compareIntervals'
+export { isSequence, SequenceOptions } from './sequence'
 export { ChainInterval, isChainInterval } from './ChainInterval'
 export { Chain, isChain, chainToGaplessLeftDefiniteSequence } from './Chain'
