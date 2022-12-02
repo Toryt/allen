@@ -192,6 +192,20 @@ describe('Interval', function () {
       twoDeepInterval.referenceIntervals = me
       isReferenceIntervals(me, 'number').should.be.true()
     })
+    it('returns true with a recursion, 2 deep, with a compare function', function () {
+      const me: ReferenceIntervals<number> = {
+        something: [{ start: -4, end: -2, referenceIntervals: { something1Deep: [{ start: 2, end: 6 }] } }],
+        other: [
+          { start: 15, end: 88 },
+          { start: 6, end: 12 }
+        ]
+      }
+      const oneDeep: ReferenceIntervals<number> | undefined = me['something'][0].referenceIntervals
+      ok(oneDeep)
+      const twoDeepInterval: Interval<number> = oneDeep['something1Deep'][0]
+      twoDeepInterval.referenceIntervals = me
+      isReferenceIntervals(me, 'number', ltCompare).should.be.true()
+    })
     it('returns false with a recursion, 2 deep, with an illegal interval', function () {
       const me: ReferenceIntervals<number> = {
         something: [{ start: -4, end: -2, referenceIntervals: { something1Deep: [{ start: 22222, end: 6 }] } }],
