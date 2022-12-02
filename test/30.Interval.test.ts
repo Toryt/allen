@@ -19,7 +19,7 @@
 import 'should'
 import { inspect } from 'util'
 import { stuff, stuffWithUndefined } from './_stuff'
-import { Interval, isInterval, isReferenceIntervals } from '../src/Interval'
+import { Interval, isInterval, isReferenceIntervals, ReferenceIntervals } from '../src/Interval'
 import { typeRepresentations } from './_typeRepresentationCases'
 import {
   commonTypeRepresentation,
@@ -165,6 +165,19 @@ describe('Interval', function () {
         })
       })
     })
+    describe('recursive', function () {
+      it('returns true with a recursion, 1 deep', function () {
+        const me: ReferenceIntervals<number> = {
+          something: [{ start: -4, end: -2, referenceIntervals: { something1deep: [{ start: 2, end: 6 }] } }],
+          other: [
+            { start: 15, end: 88 },
+            { start: 6, end: 12 }
+          ]
+        }
+        me['other'][0].referenceIntervals = me
+        isReferenceIntervals(me, 'number').should.be.true()
+      })
+    })
   })
   describe('isInterval', function () {
     describe('not an object', function () {
@@ -291,7 +304,7 @@ describe('Interval', function () {
                   referenceIntervals: { aSource: [{ start: p1, end: p2 }] }
                 }).should.be[psSubtypeOfTarget]()
               })
-              it(`returns ${psSubtypeOfTarget} with one reference interval that me, 1 deep`, function () {
+              it(`returns ${psSubtypeOfTarget} with one reference interval that is me, 1 deep`, function () {
                 const i: Interval<any> = { start: p1, end: p2 }
                 i.referenceIntervals = { aSource: [i] }
                 callIt(i).should.be[psSubtypeOfTarget]()
