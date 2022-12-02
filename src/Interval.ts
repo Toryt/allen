@@ -79,6 +79,9 @@ export function isReferenceIntervals<TR extends TypeRepresentation> (
  *
  * Invariant: `start` must be before `end`, if both are definite, with any {@link Comparator} that is
  * used where the interval is involved.
+ *
+ * **Note:** Objects that have neither a `start`, `end`, or `referenceIntervals` property, e.g., a `Date`,  _are_
+ * considered fully indefinite intervals!
  */
 export interface Interval<T> {
   start?: Indefinite<T>
@@ -151,6 +154,9 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
  *
  * To compare `start` and `end`, the optional `compareFn` is used when given, or {@link ltCompare} when not. When
  * `start` and `end` are `symbols`, or one of the values is `NaN`, a `compareFn` parameter is mandatory.
+ *
+ * **Note:** Objects that have neither a `start`, `end`, or `referenceIntervals` property, e.g., a `Date`,  _are_
+ * considered fully indefinite intervals!
  */
 export function isInterval<TR extends TypeRepresentation> (
   i: unknown,
