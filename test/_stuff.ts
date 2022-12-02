@@ -30,6 +30,7 @@ export const stuff: unknown[] = [
   {},
   new Date(2022, 10, 23, 13, 48, 44, 345),
   [],
+  [24],
   () => 'an arrow function',
   function aFunction () {
     return 5
