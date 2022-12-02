@@ -19,7 +19,10 @@
 import 'should'
 import { Interval, ReferenceIntervals } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { AllenRelation, Comparator, compareIntervals, isSequence, ltCompare } from '../src'
+import { Comparator } from '../src/Comparator'
+import { ltCompare } from '../src/ltCompare'
+import { AllenRelation } from '../src/AllenRelation'
+import { compareIntervals, isSequence } from '../src/sequence'
 import { interSectionSequence, transposeAndOrder } from '../src/interSectionSequence'
 import { ok } from 'assert'
 
