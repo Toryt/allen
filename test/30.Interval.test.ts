@@ -19,7 +19,7 @@
 import 'should'
 import { inspect } from 'util'
 import { stuff, stuffWithUndefined } from './_stuff'
-import { Interval, isInterval } from '../src/Interval'
+import { Interval, isInterval, isReferenceIntervals } from '../src/Interval'
 import { typeRepresentations } from './_typeRepresentationCases'
 import {
   commonTypeRepresentation,
@@ -153,6 +153,19 @@ const trueCases: Array<Case<TypeRepresentation>> = [
 const notAnIntervalCandidate = stuffWithUndefined.filter(s => typeof s !== 'object' && typeof s !== 'function')
 
 describe('Interval', function () {
+  describe('isReferenceIntervals', function () {
+    describe('not an object', function () {
+      typeRepresentations.forEach(ptr => {
+        describe(inspect(ptr), function () {
+          notAnIntervalCandidate.forEach(s => {
+            it(`returns false for ${inspect(s)}`, function () {
+              isReferenceIntervals(s, ptr).should.be.false()
+            })
+          })
+        })
+      })
+    })
+  })
   describe('isInterval', function () {
     describe('not an object', function () {
       typeRepresentations.forEach(ptr => {
