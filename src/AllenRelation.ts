@@ -24,6 +24,8 @@ import { getCompareIfOk } from './getCompareIfOk'
 
 const RELATIONS_CACHE: AllenRelation[] = []
 
+const constructorPrivateSymbol = Symbol('private constructor AllenRelation')
+
 /**
  * Support for reasoning about Allen relations, i.e., relations between intervals, and constraints on those relations.
  *
@@ -31,6 +33,23 @@ const RELATIONS_CACHE: AllenRelation[] = []
  * between intervals is treacherously difficult.**
  */
 export class AllenRelation extends Relation {
+  /**
+   * A `private` or `protected` constructor is an impossible concept in JavaScript, since the “constructor” _is_ the
+   * type. Hiding it would make `typeof` impossible. We can, however, make it impossible to call at runtime.
+   * `privateSymbol` must be equal to `constructorPrivateSymbol` for the call to pass, but `constructorPrivateSymbol` is
+   * not exported from this module. This means, the constructor can be used to refer to, but cannot be called outside
+   * this module.
+   */
+  private constructor (bitPattern: number, privateSymbol: typeof constructorPrivateSymbol) {
+    equal(
+      privateSymbol,
+      constructorPrivateSymbol,
+      'AllenRelations cannot be constructed. Use existing constants, or select instances with available methods and functions.'
+    )
+
+    super(bitPattern)
+  }
+
   public static readonly NR_OF_BITS = 13
   public static readonly BASIC_REPRESENTATIONS = Object.freeze([
     'p',
@@ -69,7 +88,7 @@ export class AllenRelation extends Relation {
     assert(index <= fullBitPattern(this.NR_OF_BITS))
 
     if (RELATIONS_CACHE[index] === undefined) {
-      RELATIONS_CACHE[index] = new AllenRelation(index)
+      RELATIONS_CACHE[index] = new AllenRelation(index, constructorPrivateSymbol)
     }
     return RELATIONS_CACHE[index]
   }
