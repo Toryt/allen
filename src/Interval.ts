@@ -150,7 +150,7 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
   if (cType === undefined) {
     return true
   }
-  if (pointType == undefined || !representsSuperType(pointType, cType)) {
+  if (pointType === undefined || !representsSuperType(pointType, cType)) {
     return false
   }
 
