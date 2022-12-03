@@ -503,7 +503,7 @@ describe('Interval', function () {
                 end
               )}[ with reference to [${inspect(referenceStart)}, ${inspect(referenceEnd)}[`, function () {
                 isInterval(
-                  { start, end, referenceInterval: { property: [{ start: referenceStart, end: referenceEnd }] } },
+                  { start, end, referenceIntervals: { property: [{ start: referenceStart, end: referenceEnd }] } },
                   undefined
                 ).should.be.true()
               })
@@ -511,7 +511,7 @@ describe('Interval', function () {
                 start
               )}, 20[ with reference to [${inspect(referenceStart)}, ${inspect(referenceEnd)}[`, function () {
                 isInterval(
-                  { start, end: 20, referenceInterval: { property: [{ start: referenceStart, end: referenceEnd }] } },
+                  { start, end: 20, referenceIntervals: { property: [{ start: referenceStart, end: referenceEnd }] } },
                   undefined
                 ).should.be.false()
               })
@@ -519,7 +519,7 @@ describe('Interval', function () {
                 end
               )}[ with reference to [20, ${inspect(referenceEnd)}[`, function () {
                 isInterval(
-                  { start, end, referenceInterval: { property: [{ start: 20, end: referenceEnd }] } },
+                  { start, end, referenceIntervals: { property: [{ start: 20, end: referenceEnd }] } },
                   undefined
                 ).should.be.false()
               })
