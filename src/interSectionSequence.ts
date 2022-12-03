@@ -97,7 +97,9 @@ export function interSectionSequence<T> (
   return pile.map(({ interval, reference }: Readonly<ReferencedInterval<T>>) => ({
     start: interval.start,
     end: interval.end,
-    [reference]: [interval]
+    referenceIntervals: {
+      [reference]: [interval]
+    }
   }))
 }
 // /**
