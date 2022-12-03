@@ -39,7 +39,7 @@ export interface ReferenceIntervals<T> {
 
 export function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation> (
   u: unknown,
-  pointType: TR,
+  pointType: TR | undefined,
   compareFn: Comparator<TypeFor<TR>> | undefined,
   visitedIntervals: unknown[], // loop protection
   visitedReferenceIntervals: unknown[] // loop protection
@@ -87,10 +87,18 @@ export function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation>
  * instances. There is no general code possible to bar these instances. (We could explicitly bar
  * arrays and `Date` instances, but there are infinitely many other object types possible that have
  * no enumerable properties.) Yet, we cannot allow these types in TypeScript for a map object.
+ *
+ * @param u - the candidate {@link ReferenceIntervals}`
+ * @param pointType - All point representations in `u` must at least have this type, recursively. If this is
+ *                    `undefined`, all intervals in `u` must be fully indefinite. _`undefined` notably does **not** mean
+ *                    “don‘t care”._ `indefinite` point representations are allowed in any interval with any
+ *                    `pointType`.
+ * @param compareFn - Optional {@link Comparator}, used to determine whether all intervals‘ `start < end`, recursively.
+ *                    Mandatory when the point representations are `symbol`s, or a point representation is `NaN`.
  */
 export function isReferenceIntervals<TR extends TypeRepresentation> (
   u: unknown,
-  pointType: TR, // MUDO must support explicit `undefined`, meaning all intervals fully indefinite
+  pointType: TR | undefined,
   compareFn?: Comparator<TypeFor<TR>>
 ): u is Readonly<ReferenceIntervals<TypeFor<TR>>> {
   assert(isTypeRepresentation(pointType))
@@ -117,7 +125,7 @@ export interface Interval<T> {
 
 function loopProtectedIsInterval<TR extends TypeRepresentation> (
   u: unknown,
-  pointType: TR,
+  pointType: TR | undefined,
   compareFn: Comparator<TypeFor<TR>> | undefined,
   visitedIntervals: unknown[], // loop protection
   visitedReferenceIntervals: unknown[] // loop protection
@@ -183,10 +191,19 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
  *
  * **Note:** Objects that have neither a `start`, `end`, or `referenceIntervals` property, e.g., a `Date` or an array,
  * _are_ considered fully indefinite intervals!
+ *
+ * @param u - the candidate {@link Interval}`
+ * @param pointType - `start`, `end`, and all point representations in `u.referenceIntervals` must at least have this
+ *                    type. If this is `undefined`, `u` and all intervals in `u.referenceIntervals` must be fully
+ *                    indefinite, recursively. _`undefined` notably does **not** mean “don‘t care”._ `indefinite` point
+ *                    representations are allowed in any interval with any `pointType`.
+ * @param compareFn - Optional {@link Comparator}, used to determine whether `u.start < u.end` and that `start < end`
+ *                    for all intervals in `u.referenceIntervals`, recursively. Mandatory when the point representations
+ *                    are `symbol`s, or a point representation is `NaN`.
  */
 export function isInterval<TR extends TypeRepresentation> (
   i: unknown,
-  pointType: TR,
+  pointType: TR | undefined,
   compareFn?: Comparator<TypeFor<TR>>
 ): i is Interval<TypeFor<TR>> {
   assert(isTypeRepresentation(pointType))
