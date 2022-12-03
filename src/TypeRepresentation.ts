@@ -128,6 +128,8 @@ export function representsSuperType (
   superRepresentation: TypeRepresentation,
   typeRepresentation: TypeRepresentation
 ): boolean {
+  /* IDEA: Consider allowing `undefined` for arguments, i.e., extending `TypeRepresentation` with `undefined`.
+          `undefined` would be the subtype of anything, and the super type of nothing but itself. */
   assert(isTypeRepresentation(superRepresentation))
   assert(isTypeRepresentation(typeRepresentation))
 
