@@ -198,12 +198,12 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
  *                    are `symbol`s, or a point representation is `NaN`.
  */
 export function isInterval<TR extends TypeRepresentation> (
-  i: unknown,
+  u: unknown,
   pointType: TR | undefined,
   compareFn?: Comparator<TypeFor<TR>>
-): i is Interval<TypeFor<TR>> {
+): u is Interval<TypeFor<TR>> {
   assert(pointType === undefined || isTypeRepresentation(pointType))
   assert(compareFn === undefined || typeof compareFn === 'function')
 
-  return loopProtectedIsInterval(i, pointType, compareFn, [], [])
+  return loopProtectedIsInterval(u, pointType, compareFn, [], [])
 }
