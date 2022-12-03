@@ -44,7 +44,7 @@ export function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation>
   visitedIntervals: unknown[], // loop protection
   visitedReferenceIntervals: unknown[] // loop protection
 ): u is Readonly<ReferenceIntervals<TypeFor<TR>>> {
-  assert(isTypeRepresentation(pointType))
+  assert(pointType === undefined || isTypeRepresentation(pointType))
   assert(compareFn === undefined || typeof compareFn === 'function')
   assert(visitedReferenceIntervals === undefined || Array.isArray(visitedReferenceIntervals))
 
@@ -101,7 +101,7 @@ export function isReferenceIntervals<TR extends TypeRepresentation> (
   pointType: TR | undefined,
   compareFn?: Comparator<TypeFor<TR>>
 ): u is Readonly<ReferenceIntervals<TypeFor<TR>>> {
-  assert(isTypeRepresentation(pointType))
+  assert(pointType === undefined || isTypeRepresentation(pointType))
   assert(compareFn === undefined || typeof compareFn === 'function')
 
   return loopProtectedIsReferenceIntervals(u, pointType, compareFn, [], [])
@@ -154,7 +154,7 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
   if (cType === undefined) {
     return true
   }
-  if (!representsSuperType(pointType, cType)) {
+  if (pointType == undefined || !representsSuperType(pointType, cType)) {
     return false
   }
 
@@ -206,7 +206,7 @@ export function isInterval<TR extends TypeRepresentation> (
   pointType: TR | undefined,
   compareFn?: Comparator<TypeFor<TR>>
 ): i is Interval<TypeFor<TR>> {
-  assert(isTypeRepresentation(pointType))
+  assert(pointType === undefined || isTypeRepresentation(pointType))
   assert(compareFn === undefined || typeof compareFn === 'function')
 
   return loopProtectedIsInterval(i, pointType, compareFn, [], [])
