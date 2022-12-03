@@ -112,10 +112,7 @@ describe('interSectionSequence', function () {
             const sourceReference: string = sourceReferencedInterval.reference
             sourceReference.should.be.a.String()
             const rRs = AllenRelation.relation(resultInterval, sourceInterval, compareFn)
-            if (
-              resultIntervalReferenceIntervals[sourceReference] !== undefined &&
-              resultIntervalReferenceIntervals[sourceReference].includes(sourceInterval)
-            ) {
+            if (resultIntervalReferenceIntervals[sourceReference]?.includes(sourceInterval)) {
               rRs.implies(sedf).should.be.true()
             } else {
               rRs.implies(AllenRelation.DOES_NOT_CONCUR_WITH)
