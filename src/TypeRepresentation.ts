@@ -36,7 +36,7 @@ export type Constructor<T extends Object> = new (...args: never[]) => T
  *
  * `undefined` or `null` as value are acceptable for any `TypeRepresentation`. See {@link Indefinite}.
  *
- * `undefined` as `TypeRepresentation` demands values to be `undefined` or `null`. It notable does _not_ mean “don‘t
+ * `undefined` as `TypeRepresentation` demands values to be `undefined` or `null`. It notable does _not_ mean “don't
  * care”. `TypeRepresentation` does not include `undefined`, because in some cases that is not allowed. When an
  * `undefined` `TypeRepresentation` has meaning in its context, use `TypeRepresentation | undefined` as type.
  */
