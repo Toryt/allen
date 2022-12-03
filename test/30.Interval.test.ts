@@ -35,7 +35,7 @@ import { ok } from 'assert'
 
 interface Case<T extends TypeRepresentation> {
   label: string
-  pointType: T | undefined
+  pointType: T
   p1: TypeFor<T>
   p2: TypeFor<T>
   compareFn?: Comparator<TypeFor<T>>
@@ -147,8 +147,7 @@ const trueCases: Array<Case<TypeRepresentation>> = [
     p2: Symbol('b'),
     compareFn: (p1: symbol, p2: symbol): number => ltCompare(p1.toString(), p2.toString())
   },
-  { label: 'mixed array', pointType: Array, p1: [11], p2: ['a string'] },
-  { label: 'undefined point type', pointType: undefined, p1: undefined, p2: undefined }
+  { label: 'mixed array', pointType: Array, p1: [11], p2: ['a string'] }
 ]
 
 const notAnIntervalCandidate = stuffWithUndefined.filter(s => typeof s !== 'object' && typeof s !== 'function')
