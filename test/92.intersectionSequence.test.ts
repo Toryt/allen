@@ -16,7 +16,7 @@
 
 /* eslint-env mocha */
 
-import 'should'
+import should from 'should'
 import { Interval, ReferenceIntervals } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import { Comparator } from '../src/Comparator'
@@ -27,7 +27,6 @@ import { isSequence } from '../src/isSequence'
 import { interSectionSequence, ReferencedInterval, transposeAndOrder } from '../src/interSectionSequence'
 import { ok } from 'assert'
 import { TypeFor, TypeRepresentation } from '../src'
-import should from 'should'
 
 const sedf = AllenRelation.fromString<AllenRelation>('sedf')
 
@@ -90,7 +89,7 @@ describe('interSectionSequence', function () {
   describe('interSectionSequence', function () {
     function generateTests<TR extends TypeRepresentation> (
       label: string,
-      points: TypeFor<TR>[],
+      points: ReadonlyArray<TypeFor<TR>>,
       compareFn?: Comparator<TypeFor<TR>>
     ): void {
       function validateResult (
