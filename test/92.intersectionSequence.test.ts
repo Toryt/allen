@@ -34,11 +34,11 @@ const sedf = AllenRelation.fromString<AllenRelation>('sedf')
 describe('interSectionSequence', function () {
   describe('transposeAndOrder', function () {
     it('works with an empty object', function () {
-      transposeAndOrder({}, 'number').should.deepEqual([])
+      transposeAndOrder({}).should.deepEqual([])
     })
     it('returns an array for 1 property, sorted', function () {
       const aProperty = [{ start: 32, end: 334 }, { start: 22, end: 23 }, { start: -1 }]
-      const result = transposeAndOrder({ aProperty }, 'number')
+      const result = transposeAndOrder({ aProperty })
       result.should.be.an.Array()
       result.length.should.equal(aProperty.length)
       const orderedAProperty = aProperty.slice().sort(compareIntervals)
@@ -49,7 +49,7 @@ describe('interSectionSequence', function () {
     })
     it('returns an array for 1 property, sorted, with a comparator', function () {
       const aProperty = [{ start: 32, end: 334 }, { start: 22, end: 23 }, { start: -1 }]
-      const result = transposeAndOrder({ aProperty }, 'number', ltCompare)
+      const result = transposeAndOrder({ aProperty }, ltCompare)
       result.should.be.an.Array()
       result.length.should.equal(aProperty.length)
       const orderedAProperty = aProperty.slice().sort(compareIntervals)
@@ -66,7 +66,7 @@ describe('interSectionSequence', function () {
       ]
       const property2: ReadonlyArray<Interval<number>> = [{ start: 32 }, { start: 24, end: 26 }]
       const property3: ReadonlyArray<Interval<number>> = [{ end: 32 }, { start: 122, end: 144 }]
-      const result = transposeAndOrder({ property1, property2, property3 }, 'number', ltCompare)
+      const result = transposeAndOrder({ property1, property2, property3 }, ltCompare)
       result.should.be.an.Array()
       result.length.should.equal(property1.length + property2.length + property3.length)
       const ordered: ReadonlyArray<Interval<number>> = property1
@@ -90,7 +90,6 @@ describe('interSectionSequence', function () {
   describe('interSectionSequence', function () {
     function generateTests<TR extends TypeRepresentation> (
       label: string,
-      ptr: TR,
       points: TypeFor<TR>[],
       compareFn?: Comparator<TypeFor<TR>>
     ): void {
@@ -102,7 +101,6 @@ describe('interSectionSequence', function () {
         isSequence(result, { ordered: true, gaps, compareFn }).should.be.true()
         const sourceReferencedIntervals: ReadonlyArray<Readonly<ReferencedInterval<TypeFor<TR>>>> = transposeAndOrder(
           sources,
-          ptr,
           compareFn
         )
         result.forEach(resultInterval => {
@@ -181,14 +179,11 @@ describe('interSectionSequence', function () {
       })
     }
 
-    generateTests<'number'>('number', 'number', sixNumbers)
-    generateTests<'string'>('string', 'string', sixStrings)
-    generateTests<typeof Date>('Date', Date, sixDates)
-    generateTests<'symbol'>(
-      'symbol',
-      'symbol',
-      generateSixSymbols('interSectionSequence'),
-      (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
+    generateTests<'number'>('number', sixNumbers)
+    generateTests<'string'>('string', sixStrings)
+    generateTests<typeof Date>('Date', sixDates)
+    generateTests<'symbol'>('symbol', generateSixSymbols('interSectionSequence'), (s1: Symbol, s2: Symbol): number =>
+      s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
     )
   })
 })
