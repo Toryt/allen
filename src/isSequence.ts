@@ -60,8 +60,8 @@ export interface SequenceOptions<T> {
 }
 
 /**
- * The elements of `is` are discrete (i.e., do not {@link AllenRelation.CONCURS_WITH concur with the previous or next
- * element}), and are ordered from smallest `i.start` to largest `i.end`.
+ * The elements of `candidate` are discrete (i.e., do not {@link AllenRelation.CONCURS_WITH concur with the previous or
+ * next element}), and are ordered from smallest `i.start` to largest `i.end`.
  *
  * There might be gaps in the sequence.
  *
@@ -98,14 +98,14 @@ export interface SequenceOptions<T> {
  *                   is.some((j: Interval<T>) => AllenRelation.relation(j, i, compare).implies(AllenRelation.MEETS)))
  *             )
  */
-export function isSequence<T> (is: ReadonlyArray<Readonly<Interval<T>>>, options?: SequenceOptions<T>): boolean {
+export function isSequence<T> (candidate: ReadonlyArray<Readonly<Interval<T>>>, options?: SequenceOptions<T>): boolean {
   assert(options === undefined || typeof options === 'object')
-  const compareFn: Comparator<T> = getCompareIfOk(is, options?.compareFn) // asserts preconditions
+  const compareFn: Comparator<T> = getCompareIfOk(candidate, options?.compareFn) // asserts preconditions
   const leftDefinite: boolean = options?.leftDefinite ?? false
   const rightDefinite: boolean = options?.rightDefinite ?? false
   const ordered: boolean = options?.ordered ?? false
 
-  if (is.length <= 0) {
+  if (candidate.length <= 0) {
     return true
   }
 
@@ -113,7 +113,7 @@ export function isSequence<T> (is: ReadonlyArray<Readonly<Interval<T>>>, options
     return compareIntervals(i1, i2, options?.compareFn)
   }
 
-  const sortedIs: ReadonlyArray<Readonly<Interval<T>>> = ordered ? is : is.slice().sort(intervalCompare)
+  const sortedIs: ReadonlyArray<Readonly<Interval<T>>> = ordered ? candidate : candidate.slice().sort(intervalCompare)
 
   if (
     (leftDefinite && (sortedIs[0].start === undefined || sortedIs[0].start === null)) ||
