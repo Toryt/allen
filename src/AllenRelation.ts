@@ -151,8 +151,8 @@ export class AllenRelation extends Relation {
   /**
    * A _basic_ Allen relation that says that an interval `i1` _overlaps_ an interval `i2`, i.e.,
    *
-   * - the `start` of `i1` is before the `start` of `i2`,
-   * - the `end` of `i1` is after the `start` of `i2`, and before the `end` of `i2`
+   * * the `start` of `i1` is before the `start` of `i2`,
+   * * the `end` of `i1` is after the `start` of `i2`, and before the `end` of `i2`
    *
    * ```
    * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
@@ -169,8 +169,8 @@ export class AllenRelation extends Relation {
   /**
    * A _basic_ Allen relation that says that an interval `i1` _is finished by_ an interval `i2`, i.e.,
    *
-   * - the `start` of `i1` is before the `start` of `i2`, and
-   * - the `end` of `i1` is the `end` of `i2`
+   * * the `start` of `i1` is before the `start` of `i2`, and
+   * * the `end` of `i1` is the `end` of `i2`
    *
    * ```
    * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
@@ -187,8 +187,8 @@ export class AllenRelation extends Relation {
   /**
    * A _basic_ Allen relation that says that an interval `i1` _contains_ an interval `i2`, i.e.,
    *
-   * - the `start` of `i1` is before the `start` of `i2`, and
-   * - the `end` of `i1` is after the `end` of `i2`
+   * * the `start` of `i1` is before the `start` of `i2`, and
+   * * the `end` of `i1` is after the `end` of `i2`
    *
    * ```
    * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
@@ -205,8 +205,8 @@ export class AllenRelation extends Relation {
   /**
    * A _basic_ Allen relation that says that an interval `i1` _starts_ an interval `i2`, i.e.,
    *
-   * - the `start` of `i1` is the `start` of `i2`, and
-   * - the `end` of `i1` is before the `end` of `i2`
+   * * the `start` of `i1` is the `start` of `i2`, and
+   * * the `end` of `i1` is before the `end` of `i2`
    *
    * ```
    * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
@@ -223,8 +223,8 @@ export class AllenRelation extends Relation {
   /**
    * A _basic_ Allen relation that says that an interval `i1` _is equal to_ an interval `i2`, i.e.,
    *
-   * - the `start` of `i1` is the `start` of `i2`, and
-   * - the `end` of `i1` is the `end` of `i2`
+   * * the `start` of `i1` is the `start` of `i2`, and
+   * * the `end` of `i1` is the `end` of `i2`
    *
    * ```
    * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
@@ -241,8 +241,8 @@ export class AllenRelation extends Relation {
   /**
    * A _basic_ Allen relation that says that an interval `i1` _started by_ an interval `i2`, i.e.,
    *
-   * - the `start` of `i1` is the `start` of `i2`, and
-   * - the `end` of `i1` is after the `end` of `i2`
+   * * the `start` of `i1` is the `start` of `i2`, and
+   * * the `end` of `i1` is after the `end` of `i2`
    *
    * ```
    * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
@@ -259,8 +259,8 @@ export class AllenRelation extends Relation {
   /**
    * A _basic_ Allen relation that says that an interval `i1` _is during_ an interval `i2`, i.e.,
    *
-   * - the `start` of `i1` is after the `start` of `i2`, and
-   * - the `end` of `i1` is before the `end` of `i2`
+   * * the `start` of `i1` is after the `start` of `i2`, and
+   * * the `end` of `i1` is before the `end` of `i2`
    *
    * ```
    * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
@@ -277,8 +277,8 @@ export class AllenRelation extends Relation {
   /**
    * A _basic_ Allen relation that says that an interval `i1` _finishes_ an interval `i2`, i.e.,
    *
-   * - the `start` of `i1` is after the `start` of `i2`, and
-   * - the `end` of `i1` is the `end` of `i2`
+   * * the `start` of `i1` is after the `start` of `i2`, and
+   * * the `end` of `i1` is the `end` of `i2`
    *
    * ```
    * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
@@ -295,8 +295,8 @@ export class AllenRelation extends Relation {
   /**
    * A _basic_ Allen relation that says that an interval `i1` _is overlapped by_ an interval `i2`, i.e.,
    *
-   * - the `start` of `i1` is after the `start` of `i2`, and before the `end` of `i2`, and
-   * - the `end` of `i1` is after the `end` of `i2`
+   * * the `start` of `i1` is after the `start` of `i2`, and before the `end` of `i2`, and
+   * * the `end` of `i1` is after the `end` of `i2`
    *
    * ```
    * i1.start ≠ undefined ∧ i1.end ≠ undefined ∧ i2.start ≠ undefined ∧ i2.end ≠ undefined ∧
@@ -995,20 +995,20 @@ export class AllenRelation extends Relation {
    *
    * This can result in any of only 26 relations, i.e.,
    *
-   * - the 13 {@link BASIC_RELATIONS},
-   * - `(pmoFDseSdfO)`,
-   * - `(pmoFD)`,
-   * - `(pmosd)`,
-   * - `(osd)`,
-   * - `(oFD)`,
-   * - `(seS)`,
-   * - `(Fef)`,
-   * - `(dfO)`,
-   * - `(DSO)`,
-   * - `(DSOMP)`,
-   * - `(dfOMP)`,
-   * - `(oFDseSdfOMP)`, or
-   * - {@link AllenRelation.fullRelation}.
+   * * the 13 {@link BASIC_RELATIONS},
+   * * `(pmoFDseSdfO)`,
+   * * `(pmoFD)`,
+   * * `(pmosd)`,
+   * * `(osd)`,
+   * * `(oFD)`,
+   * * `(seS)`,
+   * * `(Fef)`,
+   * * `(dfO)`,
+   * * `(DSO)`,
+   * * `(DSOMP)`,
+   * * `(dfOMP)`,
+   * * `(oFDseSdfOMP)`, or
+   * * {@link AllenRelation.fullRelation}.
    *
    * @param i1 - the first interval to find the relation with
    * @param i2 - the second interval to find the relation with
