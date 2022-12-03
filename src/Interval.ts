@@ -37,17 +37,13 @@ export interface ReferenceIntervals<T> {
   [reference: string]: ReadonlyArray<Interval<T>>
 }
 
-export function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation> (
+function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation> (
   u: unknown,
   pointType: TR | undefined,
   compareFn: Comparator<TypeFor<TR>> | undefined,
   visitedIntervals: unknown[], // loop protection
   visitedReferenceIntervals: unknown[] // loop protection
 ): u is Readonly<ReferenceIntervals<TypeFor<TR>>> {
-  assert(pointType === undefined || isTypeRepresentation(pointType))
-  assert(compareFn === undefined || typeof compareFn === 'function')
-  assert(visitedReferenceIntervals === undefined || Array.isArray(visitedReferenceIntervals))
-
   if (visitedReferenceIntervals.includes(u)) {
     return true
   }
