@@ -310,6 +310,18 @@ describe('Interval', function () {
         })
       })
     })
+    describe('indefinite point type', function () {
+      indefinites.forEach(start => {
+        indefinites.forEach(end => {
+          it(`returns true when the pointType is \`undefined\` for [${inspect(start)}, ${inspect(end)}`, function () {
+            isReferenceIntervals({ property: [{ start, end }] }, undefined).should.be.true()
+          })
+          it(`returns true when the pointType is \`undefined\` for [20, ${inspect(end)}`, function () {
+            isReferenceIntervals({ property: [{ start: 20, end }] }, undefined).should.be.false()
+          })
+        })
+      })
+    })
   })
 
   describe('isInterval', function () {
