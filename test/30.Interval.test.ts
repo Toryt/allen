@@ -463,6 +463,37 @@ describe('Interval', function () {
         isInterval({ start: {}, end: new A(27) }, Object).should.be.false()
       })
     })
+    describe('interval with referenceIntervals, false', function () {
+      it('returns false when a first level reference interval features a different type', function () {
+        isInterval(
+          { start: 1, end: 2, referenceIntervals: { property: [{ start: 'not a number' }] } },
+          'number'
+        ).should.be.false()
+      })
+      it('returns false when a first level reference interval features a different type, and the interval itself is indefinite', function () {
+        isInterval({ referenceIntervals: { property: [{ start: 'not a number' }] } }, 'number').should.be.false()
+      })
+      it('returns false when a second level reference interval features a different type', function () {
+        isInterval(
+          {
+            start: 1,
+            end: 2,
+            referenceIntervals: {
+              property: [
+                { start: 3 },
+                {
+                  end: 7,
+                  referenceIntervals: {
+                    anotherProperty: [{ start: 12, end: 14 }, { referenceIntervals: { end: 'not a number' } }]
+                  }
+                }
+              ]
+            }
+          },
+          'number'
+        ).should.be.false()
+      })
+    })
     describe('indefinite point type', function () {
       indefinites.forEach(start => {
         indefinites.forEach(end => {
