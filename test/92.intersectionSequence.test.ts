@@ -26,7 +26,6 @@ import { compareIntervals } from '../src/compareIntervals'
 import { isSequence } from '../src/isSequence'
 import { interSectionSequence, ReferencedInterval, transposeAndOrder } from '../src/interSectionSequence'
 import { ok } from 'assert'
-import { TypeFor, TypeRepresentation } from '../src'
 
 const sedf = AllenRelation.fromString<AllenRelation>('sedf')
 
@@ -87,28 +86,23 @@ describe('interSectionSequence', function () {
     })
   })
   describe('interSectionSequence', function () {
-    function generateTests<TR extends TypeRepresentation> (
-      label: string,
-      points: ReadonlyArray<TypeFor<TR>>,
-      compareFn?: Comparator<TypeFor<TR>>
-    ): void {
+    function generateTests<T> (label: string, points: ReadonlyArray<T>, compareFn?: Comparator<T>): void {
       function validateResult (
-        sources: Readonly<ReferenceIntervals<TypeFor<TR>>>,
-        result: ReadonlyArray<Readonly<Interval<TypeFor<TR>>>>,
+        sources: Readonly<ReferenceIntervals<T>>,
+        result: ReadonlyArray<Readonly<Interval<T>>>,
         gaps?: boolean
       ): void {
         isSequence(result, { ordered: true, gaps, compareFn }).should.be.true()
-        const sourceReferencedIntervals: ReadonlyArray<Readonly<ReferencedInterval<TypeFor<TR>>>> = transposeAndOrder(
+        const sourceReferencedIntervals: ReadonlyArray<Readonly<ReferencedInterval<T>>> = transposeAndOrder(
           sources,
           compareFn
         )
         result.forEach(resultInterval => {
           should(resultInterval).have.ownProperty('referenceIntervals')
-          const resultIntervalReferenceIntervals: ReferenceIntervals<TypeFor<TR>> | undefined =
-            resultInterval.referenceIntervals
+          const resultIntervalReferenceIntervals: ReferenceIntervals<T> | undefined = resultInterval.referenceIntervals
           ok(resultIntervalReferenceIntervals)
-          sourceReferencedIntervals.forEach((sourceReferencedInterval: Readonly<ReferencedInterval<TypeFor<TR>>>) => {
-            const sourceInterval: Interval<TypeFor<TR>> = sourceReferencedInterval.interval
+          sourceReferencedIntervals.forEach((sourceReferencedInterval: Readonly<ReferencedInterval<T>>) => {
+            const sourceInterval: Interval<T> = sourceReferencedInterval.interval
             const sourceReference: string = sourceReferencedInterval.reference
             sourceReference.should.be.a.String()
             const rRs = AllenRelation.relation(resultInterval, sourceInterval, compareFn)
@@ -119,8 +113,8 @@ describe('interSectionSequence', function () {
             }
           })
         })
-        sourceReferencedIntervals.forEach((sourceReferencedInterval: Readonly<ReferencedInterval<TypeFor<TR>>>) => {
-          const sourceInterval: Interval<TypeFor<TR>> = sourceReferencedInterval.interval
+        sourceReferencedIntervals.forEach((sourceReferencedInterval: Readonly<ReferencedInterval<T>>) => {
+          const sourceInterval: Interval<T> = sourceReferencedInterval.interval
           const sourceReference: string = sourceReferencedInterval.reference
           result
             .some(
@@ -134,9 +128,7 @@ describe('interSectionSequence', function () {
         })
       }
 
-      function callIt (
-        sources: Readonly<ReferenceIntervals<TypeFor<TR>>>
-      ): ReadonlyArray<Readonly<Interval<TypeFor<TR>>>> {
+      function callIt (sources: Readonly<ReferenceIntervals<T>>): ReadonlyArray<Readonly<Interval<T>>> {
         return compareFn !== undefined && compareFn !== null
           ? /* prettier-ignore */ interSectionSequence(sources, compareFn)
           : interSectionSequence(sources)
@@ -144,7 +136,7 @@ describe('interSectionSequence', function () {
 
       describe(label, function () {
         it('returns the empty sequence without sources', function () {
-          const sources: ReferenceIntervals<TypeFor<TR>> = {}
+          const sources: ReferenceIntervals<T> = {}
           const result = callIt(sources)
           result.should.be.an.Array()
           result.length.should.equal(0)
@@ -152,12 +144,11 @@ describe('interSectionSequence', function () {
         })
         it('returns the sequence with 1 singleton source', function () {
           const aSource = [{ start: points[0], end: points[1] }]
-          const sources: ReferenceIntervals<TypeFor<TR>> = { aSource }
+          const sources: ReferenceIntervals<T> = { aSource }
           const result = callIt(sources)
           result.should.be.an.Array()
           result.length.should.equal(1)
           validateResult(sources, result)
-          // MUDO more tests
         })
         it('returns the sequence with 1 source', function () {
           const aSource = [
@@ -165,20 +156,19 @@ describe('interSectionSequence', function () {
             { start: points[1], end: points[2] },
             { start: points[3], end: points[4] }
           ]
-          const sources: ReferenceIntervals<TypeFor<TR>> = { aSource }
+          const sources: ReferenceIntervals<T> = { aSource }
           const result = callIt(sources)
           result.should.be.an.Array()
           result.length.should.equal(3)
           validateResult(sources, result)
-          // MUDO more tests
         })
       })
     }
 
-    generateTests<'number'>('number', sixNumbers)
-    generateTests<'string'>('string', sixStrings)
-    generateTests<typeof Date>('Date', sixDates)
-    generateTests<'symbol'>('symbol', generateSixSymbols('interSectionSequence'), (s1: Symbol, s2: Symbol): number =>
+    generateTests<number>('number', sixNumbers)
+    generateTests<string>('string', sixStrings)
+    generateTests<Date>('Date', sixDates)
+    generateTests<symbol>('symbol', generateSixSymbols('interSectionSequence'), (s1: Symbol, s2: Symbol): number =>
       s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
     )
   })
