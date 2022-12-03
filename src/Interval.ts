@@ -130,14 +130,6 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
     return true
   }
 
-  function startBeforeEnd (
-    start: Indefinite<TypeFor<TR>>,
-    end: Indefinite<TypeFor<TR>>,
-    compare: Comparator<TypeFor<TR>>
-  ): boolean {
-    return start === undefined || start === null || end === undefined || end === null || compare(start, end) < 0
-  }
-
   if (u === undefined || u === null || (typeof u !== 'object' && typeof u !== 'function')) {
     return false
   }
@@ -158,6 +150,14 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
     (isLTComparableOrIndefinite(pi.start) && isLTComparableOrIndefinite(pi.end)) || compareFn !== undefined,
     '`compareFn` is mandatory when `i.start` or `i.end` is a `symbol` or `NaN`'
   )
+
+  function startBeforeEnd (
+    start: Indefinite<TypeFor<TR>>,
+    end: Indefinite<TypeFor<TR>>,
+    compare: Comparator<TypeFor<TR>>
+  ): boolean {
+    return start === undefined || start === null || end === undefined || end === null || compare(start, end) < 0
+  }
 
   if (!startBeforeEnd(pi.start, pi.end, compareFn ?? ltCompare)) {
     return false
