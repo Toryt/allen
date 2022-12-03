@@ -90,7 +90,7 @@ function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation> (
  *                    “don‘t care”._ `indefinite` point representations are allowed in any interval with any
  *                    `pointType`.
  * @param compareFn - Optional {@link Comparator}, used to determine whether all intervals‘ `start < end`, recursively.
- *                    Mandatory when the point representations are `symbol`s, or a point representation is `NaN`.
+ *                    Mandatory when the point representations are `symbol` s, or a point representation is `NaN`.
  */
 export function isReferenceIntervals<TR extends TypeRepresentation> (
   u: unknown,
@@ -196,7 +196,7 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
  *                    representations are allowed in any interval with any `pointType`.
  * @param compareFn - Optional {@link Comparator}, used to determine whether `u.start < u.end` and that `start < end`
  *                    for all intervals in `u.referenceIntervals`, recursively. Mandatory when the point representations
- *                    are `symbol`s, or a point representation is `NaN`.
+ *                    are `symbol` s, or a point representation is `NaN`.
  */
 export function isInterval<TR extends TypeRepresentation> (
   u: unknown,
