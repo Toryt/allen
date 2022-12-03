@@ -4,6 +4,17 @@
 
 ### 0.8
 
+#### 0.8.1
+
+- `undefined` is now allowed as `pointType` in `isInterval` and `isReferenceIntervals` (meaning all intervals _must_ be
+  fully indefinite)
+- `ReferenceIntervals` property values now can be `readonly` arrays
+- fixed a bug in `isInterval` and `isReferenceIntervals`: nested `ReferenceIntervals` would not be tested for a fully
+  indefinite interval
+
+There are also some internal changes, that should not influence the user, who should not use code outside what is
+offered through `index`.
+
 #### 0.8.0
 
 - correct `main` and `types` references
