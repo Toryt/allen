@@ -33,6 +33,12 @@ export type Constructor<T extends Object> = new (...args: never[]) => T
  *
  * For 'number', 'bigint', 'string', 'boolean', 'symbol', this is the `typeof` string. For `object` and `function`, it
  * is the constructor.
+ *
+ * `undefined` or `null` as value are acceptable for any `TypeRepresentation`. See {@link Indefinite}.
+ *
+ * `undefined` as `TypeRepresentation` demands values to be `undefined` or `null`. It notable does _not_ mean “don‘t
+ * care”. `TypeRepresentation` does not include `undefined`, because in some cases that is not allowed. When an
+ * `undefined` `TypeRepresentation` has meaning in its context, use `TypeRepresentation | undefined` as type.
  */
 export type TypeRepresentation = typeof primitiveTypeRepresentations[number] | Constructor<Object>
 
@@ -122,14 +128,15 @@ export function commonTypeRepresentation (...p: unknown[]): TypeRepresentation |
 }
 
 /**
- * `superRepresentation` is, or is a super type of `typeRepresentation`
+ * `superRepresentation` is, or is a super type of `typeRepresentation`.
+ *
+ * The arguments are not allowed to be `undefined`. Whether `undefined` is an acceptable subtype of another type is
+ * context dependent. The case must be handled in situ, before calling this function.
  */
 export function representsSuperType (
   superRepresentation: TypeRepresentation,
   typeRepresentation: TypeRepresentation
 ): boolean {
-  /* IDEA: Consider allowing `undefined` for arguments, i.e., extending `TypeRepresentation` with `undefined`.
-          `undefined` would be the subtype of anything, and the super type of nothing but itself. */
   assert(isTypeRepresentation(superRepresentation))
   assert(isTypeRepresentation(typeRepresentation))
 
