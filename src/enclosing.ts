@@ -117,6 +117,7 @@ export function minimalEnclosing<T> (
   is: ReadonlyArray<Readonly<Interval<T>>>,
   compareFn?: Comparator<T>
 ): Readonly<Interval<T>> {
+  /* IDEA: add optional property name for referenceIntervals */
   const compare: Comparator<T> = getCompareIfOk(is, compareFn)
 
   if (is.length <= 0) {
