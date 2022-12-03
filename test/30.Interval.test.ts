@@ -35,7 +35,7 @@ import { ok } from 'assert'
 
 interface Case<T extends TypeRepresentation> {
   label: string
-  pointType: T
+  pointType: T | undefined
   p1: TypeFor<T>
   p2: TypeFor<T>
   compareFn?: Comparator<TypeFor<T>>
@@ -147,7 +147,8 @@ const trueCases: Array<Case<TypeRepresentation>> = [
     p2: Symbol('b'),
     compareFn: (p1: symbol, p2: symbol): number => ltCompare(p1.toString(), p2.toString())
   },
-  { label: 'mixed array', pointType: Array, p1: [11], p2: ['a string'] }
+  { label: 'mixed array', pointType: Array, p1: [11], p2: ['a string'] },
+  { label: 'undefined point type', pointType: undefined, p1: undefined, p2: undefined }
 ]
 
 const notAnIntervalCandidate = stuffWithUndefined.filter(s => typeof s !== 'object' && typeof s !== 'function')
@@ -449,6 +450,40 @@ describe('Interval', function () {
     describe('object without compareFn', function () {
       it('returns false because the interval is degenerate (all objects are the same)', function () {
         isInterval({ start: {}, end: new A(27) }, Object).should.be.false()
+      })
+    })
+    describe('indefinite point type', function () {
+      indefinites.forEach(start => {
+        indefinites.forEach(end => {
+          indefinites.forEach(referenceStart => {
+            indefinites.forEach(referenceEnd => {
+              it(`returns true when the pointType is \`undefined\` for [${inspect(start)}, ${inspect(
+                end
+              )}[ with reference to [${inspect(referenceStart)}, ${inspect(referenceEnd)}[`, function () {
+                isInterval(
+                  { start, end, referenceInterval: { property: [{ start: referenceStart, end: referenceEnd }] } },
+                  undefined
+                ).should.be.true()
+              })
+              it(`returns false when the pointType is \`undefined\` for [${inspect(
+                start
+              )}, 20[ with reference to [${inspect(referenceStart)}, ${inspect(referenceEnd)}[`, function () {
+                isInterval(
+                  { start, end: 20, referenceInterval: { property: [{ start: referenceStart, end: referenceEnd }] } },
+                  undefined
+                ).should.be.false()
+              })
+              it(`returns true when the pointType is \`undefined\` for [${inspect(start)}, ${inspect(
+                end
+              )}[ with reference to [20, ${inspect(referenceEnd)}[`, function () {
+                isInterval(
+                  { start, end, referenceInterval: { property: [{ start: 20, end: referenceEnd }] } },
+                  undefined
+                ).should.be.false()
+              })
+            })
+          })
+        })
       })
     })
   })
