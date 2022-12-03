@@ -135,6 +135,22 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
   }
 
   const pi = u as Readonly<Partial<Interval<TypeFor<TR>>>>
+
+  // depth first backtrack
+  visitedIntervals.push(pi)
+  if (
+    pi.referenceIntervals !== undefined &&
+    !loopProtectedIsReferenceIntervals<TR>(
+      pi.referenceIntervals,
+      pointType,
+      compareFn,
+      visitedIntervals,
+      visitedReferenceIntervals
+    )
+  ) {
+    return false
+  }
+
   const cType = commonTypeRepresentation(pi.start, pi.end)
   if (cType === false) {
     return false
@@ -159,22 +175,7 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
     return start === undefined || start === null || end === undefined || end === null || compare(start, end) < 0
   }
 
-  if (!startBeforeEnd(pi.start, pi.end, compareFn ?? ltCompare)) {
-    return false
-  }
-
-  // tail recursion
-  visitedIntervals.push(pi)
-  return (
-    pi.referenceIntervals === undefined ||
-    loopProtectedIsReferenceIntervals<TR>(
-      pi.referenceIntervals,
-      pointType,
-      compareFn,
-      visitedIntervals,
-      visitedReferenceIntervals
-    )
-  )
+  return startBeforeEnd(pi.start, pi.end, compareFn ?? ltCompare)
 }
 /**
  * If both `start` and `end` are definite,
