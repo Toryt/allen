@@ -19,6 +19,7 @@ import { Comparator } from './Comparator'
 import assert, { equal, ok } from 'assert'
 import { compareIntervals } from './compareIntervals'
 import { commonTypeRepresentation } from './TypeRepresentation'
+import { getCompareIfOk } from './getCompareIfOk'
 
 export interface ReferencedInterval<T> {
   readonly interval: Readonly<Interval<T>>
@@ -68,6 +69,47 @@ export function transposeAndOrder<T> (
   }
 
   return transposed.sort(compareReferencedIntervals)
+}
+
+/**
+ * Returns the intervals that form the intersections between `i1` and `i2`.
+ *
+ * #### Result
+ *
+ *
+ * For fully definite intervals
+ *
+ * | `i1 (.) i2`  | result                                                                        |
+ * | ------------ | ----------------------------------------------------------------------------- |
+ * | `i1 (pm) i2` | `i1{i1}, i2{i2]`                                                              |
+ * | `i1 (o) i2`  | `[i1.start, i2.start[{i1}, [i2.start, i1.end[{i1, i2} , [i1.end, i2.end[{i2}` |
+ * | `i1 (F) i2`  | `[i1.start, i2.start[{i1}, [i2.start, i2.end[{i1, i2}`                        |
+ * | `i1 (D) i2`  | `[i1.start, i2.start[{i1}, i2{i1, i2}, [i2.end, i1.end[{i1}`                  |
+ * | `i1 (s) i2`  | `i1{i1, i2}, [i1.end, i2.end[{i2}`                                            |
+ * | `i1 (e) i2`  | `i1{i1, i2}`                                                                  |
+ * | `i1 (S) i2`  | `i2{i2, i1}, [i2.end, i1.end[{i1}`                                            |
+ * | `i1 (d) i2`  | `[i2.start, i1.start[{i2}, i1{i2, i1}, [i1.end, i2.end[{i2}`                  |
+ * | `i1 (f) i2`  | `[i2.start, i1.start[{i2}, [i1.start, i1.end[{i2, i1}`                        |
+ * | `i1 (O) i2`  | `[i2.start, i1.start[{i2}, [i1.start, i2.end[{i2, i1} , [i2.end, i1.end[{i1}` |
+ * | `i1 (MP) i2` | `i2{i2}, i1{i1}`                                                              |
+ */
+export function intersection<T> (
+  i1: Readonly<Interval<T>>,
+  i2: Readonly<Interval<T>>,
+  compareFn?: Comparator<T>
+): ReadonlyArray<Readonly<Interval<T>>> {
+  const compare: Comparator<T> = getCompareIfOk<T>([i1, i2], compareFn)
+
+  const i1Starti2Start = compare(i1.start, i2.start)
+
+  const { smallest, largest } =
+    compareIntervals(i1, i2, compareFn) <= 0 // checks preconditions
+      ? { smallest: i1, largest: i2 }
+      : { smallest: i2, largest: i1 }
+
+  // smallest.start ≤ largest.start
+
+  return []
 }
 
 /**
