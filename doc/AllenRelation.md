@@ -329,6 +329,86 @@ The following table gives a graphical overview of the 8 actual relations that ar
 | `p` |           |       | `(B)`     | `(MP)`      |
 | 🤷  | 🤷        | 🤷    | `(ATICB)` | `(pmFDSMP)` |
 
+## Chop and intersection
+
+Given 2 intervals `i1` and `i2`, we can consider their _chopped sequence_. This is an ordered sequence such that both
+`i1` and `i2` are “covered” a gapless subsequence `ss` of one or more intervals in it. The minimal enclosing interval of
+the subsequence `minimalEnclosing(ss) (e) i1`, respectively `minimalEnclosing(ss) (e) i2`. All intervals in the chopped
+sequence are part of such a subsequence. There is such a subsequence for both `i1` and `i2`. For each interval in the
+subsequence, its relation with `i1` or `i2` must imply `(sedf)`, or the relation between `i1` or `i2` and the intervals
+in their subsequence must imply `ENCLOSES`. I imagine both intervals to be cooky cutters, which slice the other interval
+at the `start` and `end`.
+
+When we only retain the intervals from the chopped sequence that are enclosed by both `i1` and `i2`, we get the
+_intersection sequence_.
+
+### Definite intervals
+
+For fully definite intervals, we get the following intersection sequences and subsequences, depending on their relation.
+
+| `i1 (.) i2` | chopped sequence                                              | subsequence `i1`                             | subsequence `i2`                             | intersection         |
+| ----------- | ------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------- | -------------------- |
+| `i1 (p) i2` | `i1, i2`                                                      | `i1`                                         | `i2`                                         | —                    |
+| `i1 (m) i2` | `i1, i2`                                                      | `i1`                                         | `i2`                                         | —                    |
+| `i1 (o) i2` | `[i1.start, i2.start[, [i2.start, i1.end[ , [i1.end, i2.end[` | `[i1.start, i2.start[, [i2.start, i1.end[`   | `[i2.start, i1.end[, [i1.end, i2.end[`       | `[i2.start, i1.end[` |
+| `i1 (F) i2` | `[i1.start, i2.start[, i2`                                    | `[i1.start, i2.start[, i2`                   | `i2`                                         | `i2`                 |
+| `i1 (D) i2` | `[i1.start, i2.start[, i2, [i2.end, i1.end[`                  | `[i1.start, i2.start[, i2, [i2.end, i1.end[` | `i2`                                         | `i2`                 |
+| `i1 (s) i2` | `i1, [i1.end, i2.end[`                                        | `i1`                                         | `i1, [i1.end, i2.end[`                       | `i1`                 |
+| `i1 (e) i2` | `i1` = `i2`                                                   | `i1, i2`                                     | `i1, i2`                                     | `i1` = `i2`          |
+| `i1 (S) i2` | `i2, [i2.end, i1.end[`                                        | `i2, [i2.end, i1.end[`                       | `i2`                                         | `i2`                 |
+| `i1 (d) i2` | `[i2.start, i1.start[, i1, [i1.end, i2.end[`                  | `i1`                                         | `[i2.start, i1.start[, i1, [i1.end, i2.end[` | `i1`                 |
+| `i1 (f) i2` | `[i2.start, i1.start[, i1`                                    | `i1`                                         | `[i2.start, i1.start[, i1`                   | `i1`                 |
+| `i1 (O) i2` | `[i2.start, i1.start[, [i1.start, i2.end[ , [i2.end, i1.end[` | `[i1.start, i2.end[ , [i2.end, i1.end[`      | `[i2.start, i1.start[, [i1.start, i2.end[ `  | `[i1.start, i2.end[` |
+| `i1 (M) i2` | `i2, i1`                                                      | `i1`                                         | `i2`                                         | —                    |
+| `i1 (P) i2` | `i2, i1`                                                      | `i1`                                         | `i2`                                         | —                    |
+
+Note there are always 1, 2, or 3 intervals in the chopped sequence. The intersection sequence has zero or 1 interval,
+which is `i1` or `i2` (or both for `(e)`), or a new interval for `(o)` and `(O)`.
+
+### Indefinite intervals
+
+For indefinite intervals, the result is indeterminate.
+
+Consider the actual relation between a left-indefinite interval `lii` and an interval `i`. Depending on the relation
+between `lii.end` and `i.start`, and `lii.end` and `i.end`, we get:
+
+| `lii.end ⨀ i.start` | `lii.end ⨀ i.end` | `lii (.) i`     | `i (.) liii`    |
+| ------------------- | ----------------- | --------------- | --------------- |
+| <                   | <                 | `(p)`           | `(P)`           |
+| =                   | <                 | `(m)`           | `(M)`           |
+| >                   | <                 | `(osd)`         | `(DSO)`         |
+|                     | =                 | `(Fef)`         | `(Fef)`         |
+|                     | >                 | `(DSOMP)`       | `(pmosd)`       |
+|                     | 🤷                | `(oFDseSdfOMP)` | `(pmoFDseSdfO)` |
+| 🤷                  | <                 | `(pmosd)`       | `(DSOMP)`       |
+|                     | =                 | `(Fef)`         | `(FeF)`         |
+|                     | >                 | `(DSOMP)`       | `(pmosd)`       |
+|                     | 🤷                | full            | full            |
+
+`(p)`, `(m)`, `(M)`, and `(P)` are basic relations, and the chopped sequence can be looked up in the table above. There
+is no intersection.
+
+Note that the possible actual relations `(oFD)`, `(dfO)`, `(seS)`, and `(dfOMP)` do not appear in this list.
+
+// MUDO why not? They should. With a right-indefinite interval `rii`?
+
+When `lii. end > i.start` however, we have 3 different cases where the actual relation is not a basic relation, and
+there are 3, respectively 5, possible chopped sequences. Let's display them visually:
+
+| `[lii.start,` | `[i.start` |          | `lii.end[` |          | `lii (.) i` | chopped sequence                                      | intersection           |
+| ------------- | ---------- | -------- | ---------- | -------- | ----------- | ----------------------------------------------------- | ---------------------- |
+|               |            |          |            | `i.end[` | `(o)`       | `[…, i.start[, [i.start, lii.end[ , [lii.end, i.end[` | `[i.start, lii.end[`   |
+|               |            |          |            |          | `(s)`       | `[lii.start = i.start, lii.end[, [lii.end, i.end[`    | `[i.start, lii.end[`   |
+|               |            |          |            |          | `(d)`       | `[i.start, ?[, [?, lii.end], [lii.end, i2.end[`       | `[?, lii.end]`         |
+|               |            |          | `i.end[`   |          | `(F)`       | `[…, i.start[, i`                                     | `i`                    |
+|               |            |          |            |          | `(e)`       | `i`                                                   | `i`                    |
+|               |            |          |            |          | `(f)`       | `[i.start, ?[, [?, lii.end = i.end[`                  | `[?, lii.end = i.end]` |
+|               |            | `i.end[` |            |          | `(D)`       | `[…, i.start[, i, [i.end, lii.end[`                   | `i`                    |
+|               |            |          |            |          | `(S)`       | `i, [i.end, lii.end[`                                 | `i`                    |
+|               |            |          |            |          | `(O)`       | `[i.start, ?[, [?, i.end[, [i.end, lii.end[`          | `[?, i.end]`           |
+|               |            |          |            |          | `(M)`       | `i, [? = i.end, lii.end[`                             | —                      |
+|               |            |          |            |          | `(P)`       | `i, [? = i.end, lii.end[`                             | —                      |
+
 ## Inference
 
 **Be aware that, in general, inference over intervals, also using Allen relations, is NP-complete.** This means that the
