@@ -376,7 +376,7 @@ between `lii.end` and `i.start`, and `lii.end` and `i.end`, we get:
 | ------------------- | ----------------- | --------------- | --------------- |
 | <                   | <                 | `(p)`           | `(P)`           |
 | =                   | <                 | `(m)`           | `(M)`           |
-| >                   | <                 | `(osd)`         | `(DSO)`         |
+| &gt;                | <                 | `(osd)`         | `(DSO)`         |
 |                     | =                 | `(Fef)`         | `(Fef)`         |
 |                     | >                 | `(DSOMP)`       | `(pmosd)`       |
 |                     | 🤷                | `(oFDseSdfOMP)` | `(pmoFDseSdfO)` |
@@ -408,6 +408,10 @@ there are 3, respectively 5, possible chopped sequences. Let's display them visu
 |               |            |          |            |          | `(O)`       | `[i.start, ?[, [?, i.end[, [i.end, lii.end[`          | `[?, i.end]`           |
 |               |            |          |            |          | `(M)`       | `i, [? = i.end, lii.end[`                             | —                      |
 |               |            |          |            |          | `(P)`       | `i, [? = i.end, lii.end[`                             | —                      |
+
+WE FORBID THE USE OF INDEFINITE INTERVALS FOR THIS ALGORITHM USERS MUST MAKE THE SEMANTICS OF indefinite points CLEAR
+FIRST BY “Reasoning with unknown but constrained start and end point”, before using the algorithm, and take into account
+that the returned result is that for constrained (definite) intervals, not the original interval.
 
 ## Inference
 
