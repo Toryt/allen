@@ -14,58 +14,12 @@
  limitations under the License.
  */
 
-import { Interval, isReferenceIntervals, ReferencedInterval, ReferenceIntervals } from './Interval'
+import { Interval, ReferencedInterval, ReferenceIntervals } from './Interval'
 import { Comparator } from './Comparator'
-import assert, { equal, ok } from 'assert'
-import { compareIntervals } from './compareIntervals'
-import { commonTypeRepresentation } from './TypeRepresentation'
+import { equal, ok } from 'assert'
 import { getCompareIfOk } from './getCompareIfOk'
 import { AllenRelation } from './AllenRelation'
-
-const haveCommonType: string = 'all `start` and `end` values of all intervals must be of a common type'
-
-/**
- * Turn a {@link ReferenceIntervals} instance into an array of {@link ReferencedInterval} instances, ordered with
- * {@link compareIntervals} on their `interval` values.
- */
-export function transposeAndOrder<T> (
-  sources: Readonly<ReferenceIntervals<T>>,
-  compareFn?: Comparator<T>
-): ReadonlyArray<Readonly<ReferencedInterval<T>>> {
-  equal(typeof sources, 'object')
-  ok(sources)
-  assert(compareFn === undefined || typeof compareFn === 'function')
-
-  // use for .. in, because we also need the inherited properties
-  let transposed: Array<Readonly<ReferencedInterval<T>>> = []
-  for (const reference in sources) {
-    const referenceTransposed: ReadonlyArray<Readonly<ReferencedInterval<T>>> = sources[reference].map(interval => ({
-      interval,
-      reference
-    }))
-    transposed = transposed.concat(referenceTransposed)
-  }
-
-  const cType = commonTypeRepresentation(
-    ...transposed.reduce((acc: unknown[], { interval: { start, end } }: Readonly<ReferencedInterval<T>>): unknown[] => {
-      acc.push(start)
-      acc.push(end)
-      return acc
-    }, [])
-  )
-
-  assert(cType !== false, haveCommonType)
-  assert(isReferenceIntervals(sources, cType, compareFn))
-
-  function compareReferencedIntervals (
-    ri1: Readonly<ReferencedInterval<T>>,
-    ri2: Readonly<ReferencedInterval<T>>
-  ): number {
-    return compareIntervals(ri1.interval, ri2.interval, compareFn)
-  }
-
-  return transposed.sort(compareReferencedIntervals)
-}
+import { transposeAndOrder } from './transposeAndOrder'
 
 interface LabeledInterval<T> {
   readonly label: string
