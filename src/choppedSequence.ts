@@ -35,7 +35,7 @@ import { transposeAndOrder } from './transposeAndOrder'
  *
  * The resulting sequence is ordered, might have gaps, and might be left- and / or right-indefinite.
  */
-export function interSectionSequence<T> (
+export function choppedSequence<T> (
   sources: Readonly<ReferenceIntervals<T>>,
   compareFn?: Comparator<T>
 ): ReadonlyArray<Readonly<Interval<T>>> {

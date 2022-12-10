@@ -22,13 +22,13 @@ import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCa
 import { Comparator } from '../src/Comparator'
 import { AllenRelation } from '../src/AllenRelation'
 import { isSequence } from '../src/isSequence'
-import { interSectionSequence } from '../src/interSectionSequence'
+import { choppedSequence } from '../src/choppedSequence'
 import { ok } from 'assert'
 import { transposeAndOrder } from '../src/transposeAndOrder'
 
 const sedf = AllenRelation.fromString<AllenRelation>('sedf')
 
-describe('interSectionSequence', function () {
+describe('choppedSequence', function () {
   function generateTests<T> (label: string, points: ReadonlyArray<T>, compareFn?: Comparator<T>): void {
     function validateResult (
       sources: Readonly<ReferenceIntervals<T>>,
@@ -73,8 +73,8 @@ describe('interSectionSequence', function () {
 
     function callIt (sources: Readonly<ReferenceIntervals<T>>): ReadonlyArray<Readonly<Interval<T>>> {
       return compareFn !== undefined && compareFn !== null
-        ? /* prettier-ignore */ interSectionSequence(sources, compareFn)
-        : interSectionSequence(sources)
+        ? /* prettier-ignore */ choppedSequence(sources, compareFn)
+        : choppedSequence(sources)
     }
 
     describe(label, function () {
