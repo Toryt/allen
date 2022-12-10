@@ -385,6 +385,21 @@ the relation between `lii.end` and `i.start`, and `lii.end` and `i.end`, we get:
 |                     | >                 | `(DSOMP)`       | `(pmosd)`       |
 |                     | 🤷                | full            | full            |
 
+For a right-indefinite interval `rii` and an interval `i`, and vice versa, we get:
+
+| `rii.start ⨀ i.end` | `rii.start ⨀ i.start` | `rii (.) i`     | `i (.) rii`     |
+| ------------------- | --------------------- | --------------- | --------------- |
+| &gt;                | &gt;                  | `(P)`           | `(p)`           |
+| =                   | <                     | `(M)`           | `(m)`           |
+| <                   | >                     | `(dfO)`         | `(oFD)`         |
+|                     | =                     | `(seS)`         | `(seS)`         |
+|                     | <                     | `(pmOFD)`       | `(dfoMP)`       |
+|                     | 🤷                    | `(pmoFDseSdfO)` | `(oFDseSdfOMP)` |
+| 🤷                  | >                     | `(dfOMP)`       | `(pmoFD)`       |
+|                     | =                     | `(seS)`         | `(seS)`         |
+|                     | <                     | `(pmoFD)`       | `(dfOMP)`       |
+|                     | 🤷                    | full            | full            |
+
 `(p)`, `(m)`, `(M)`, and `(P)` are basic relations, and the chopped sequence can be looked up in the table above. There
 is no intersection.
 
