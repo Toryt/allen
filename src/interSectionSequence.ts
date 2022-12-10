@@ -388,6 +388,23 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
   [AllenRelation.fullRelation<AllenRelation>(), { intersect: intersectionNotDefined, chop: chopNotDefined }]
 ])
 
+export const chop: Chop = <T>(li1: LabeledInterval<T>, li2: LabeledInterval<T>): Array<Interval<T>> | undefined => {
+  const gr = AllenRelation.relation(i1, i2)
+  const handler: ChopAndIntersect | undefined = chopAndIntersect.get(gr)
+  ok(handler)
+  return handler.chop(li1, li2)
+}
+
+export const intersect: Intersect = <T>(
+  li1: LabeledInterval<T>,
+  li2: LabeledInterval<T>
+): Interval<T> | null | undefined => {
+  const gr = AllenRelation.relation(i1, i2)
+  const handler: ChopAndIntersect | undefined = chopAndIntersect.get(gr)
+  ok(handler)
+  return handler.intersect(li1, li2)
+}
+
 /**
  * Returns the intervals that form the intersections between `i1` and `i2`.
  *
