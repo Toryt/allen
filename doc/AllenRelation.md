@@ -367,12 +367,12 @@ which is `i1` or `i2` (or both for `(e)`), or a new interval for `(o)` and `(O)`
 
 ### Indefinite intervals
 
-For indefinite intervals, the result is indeterminate.
+For indefinite intervals, the result is most often indeterminate.
 
-Consider the actual relation between a left-indefinite interval `lii` and an interval `i`. Depending on the relation
-between `lii.end` and `i.start`, and `lii.end` and `i.end`, we get:
+Consider the actual relation between a left-indefinite interval `lii` and an interval `i`, and vice versa. Depending on
+the relation between `lii.end` and `i.start`, and `lii.end` and `i.end`, we get:
 
-| `lii.end ⨀ i.start` | `lii.end ⨀ i.end` | `lii (.) i`     | `i (.) liii`    |
+| `lii.end ⨀ i.start` | `lii.end ⨀ i.end` | `lii (.) i`     | `i (.) lii`     |
 | ------------------- | ----------------- | --------------- | --------------- |
 | <                   | <                 | `(p)`           | `(P)`           |
 | =                   | <                 | `(m)`           | `(M)`           |
