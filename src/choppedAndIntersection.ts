@@ -25,318 +25,340 @@ interface LabeledInterval<T> {
   readonly interval: Interval<T>
 }
 
-type Intersector = <T>(i1: LabeledInterval<T>, i2: LabeledInterval<T>) => Readonly<Interval<T>> | null | undefined
+type SimpleIntersector = <T>(i1: Interval<T>, i2: Interval<T>) => Interval<T> | undefined | false
+const noIntersection: SimpleIntersector = (): undefined => undefined
+const intersectionNotDefined: SimpleIntersector = (): false => false
+type Intersector = <T>(li1: LabeledInterval<T>, li2: LabeledInterval<T>) => Readonly<Interval<T>> | undefined | false
 
-const noIntersection: Intersector = (): null => null
-const intersectionNotDefined: Intersector = (): undefined => undefined
-type Chopper = <T>(i1: LabeledInterval<T>, i2: LabeledInterval<T>) => ReadonlyArray<Readonly<Interval<T>>> | undefined
+type Chopper = <T>(li1: LabeledInterval<T>, li2: LabeledInterval<T>) => ReadonlyArray<Readonly<Interval<T>>> | false
 
-const choppedNotDefined: Chopper = (): undefined => undefined
+const chopsNotDefined: Chopper = (): false => false
 
-interface ChopAndIntersect {
-  intersection: Intersector
-  chopped: Chopper
+interface ChopAndIntersectKwargs {
+  intersection: SimpleIntersector
+  chops: Chopper
+}
+
+class ChopAndIntersect {
+  intersection: SimpleIntersector
+  chops: Chopper
+
+  constructor ({ intersection, chops }: ChopAndIntersectKwargs) {
+    this.intersection = intersection
+    this.chops = chops
+  }
+
+  referencingIntersection<T> (
+    li1: LabeledInterval<T>,
+    li2: LabeledInterval<T>
+  ): Readonly<Interval<T>> | undefined | false {
+    const provisional: Interval<T> | undefined | false = this.intersection(li1.interval, li2.interval)
+
+    if (provisional === false || provisional === undefined) {
+      return provisional
+    }
+
+    return { ...provisional, referenceIntervals: { [li1.label]: [li1.interval], [li2.label]: [li2.interval] } }
+  }
+
+  cleanIntersection<T> (li1: LabeledInterval<T>, li2: LabeledInterval<T>): Readonly<Interval<T>> {
+    const provisional: Interval<T> | undefined | false = this.referencingIntersection(li1, li2)
+    ok(provisional)
+
+    return provisional
+  }
 }
 
 const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
   [
     AllenRelation.PRECEDES,
-    {
+    new ChopAndIntersect({
       intersection: noIntersection,
-      chopped: <T>(
+      chops: <T>(
         { label: label1, interval: i1 }: LabeledInterval<T>,
         { label: label2, interval: i2 }: LabeledInterval<T>
       ): ReadonlyArray<Readonly<Interval<T>>> => [
         { ...i1, referenceIntervals: { [label1]: [i1] } },
         { ...i2, referenceIntervals: { [label2]: [i2] } }
       ]
-    }
+    })
   ],
   [
     AllenRelation.MEETS,
-    {
+    new ChopAndIntersect({
       intersection: noIntersection,
-      chopped: <T>(
+      chops: <T>(
         { label: label1, interval: i1 }: LabeledInterval<T>,
         { label: label2, interval: i2 }: LabeledInterval<T>
       ): ReadonlyArray<Readonly<Interval<T>>> => [
         { ...i1, referenceIntervals: { [label1]: [i1] } },
         { ...i2, referenceIntervals: { [label2]: [i2] } }
       ]
-    }
+    })
   ],
   [
     AllenRelation.OVERLAPS,
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({
+    new ChopAndIntersect({
+      intersection: <T>(i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): Readonly<Interval<T>> => ({
         start: i2.start,
-        end: i1.end,
-        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+        end: i1.end
       }),
-      chopped: function <T> (li1: LabeledInterval<T>, li2: LabeledInterval<T>): ReadonlyArray<Readonly<Interval<T>>> {
+      chops: function <T> (
+        this: ChopAndIntersect,
+        li1: LabeledInterval<T>,
+        li2: LabeledInterval<T>
+      ): ReadonlyArray<Readonly<Interval<T>>> {
         const { label: label1, interval: i1 } = li1
         const { label: label2, interval: i2 } = li2
         return [
           { start: i1.start, end: i2.start, referenceIntervals: { [label1]: [i1] } },
-          this.intersection(li1, li2)!,
+          this.cleanIntersection(li1, li2),
           { start: i1.end, end: i2.end, referenceIntervals: { [label2]: [i2] } }
         ]
       }
-    }
+    })
   ],
   [
     AllenRelation.FINISHED_BY,
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({
-        ...i2,
-        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
-      }),
-      chopped: function <T> (li1: LabeledInterval<T>, li2: LabeledInterval<T>): ReadonlyArray<Readonly<Interval<T>>> {
+    new ChopAndIntersect({
+      intersection: <T>(_: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): Readonly<Interval<T>> => i2,
+      chops: function <T> (
+        this: ChopAndIntersect,
+        li1: LabeledInterval<T>,
+        li2: LabeledInterval<T>
+      ): ReadonlyArray<Readonly<Interval<T>>> {
         const { label: label1, interval: i1 } = li1
         const { interval: i2 } = li2
         return [
           { start: i1.start, end: i2.start, referenceIntervals: { [label1]: [i1] } },
-          this.intersection(li1, li2)!
+          this.cleanIntersection(li1, li2)
         ]
       }
-    }
+    })
   ],
   [
     AllenRelation.CONTAINS,
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({
-        ...i2,
-        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
-      }),
-      chopped: function <T> (li1: LabeledInterval<T>, li2: LabeledInterval<T>): ReadonlyArray<Readonly<Interval<T>>> {
+    new ChopAndIntersect({
+      intersection: <T>(_: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): Readonly<Interval<T>> => i2,
+      chops: function <T> (
+        this: ChopAndIntersect,
+        li1: LabeledInterval<T>,
+        li2: LabeledInterval<T>
+      ): ReadonlyArray<Readonly<Interval<T>>> {
         const { label: label1, interval: i1 } = li1
         const { interval: i2 } = li2
         return [
           { start: i1.start, end: i2.start, referenceIntervals: { [label1]: [i1] } },
-          this.intersection(li1, li2)!,
+          this.cleanIntersection(li1, li2),
           { start: i2.end, end: i1.end, referenceIntervals: { [label1]: [i1] } }
         ]
       }
-    }
+    })
   ],
   [
     AllenRelation.STARTS,
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({
-        ...i1,
-        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
-      }),
-      chopped: function <T> (li1: LabeledInterval<T>, li2: LabeledInterval<T>): ReadonlyArray<Readonly<Interval<T>>> {
-        const { interval: i1 } = li1
-        const { label: label2, interval: i2 } = li2
-        return [this.intersection(li1, li2)!, { start: i1.end, end: i2.end, referenceIntervals: { [label2]: [i2] } }]
-      }
-    }
-  ],
-  [
-    AllenRelation.EQUALS,
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({
-        ...i1,
-        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
-      }),
-      chopped: function <T> (li1: LabeledInterval<T>, li2: LabeledInterval<T>): ReadonlyArray<Readonly<Interval<T>>> {
-        return [this.intersection(li1, li2)!]
-      }
-    }
-  ],
-  [
-    AllenRelation.STARTED_BY,
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({
-        ...i2,
-        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
-      }),
-      chopped: function <T> (li1: LabeledInterval<T>, li2: LabeledInterval<T>): ReadonlyArray<Readonly<Interval<T>>> {
-        const { label: label1, interval: i1 } = li1
-        const { interval: i2 } = li2
-        return [this.intersection(li1, li2)!, { start: i2.end, end: i1.end, referenceIntervals: { [label1]: [i1] } }]
-      }
-    }
-  ],
-  [
-    AllenRelation.DURING,
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({
-        ...i1,
-        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
-      }),
-      chopped: function <T> (li1: LabeledInterval<T>, li2: LabeledInterval<T>): ReadonlyArray<Readonly<Interval<T>>> {
+    new ChopAndIntersect({
+      intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => i1,
+      chops: function <T> (
+        this: ChopAndIntersect,
+        li1: LabeledInterval<T>,
+        li2: LabeledInterval<T>
+      ): ReadonlyArray<Readonly<Interval<T>>> {
         const { interval: i1 } = li1
         const { label: label2, interval: i2 } = li2
         return [
-          { start: i2.start, end: i1.start, referenceIntervals: { [label2]: [i2] } },
-          this.intersection(li1, li2)!,
+          this.cleanIntersection(li1, li2),
           { start: i1.end, end: i2.end, referenceIntervals: { [label2]: [i2] } }
         ]
       }
-    }
+    })
   ],
   [
-    AllenRelation.FINISHES,
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({
-        ...i1,
-        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
-      }),
-      chopped: function <T> (li1: LabeledInterval<T>, li2: LabeledInterval<T>): ReadonlyArray<Readonly<Interval<T>>> {
+    AllenRelation.EQUALS,
+    new ChopAndIntersect({
+      intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => i1,
+      chops: function <T> (
+        this: ChopAndIntersect,
+        li1: LabeledInterval<T>,
+        li2: LabeledInterval<T>
+      ): ReadonlyArray<Readonly<Interval<T>>> {
+        return [this.cleanIntersection(li1, li2)]
+      }
+    })
+  ],
+  [
+    AllenRelation.STARTED_BY,
+    new ChopAndIntersect({
+      intersection: <T>(_: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): Readonly<Interval<T>> => i2,
+      chops: function <T> (
+        this: ChopAndIntersect,
+        li1: LabeledInterval<T>,
+        li2: LabeledInterval<T>
+      ): ReadonlyArray<Readonly<Interval<T>>> {
+        const { label: label1, interval: i1 } = li1
+        const { interval: i2 } = li2
+        return [
+          this.cleanIntersection(li1, li2),
+          { start: i2.end, end: i1.end, referenceIntervals: { [label1]: [i1] } }
+        ]
+      }
+    })
+  ],
+  [
+    AllenRelation.DURING,
+    new ChopAndIntersect({
+      intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => i1,
+      chops: function <T> (
+        this: ChopAndIntersect,
+        li1: LabeledInterval<T>,
+        li2: LabeledInterval<T>
+      ): ReadonlyArray<Readonly<Interval<T>>> {
         const { interval: i1 } = li1
         const { label: label2, interval: i2 } = li2
         return [
           { start: i2.start, end: i1.start, referenceIntervals: { [label2]: [i2] } },
-          this.intersection(li1, li2)!
+          this.cleanIntersection(li1, li2),
+          { start: i1.end, end: i2.end, referenceIntervals: { [label2]: [i2] } }
         ]
       }
-    }
+    })
+  ],
+  [
+    AllenRelation.FINISHES,
+    new ChopAndIntersect({
+      intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => i1,
+      chops: function <T> (
+        this: ChopAndIntersect,
+        li1: LabeledInterval<T>,
+        li2: LabeledInterval<T>
+      ): ReadonlyArray<Readonly<Interval<T>>> {
+        const { interval: i1 } = li1
+        const { label: label2, interval: i2 } = li2
+        return [
+          { start: i2.start, end: i1.start, referenceIntervals: { [label2]: [i2] } },
+          this.cleanIntersection(li1, li2)
+        ]
+      }
+    })
   ],
   [
     AllenRelation.OVERLAPPED_BY,
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({
+    new ChopAndIntersect({
+      intersection: <T>(i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): Readonly<Interval<T>> => ({
         start: i1.start,
-        end: i2.end,
-        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+        end: i2.end
       }),
-      chopped: function <T> (li1: LabeledInterval<T>, li2: LabeledInterval<T>): ReadonlyArray<Readonly<Interval<T>>> {
+      chops: function <T> (
+        this: ChopAndIntersect,
+        li1: LabeledInterval<T>,
+        li2: LabeledInterval<T>
+      ): ReadonlyArray<Readonly<Interval<T>>> {
         const { label: label1, interval: i1 } = li1
         const { label: label2, interval: i2 } = li2
         return [
           { start: i2.start, end: i1.start, referenceIntervals: { [label2]: [i2] } },
-          this.intersection(li1, li2)!,
+          this.cleanIntersection(li1, li2),
           { start: i2.end, end: i1.end, referenceIntervals: { [label1]: [i1] } }
         ]
       }
-    }
+    })
   ],
   [
     AllenRelation.MET_BY,
-    {
+    new ChopAndIntersect({
       intersection: noIntersection,
-      chopped: <T>(
+      chops: <T>(
         { label: label1, interval: i1 }: LabeledInterval<T>,
         { label: label2, interval: i2 }: LabeledInterval<T>
       ): ReadonlyArray<Readonly<Interval<T>>> => [
         { ...i2, referenceIntervals: { [label2]: [i2] } },
         { ...i1, referenceIntervals: { [label1]: [i1] } }
       ]
-    }
+    })
   ],
   [
     AllenRelation.MEETS,
-    {
+    new ChopAndIntersect({
       intersection: noIntersection,
-      chopped: <T>(
+      chops: <T>(
         { label: label1, interval: i1 }: LabeledInterval<T>,
         { label: label2, interval: i2 }: LabeledInterval<T>
       ): ReadonlyArray<Readonly<Interval<T>>> => [
         { ...i2, referenceIntervals: { [label2]: [i2] } },
         { ...i1, referenceIntervals: { [label1]: [i1] } }
       ]
-    }
+    })
   ],
-  [AllenRelation.ANTERIOR.complement(), { intersection: intersectionNotDefined, chopped: choppedNotDefined }],
-  [AllenRelation.STARTS_EARLIER, { intersection: intersectionNotDefined, chopped: choppedNotDefined }],
-  [AllenRelation.ENDS_EARLIER, { intersection: intersectionNotDefined, chopped: choppedNotDefined }],
+  [
+    AllenRelation.ANTERIOR.complement(),
+    new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })
+  ],
+  [
+    AllenRelation.STARTS_EARLIER,
+    new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })
+  ],
+  [AllenRelation.ENDS_EARLIER, new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })],
   [
     AllenRelation.ENDS_IN, // `(osd)`
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({ end: i1.end, referenceIntervals: { [label1]: [i1], [label2]: [i2] } }),
-      chopped: choppedNotDefined
-    }
+    new ChopAndIntersect({
+      intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => ({ end: i1.end }),
+      chops: chopsNotDefined
+    })
   ],
   [
     AllenRelation.CONTAINS_START, // `(oFD)`
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({ start: i2.start, referenceIntervals: { [label1]: [i1], [label2]: [i2] } }),
-      chopped: choppedNotDefined
-    }
+    new ChopAndIntersect({
+      intersection: <T>(_: unknown, i2: Readonly<Interval<T>>): Readonly<Interval<T>> => ({ start: i2.start }),
+      chops: chopsNotDefined
+    })
   ],
   [
     AllenRelation.fromString<AllenRelation>('seS'),
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({ start: i1.start, referenceIntervals: { [label1]: [i1], [label2]: [i2] } }),
-      chopped: choppedNotDefined
-    }
+    new ChopAndIntersect({
+      intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => ({ start: i1.start }),
+      chops: chopsNotDefined
+    })
   ],
   [
     AllenRelation.END_TOGETHER, // `(Fef)`
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({ start: i1.start, referenceIntervals: { [label1]: [i1], [label2]: [i2] } }),
-      chopped: choppedNotDefined
-    }
+    new ChopAndIntersect({
+      intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => ({ start: i1.start }),
+      chops: chopsNotDefined
+    })
   ],
   [
     AllenRelation.STARTS_IN, // `(dfO)`
-    {
-      intersection: <T>(
-        { label: label1, interval: i1 }: LabeledInterval<T>,
-        { label: label2, interval: i2 }: LabeledInterval<T>
-      ): Readonly<Interval<T>> => ({ end: i2.end, referenceIntervals: { [label1]: [i1], [label2]: [i2] } }),
-      chopped: choppedNotDefined
-    }
+    new ChopAndIntersect({
+      intersection: <T>(_: unknown, i2: Readonly<Interval<T>>): Readonly<Interval<T>> => ({
+        end: i2.end
+      }),
+      chops: chopsNotDefined
+    })
   ],
-  [AllenRelation.CONTAINS_END, { intersection: intersectionNotDefined, chopped: choppedNotDefined }],
-  [AllenRelation.ENDS_LATER, { intersection: intersectionNotDefined, chopped: choppedNotDefined }],
-  [AllenRelation.STARTS_LATER, { intersection: intersectionNotDefined, chopped: choppedNotDefined }],
-  [AllenRelation.BEFORE.complement(), { intersection: intersectionNotDefined, chopped: choppedNotDefined }],
-  [AllenRelation.fullRelation<AllenRelation>(), { intersection: intersectionNotDefined, chopped: choppedNotDefined }]
+  [AllenRelation.CONTAINS_END, new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })],
+  [AllenRelation.ENDS_LATER, new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })],
+  [AllenRelation.STARTS_LATER, new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })],
+  [
+    AllenRelation.BEFORE.complement(),
+    new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })
+  ],
+  [
+    AllenRelation.fullRelation<AllenRelation>(),
+    new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })
+  ]
 ])
 
-export const chopped: Chopper = <T>(
+export const chops: Chopper = <T>(
   li1: LabeledInterval<T>,
   li2: LabeledInterval<T>,
   compareFn?: Comparator<T>
-): ReadonlyArray<Readonly<Interval<T>>> | undefined => {
+): ReadonlyArray<Readonly<Interval<T>>> | false => {
   getCompareIfOk<T>([li1.interval, li2.interval], compareFn)
 
   const gr = AllenRelation.relation(li1.interval, li2.interval, compareFn)
   const handler: ChopAndIntersect | undefined = chopAndIntersect.get(gr)
   ok(handler)
-  return handler.chopped(li1, li2)
+  return handler.chops(li1, li2)
 }
 
 /**
@@ -365,11 +387,11 @@ export const intersection: Intersector = <T>(
   li1: LabeledInterval<T>,
   li2: LabeledInterval<T>,
   compareFn?: Comparator<T>
-): Readonly<Interval<T>> | null | undefined => {
+): Readonly<Interval<T>> | undefined | false => {
   getCompareIfOk<T>([li1.interval, li2.interval], compareFn)
 
   const gr = AllenRelation.relation(li1.interval, li2.interval, compareFn)
   const handler: ChopAndIntersect | undefined = chopAndIntersect.get(gr)
   ok(handler)
-  return handler.intersection(li1, li2)
+  return handler.referencingIntersection(li1, li2)
 }
