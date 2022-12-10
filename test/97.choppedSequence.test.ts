@@ -29,7 +29,7 @@ import { transposeAndOrder } from '../src/transposeAndOrder'
 const sedf = AllenRelation.fromString<AllenRelation>('sedf')
 
 describe('choppedSequence', function () {
-  function generateTests<T> (label: string, points: ReadonlyArray<T>, compareFn?: Comparator<T>): void {
+  function generateTests<T> (label: string, points: readonly T[], compareFn?: Comparator<T>): void {
     function validateResult (
       sources: Readonly<ReferenceIntervals<T>>,
       result: ReadonlyArray<Readonly<Interval<T>>>,

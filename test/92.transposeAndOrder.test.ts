@@ -62,12 +62,12 @@ describe('transposeAndOrder', function () {
     result.forEach((e, i) => {
       const expectedReference =
         /* prettier-ignore */ property1.includes(e.interval)
-            ? 'property1'
-            : property2.includes(e.interval)
-              ? 'property2'
-              : property3.includes(e.interval)
-                ? 'property3'
-                : 'error'
+          ? 'property1'
+          : property2.includes(e.interval)
+            ? 'property2'
+            : property3.includes(e.interval)
+              ? 'property3'
+              : 'error'
       e.reference.should.equal(expectedReference)
       e.interval.should.equal(ordered[i])
     })

@@ -17,7 +17,6 @@
 import { Interval, ReferencedInterval, ReferenceIntervals } from './Interval'
 import { Comparator } from './Comparator'
 import { equal, ok } from 'assert'
-import { AllenRelation } from './AllenRelation'
 import { transposeAndOrder } from './transposeAndOrder'
 
 /**
