@@ -105,60 +105,60 @@ describe('choppedSequence', function () {
         result.length.should.equal(3)
         validateResult(sources, result)
       })
-      it('returns expected intersections with fully definite intervals', function () {
-        const i1: Readonly<Interval<T>> = { start: points[0], end: points[2] }
-        const i2: Readonly<Interval<T>> = { start: points[1], end: points[3] }
-        const i3: Readonly<Interval<T>> = { start: points[0], end: points[2] } // duplicates i1
-        /* i1 (o) i2
-             i1 (e) i3
-             i2 (O) i3
-             expect [0, 1[, [1, 2[, [1, 3[ */
-        const i4: Readonly<Interval<T>> = { start: points[4], end: points[5] }
-        /* i1, i2, i3 (p) i4 */
-        // MUDO need more points to cover all relations
-        const sources: Readonly<ReferenceIntervals<T>> = {
-          property1: [i3, i2],
-          property2: [i3, i1, i4],
-          property3: [i4, i1]
-        }
-        const expected: ReadonlyArray<Readonly<Interval<T>>> = [
-          {
-            start: points[0],
-            end: points[1],
-            referenceIntervals: {
-              property1: [i3],
-              property2: [i1, i3],
-              property3: [i1]
-            }
-          },
-          {
-            start: points[1],
-            end: points[2],
-            referenceIntervals: {
-              property1: [i2, i3],
-              property2: [i1, i3],
-              property3: [i1]
-            }
-          },
-          {
-            start: points[2],
-            end: points[3],
-            referenceIntervals: {
-              property1: [i2]
-            }
-          }, // gap
-          {
-            start: points[4],
-            end: points[5],
-            referenceIntervals: {
-              property1: [i4],
-              property2: [i4],
-              property3: [i4]
-            }
-          }
-        ]
-        callIt(sources).should.deepEqual(expected)
-      })
+      // it('returns expected intersections with fully definite intervals', function () {
+      //   const i1: Readonly<Interval<T>> = { start: points[0], end: points[2] }
+      //   const i2: Readonly<Interval<T>> = { start: points[1], end: points[3] }
+      //   const i3: Readonly<Interval<T>> = { start: points[0], end: points[2] } // duplicates i1
+      //   /* i1 (o) i2
+      //        i1 (e) i3
+      //        i2 (O) i3
+      //        expect [0, 1[, [1, 2[, [1, 3[ */
+      //   const i4: Readonly<Interval<T>> = { start: points[4], end: points[5] }
+      //   /* i1, i2, i3 (p) i4 */
+      //   // MUDO need more points to cover all relations
+      //   const sources: Readonly<ReferenceIntervals<T>> = {
+      //     property1: [i3, i2],
+      //     property2: [i3, i1, i4],
+      //     property3: [i4, i1]
+      //   }
+      //   const expected: ReadonlyArray<Readonly<Interval<T>>> = [
+      //     {
+      //       start: points[0],
+      //       end: points[1],
+      //       referenceIntervals: {
+      //         property1: [i3],
+      //         property2: [i1, i3],
+      //         property3: [i1]
+      //       }
+      //     },
+      //     {
+      //       start: points[1],
+      //       end: points[2],
+      //       referenceIntervals: {
+      //         property1: [i2, i3],
+      //         property2: [i1, i3],
+      //         property3: [i1]
+      //       }
+      //     },
+      //     {
+      //       start: points[2],
+      //       end: points[3],
+      //       referenceIntervals: {
+      //         property1: [i2]
+      //       }
+      //     }, // gap
+      //     {
+      //       start: points[4],
+      //       end: points[5],
+      //       referenceIntervals: {
+      //         property1: [i4],
+      //         property2: [i4],
+      //         property3: [i4]
+      //       }
+      //     }
+      //   ]
+      //   callIt(sources).should.deepEqual(expected)
+      // })
     })
   }
 

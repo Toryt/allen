@@ -44,6 +44,8 @@ export function choppedSequence<T> (
 
   const pile: ReadonlyArray<Readonly<ReferencedInterval<T>>> = transposeAndOrder(sources, compareFn) // validates preconditions
 
+  // MUDO unfinished
+
   // MUDO condition: reference intervals are ordered
   return pile.map(({ interval, reference }: Readonly<ReferencedInterval<T>>) => ({
     start: interval.start,
