@@ -459,31 +459,3 @@ export function interSectionSequence<T> (
     }
   }))
 }
-// /**
-//  * Turn the _set_ of intervals `i` into a {@link isSequence seqyence}.
-//  *
-//  * Intervals that {@link AllenRelation.CONCURS_WITH concur with} each other are replaced by distinct
-//  * {@link AllenRelation.MEETS meeting} intervals (the “intersections“).
-//  */
-// export function toSequence<T> (i: Interval<T>[], compareFn?: Comparator<T>): Interval<T>[] {}
-
-// /**
-//  * Turn the _set_ of intervals `i` into a {@link isSequence seqyence}.
-//  *
-//  * Intervals that {@link AllenRelation.CONCURS_WITH concur with} each other are replaced by distinct
-//  * {@link AllenRelation.MEETS meeting} intervals (the “intersections“).
-//  */
-// export function toSequence<T> (i: Interval<T>[], compareFn?: Comparator<T>): Interval<T>[] {}
-
-// /**
-//  * Turn the _set_ of intervals `i` into a {@link isSequence sequence}. This is a chain, with gaps filled up with
-//  * maximal interval.
-//  *
-//  * Intervals that {@link AllenRelation.CONCURS_WITH concur with} each other are replaced by distinct
-//  * {@link AllenRelation.MEETS meeting} intervals (the “intersections“).
-//  */
-// export function toChain<T> (i: Interval<T>[], compareFn?: Comparator<T>): Interval<T>[] {}
-
-// export function toChain<T> (pi: PseudoInterval<T>[], compareFn?: Comparator<T>): Interval<T>[] {}
-
-// export function toChain<T> (t: <T>[], compareFn?: Comparator<T>): Interval<T>[] {}
