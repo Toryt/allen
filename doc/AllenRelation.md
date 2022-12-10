@@ -401,32 +401,43 @@ For a right-indefinite interval `rii` and an interval `i`, and vice versa, we ge
 |                     | 🤷                    | full            | full            |
 
 `(p)`, `(m)`, `(M)`, and `(P)` are basic relations, and the chopped sequence can be looked up in the table above. There
-is no intersection.
+is no intersection in these cases.
 
-Note that the possible actual relations `(oFD)`, `(dfO)`, `(seS)`, and `(dfOMP)` do not appear in this list.
+When `lii.end > i.start`, and `i.end` definite, and `rii.start < i.end`, and `i.start` definite however, we have 3
+different cases where the actual relation is not a basic relation, and there are 3, respectively 5, possible chopped
+sequences. Let's display them visually:
 
-// MUDO why not? They should. With a right-indefinite interval `rii`?
+| `[i.start, –` |             | `…, lii.end[` |             | `lii (.) i` | chopped sequence                                      | intersection           |
+| ------------- | ----------- | ------------- | ----------- | ----------- | ----------------------------------------------------- | ---------------------- |
+|               |             |               | `–, i.end[` | `(o)`       | `[…, i.start[, [i.start, lii.end[ , [lii.end, i.end[` | `[i.start, lii.end[`   |
+|               |             |               |             | `(s)`       | `[lii.start = i.start, lii.end[, [lii.end, i.end[`    | `[i.start, lii.end[`   |
+|               |             |               |             | `(d)`       | `[i.start, ?[, [?, lii.end], [lii.end, i2.end[`       | `[?, lii.end]`         |
+|               |             | `–, i.end[`   |             | `(F)`       | `[…, i.start[, i`                                     | `i`                    |
+|               |             |               |             | `(e)`       | `i`                                                   | `i`                    |
+|               |             |               |             | `(f)`       | `[i.start, ?[, [?, lii.end = i.end[`                  | `[?, lii.end = i.end]` |
+|               | `–, i.end[` |               |             | `(D)`       | `[…, i.start[, i, [i.end, lii.end[`                   | `i`                    |
+|               |             |               |             | `(S)`       | `i, [i.end, lii.end[`                                 | `i`                    |
+|               |             |               |             | `(O)`       | `[i.start, ?[, [?, i.end[, [i.end, lii.end[`          | `[?, i.end]`           |
+|               |             |               |             | `(M)`       | `i, [? = i.end, lii.end[`                             | —                      |
+|               |             |               |             | `(P)`       | `i, [? = i.end, lii.end[`                             | —                      |
 
-When `lii. end > i.start` however, we have 3 different cases where the actual relation is not a basic relation, and
-there are 3, respectively 5, possible chopped sequences. Let's display them visually:
+|               | `[rii.start, …` |               | `–, i.end[` | `rii (.) i` | chopped sequence                                              | intersection |
+| ------------- | --------------- | ------------- | ----------- | ----------- | ------------------------------------------------------------- | ------------ |
+| `[i.start, –` |                 |               |             | `(d)`       | `[i.start, rii.start[, [rii.start, ?], [?, i.end[`            |              |
+|               |                 |               |             | `(f)`       | `[i.start, rii.start[, rii`                                   |              |
+|               |                 |               |             | `(O)`       | `[i.start, rii.start[, [rii.start, i.end[ , [i.end, rii.end[` |              |
+|               | `[i.start, –`   |               |             | `(s)`       | `rii, [rii.end, i.end[`                                       |              |
+|               |                 |               |             | `(e)`       | `i`                                                           |              |
+|               |                 |               |             | `(S)`       | `i, [i.end, rii.end[`                                         |              |
+|               |                 | `[i.start, –` |             | `(p)`       | `rii, i`                                                      | —            |
+|               |                 |               |             | `(m)`       | `rii, i`                                                      | —            |
+|               |                 |               |             | `(O)`       | `[i.start, rii.start[, [rii.start, i.end[ , [i.end, rii.end[` |              |
+|               |                 |               |             | `(F)`       | `[rii.start, i.start[, i`                                     |              |
+|               |                 |               |             | `(D)`       | `[rii.start, i.start[, i, [i.end, rii.end[`                   |              |
 
-| `[lii.start,` | `[i.start` |          | `lii.end[` |          | `lii (.) i` | chopped sequence                                      | intersection           |
-| ------------- | ---------- | -------- | ---------- | -------- | ----------- | ----------------------------------------------------- | ---------------------- |
-|               |            |          |            | `i.end[` | `(o)`       | `[…, i.start[, [i.start, lii.end[ , [lii.end, i.end[` | `[i.start, lii.end[`   |
-|               |            |          |            |          | `(s)`       | `[lii.start = i.start, lii.end[, [lii.end, i.end[`    | `[i.start, lii.end[`   |
-|               |            |          |            |          | `(d)`       | `[i.start, ?[, [?, lii.end], [lii.end, i2.end[`       | `[?, lii.end]`         |
-|               |            |          | `i.end[`   |          | `(F)`       | `[…, i.start[, i`                                     | `i`                    |
-|               |            |          |            |          | `(e)`       | `i`                                                   | `i`                    |
-|               |            |          |            |          | `(f)`       | `[i.start, ?[, [?, lii.end = i.end[`                  | `[?, lii.end = i.end]` |
-|               |            | `i.end[` |            |          | `(D)`       | `[…, i.start[, i, [i.end, lii.end[`                   | `i`                    |
-|               |            |          |            |          | `(S)`       | `i, [i.end, lii.end[`                                 | `i`                    |
-|               |            |          |            |          | `(O)`       | `[i.start, ?[, [?, i.end[, [i.end, lii.end[`          | `[?, i.end]`           |
-|               |            |          |            |          | `(M)`       | `i, [? = i.end, lii.end[`                             | —                      |
-|               |            |          |            |          | `(P)`       | `i, [? = i.end, lii.end[`                             | —                      |
-
-WE FORBID THE USE OF INDEFINITE INTERVALS FOR THIS ALGORITHM USERS MUST MAKE THE SEMANTICS OF indefinite points CLEAR
-FIRST BY “Reasoning with unknown but constrained start and end point”, before using the algorithm, and take into account
-that the returned result is that for constrained (definite) intervals, not the original interval.
+WE FORBID THE USE OF INDEFINITE INTERVALS FOR THIS ALGORITHM USERS MUST MAKE THE SEpoints CLEAR FIRST BY “Reasoning with
+unknown but constrained start and end point”, before using the algorithm, and take into account that the returned result
+is that for constrained (definite) intervals, not the original interval.
 
 ## Inference
 
