@@ -478,6 +478,26 @@ Therefor, we only define the chopped sequence for fully definite intervals. User
 but constrained start and end point” to the indefinite intervals first, to express the extra knowledge about constraints
 that they have.
 
+When we calculate the actual relation between intervals, there are 13 possible results apart from the basic relations
+discussed above. The chopped sequence is not defined for any of them. The intersection, however, is for the 6 with the
+smallest uncertainty. When the uncertainly `> 1/6`, the intersection is not defined.
+
+| `i1 (.) i2 `    | chopped sequence | intersection                |
+| --------------- | ---------------- | --------------------------- |
+| `(pmoFDseSdfO)` | ❌               | ❌                          |
+| `(pmoFD)`       | ❌               | ❌                          |
+| `(pmosd)`       | ❌               | ❌                          |
+| `(osd)`         | ❌               | `[🤷, i1.end[`              |
+| `(oFD)`         | ❌               | `[i2.start, 🤷[`            |
+| `(seS)`         | ❌               | `[i1.start = i2.start, 🤷[` |
+| `(Fef)`         | ❌               | `[🤷, i1.end = i2.end[`     |
+| `(dfO)`         | ❌               | `[i1.start, 🤷[`            |
+| `(DSO)`         | ❌               | `[🤷, i2.end[`              |
+| `(DSOMP)`       | ❌               | ❌                          |
+| `(dfOMP)`       | ❌               | ❌                          |
+| `(oFDseSdfOMP)` | ❌               | ❌                          |
+| full            | ❌               | ❌                          |
+
 ## Inference
 
 **Be aware that, in general, inference over intervals, also using Allen relations, is NP-complete.** This means that the
