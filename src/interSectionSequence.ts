@@ -378,21 +378,17 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
   [AllenRelation.fullRelation<AllenRelation>(), { intersection: intersectionNotDefined, chopped: choppedNotDefined }]
 ])
 
-export const chop: Chop = <T>(li1: LabeledInterval<T>, li2: LabeledInterval<T>): Array<Interval<T>> | undefined => {
-  const gr = AllenRelation.relation(i1, i2)
-  const handler: ChopAndIntersect | undefined = chopAndIntersect.get(gr)
-  ok(handler)
-  return handler.chop(li1, li2)
-}
-
-export const intersect: Intersect = <T>(
+export const chopped: Chopper = <T>(
   li1: LabeledInterval<T>,
-  li2: LabeledInterval<T>
-): Interval<T> | null | undefined => {
-  const gr = AllenRelation.relation(i1, i2)
+  li2: LabeledInterval<T>,
+  compareFn?: Comparator<T>
+): ReadonlyArray<Readonly<Interval<T>>> | undefined => {
+  getCompareIfOk<T>([li1.interval, li2.interval], compareFn)
+
+  const gr = AllenRelation.relation(li1.interval, li2.interval, compareFn)
   const handler: ChopAndIntersect | undefined = chopAndIntersect.get(gr)
   ok(handler)
-  return handler.intersect(li1, li2)
+  return handler.chopped(li1, li2)
 }
 
 /**
@@ -417,23 +413,17 @@ export const intersect: Intersect = <T>(
  * | `i1 (O) i2`  | `[i2.start, i1.start[{i2}, [i1.start, i2.end[{i2, i1} , [i2.end, i1.end[{i1}` |
  * | `i1 (MP) i2` | `i2{i2}, i1{i1}`                                                              |
  */
-export function intersection<T> (
-  i1: Readonly<Interval<T>>,
-  i2: Readonly<Interval<T>>,
+export const intersection: Intersector = <T>(
+  li1: LabeledInterval<T>,
+  li2: LabeledInterval<T>,
   compareFn?: Comparator<T>
-): ReadonlyArray<Readonly<Interval<T>>> {
-  const compare: Comparator<T> = getCompareIfOk<T>([i1, i2], compareFn)
+): Readonly<Interval<T>> | null | undefined => {
+  getCompareIfOk<T>([li1.interval, li2.interval], compareFn)
 
-  const i1Starti2Start = compare(i1.start, i2.start)
-
-  const { smallest, largest } =
-    compareIntervals(i1, i2, compareFn) <= 0 // checks preconditions
-      ? { smallest: i1, largest: i2 }
-      : { smallest: i2, largest: i1 }
-
-  // smallest.start ≤ largest.start
-
-  return []
+  const gr = AllenRelation.relation(li1.interval, li2.interval, compareFn)
+  const handler: ChopAndIntersect | undefined = chopAndIntersect.get(gr)
+  ok(handler)
+  return handler.intersection(li1, li2)
 }
 
 /**
