@@ -78,7 +78,12 @@ interface LabeledInterval<T> {
 }
 
 type Intersect = <T>(i1: LabeledInterval<T>, i2: LabeledInterval<T>) => Interval<T> | null | undefined
+
+const noIntersection: Intersect = (): null => null
+const intersectionNotDefined: Intersect = (): undefined => undefined
 type Chop = <T>(i1: LabeledInterval<T>, i2: LabeledInterval<T>) => Array<Interval<T>> | undefined
+
+const chopNotDefined: Chop = (): undefined => undefined
 
 interface ChopAndIntersect {
   intersect: Intersect
@@ -89,7 +94,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
   [
     AllenRelation.PRECEDES,
     {
-      intersect: (): null => null,
+      intersect: noIntersection,
       chop: <T>(
         { label: label1, interval: i1 }: LabeledInterval<T>,
         { label: label2, interval: i2 }: LabeledInterval<T>
@@ -102,7 +107,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
   [
     AllenRelation.MEETS,
     {
-      intersect: (): null => null,
+      intersect: noIntersection,
       chop: <T>(
         { label: label1, interval: i1 }: LabeledInterval<T>,
         { label: label2, interval: i2 }: LabeledInterval<T>
@@ -300,7 +305,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
   [
     AllenRelation.MET_BY,
     {
-      intersect: (): null => null,
+      intersect: noIntersection,
       chop: <T>(
         { label: label1, interval: i1 }: LabeledInterval<T>,
         { label: label2, interval: i2 }: LabeledInterval<T>
@@ -313,7 +318,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
   [
     AllenRelation.MEETS,
     {
-      intersect: (): null => null,
+      intersect: noIntersection,
       chop: <T>(
         { label: label1, interval: i1 }: LabeledInterval<T>,
         { label: label2, interval: i2 }: LabeledInterval<T>
@@ -322,7 +327,65 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
         { ...i1, referenceIntervals: { [label1]: [i1] } }
       ]
     }
-  ]
+  ],
+  [AllenRelation.ANTERIOR.complement(), { intersect: intersectionNotDefined, chop: chopNotDefined }],
+  [AllenRelation.STARTS_EARLIER, { intersect: intersectionNotDefined, chop: chopNotDefined }],
+  [AllenRelation.ENDS_EARLIER, { intersect: intersectionNotDefined, chop: chopNotDefined }],
+  [
+    AllenRelation.ENDS_IN, // `(osd)`
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({ end: i1.end, referenceIntervals: { [label1]: [i1], [label2]: [i2] } }),
+      chop: chopNotDefined
+    }
+  ],
+  [
+    AllenRelation.CONTAINS_START, // `(oFD)`
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({ start: i2.start, referenceIntervals: { [label1]: [i1], [label2]: [i2] } }),
+      chop: chopNotDefined
+    }
+  ],
+  [
+    AllenRelation.fromString<AllenRelation>('seS'),
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({ start: i1.start, referenceIntervals: { [label1]: [i1], [label2]: [i2] } }),
+      chop: chopNotDefined
+    }
+  ],
+  [
+    AllenRelation.END_TOGETHER, // `(Fef)`
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({ start: i1.start, referenceIntervals: { [label1]: [i1], [label2]: [i2] } }),
+      chop: chopNotDefined
+    }
+  ],
+  [
+    AllenRelation.STARTS_IN, // `(dfO)`
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({ end: i2.end, referenceIntervals: { [label1]: [i1], [label2]: [i2] } }),
+      chop: chopNotDefined
+    }
+  ],
+  [AllenRelation.CONTAINS_END, { intersect: intersectionNotDefined, chop: chopNotDefined }],
+  [AllenRelation.ENDS_LATER, { intersect: intersectionNotDefined, chop: chopNotDefined }],
+  [AllenRelation.STARTS_LATER, { intersect: intersectionNotDefined, chop: chopNotDefined }],
+  [AllenRelation.BEFORE.complement(), { intersect: intersectionNotDefined, chop: chopNotDefined }],
+  [AllenRelation.fullRelation<AllenRelation>(), { intersect: intersectionNotDefined, chop: chopNotDefined }]
 ])
 
 /**
