@@ -527,6 +527,8 @@ export class AllenRelation extends Relation {
     AllenRelation.OVERLAPS
   )
 
+  static readonly BEFORE: AllenRelation = AllenRelation.or(AllenRelation.PRECEDES, AllenRelation.MEETS)
+
   /**
    * `(OMP)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1` starts
    * and ends after an interval `i2` starts and ends.
@@ -549,6 +551,8 @@ export class AllenRelation extends Relation {
     AllenRelation.MET_BY,
     AllenRelation.PRECEDED_BY
   )
+
+  static readonly ANTERIOR: AllenRelation = AllenRelation.or(AllenRelation.MET_BY, AllenRelation.PRECEDED_BY)
 
   /**
    * `(pmosd)` — a non-basic interval relation that is often handy to use, which expresses that interval `i1` ends
