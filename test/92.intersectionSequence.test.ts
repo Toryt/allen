@@ -17,14 +17,14 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { Interval, ReferenceIntervals } from '../src/Interval'
+import { Interval, ReferencedInterval, ReferenceIntervals } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import { Comparator } from '../src/Comparator'
 import { ltCompare } from '../src/ltCompare'
 import { AllenRelation } from '../src/AllenRelation'
 import { compareIntervals } from '../src/compareIntervals'
 import { isSequence } from '../src/isSequence'
-import { interSectionSequence, ReferencedInterval, transposeAndOrder } from '../src/interSectionSequence'
+import { interSectionSequence, transposeAndOrder } from '../src/interSectionSequence'
 import { ok } from 'assert'
 
 const sedf = AllenRelation.fromString<AllenRelation>('sedf')

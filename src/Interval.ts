@@ -208,3 +208,8 @@ export function isInterval<TR extends TypeRepresentation> (
 
   return loopProtectedIsInterval(u, pointType, compareFn, [], [])
 }
+
+export interface ReferencedInterval<T> {
+  readonly interval: Readonly<Interval<T>>
+  readonly reference: string
+}

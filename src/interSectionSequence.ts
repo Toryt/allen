@@ -14,18 +14,13 @@
  limitations under the License.
  */
 
-import { Interval, isReferenceIntervals, ReferenceIntervals } from './Interval'
+import { Interval, isReferenceIntervals, ReferencedInterval, ReferenceIntervals } from './Interval'
 import { Comparator } from './Comparator'
 import assert, { equal, ok } from 'assert'
 import { compareIntervals } from './compareIntervals'
 import { commonTypeRepresentation } from './TypeRepresentation'
 import { getCompareIfOk } from './getCompareIfOk'
 import { AllenRelation } from './AllenRelation'
-
-export interface ReferencedInterval<T> {
-  readonly interval: Readonly<Interval<T>>
-  readonly reference: string
-}
 
 const haveCommonType: string = 'all `start` and `end` values of all intervals must be of a common type'
 
