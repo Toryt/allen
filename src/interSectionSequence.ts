@@ -20,6 +20,7 @@ import assert, { equal, ok } from 'assert'
 import { compareIntervals } from './compareIntervals'
 import { commonTypeRepresentation } from './TypeRepresentation'
 import { getCompareIfOk } from './getCompareIfOk'
+import { AllenRelation } from './AllenRelation'
 
 export interface ReferencedInterval<T> {
   readonly interval: Readonly<Interval<T>>
@@ -70,6 +71,259 @@ export function transposeAndOrder<T> (
 
   return transposed.sort(compareReferencedIntervals)
 }
+
+interface LabeledInterval<T> {
+  label: string
+  interval: Interval<T>
+}
+
+type Intersect = <T>(i1: LabeledInterval<T>, i2: LabeledInterval<T>) => Interval<T> | null | undefined
+type Chop = <T>(i1: LabeledInterval<T>, i2: LabeledInterval<T>) => Array<Interval<T>> | undefined
+
+interface ChopAndIntersect {
+  intersect: Intersect
+  chop: Chop
+}
+
+const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
+  [
+    AllenRelation.PRECEDES,
+    {
+      intersect: (): null => null,
+      chop: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Array<Interval<T>> => [
+        { ...i1, referenceIntervals: { [label1]: [i1] } },
+        { ...i2, referenceIntervals: { [label2]: [i2] } }
+      ]
+    }
+  ],
+  [
+    AllenRelation.MEETS,
+    {
+      intersect: (): null => null,
+      chop: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Array<Interval<T>> => [
+        { ...i1, referenceIntervals: { [label1]: [i1] } },
+        { ...i2, referenceIntervals: { [label2]: [i2] } }
+      ]
+    }
+  ],
+  [
+    AllenRelation.OVERLAPS,
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({ start: i2.start, end: i1.end, referenceIntervals: { [label1]: [i1], [label2]: [i2] } }),
+      chop: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Array<Interval<T>> => [
+        { start: i1.start, end: i2.start, referenceIntervals: { [label1]: [i1] } },
+        { start: i2.start, end: i1.end, referenceIntervals: { [label1]: [i1], [label2]: [i2] } },
+        { start: i1.end, end: i2.end, referenceIntervals: { [label2]: [i2] } }
+      ]
+    }
+  ],
+  [
+    AllenRelation.FINISHED_BY,
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({
+        ...i2,
+        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+      }),
+      chop: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Array<Interval<T>> => [
+        { start: i1.start, end: i2.start, referenceIntervals: { [label1]: [i1] } },
+        {
+          ...i2,
+          referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+        }
+      ]
+    }
+  ],
+  [
+    AllenRelation.CONTAINS,
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({
+        ...i2,
+        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+      }),
+      chop: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Array<Interval<T>> => [
+        { start: i1.start, end: i2.start, referenceIntervals: { [label1]: [i1] } },
+        {
+          ...i2,
+          referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+        },
+        { start: i2.end, end: i1.end, referenceIntervals: { [label1]: [i1] } }
+      ]
+    }
+  ],
+  [
+    AllenRelation.STARTS,
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({
+        ...i1,
+        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+      }),
+      chop: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Array<Interval<T>> => [
+        { ...i1, referenceIntervals: { [label1]: [i1], [label2]: [i2] } },
+        { start: i1.end, end: i2.end, referenceIntervals: { [label2]: [i2] } }
+      ]
+    }
+  ],
+  [
+    AllenRelation.EQUALS,
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({
+        ...i1,
+        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+      }),
+      chop: function <T> (
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Array<Interval<T>> {
+        return [
+          {
+            ...i1,
+            referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+          }
+        ]
+      }
+    }
+  ],
+  [
+    AllenRelation.STARTED_BY,
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({
+        ...i2,
+        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+      }),
+      chop: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Array<Interval<T>> => [
+        { ...i2, referenceIntervals: { [label1]: [i1], [label2]: [i2] } },
+        { start: i2.end, end: i1.end, referenceIntervals: { [label1]: [i1] } }
+      ]
+    }
+  ],
+  [
+    AllenRelation.DURING,
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({
+        ...i1,
+        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+      }),
+      chop: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Array<Interval<T>> => [
+        { start: i2.start, end: i1.start, referenceIntervals: { [label2]: [i2] } },
+        {
+          ...i1,
+          referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+        },
+        { start: i1.end, end: i2.end, referenceIntervals: { [label2]: [i2] } }
+      ]
+    }
+  ],
+  [
+    AllenRelation.FINISHES,
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({
+        ...i1,
+        referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+      }),
+      chop: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Array<Interval<T>> => [
+        { start: i2.start, end: i1.start, referenceIntervals: { [label2]: [i2] } },
+        {
+          ...i1,
+          referenceIntervals: { [label1]: [i1], [label2]: [i2] }
+        }
+      ]
+    }
+  ],
+  [
+    AllenRelation.OVERLAPPED_BY,
+    {
+      intersect: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Interval<T> => ({ start: i1.start, end: i2.end, referenceIntervals: { [label1]: [i1], [label2]: [i2] } }),
+      chop: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Array<Interval<T>> => [
+        { start: i2.start, end: i1.start, referenceIntervals: { [label2]: [i2] } },
+        { start: i1.start, end: i2.end, referenceIntervals: { [label1]: [i1], [label2]: [i2] } },
+        { start: i2.end, end: i1.end, referenceIntervals: { [label1]: [i1] } }
+      ]
+    }
+  ],
+  [
+    AllenRelation.MET_BY,
+    {
+      intersect: (): null => null,
+      chop: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Array<Interval<T>> => [
+        { ...i2, referenceIntervals: { [label2]: [i2] } },
+        { ...i1, referenceIntervals: { [label1]: [i1] } }
+      ]
+    }
+  ],
+  [
+    AllenRelation.MEETS,
+    {
+      intersect: (): null => null,
+      chop: <T>(
+        { label: label1, interval: i1 }: LabeledInterval<T>,
+        { label: label2, interval: i2 }: LabeledInterval<T>
+      ): Array<Interval<T>> => [
+        { ...i2, referenceIntervals: { [label2]: [i2] } },
+        { ...i1, referenceIntervals: { [label1]: [i1] } }
+      ]
+    }
+  ]
+])
 
 /**
  * Returns the intervals that form the intersections between `i1` and `i2`.
