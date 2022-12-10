@@ -437,16 +437,27 @@ sequences. Let's display them visually:
 |               | `[rii.start, …` |               | `–, i.end[` | `rii (.) i` | chopped sequence                                         | intersection                | most meaningfull intersection |
 | ------------- | --------------- | ------------- | ----------- | ----------- | -------------------------------------------------------- | --------------------------- | ----------------------------- |
 | `[i.start, –` |                 |               |             | `(d)`       | `[i.start, rii.start[, [rii.start, ❓▶️], [◀️❓, i.end[` | `[rii.start, 🤷[`           | `[rii.start, 🤷[`             |
-|               |                 |               |             | `(f)`       | `[i.start, rii.start[, [rii.start, i.end = rii.end]`     | `[rii.start, i.end[`        |
-|               |                 |               |             | `(O)`       | `[i.start, rii.start[, [rii.start, i.end[ , [i.end, 🤷[` | `[rii.start, i.end[`        |
+|               |                 |               |             | `(f)`       | `[i.start, rii.start[, [rii.start, i.end = rii.end]`     | `[rii.start, i.end[`        |                               |
+|               |                 |               |             | `(O)`       | `[i.start, rii.start[, [rii.start, i.end[ , [i.end, 🤷[` | `[rii.start, i.end[`        |                               |
 |               | `[i.start, –`   |               |             | `(s)`       | `[i.start = rii.start, ❓▶️], [◀️❓, i.end[`             | `[i.start = rii.start, 🤷[` | `[i.start = rii.start, 🤷[`   |
 |               |                 |               |             | `(e)`       | `i`                                                      | `i`                         |                               |
 |               |                 |               |             | `(S)`       | `i, [i.end, 🤷[`                                         | `i`                         |                               |
 |               |                 | `[i.start, –` |             | `(p)`       | `[rii.start, ❓▶️[, i`                                   | —                           | ❌                            |
 |               |                 |               |             | `(m)`       | `[rii.start, ▶️ = i.start[, i`                           | —                           |                               |
-|               |                 |               |             | `(o)`       | `[rii.start, i.start[, [i.start, ❓▶️[, [◀️❓, i2.end[`  | `[i.start, 🤷[`             |                               |
+|               |                 |               |             | `(o)`       | `[rii.start, i.start[, [i.start, ❓▶️[, [◀️❓, i.end[`   | `[i.start, 🤷[`             |                               |
 |               |                 |               |             | `(F)`       | `[rii.start, i.start[, i`                                | `i`                         |                               |
 |               |                 |               |             | `(D)`       | `[rii.start, i.start[, i, [i.end, 🤷[`                   | `i`                         |                               |
+| 🤷            | 🤷              | 🤷            |             | `(p)`       | `[rii.start, ❓▶️[, [◀️❓, i.end[`                       | —                           | ❌                            |
+|               |                 |               |             | `(m)`       | `[rii.start, ❓▶️[, [◀️❓, i.end[`                       | —                           | ❌                            |
+|               |                 |               |             | `(o)`       | `[rii.start, ❓▶️[, [◀️❓, ❓▶️[, [◀️❓, i.end[`         | `[🤷, 🤷[`                  | ❌                            |
+|               |                 |               |             | `(F)`       | `[rii.start, ❓▶️[, [◀️❓, i.end[`                       | `i`                         | ❌                            |
+|               |                 |               |             | `(D)`       | `[rii.start, ❓▶️[, [◀️❓, i.end[, [i.end, 🤷[`          | `i`                         | ❌                            |
+|               |                 |               |             | `(s)`       | `[i.start = rii.start, ❓▶️], [◀️❓, i.end[`             | `[i.start = rii.start, 🤷[` | ❌                            |
+|               |                 |               |             | `(e)`       | `i`                                                      | `i`                         | ❌                            |
+|               |                 |               |             | `(S)`       | `[🤷, i.end[, [i.end, 🤷[`                               | `i`                         | ❌                            |
+|               |                 |               |             | `(d)`       | `[🤷, rii.start[, [rii.start, ❓▶️], [◀️❓, i.end[`      | `[rii.start, 🤷[`           | ❌                            |
+|               |                 |               |             | `(f)`       | `[🤷, rii.start[, [rii.start, i.end = rii.end]`          | `[rii.start, i.end[`        | ❌                            |
+|               |                 |               |             | `(O)`       | `[🤷, rii.start[, [rii.start, i.end[ , [i.end, 🤷[`      | `[rii.start, i.end[`        | ❌                            |
 
 We get the same results for `i (.) lii`, and `i (.) rii`.
 
