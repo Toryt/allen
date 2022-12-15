@@ -16,11 +16,11 @@
 
 import { Interval } from './Interval'
 import { Comparator } from './Comparator'
-import { ok } from 'assert'
+import { notEqual, ok } from 'assert'
 import { getCompareIfOk } from './getCompareIfOk'
 import { AllenRelation } from './AllenRelation'
 
-interface LabeledInterval<T> {
+export interface LabeledInterval<T> {
   readonly label: string
   readonly interval: Interval<T>
 }
@@ -28,9 +28,17 @@ interface LabeledInterval<T> {
 type SimpleIntersector = <T>(i1: Interval<T>, i2: Interval<T>) => Interval<T> | undefined | false
 const noIntersection: SimpleIntersector = (): undefined => undefined
 const intersectionNotDefined: SimpleIntersector = (): false => false
-type Intersector = <T>(li1: LabeledInterval<T>, li2: LabeledInterval<T>) => Readonly<Interval<T>> | undefined | false
+type Intersector = <T>(
+  li1: LabeledInterval<T>,
+  li2: LabeledInterval<T>,
+  compareFn?: Comparator<T>
+) => Readonly<Interval<T>> | undefined | false
 
-type Chopper = <T>(li1: LabeledInterval<T>, li2: LabeledInterval<T>) => ReadonlyArray<Readonly<Interval<T>>> | false
+type Chopper = <T>(
+  li1: LabeledInterval<T>,
+  li2: LabeledInterval<T>,
+  compareFn?: Comparator<T>
+) => ReadonlyArray<Readonly<Interval<T>>> | false
 
 const chopsNotDefined: Chopper = (): false => false
 
@@ -388,6 +396,8 @@ export const intersection: Intersector = <T>(
   li2: LabeledInterval<T>,
   compareFn?: Comparator<T>
 ): Readonly<Interval<T>> | undefined | false => {
+  notEqual(li1.label, li2.label)
+
   getCompareIfOk<T>([li1.interval, li2.interval], compareFn)
 
   const gr = AllenRelation.relation(li1.interval, li2.interval, compareFn)
