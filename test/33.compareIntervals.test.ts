@@ -61,6 +61,7 @@ describe('compareIntervals', function () {
         ? /* prettier-ignore */ compareIntervals(i1, i2, compareFn)
         : compareIntervals(i1, i2)
     }
+
     describe(label, function () {
       cases.forEach(({ i1, i2, relation, comparison }: NonDegenerateTestIntervals<T>) => {
         it(`returns ${comparison} for ${intervalToString(i1)}, ${intervalToString(
