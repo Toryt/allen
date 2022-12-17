@@ -337,8 +337,8 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
   [
     AllenRelation.STARTS_IN, // `(dfO)`
     new ChopAndIntersect({
-      intersection: <T>(_: unknown, i2: Readonly<Interval<T>>): Readonly<Interval<T>> => ({
-        end: i2.end
+      intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => ({
+        start: i1.start
       }),
       chops: chopsNotDefined
     })
