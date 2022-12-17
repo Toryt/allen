@@ -24,7 +24,7 @@ import { chops, intersection, LabeledInterval } from '../src/chopsAndIntersectio
 import { Comparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import should from 'should'
-import { TypeRepresentation } from '../src'
+import { isSequence, TypeRepresentation } from '../src'
 import { ok } from 'assert'
 
 const label1 = 'first label'
@@ -155,31 +155,49 @@ describe('choppedAndIntersection', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
       const cases = createIntervalCoupleCases<T>(points)
 
-      function callIt (
-        i1: Readonly<Interval<T>>,
-        i2: Readonly<Interval<T>>
-      ): ReadonlyArray<Readonly<Interval<T>>> | false {
-        const li1: LabeledInterval<T> = { label: label1, interval: i1 }
-        const li2: LabeledInterval<T> = { label: label2, interval: i2 }
+      function callIt (li1: LabeledInterval<T>, li2: LabeledInterval<T>): ReadonlyArray<Readonly<Interval<T>>> | false {
         return compareFn !== undefined && compareFn !== null
           ? /* prettier-ignore */ chops(li1, li2, compareFn)
           : chops(li1, li2)
       }
 
+      function callIntersection (
+        li1: LabeledInterval<T>,
+        li2: LabeledInterval<T>
+      ): Readonly<Interval<T>> | undefined | false {
+        return compareFn !== undefined && compareFn !== null
+          ? /* prettier-ignore */ intersection(li1, li2, compareFn)
+          : intersection(li1, li2)
+      }
+
       describe(label, function () {
-        cases.forEach(({ i1, i2 }: NonDegenerateTestIntervals<T>) => {
+        cases.forEach(({ i1, i2, relation }: NonDegenerateTestIntervals<T>) => {
           it(`returns chops for ${intervalToString(i1)}, ${intervalToString(
             i2
-          )} and fullfils the definition`, function () {
+          )} ${relation.toString()} and fullfils the definition`, function () {
+            const li1: LabeledInterval<T> = { label: label1, interval: i1 }
+            const li2: LabeledInterval<T> = { label: label2, interval: i2 }
             const calculatedRelation: AllenRelation = AllenRelation.relation(i1, i2, compareFn)
-            const result: ReadonlyArray<Readonly<Interval<T>>> | false = callIt(i1, i2)
+            const result: ReadonlyArray<Readonly<Interval<T>>> | false = callIt(li1, li2)
             if (!calculatedRelation.isBasic()) {
               should(result).equal(false)
+            } else {
+              result.should.be.an.Array()
             }
             if (result === false) {
               calculatedRelation.isBasic().should.be.false()
             } else {
-              result.should.be.an.Array()
+              const intersection = callIntersection(li1, li2)
+              should(intersection).not.be.false()
+              if (intersection !== undefined) {
+                calculatedRelation.implies(AllenRelation.CONCURS_WITH).should.be.true()
+                isSequence(result, { compareFn, ordered: true, gaps: false }).should.be.true()
+                // result.should.containDeep(intersection)
+              } else {
+                calculatedRelation.implies(AllenRelation.DOES_NOT_CONCUR_WITH).should.be.true()
+                const gaps = calculatedRelation.implies(AllenRelation.IS_SEPARATE_FROM)
+                isSequence(result, { compareFn, ordered: true, gaps }).should.be.true()
+              }
             }
           })
         })
