@@ -17,10 +17,10 @@
 /* eslint-env mocha */
 
 import { createIntervalCoupleCases, NonDegenerateTestIntervals } from './_createIntervalCoupleCases'
-import { Interval, isInterval } from '../src/Interval'
+import { Interval, isInterval, ReferencedInterval } from '../src/Interval'
 import { intervalToString } from './_intervalToString'
 import { AllenRelation } from '../src/AllenRelation'
-import { chops, intersection, LabeledInterval } from '../src/chopsAndIntersection'
+import { chops, intersection } from '../src/chopsAndIntersection'
 import { Comparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import should from 'should'
@@ -60,7 +60,10 @@ describe('choppedAndIntersection', function () {
 
       const cases = createIntervalCoupleCases<T>(points)
 
-      function callIt (li1: LabeledInterval<T>, li2: LabeledInterval<T>): Readonly<Interval<T>> | undefined | false {
+      function callIt (
+        li1: ReferencedInterval<T>,
+        li2: ReferencedInterval<T>
+      ): Readonly<Interval<T>> | undefined | false {
         return compareFn !== undefined && compareFn !== null
           ? /* prettier-ignore */ intersection(li1, li2, compareFn)
           : intersection(li1, li2)
@@ -116,8 +119,8 @@ describe('choppedAndIntersection', function () {
           it(`returns the intersection for ${intervalToString(i1)}, ${intervalToString(
             i2
           )} ${relation.toString()} and fullfils the definition`, function () {
-            const li1: LabeledInterval<T> = { label: label1, interval: i1 }
-            const li2: LabeledInterval<T> = { label: label2, interval: i2 }
+            const li1: ReferencedInterval<T> = { reference: label1, interval: i1 }
+            const li2: ReferencedInterval<T> = { reference: label2, interval: i2 }
             const result: Readonly<Interval<T>> | undefined | false = callIt(li1, li2)
             if (expected === false || expected === undefined) {
               should(result).equal(expected)
@@ -181,15 +184,18 @@ describe('choppedAndIntersection', function () {
 
       const cases = createIntervalCoupleCases<T>(points)
 
-      function callIt (li1: LabeledInterval<T>, li2: LabeledInterval<T>): ReadonlyArray<Readonly<Interval<T>>> | false {
+      function callIt (
+        li1: ReferencedInterval<T>,
+        li2: ReferencedInterval<T>
+      ): ReadonlyArray<Readonly<Interval<T>>> | false {
         return compareFn !== undefined && compareFn !== null
           ? /* prettier-ignore */ chops(li1, li2, compareFn)
           : chops(li1, li2)
       }
 
       function callIntersection (
-        li1: LabeledInterval<T>,
-        li2: LabeledInterval<T>
+        li1: ReferencedInterval<T>,
+        li2: ReferencedInterval<T>
       ): Readonly<Interval<T>> | undefined | false {
         return compareFn !== undefined && compareFn !== null
           ? /* prettier-ignore */ intersection(li1, li2, compareFn)
@@ -201,8 +207,8 @@ describe('choppedAndIntersection', function () {
           it(`returns chops for ${intervalToString(i1)}, ${intervalToString(
             i2
           )} ${relation.toString()} and fullfils the definition`, function () {
-            const li1: LabeledInterval<T> = { label: label1, interval: i1 }
-            const li2: LabeledInterval<T> = { label: label2, interval: i2 }
+            const li1: ReferencedInterval<T> = { reference: label1, interval: i1 }
+            const li2: ReferencedInterval<T> = { reference: label2, interval: i2 }
             const result: ReadonlyArray<Readonly<Interval<T>>> | false = callIt(li1, li2)
             if (expected === false) {
               should(result).equal(expected)
