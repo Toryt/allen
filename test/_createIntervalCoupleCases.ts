@@ -118,7 +118,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { start: pts[1] },
       i2: { end: pts[0] },
-      relation: AllenRelation.fromString<AllenRelation>('P'),
+      relation: AllenRelation.PRECEDED_BY,
       comparison: +1,
       intersection: undefined,
       chops: false
@@ -126,7 +126,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { start: pts[1] },
       i2: { end: pts[1] },
-      relation: AllenRelation.fromString<AllenRelation>('M'),
+      relation: AllenRelation.MET_BY,
       comparison: +1,
       intersection: undefined,
       chops: false
@@ -151,7 +151,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { end: pts[1] },
       i2: { start: pts[1] },
-      relation: AllenRelation.fromString<AllenRelation>('m'),
+      relation: AllenRelation.MEETS,
       comparison: -1,
       intersection: undefined,
       chops: false
@@ -159,7 +159,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { end: pts[1] },
       i2: { start: pts[2] },
-      relation: AllenRelation.fromString<AllenRelation>('p'),
+      relation: AllenRelation.PRECEDES,
       comparison: -1,
       intersection: undefined,
       chops: false
@@ -204,7 +204,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { end: pts[1] },
       i2: { start: pts[2], end: pts[3] },
-      relation: AllenRelation.fromString<AllenRelation>('p'),
+      relation: AllenRelation.PRECEDES,
       comparison: -1,
       intersection: undefined,
       chops: false
@@ -212,7 +212,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { end: pts[1] },
       i2: { start: pts[1], end: pts[3] },
-      relation: AllenRelation.fromString<AllenRelation>('m'),
+      relation: AllenRelation.MEETS,
       comparison: -1,
       intersection: undefined,
       chops: false
@@ -269,7 +269,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { start: pts[1] },
       i2: { start: pts[0], end: pts[1] },
-      relation: AllenRelation.fromString<AllenRelation>('M'),
+      relation: AllenRelation.MET_BY,
       comparison: +1,
       intersection: undefined,
       chops: false
@@ -277,7 +277,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { start: pts[2] },
       i2: { start: pts[0], end: pts[1] },
-      relation: AllenRelation.fromString<AllenRelation>('P'),
+      relation: AllenRelation.PRECEDED_BY,
       comparison: +1,
       intersection: undefined,
       chops: false
@@ -310,7 +310,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { start: pts[1], end: pts[2] },
       i2: { end: pts[1] },
-      relation: AllenRelation.fromString<AllenRelation>('M'),
+      relation: AllenRelation.MET_BY,
       comparison: +1,
       intersection: undefined,
       chops: false
@@ -318,7 +318,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { start: pts[2], end: pts[3] },
       i2: { end: pts[1] },
-      relation: AllenRelation.fromString<AllenRelation>('P'),
+      relation: AllenRelation.PRECEDED_BY,
       comparison: +1,
       intersection: undefined,
       chops: false
@@ -327,7 +327,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { start: pts[0], end: pts[1] },
       i2: { start: pts[2] },
-      relation: AllenRelation.fromString<AllenRelation>('p'),
+      relation: AllenRelation.PRECEDES,
       comparison: -1,
       intersection: undefined,
       chops: false
@@ -335,7 +335,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { start: pts[0], end: pts[1] },
       i2: { start: pts[1] },
-      relation: AllenRelation.fromString<AllenRelation>('m'),
+      relation: AllenRelation.MEETS,
       comparison: -1,
       intersection: undefined,
       chops: false
