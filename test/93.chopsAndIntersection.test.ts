@@ -24,7 +24,7 @@ import { chops, intersection, LabeledInterval } from '../src/chopsAndIntersectio
 import { Comparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import should from 'should'
-import { TypeRepresentation } from '../src'
+import { Indefinite, ltCompare, TypeRepresentation } from '../src'
 import { ok } from 'assert'
 import { inspect } from 'util'
 
@@ -102,6 +102,28 @@ describe('choppedAndIntersection', function () {
           : intersection(li1, li2)
       }
 
+      function select (p1: Indefinite<T>, p2: Indefinite<T>, c: 'largest' | 'smallest'): Indefinite<T> {
+        if (p1 === undefined || p1 === null) {
+          return p2
+        }
+        if (p2 === undefined || p2 === null) {
+          return p1
+        }
+        const comparison: number = compareFn !== undefined && compareFn !== null ? compareFn(p1, p2) : ltCompare(p1, p2)
+        return (c === 'largest' ? comparison >= 0 : comparison <= 0) ? p1 : p2
+      }
+
+      function samePoint (p1: Indefinite<T>, p2: Indefinite<T>): void {
+        if (p1 === undefined || p1 === null || p2 === undefined || p2 === null) {
+          should(p1).not.be.ok()
+          should(p2).not.be.ok()
+        } else {
+          const comparison: number =
+            compareFn !== undefined && compareFn !== null ? compareFn(p1, p2) : ltCompare(p1, p2)
+          comparison.should.equal(0)
+        }
+      }
+
       describe(label, function () {
         cases.forEach(({ i1, i2 }: NonDegenerateTestIntervals<T>) => {
           it(`returns the intersection for ${intervalToString(i1)}, ${intervalToString(
@@ -134,6 +156,10 @@ describe('choppedAndIntersection', function () {
               i1Relation.implies(AllenRelation.CONCURS_WITH).should.be.true()
               const i2Relation = AllenRelation.relation(i2, result, compareFn)
               i2Relation.implies(AllenRelation.CONCURS_WITH).should.be.true()
+              const largestStart = select(i1.start, i2.start, 'largest')
+              const smallestEnd = select(i1.end, i2.end, 'smallest')
+              samePoint(largestStart, result.start)
+              samePoint(smallestEnd, result.end)
             }
           })
         })
