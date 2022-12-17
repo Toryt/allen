@@ -30,15 +30,6 @@ import { ok } from 'assert'
 const label1 = 'first label'
 const label2 = 'second label'
 
-const nonBasicWithIntersection = [
-  AllenRelation.ENDS_IN,
-  AllenRelation.CONTAINS_START,
-  AllenRelation.START_TOGETHER,
-  AllenRelation.END_TOGETHER,
-  AllenRelation.STARTS_IN,
-  AllenRelation.CONTAINS_END
-]
-
 describe('choppedAndIntersection', function () {
   describe('intersection', function () {
     function generateTests<T> (
@@ -47,6 +38,15 @@ describe('choppedAndIntersection', function () {
       points: T[],
       compareFn?: Comparator<T>
     ): void {
+      const nonBasicWithIntersection = [
+        AllenRelation.ENDS_IN,
+        AllenRelation.CONTAINS_START,
+        AllenRelation.START_TOGETHER,
+        AllenRelation.END_TOGETHER,
+        AllenRelation.STARTS_IN,
+        AllenRelation.CONTAINS_END
+      ]
+
       const cases = createIntervalCoupleCases<T>(points)
 
       function callIt (li1: LabeledInterval<T>, li2: LabeledInterval<T>): Readonly<Interval<T>> | undefined | false {
