@@ -40,66 +40,6 @@ const nonBasicWithIntersection = [
   AllenRelation.CONTAINS_END
 ]
 
-function hasExpectedReferenceIntervals<T> (
-  i: Readonly<Interval<T>>,
-  i1: Readonly<Interval<T>>,
-  i2: Readonly<Interval<T>>
-): void {
-  ok(i.referenceIntervals)
-  i.referenceIntervals[label1].length.should.equal(1)
-  i.referenceIntervals[label1][0].should.equal(i1)
-  i.referenceIntervals[label2].length.should.equal(1)
-  i.referenceIntervals[label2][0].should.equal(i2)
-}
-
-function moreOrLessEqual<T> (
-  one: Readonly<Interval<T>>,
-  other: Readonly<Interval<T>> | undefined | false,
-  compareFn?: Comparator<T>
-): void {
-  ok(other)
-  const oneOtherRelation = AllenRelation.relation(one, other, compareFn)
-  console.log(oneOtherRelation.toString())
-  console.log('one')
-  console.log(inspect(one))
-  console.log('other')
-  console.log(inspect(other))
-  console.log(oneOtherRelation.toString())
-  if (one.end === undefined) {
-    oneOtherRelation.should.equal(AllenRelation.START_TOGETHER)
-  } else if (one.start === undefined) {
-    oneOtherRelation.should.equal(AllenRelation.END_TOGETHER)
-  } else {
-    oneOtherRelation.should.equal(AllenRelation.EQUALS)
-  }
-}
-
-function areSameIntervals<T> (
-  one: Readonly<Interval<T>> | undefined | false,
-  other: Readonly<Interval<T>> | undefined | false,
-  i1: Readonly<Interval<T>>,
-  i2: Readonly<Interval<T>>,
-  pointType: TypeRepresentation,
-  compareFn?: Comparator<T>
-): void {
-  if (one === false) {
-    should(other).be.false()
-  } else if (one === undefined) {
-    should(other).be.undefined()
-  } else {
-    console.log('one')
-    console.log(inspect(one, { depth: 5 }))
-    console.log('other')
-    console.log(inspect(other, { depth: 5 }))
-    isInterval(one, pointType, compareFn).should.be.true()
-    isInterval(other, pointType, compareFn).should.be.true()
-    moreOrLessEqual(one, other, compareFn)
-    ok(other)
-    hasExpectedReferenceIntervals(one, i1, i2)
-    hasExpectedReferenceIntervals(other, i1, i2)
-    should(one.referenceIntervals).deepEqual(other.referenceIntervals)
-  }
-}
 describe('choppedAndIntersection', function () {
   describe('intersection', function () {
     function generateTests<T> (
@@ -116,6 +56,61 @@ describe('choppedAndIntersection', function () {
           : intersection(li1, li2)
       }
 
+      function moreOrLessEqual (one: Readonly<Interval<T>>, other: Readonly<Interval<T>> | undefined | false): void {
+        ok(other)
+        const oneOtherRelation = AllenRelation.relation(one, other, compareFn)
+        console.log(oneOtherRelation.toString())
+        console.log('one')
+        console.log(inspect(one))
+        console.log('other')
+        console.log(inspect(other))
+        console.log(oneOtherRelation.toString())
+        if (one.end === undefined) {
+          oneOtherRelation.should.equal(AllenRelation.START_TOGETHER)
+        } else if (one.start === undefined) {
+          oneOtherRelation.should.equal(AllenRelation.END_TOGETHER)
+        } else {
+          oneOtherRelation.should.equal(AllenRelation.EQUALS)
+        }
+      }
+
+      function hasExpectedReferenceIntervals (
+        i: Readonly<Interval<T>>,
+        i1: Readonly<Interval<T>>,
+        i2: Readonly<Interval<T>>
+      ): void {
+        ok(i.referenceIntervals)
+        i.referenceIntervals[label1].length.should.equal(1)
+        i.referenceIntervals[label1][0].should.equal(i1)
+        i.referenceIntervals[label2].length.should.equal(1)
+        i.referenceIntervals[label2][0].should.equal(i2)
+      }
+
+      function areSameIntervals (
+        one: Readonly<Interval<T>> | undefined | false,
+        other: Readonly<Interval<T>> | undefined | false,
+        i1: Readonly<Interval<T>>,
+        i2: Readonly<Interval<T>>
+      ): void {
+        if (one === false) {
+          should(other).be.false()
+        } else if (one === undefined) {
+          should(other).be.undefined()
+        } else {
+          console.log('one')
+          console.log(inspect(one, { depth: 5 }))
+          console.log('other')
+          console.log(inspect(other, { depth: 5 }))
+          isInterval(one, pointType, compareFn).should.be.true()
+          isInterval(other, pointType, compareFn).should.be.true()
+          moreOrLessEqual(one, other)
+          ok(other)
+          hasExpectedReferenceIntervals(one, i1, i2)
+          hasExpectedReferenceIntervals(other, i1, i2)
+          should(one.referenceIntervals).deepEqual(other.referenceIntervals)
+        }
+      }
+
       describe(label, function () {
         cases.forEach(({ i1, i2, intersection: expected, relation }: NonDegenerateTestIntervals<T>) => {
           it(`returns the intersection for ${intervalToString(i1)}, ${intervalToString(
@@ -127,12 +122,12 @@ describe('choppedAndIntersection', function () {
             if (expected === false || expected === undefined) {
               should(result).equal(expected)
             } else {
-              moreOrLessEqual(expected, result, compareFn)
+              moreOrLessEqual(expected, result)
             }
             console.log('result')
             console.log(inspect(result, { depth: 5 }))
             const symmetric: Readonly<Interval<T>> | undefined | false = callIt(li2, li1)
-            areSameIntervals(result, symmetric, i1, i2, pointType, compareFn)
+            areSameIntervals(result, symmetric, i1, i2)
             const calculatedRelation: AllenRelation = AllenRelation.relation(i1, i2, compareFn)
             if (!calculatedRelation.isBasic() && !nonBasicWithIntersection.includes(calculatedRelation)) {
               should(result).equal(false)
