@@ -65,14 +65,14 @@ function areSameIntervals<T> (
   } else if (one === undefined) {
     should(other).be.undefined()
   } else {
-    isInterval(one, pointType, compareFn).should.be.true()
-    isInterval(other, pointType, compareFn).should.be.true()
-    ok(other)
-    const oneOtherRelation = AllenRelation.relation(one, other, compareFn)
     console.log('one')
     console.log(inspect(one, { depth: 5 }))
     console.log('other')
     console.log(inspect(other, { depth: 5 }))
+    isInterval(one, pointType, compareFn).should.be.true()
+    isInterval(other, pointType, compareFn).should.be.true()
+    ok(other)
+    const oneOtherRelation = AllenRelation.relation(one, other, compareFn)
     console.log(oneOtherRelation.toString())
     if (one.end === undefined) {
       oneOtherRelation.should.equal(AllenRelation.START_TOGETHER)

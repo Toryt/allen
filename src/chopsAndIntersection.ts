@@ -343,7 +343,13 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
       chops: chopsNotDefined
     })
   ],
-  [AllenRelation.CONTAINS_END, new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })],
+  [
+    AllenRelation.CONTAINS_END,
+    new ChopAndIntersect({
+      intersection: <T>(_: unknown, i2: Readonly<Interval<T>>): Readonly<Interval<T>> => ({ end: i2.end }),
+      chops: chopsNotDefined
+    })
+  ],
   [AllenRelation.ENDS_LATER, new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })],
   [AllenRelation.STARTS_LATER, new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })],
   [
