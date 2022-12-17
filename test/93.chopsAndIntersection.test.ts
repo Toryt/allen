@@ -17,27 +17,107 @@
 /* eslint-env mocha */
 
 import { createIntervalCoupleCases, NonDegenerateTestIntervals } from './_createIntervalCoupleCases'
-import { Interval } from '../src/Interval'
+import { Interval, isInterval } from '../src/Interval'
 import { intervalToString } from './_intervalToString'
 import { AllenRelation } from '../src/AllenRelation'
-import { chops, LabeledInterval } from '../src/chopsAndIntersection'
+import { chops, intersection, LabeledInterval } from '../src/chopsAndIntersection'
 import { Comparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import should from 'should'
+import { TypeRepresentation } from '../src'
+import { ok } from 'assert'
 
 const label1 = 'first label'
 const label2 = 'second label'
 
-// const nonBasicWithIntersection = [
-//   AllenRelation.ENDS_IN,
-//   AllenRelation.CONTAINS_START,
-//   AllenRelation.START_TOGETHER,
-//   AllenRelation.END_TOGETHER,
-//   AllenRelation.STARTS_IN,
-//   AllenRelation.CONTAINS_END
-// ]
+const nonBasicWithIntersection = [
+  AllenRelation.ENDS_IN,
+  AllenRelation.CONTAINS_START,
+  AllenRelation.START_TOGETHER,
+  AllenRelation.END_TOGETHER,
+  AllenRelation.STARTS_IN,
+  AllenRelation.CONTAINS_END
+]
 
+function areSameIntervals<T> (
+  one: Readonly<Interval<T>> | undefined | false,
+  other: Readonly<Interval<T>> | undefined | false,
+  pointType: TypeRepresentation,
+  compareFn?: Comparator<T>
+): void {
+  if (one === false) {
+    should(other).be.false()
+  } else if (one === undefined) {
+    should(other).be.undefined()
+  } else {
+    isInterval(one, pointType, compareFn).should.be.true()
+    isInterval(other, pointType, compareFn).should.be.true()
+    ok(other)
+    AllenRelation.relation(one, other, compareFn).should.equal(AllenRelation.EQUALS)
+    should(one.referenceIntervals).deepEqual(other.referenceIntervals)
+  }
+}
 describe('choppedAndIntersection', function () {
+  describe('intersection', function () {
+    function generateTests<T> (
+      label: string,
+      pointType: TypeRepresentation,
+      points: T[],
+      compareFn?: Comparator<T>
+    ): void {
+      const cases = createIntervalCoupleCases<T>(points)
+
+      function callIt (
+        i1: Readonly<Interval<T>>,
+        i2: Readonly<Interval<T>>
+      ): Readonly<Interval<T>> | undefined | false {
+        const li1: LabeledInterval<T> = { label: label1, interval: i1 }
+        const li2: LabeledInterval<T> = { label: label2, interval: i2 }
+        return compareFn !== undefined && compareFn !== null
+          ? /* prettier-ignore */ intersection(li1, li2, compareFn)
+          : intersection(li1, li2)
+      }
+
+      describe(label, function () {
+        cases.forEach(({ i1, i2 }: NonDegenerateTestIntervals<T>) => {
+          it(`returns the intersection for ${intervalToString(i1)}, ${intervalToString(
+            i2
+          )} and fullfils the definition`, function () {
+            const calculatedRelation: AllenRelation = AllenRelation.relation(i1, i2, compareFn)
+            const result: Readonly<Interval<T>> | undefined | false = callIt(i1, i2)
+            const symmetric: Readonly<Interval<T>> | undefined | false = callIt(i2, i1)
+            areSameIntervals(result, symmetric, pointType, compareFn)
+            if (!calculatedRelation.isBasic() && !nonBasicWithIntersection.includes(calculatedRelation)) {
+              should(result).equal(false)
+            } else if (calculatedRelation.implies(AllenRelation.DOES_NOT_CONCUR_WITH)) {
+              should(result).be.undefined()
+            } else {
+              should(result).be.an.Object()
+            }
+            if (result === false) {
+              calculatedRelation.isBasic().should.be.false()
+              nonBasicWithIntersection.should.not.containEql(calculatedRelation)
+            } else if (result === undefined) {
+              calculatedRelation.isBasic().should.be.true()
+              calculatedRelation.implies(AllenRelation.DOES_NOT_CONCUR_WITH).should.be.true()
+            } else {
+              should(result).be.an.Object()
+            }
+          })
+        })
+      })
+    }
+
+    generateTests<number>('number', 'number', sixNumbers)
+    generateTests<string>('string', 'string', sixStrings)
+    generateTests<Date>('Date', Date, sixDates)
+    generateTests<symbol>(
+      'symbol',
+      'symbol',
+      generateSixSymbols('comparareIntervals'),
+      (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
+    )
+  })
   describe('chops', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
       const cases = createIntervalCoupleCases<T>(points)
@@ -64,10 +144,9 @@ describe('choppedAndIntersection', function () {
               should(result).equal(false)
             }
             if (result === false) {
-              should(calculatedRelation.isBasic()).be.false()
-              // MUDO ONLY FOR INTERSECTION nonBasicWithIntersection.should.not.containEql(result)
+              calculatedRelation.isBasic().should.be.false()
             } else {
-              should(result).be.an.Array()
+              result.should.be.an.Array()
             }
           })
         })
@@ -81,5 +160,4 @@ describe('choppedAndIntersection', function () {
       s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
     )
   })
-  // describe('intersection')
 })
