@@ -166,6 +166,19 @@ describe('choppedAndIntersection', function () {
   })
   describe('chops', function () {
     function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
+      const chopWithSourceRelations = [
+        AllenRelation.PRECEDES,
+        AllenRelation.MEETS,
+        AllenRelation.STARTS,
+        AllenRelation.START_TOGETHER,
+        AllenRelation.EQUALS,
+        AllenRelation.DURING,
+        AllenRelation.END_TOGETHER,
+        AllenRelation.FINISHES,
+        AllenRelation.MET_BY,
+        AllenRelation.PRECEDED_BY
+      ]
+
       const cases = createIntervalCoupleCases<T>(points)
 
       function callIt (li1: LabeledInterval<T>, li2: LabeledInterval<T>): ReadonlyArray<Readonly<Interval<T>>> | false {
@@ -219,7 +232,8 @@ describe('choppedAndIntersection', function () {
               result.forEach(i => {
                 ok(i.referenceIntervals)
                 const maxReferenceIntervals = [i1, i2]
-                const i1Relation = AllenRelation.relation(i1, i, compareFn)
+                const i1Relation = AllenRelation.relation(i, i1, compareFn)
+                i1Relation.should.be.oneOf(chopWithSourceRelations)
                 if (i1Relation.implies(AllenRelation.CONCURS_WITH)) {
                   i1.should.be.oneOf(i.referenceIntervals[label1])
                 } else if (i.referenceIntervals[label1] !== undefined) {
@@ -230,7 +244,8 @@ describe('choppedAndIntersection', function () {
                     ri.should.be.oneOf(maxReferenceIntervals)
                   })
                 }
-                const i2Relation = AllenRelation.relation(i2, i, compareFn)
+                const i2Relation = AllenRelation.relation(i, i2, compareFn)
+                i2Relation.should.be.oneOf(chopWithSourceRelations)
                 if (i2Relation.implies(AllenRelation.CONCURS_WITH)) {
                   i2.should.be.oneOf(i.referenceIntervals[label2])
                 } else if (i.referenceIntervals[label2] !== undefined) {
