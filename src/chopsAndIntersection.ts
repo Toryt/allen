@@ -285,7 +285,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
     })
   ],
   [
-    AllenRelation.MEETS,
+    AllenRelation.PRECEDED_BY,
     new ChopAndIntersect({
       intersection: noIntersection,
       chops: <T>(
