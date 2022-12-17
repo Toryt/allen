@@ -192,11 +192,9 @@ describe('choppedAndIntersection', function () {
               const intersection = callIntersection(li1, li2)
               should(intersection).not.be.false()
               if (intersection !== undefined) {
-                calculatedRelation.implies(AllenRelation.CONCURS_WITH).should.be.true()
                 isSequence(result, { compareFn, ordered: true, gaps: false }).should.be.true()
                 intersection.should.be.oneOf(result)
               } else {
-                calculatedRelation.implies(AllenRelation.DOES_NOT_CONCUR_WITH).should.be.true()
                 const gaps = calculatedRelation.implies(AllenRelation.IS_SEPARATE_FROM)
                 isSequence(result, { compareFn, ordered: true, gaps }).should.be.true()
               }
