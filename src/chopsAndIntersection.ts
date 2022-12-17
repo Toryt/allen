@@ -330,7 +330,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
   [
     AllenRelation.END_TOGETHER, // `(Fef)`
     new ChopAndIntersect({
-      intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => ({ start: i1.start }),
+      intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => ({ end: i1.end }),
       chops: chopsNotDefined
     })
   ],
