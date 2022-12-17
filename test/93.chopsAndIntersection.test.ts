@@ -26,7 +26,6 @@ import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCa
 import should from 'should'
 import { TypeRepresentation } from '../src'
 import { ok } from 'assert'
-import { inspect } from 'util'
 
 const label1 = 'first label'
 const label2 = 'second label'
@@ -59,12 +58,6 @@ describe('choppedAndIntersection', function () {
       function moreOrLessEqual (one: Readonly<Interval<T>>, other: Readonly<Interval<T>> | undefined | false): void {
         ok(other)
         const oneOtherRelation = AllenRelation.relation(one, other, compareFn)
-        console.log(oneOtherRelation.toString())
-        console.log('one')
-        console.log(inspect(one))
-        console.log('other')
-        console.log(inspect(other))
-        console.log(oneOtherRelation.toString())
         if (one.end === undefined) {
           oneOtherRelation.should.equal(AllenRelation.START_TOGETHER)
         } else if (one.start === undefined) {
@@ -97,10 +90,6 @@ describe('choppedAndIntersection', function () {
         } else if (one === undefined) {
           should(other).be.undefined()
         } else {
-          console.log('one')
-          console.log(inspect(one, { depth: 5 }))
-          console.log('other')
-          console.log(inspect(other, { depth: 5 }))
           isInterval(one, pointType, compareFn).should.be.true()
           isInterval(other, pointType, compareFn).should.be.true()
           moreOrLessEqual(one, other)
@@ -124,8 +113,6 @@ describe('choppedAndIntersection', function () {
             } else {
               moreOrLessEqual(expected, result)
             }
-            console.log('result')
-            console.log(inspect(result, { depth: 5 }))
             const symmetric: Readonly<Interval<T>> | undefined | false = callIt(li2, li1)
             areSameIntervals(result, symmetric, i1, i2)
             const calculatedRelation: AllenRelation = AllenRelation.relation(i1, i2, compareFn)
