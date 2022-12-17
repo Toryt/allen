@@ -180,18 +180,18 @@ describe('AllenRelation', function () {
      * The 26 possible results:
      */
     const possibleResults: AllenRelation[] = AllenRelation.BASIC_RELATIONS.concat([
-      AllenRelation.fromString<AllenRelation>('pmoFDseSdfO'),
-      AllenRelation.fromString<AllenRelation>('pmoFD'),
-      AllenRelation.fromString<AllenRelation>('pmosd'),
-      AllenRelation.fromString<AllenRelation>('osd'),
-      AllenRelation.fromString<AllenRelation>('oFD'),
-      AllenRelation.fromString<AllenRelation>('seS'),
-      AllenRelation.fromString<AllenRelation>('Fef'),
-      AllenRelation.fromString<AllenRelation>('dfO'),
-      AllenRelation.fromString<AllenRelation>('DSO'),
-      AllenRelation.fromString<AllenRelation>('DSOMP'),
-      AllenRelation.fromString<AllenRelation>('dfOMP'),
-      AllenRelation.fromString<AllenRelation>('oFDseSdfOMP'),
+      AllenRelation.AFTER.complement(),
+      AllenRelation.STARTS_EARLIER,
+      AllenRelation.ENDS_EARLIER,
+      AllenRelation.ENDS_IN,
+      AllenRelation.CONTAINS_START,
+      AllenRelation.START_TOGETHER,
+      AllenRelation.END_TOGETHER,
+      AllenRelation.STARTS_IN,
+      AllenRelation.CONTAINS_END,
+      AllenRelation.ENDS_LATER,
+      AllenRelation.STARTS_LATER,
+      AllenRelation.BEFORE.complement(),
       AllenRelation.FULL
     ])
 

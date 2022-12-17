@@ -367,7 +367,6 @@ describe('isSequence', function () {
             : { ...optionsBase, compareFn }
       const result = options === undefined ? isSequence(is) : isSequence(is, options)
       const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
-      const EARLIER = AllenRelation.fromString<AllenRelation>('mp')
       // the definition, split in parts
       if (is.length <= 0) {
         result.should.be.true()
@@ -382,7 +381,8 @@ describe('isSequence', function () {
           result.should.be.false()
         }
         const first: Interval<T> = is.reduce(
-          (acc: Interval<T>, j: Interval<T>) => (AllenRelation.relation(acc, j, compare).implies(EARLIER) ? acc : j),
+          (acc: Interval<T>, j: Interval<T>) =>
+            AllenRelation.relation(acc, j, compare).implies(AllenRelation.BEFORE) ? acc : j,
           is[0]
         )
         is.forEach((i: Interval<T>, index: number) => {
@@ -440,7 +440,7 @@ describe('isSequence', function () {
                 i ===
                   is.reduce(
                     (acc: Interval<T>, j: Interval<T>) =>
-                      AllenRelation.relation(acc, j, compare).implies(EARLIER) ? acc : j,
+                      AllenRelation.relation(acc, j, compare).implies(AllenRelation.BEFORE) ? acc : j,
                     is[0]
                   ) ||
                 // must have a predecessor

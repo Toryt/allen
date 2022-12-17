@@ -321,7 +321,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
     })
   ],
   [
-    AllenRelation.fromString<AllenRelation>('seS'),
+    AllenRelation.START_TOGETHER,
     new ChopAndIntersect({
       intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => ({ start: i1.start }),
       chops: chopsNotDefined
