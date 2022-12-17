@@ -171,13 +171,18 @@ describe('choppedAndIntersection', function () {
       }
 
       describe(label, function () {
-        cases.forEach(({ i1, i2, relation }: NonDegenerateTestIntervals<T>) => {
+        cases.forEach(({ i1, i2, chops: expected, relation }: NonDegenerateTestIntervals<T>) => {
           it(`returns chops for ${intervalToString(i1)}, ${intervalToString(
             i2
           )} ${relation.toString()} and fullfils the definition`, function () {
             const li1: LabeledInterval<T> = { label: label1, interval: i1 }
             const li2: LabeledInterval<T> = { label: label2, interval: i2 }
             const result: ReadonlyArray<Readonly<Interval<T>>> | false = callIt(li1, li2)
+            if (expected === false) {
+              should(result).equal(expected)
+              // } else {
+              //   moreOrLessEqual(expected, result)
+            }
             const commuted: ReadonlyArray<Readonly<Interval<T>>> | false = callIt(li2, li1)
             commuted.should.eql(result)
             const calculatedRelation: AllenRelation = AllenRelation.relation(i1, i2, compareFn)
