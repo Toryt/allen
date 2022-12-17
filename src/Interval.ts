@@ -33,9 +33,7 @@ import { Comparator } from './Comparator'
  * name. Also, e.g., `Date` instances do not have any `string` property name, and are not allowed. The empty object `{}`
  * however, _is_ allowed.
  */
-export interface ReferenceIntervals<T> {
-  [reference: string]: ReadonlyArray<Interval<T>>
-}
+export type ReferenceIntervals<T> = Record<string, ReadonlyArray<Interval<T>>>
 
 function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation> (
   u: unknown,
