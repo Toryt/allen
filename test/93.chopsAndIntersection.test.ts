@@ -24,7 +24,7 @@ import { chops, intersection, LabeledInterval } from '../src/chopsAndIntersectio
 import { Comparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import should from 'should'
-import { Indefinite, ltCompare, TypeRepresentation } from '../src'
+import { TypeRepresentation } from '../src'
 import { ok } from 'assert'
 import { inspect } from 'util'
 
@@ -52,6 +52,28 @@ function hasExpectedReferenceIntervals<T> (
   i.referenceIntervals[label2][0].should.equal(i2)
 }
 
+function moreOrLessEqual<T> (
+  one: Readonly<Interval<T>>,
+  other: Readonly<Interval<T>> | undefined | false,
+  compareFn?: Comparator<T>
+): void {
+  ok(other)
+  const oneOtherRelation = AllenRelation.relation(one, other, compareFn)
+  console.log(oneOtherRelation.toString())
+  console.log('one')
+  console.log(inspect(one))
+  console.log('other')
+  console.log(inspect(other))
+  console.log(oneOtherRelation.toString())
+  if (one.end === undefined) {
+    oneOtherRelation.should.equal(AllenRelation.START_TOGETHER)
+  } else if (one.start === undefined) {
+    oneOtherRelation.should.equal(AllenRelation.END_TOGETHER)
+  } else {
+    oneOtherRelation.should.equal(AllenRelation.EQUALS)
+  }
+}
+
 function areSameIntervals<T> (
   one: Readonly<Interval<T>> | undefined | false,
   other: Readonly<Interval<T>> | undefined | false,
@@ -71,16 +93,8 @@ function areSameIntervals<T> (
     console.log(inspect(other, { depth: 5 }))
     isInterval(one, pointType, compareFn).should.be.true()
     isInterval(other, pointType, compareFn).should.be.true()
+    moreOrLessEqual(one, other, compareFn)
     ok(other)
-    const oneOtherRelation = AllenRelation.relation(one, other, compareFn)
-    console.log(oneOtherRelation.toString())
-    if (one.end === undefined) {
-      oneOtherRelation.should.equal(AllenRelation.START_TOGETHER)
-    } else if (one.start === undefined) {
-      oneOtherRelation.should.equal(AllenRelation.END_TOGETHER)
-    } else {
-      oneOtherRelation.should.equal(AllenRelation.EQUALS)
-    }
     hasExpectedReferenceIntervals(one, i1, i2)
     hasExpectedReferenceIntervals(other, i1, i2)
     should(one.referenceIntervals).deepEqual(other.referenceIntervals)
@@ -102,41 +116,24 @@ describe('choppedAndIntersection', function () {
           : intersection(li1, li2)
       }
 
-      function select (p1: Indefinite<T>, p2: Indefinite<T>, c: 'largest' | 'smallest'): Indefinite<T> {
-        if (p1 === undefined || p1 === null) {
-          return p2
-        }
-        if (p2 === undefined || p2 === null) {
-          return p1
-        }
-        const comparison: number = compareFn !== undefined && compareFn !== null ? compareFn(p1, p2) : ltCompare(p1, p2)
-        return (c === 'largest' ? comparison >= 0 : comparison <= 0) ? p1 : p2
-      }
-
-      function samePoint (p1: Indefinite<T>, p2: Indefinite<T>): void {
-        if (p1 === undefined || p1 === null || p2 === undefined || p2 === null) {
-          should(p1).not.be.ok()
-          should(p2).not.be.ok()
-        } else {
-          const comparison: number =
-            compareFn !== undefined && compareFn !== null ? compareFn(p1, p2) : ltCompare(p1, p2)
-          comparison.should.equal(0)
-        }
-      }
-
       describe(label, function () {
-        cases.forEach(({ i1, i2 }: NonDegenerateTestIntervals<T>) => {
+        cases.forEach(({ i1, i2, intersection: expected, relation }: NonDegenerateTestIntervals<T>) => {
           it(`returns the intersection for ${intervalToString(i1)}, ${intervalToString(
             i2
-          )} and fullfils the definition`, function () {
-            const calculatedRelation: AllenRelation = AllenRelation.relation(i1, i2, compareFn)
+          )} ${relation.toString()} and fullfils the definition`, function () {
             const li1: LabeledInterval<T> = { label: label1, interval: i1 }
             const li2: LabeledInterval<T> = { label: label2, interval: i2 }
             const result: Readonly<Interval<T>> | undefined | false = callIt(li1, li2)
+            if (expected === false || expected === undefined) {
+              should(result).equal(expected)
+            } else {
+              moreOrLessEqual(expected, result, compareFn)
+            }
             console.log('result')
             console.log(inspect(result, { depth: 5 }))
             const symmetric: Readonly<Interval<T>> | undefined | false = callIt(li2, li1)
             areSameIntervals(result, symmetric, i1, i2, pointType, compareFn)
+            const calculatedRelation: AllenRelation = AllenRelation.relation(i1, i2, compareFn)
             if (!calculatedRelation.isBasic() && !nonBasicWithIntersection.includes(calculatedRelation)) {
               should(result).equal(false)
             } else if (calculatedRelation.implies(AllenRelation.DOES_NOT_CONCUR_WITH)) {
@@ -156,10 +153,6 @@ describe('choppedAndIntersection', function () {
               i1Relation.implies(AllenRelation.CONCURS_WITH).should.be.true()
               const i2Relation = AllenRelation.relation(i2, result, compareFn)
               i2Relation.implies(AllenRelation.CONCURS_WITH).should.be.true()
-              const largestStart = select(i1.start, i2.start, 'largest')
-              const smallestEnd = select(i1.end, i2.end, 'smallest')
-              samePoint(largestStart, result.start)
-              samePoint(smallestEnd, result.end)
             }
           })
         })
