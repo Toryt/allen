@@ -365,7 +365,7 @@ For fully definite intervals, we get the following intersection sequences and su
 Note there are always 1, 2, or 3 intervals in the chopped sequence. The intersection sequence has zero or 1 interval,
 which is `i1` or `i2` (or both for `(e)`), or a new interval for `(o)` and `(O)`.
 
-We get the same results for `i2 (.) i1`. Chopping, and the intersection, is symmetric.
+We get the same results for `i2 (.) i1`. Chopping, and the intersection, commute.
 
 ### Indefinite intervals
 

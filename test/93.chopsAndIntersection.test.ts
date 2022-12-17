@@ -113,8 +113,8 @@ describe('choppedAndIntersection', function () {
             } else {
               moreOrLessEqual(expected, result)
             }
-            const symmetric: Readonly<Interval<T>> | undefined | false = callIt(li2, li1)
-            areSameIntervals(result, symmetric, i1, i2)
+            const commuted: Readonly<Interval<T>> | undefined | false = callIt(li2, li1)
+            areSameIntervals(result, commuted, i1, i2)
             const calculatedRelation: AllenRelation = AllenRelation.relation(i1, i2, compareFn)
             if (!calculatedRelation.isBasic() && !nonBasicWithIntersection.includes(calculatedRelation)) {
               should(result).equal(false)
@@ -178,8 +178,8 @@ describe('choppedAndIntersection', function () {
             const li1: LabeledInterval<T> = { label: label1, interval: i1 }
             const li2: LabeledInterval<T> = { label: label2, interval: i2 }
             const result: ReadonlyArray<Readonly<Interval<T>>> | false = callIt(li1, li2)
-            const symmetric: ReadonlyArray<Readonly<Interval<T>>> | false = callIt(li2, li1)
-            symmetric.should.eql(result)
+            const commuted: ReadonlyArray<Readonly<Interval<T>>> | false = callIt(li2, li1)
+            commuted.should.eql(result)
             const calculatedRelation: AllenRelation = AllenRelation.relation(i1, i2, compareFn)
             if (!calculatedRelation.isBasic()) {
               should(result).equal(false)
