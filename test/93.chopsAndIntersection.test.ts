@@ -202,34 +202,33 @@ describe('choppedAndIntersection', function () {
               } else {
                 const gaps = calculatedRelation.implies(AllenRelation.IS_SEPARATE_FROM)
                 isSequence(result, { compareFn, ordered: true, gaps }).should.be.true()
-
-                result.forEach(i => {
-                  ok(i.referenceIntervals)
-                  const maxReferenceIntervals = [i1, i2]
-                  const i1Relation = AllenRelation.relation(i1, i, compareFn)
-                  if (i1Relation.implies(AllenRelation.CONCURS_WITH)) {
-                    i1.should.be.oneOf(i.referenceIntervals[label1])
-                  } else if (i.referenceIntervals[label1] !== undefined) {
-                    i.referenceIntervals[label1].should.not.containEql(i1)
-                  }
-                  if (i.referenceIntervals[label1] !== undefined) {
-                    i.referenceIntervals[label1].forEach(ri => {
-                      ri.should.be.oneOf(maxReferenceIntervals)
-                    })
-                  }
-                  const i2Relation = AllenRelation.relation(i2, i, compareFn)
-                  if (i2Relation.implies(AllenRelation.CONCURS_WITH)) {
-                    i2.should.be.oneOf(i.referenceIntervals[label2])
-                  } else if (i.referenceIntervals[label2] !== undefined) {
-                    i.referenceIntervals[label2].should.not.containEql(i2)
-                  }
-                  if (i.referenceIntervals[label2] !== undefined) {
-                    i.referenceIntervals[label2].forEach(ri => {
-                      ri.should.be.oneOf(maxReferenceIntervals)
-                    })
-                  }
-                })
               }
+              result.forEach(i => {
+                ok(i.referenceIntervals)
+                const maxReferenceIntervals = [i1, i2]
+                const i1Relation = AllenRelation.relation(i1, i, compareFn)
+                if (i1Relation.implies(AllenRelation.CONCURS_WITH)) {
+                  i1.should.be.oneOf(i.referenceIntervals[label1])
+                } else if (i.referenceIntervals[label1] !== undefined) {
+                  i.referenceIntervals[label1].should.not.containEql(i1)
+                }
+                if (i.referenceIntervals[label1] !== undefined) {
+                  i.referenceIntervals[label1].forEach(ri => {
+                    ri.should.be.oneOf(maxReferenceIntervals)
+                  })
+                }
+                const i2Relation = AllenRelation.relation(i2, i, compareFn)
+                if (i2Relation.implies(AllenRelation.CONCURS_WITH)) {
+                  i2.should.be.oneOf(i.referenceIntervals[label2])
+                } else if (i.referenceIntervals[label2] !== undefined) {
+                  i.referenceIntervals[label2].should.not.containEql(i2)
+                }
+                if (i.referenceIntervals[label2] !== undefined) {
+                  i.referenceIntervals[label2].forEach(ri => {
+                    ri.should.be.oneOf(maxReferenceIntervals)
+                  })
+                }
+              })
             }
           })
         })
