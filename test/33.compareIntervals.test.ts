@@ -52,7 +52,7 @@ describe('compareIntervals', function () {
     crossReference26.set(AllenRelation.ENDS_LATER, [-1, +1])
     crossReference26.set(AllenRelation.START_TOGETHER, [-1, 0, +1])
     crossReference26.set(AllenRelation.END_TOGETHER, [-1, 0, +1])
-    crossReference26.set(AllenRelation.fullRelation<AllenRelation>(), [-1, 0, +1])
+    crossReference26.set(AllenRelation.FULL, [-1, 0, +1])
 
     const cases = createIntervalCoupleCases<T>(points)
 

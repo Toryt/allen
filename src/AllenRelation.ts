@@ -346,6 +346,17 @@ export class AllenRelation extends Relation {
   // -------------------------------------------------------------------------------------------------------------------
 
   /**
+   * The full relation, which expresses that nothing definite can be said about the relation.
+   *
+   * ### Invariants
+   *
+   * ```
+   * R.RELATIONS.every(gr => fullRelation().impliedBy(gr))
+   * ```
+   */
+  static readonly FULL: AllenRelation = AllenRelation.fullRelation<AllenRelation>()
+
+  /**
    * `(mM)` — a non-basic interval relation that is often handy to use, which expresses that and interval `i1`
    * touches an interval `i2`.
    *
@@ -758,7 +769,7 @@ export class AllenRelation extends Relation {
       AllenRelation.ENDS_EARLIER,
       AllenRelation.ENDS_EARLIER,
       AllenRelation.ENDS_EARLIER,
-      AllenRelation.fullRelation<AllenRelation>()
+      AllenRelation.FULL
     ],
     [
       AllenRelation.PRECEDES,
@@ -870,7 +881,7 @@ export class AllenRelation extends Relation {
       AllenRelation.PRECEDES,
       AllenRelation.ENDS_EARLIER,
       AllenRelation.ENDS_EARLIER,
-      AllenRelation.fullRelation<AllenRelation>(),
+      AllenRelation.FULL,
       AllenRelation.DURING,
       AllenRelation.DURING,
       AllenRelation.STARTS_LATER,
@@ -926,7 +937,7 @@ export class AllenRelation extends Relation {
       AllenRelation.PRECEDED_BY
     ],
     [
-      AllenRelation.fullRelation<AllenRelation>(),
+      AllenRelation.FULL,
       AllenRelation.STARTS_LATER,
       AllenRelation.STARTS_LATER,
       AllenRelation.PRECEDED_BY,
@@ -1027,7 +1038,7 @@ export class AllenRelation extends Relation {
     const i2Start: Indefinite<T> = i2.start
     const i2End: Indefinite<T> = i2.end
 
-    let result: AllenRelation = AllenRelation.fullRelation<AllenRelation>()
+    let result: AllenRelation = AllenRelation.FULL
 
     if (i1Start !== undefined && i1Start !== null) {
       if (i2Start !== undefined && i2Start !== null) {

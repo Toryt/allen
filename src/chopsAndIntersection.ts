@@ -356,10 +356,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
     AllenRelation.BEFORE.complement(),
     new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })
   ],
-  [
-    AllenRelation.fullRelation<AllenRelation>(),
-    new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })
-  ]
+  [AllenRelation.FULL, new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })]
 ])
 
 export const chops: Chopper = <T>(

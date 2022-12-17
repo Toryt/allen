@@ -40,7 +40,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: {},
       i2: {},
-      relation: AllenRelation.fullRelation<AllenRelation>(),
+      relation: AllenRelation.FULL,
       comparison: 0,
       intersection: false,
       chops: false
@@ -50,7 +50,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { start: pts[0] },
       i2: {},
-      relation: AllenRelation.fullRelation<AllenRelation>(),
+      relation: AllenRelation.FULL,
       comparison: +1,
       intersection: false,
       chops: false
@@ -58,7 +58,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { end: pts[0] },
       i2: {},
-      relation: AllenRelation.fullRelation<AllenRelation>(),
+      relation: AllenRelation.FULL,
       comparison: -1,
       intersection: false,
       chops: false
@@ -66,7 +66,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: {},
       i2: { start: pts[0] },
-      relation: AllenRelation.fullRelation<AllenRelation>(),
+      relation: AllenRelation.FULL,
       comparison: -1,
       intersection: false,
       chops: false
@@ -74,7 +74,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: {},
       i2: { end: pts[0] },
-      relation: AllenRelation.fullRelation<AllenRelation>(),
+      relation: AllenRelation.FULL,
       comparison: +1,
       intersection: false,
       chops: false
@@ -84,7 +84,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { start: pts[0], end: pts[1] },
       i2: {},
-      relation: AllenRelation.fullRelation<AllenRelation>(),
+      relation: AllenRelation.FULL,
       comparison: +1,
       intersection: false,
       chops: false
@@ -193,7 +193,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: {},
       i2: { start: pts[0], end: pts[1] },
-      relation: AllenRelation.fullRelation<AllenRelation>(),
+      relation: AllenRelation.FULL,
       comparison: -1,
       intersection: false,
       chops: false
@@ -514,7 +514,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
     {
       i1: { start: null },
       i2: { end: pts[0] },
-      relation: AllenRelation.fullRelation<AllenRelation>(),
+      relation: AllenRelation.FULL,
       comparison: +1,
       intersection: false,
       chops: false

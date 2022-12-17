@@ -46,6 +46,7 @@ describe('AllenRelation', function () {
       { name: 'PRECEDED_BY', representation: 'P' }
     ],
     [
+      { name: 'FULL', representation: 'pmoFDseSdfOMP' },
       { name: 'CONCURS_WITH', representation: 'oFDseSdfO' },
       { name: 'DOES_NOT_CONCUR_WITH', representation: 'pmMP' },
       { name: 'TOUCHES', representation: 'mM' },
@@ -189,7 +190,7 @@ describe('AllenRelation', function () {
       AllenRelation.fromString<AllenRelation>('DSOMP'),
       AllenRelation.fromString<AllenRelation>('dfOMP'),
       AllenRelation.fromString<AllenRelation>('oFDseSdfOMP'),
-      AllenRelation.fullRelation<AllenRelation>()
+      AllenRelation.FULL
     ])
 
     function generateTests<T> (label: string, pts: T[], compareFn?: (a1: T, a2: T) => number): void {
