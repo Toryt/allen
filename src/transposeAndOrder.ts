@@ -29,7 +29,7 @@ const haveCommonType: string = 'all `start` and `end` values of all intervals mu
 export function transposeAndOrder<T> (
   sources: Readonly<ReferenceIntervals<T>>,
   compareFn?: Comparator<T>
-): ReadonlyArray<Readonly<ReferencedInterval<T>>> {
+): Array<Readonly<ReferencedInterval<T>>> {
   equal(typeof sources, 'object')
   ok(sources)
   assert(compareFn === undefined || typeof compareFn === 'function')
