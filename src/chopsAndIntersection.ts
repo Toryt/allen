@@ -298,7 +298,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
     })
   ],
   [
-    AllenRelation.ANTERIOR.complement(),
+    AllenRelation.AFTER.complement(),
     new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })
   ],
   [

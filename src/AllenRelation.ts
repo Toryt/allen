@@ -538,6 +538,20 @@ export class AllenRelation extends Relation {
     AllenRelation.OVERLAPS
   )
 
+  /**
+   * `(pm)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1` comes
+   * before an interval `i2`.
+   *
+   * ```
+   * (i1.end ≠ undefined) ∧ (i2.start ≠ undefined) ∧ (i1.end ≤ i2.start)
+   * ```
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * BEFORE == or(PRECEDES, MEETS)
+   * ```
+   */
   static readonly BEFORE: AllenRelation = AllenRelation.or(AllenRelation.PRECEDES, AllenRelation.MEETS)
 
   /**
@@ -563,7 +577,21 @@ export class AllenRelation extends Relation {
     AllenRelation.PRECEDED_BY
   )
 
-  static readonly ANTERIOR: AllenRelation = AllenRelation.or(AllenRelation.MET_BY, AllenRelation.PRECEDED_BY)
+  /**
+   * `(MP)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1` comes
+   * after an interval `i2`.
+   *
+   * ```
+   * (i1.start ≠ undefined) ∧ (i2.end ≠ undefined) ∧ (i2.end ≤ i1.end)
+   * ```
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * AFTER == or(MET_BY, PRECEDED_BY)
+   * ```
+   */
+  static readonly AFTER: AllenRelation = AllenRelation.or(AllenRelation.MET_BY, AllenRelation.PRECEDED_BY)
 
   /**
    * `(pmosd)` — a non-basic interval relation that is often handy to use, which expresses that interval `i1` ends
