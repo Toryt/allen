@@ -130,6 +130,10 @@ describe('choppedAndIntersection', function () {
               calculatedRelation.implies(AllenRelation.DOES_NOT_CONCUR_WITH).should.be.true()
             } else {
               should(result).be.an.Object()
+              const i1Relation = AllenRelation.relation(i1, result, compareFn)
+              i1Relation.implies(AllenRelation.CONCURS_WITH).should.be.true()
+              const i2Relation = AllenRelation.relation(i2, result, compareFn)
+              i2Relation.implies(AllenRelation.CONCURS_WITH).should.be.true()
             }
           })
         })
