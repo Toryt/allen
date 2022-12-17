@@ -26,6 +26,7 @@ import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCa
 import should from 'should'
 import { TypeRepresentation } from '../src'
 import { ok } from 'assert'
+import { inspect } from 'util'
 
 const label1 = 'first label'
 const label2 = 'second label'
@@ -39,9 +40,23 @@ const nonBasicWithIntersection = [
   AllenRelation.CONTAINS_END
 ]
 
+function hasExpectedReferenceIntervals<T> (
+  i: Readonly<Interval<T>>,
+  i1: Readonly<Interval<T>>,
+  i2: Readonly<Interval<T>>
+): void {
+  ok(i.referenceIntervals)
+  i.referenceIntervals[label1].length.should.equal(1)
+  i.referenceIntervals[label1][0].should.equal(i1)
+  i.referenceIntervals[label2].length.should.equal(1)
+  i.referenceIntervals[label2][0].should.equal(i2)
+}
+
 function areSameIntervals<T> (
   one: Readonly<Interval<T>> | undefined | false,
   other: Readonly<Interval<T>> | undefined | false,
+  i1: Readonly<Interval<T>>,
+  i2: Readonly<Interval<T>>,
   pointType: TypeRepresentation,
   compareFn?: Comparator<T>
 ): void {
@@ -54,6 +69,8 @@ function areSameIntervals<T> (
     isInterval(other, pointType, compareFn).should.be.true()
     ok(other)
     AllenRelation.relation(one, other, compareFn).should.equal(AllenRelation.EQUALS)
+    hasExpectedReferenceIntervals(one, i1, i2)
+    hasExpectedReferenceIntervals(other, i1, i2)
     should(one.referenceIntervals).deepEqual(other.referenceIntervals)
   }
 }
@@ -85,8 +102,9 @@ describe('choppedAndIntersection', function () {
           )} and fullfils the definition`, function () {
             const calculatedRelation: AllenRelation = AllenRelation.relation(i1, i2, compareFn)
             const result: Readonly<Interval<T>> | undefined | false = callIt(i1, i2)
+            console.log(inspect(result, { depth: 5 }))
             const symmetric: Readonly<Interval<T>> | undefined | false = callIt(i2, i1)
-            areSameIntervals(result, symmetric, pointType, compareFn)
+            areSameIntervals(result, symmetric, i1, i2, pointType, compareFn)
             if (!calculatedRelation.isBasic() && !nonBasicWithIntersection.includes(calculatedRelation)) {
               should(result).equal(false)
             } else if (calculatedRelation.implies(AllenRelation.DOES_NOT_CONCUR_WITH)) {
