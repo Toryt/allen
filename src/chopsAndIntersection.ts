@@ -360,71 +360,6 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
 ])
 
 /**
- * Returns the sequence of intervals that are the result of chopping `i1` and `i2` with each other.
- *
- * There is always a chopped sequence if the relation between `i1` and `i2` is basic. This is true if `i1` and `i2` are
- * definite intervals. For indefinite intervals, it is only true if the relation is `(p)`, `(m)`, `(M)`, `(P)`. The
- * chopped sequence contains 1, 2, or 3 intervals.
- *
- * If the relation between `i1` and `i2` is not basic, we cannot determine the chopped sequence, because we are missing
- * a necessary intermediate point. In this case, `false` is returned.
- *
- * The relation between the intervals of the chopped sequence `csi` and `i1` (`csi (.) i1`), and `i2` (`csi (.) i2`),
- * must be one of
- *
- * * {@link AllenRelation.PRECEDES `(p)`}
- * * {@link AllenRelation.MEETS `(m)`}
- * * {@link AllenRelation.STARTS `(s)`}
- * * {@link AllenRelation.START_TOGETHER `(seS)`}
- * * {@link AllenRelation.EQUALS `(e)`}
- * * {@link AllenRelation.DURING `(d)`}
- * * {@link AllenRelation.END_TOGETHER `(Fef)`}
- * * {@link AllenRelation.FINISHES `(f)`}
- * * {@link AllenRelation.MET_BY `(M)`}
- * * {@link AllenRelation.PRECEDED_BY `(P)`}
- *
- * If `i1` and `i2` have an {@link intersection}, and there is a chopped sequence, the intersection is an element of the
- * chopped sequence. When the relation between `i1` and `i2` is {@link AllenRelation.STARTS_IN `(dfO)`} or
- * {@link AllenRelation.ENDS_IN `(osd)`}, we cannot determine the chopped sequence, although there is an
- * {@link intersection}.
- *
- * Chops commutes: `chops(i1, i2) = chops(i2, i1)`.
- *
- * #### Result
- *
- * For basic relations we get the following results. The subsequences indicate in which interval of the result `i1`,
- * respectively `i2`, are mentioned as reference intervals.
- *
- * | `i1 (.) i2` | chopped sequence                                              | subsequence `i1`                             | subsequence `i2`                             |
- * | ----------- | ------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
- * | `(p)`       | `i1, i2`                                                      | `i1`                                         | `i2`                                         |
- * | `(m)`       | `i1, i2`                                                      | `i1`                                         | `i2`                                         |
- * | `(o)`       | `[i1.start, i2.start[, [i2.start, i1.end[ , [i1.end, i2.end[` | `[i1.start, i2.start[, [i2.start, i1.end[`   | `[i2.start, i1.end[, [i1.end, i2.end[`       |
- * | `(F)`       | `[i1.start, i2.start[, i2`                                    | `[i1.start, i2.start[, i2`                   | `i2`                                         |
- * | `(D)`       | `[i1.start, i2.start[, i2, [i2.end, i1.end[`                  | `[i1.start, i2.start[, i2, [i2.end, i1.end[` | `i2`                                         |
- * | `(s)`       | `i1, [i1.end, i2.end[`                                        | `i1`                                         | `i1, [i1.end, i2.end[`                       |
- * | `(e)`       | `i1` = `i2`                                                   | `i1, i2`                                     | `i1, i2`                                     |
- * | `(S)`       | `i2, [i2.end, i1.end[`                                        | `i2, [i2.end, i1.end[`                       | `i2`                                         |
- * | `(d)`       | `[i2.start, i1.start[, i1, [i1.end, i2.end[`                  | `i1`                                         | `[i2.start, i1.start[, i1, [i1.end, i2.end[` |
- * | `(f)`       | `[i2.start, i1.start[, i1`                                    | `i1`                                         | `[i2.start, i1.start[, i1`                   |
- * | `(O)`       | `[i2.start, i1.start[, [i1.start, i2.end[ , [i2.end, i1.end[` | `[i1.start, i2.end[ , [i2.end, i1.end[`      | `[i2.start, i1.start[, [i1.start, i2.end[ `  |
- * | `(M)`       | `i2, i1`                                                      | `i1`                                         | `i2`                                         |
- * | `(P)`       | `i2, i1`                                                      | `i1`                                         | `i2`                                         |
- */
-export const chops: Chopper = <T>(
-  li1: LabeledInterval<T>,
-  li2: LabeledInterval<T>,
-  compareFn?: Comparator<T>
-): ReadonlyArray<Readonly<Interval<T>>> | false => {
-  getCompareIfOk<T>([li1.interval, li2.interval], compareFn)
-
-  const gr = AllenRelation.relation(li1.interval, li2.interval, compareFn)
-  const handler: ChopAndIntersect | undefined = chopAndIntersect.get(gr)
-  ok(handler)
-  return handler.chops(li1, li2)
-}
-
-/**
  * Returns the intervals that form the intersections between `i1` and `i2`.
  *
  * The relation between the intersection `i` and `i1` (`i (.) i1`), and `i2` (`i (.) i2`), must be one of
@@ -492,4 +427,69 @@ export const intersection: Intersector = <T>(
   const handler: ChopAndIntersect | undefined = chopAndIntersect.get(gr)
   ok(handler)
   return handler.referencingIntersection(li1, li2)
+}
+
+/**
+ * Returns the sequence of intervals that are the result of chopping `i1` and `i2` with each other.
+ *
+ * There is always a chopped sequence if the relation between `i1` and `i2` is basic. This is true if `i1` and `i2` are
+ * definite intervals. For indefinite intervals, it is only true if the relation is `(p)`, `(m)`, `(M)`, `(P)`. The
+ * chopped sequence contains 1, 2, or 3 intervals.
+ *
+ * If the relation between `i1` and `i2` is not basic, we cannot determine the chopped sequence, because we are missing
+ * a necessary intermediate point. In this case, `false` is returned.
+ *
+ * The relation between the intervals of the chopped sequence `csi` and `i1` (`csi (.) i1`), and `i2` (`csi (.) i2`),
+ * must be one of
+ *
+ * * {@link AllenRelation.PRECEDES `(p)`}
+ * * {@link AllenRelation.MEETS `(m)`}
+ * * {@link AllenRelation.STARTS `(s)`}
+ * * {@link AllenRelation.START_TOGETHER `(seS)`}
+ * * {@link AllenRelation.EQUALS `(e)`}
+ * * {@link AllenRelation.DURING `(d)`}
+ * * {@link AllenRelation.END_TOGETHER `(Fef)`}
+ * * {@link AllenRelation.FINISHES `(f)`}
+ * * {@link AllenRelation.MET_BY `(M)`}
+ * * {@link AllenRelation.PRECEDED_BY `(P)`}
+ *
+ * If `i1` and `i2` have an {@link intersection}, and there is a chopped sequence, the intersection is an element of the
+ * chopped sequence. When the relation between `i1` and `i2` is {@link AllenRelation.STARTS_IN `(dfO)`} or
+ * {@link AllenRelation.ENDS_IN `(osd)`}, we cannot determine the chopped sequence, although there is an
+ * {@link intersection}.
+ *
+ * Chops commutes: `chops(i1, i2) = chops(i2, i1)`.
+ *
+ * #### Result
+ *
+ * For basic relations we get the following results. The subsequences indicate in which interval of the result `i1`,
+ * respectively `i2`, are mentioned as reference intervals.
+ *
+ * | `i1 (.) i2` | chopped sequence                                              | subsequence `i1`                             | subsequence `i2`                             |
+ * | ----------- | ------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
+ * | `(p)`       | `i1, i2`                                                      | `i1`                                         | `i2`                                         |
+ * | `(m)`       | `i1, i2`                                                      | `i1`                                         | `i2`                                         |
+ * | `(o)`       | `[i1.start, i2.start[, [i2.start, i1.end[ , [i1.end, i2.end[` | `[i1.start, i2.start[, [i2.start, i1.end[`   | `[i2.start, i1.end[, [i1.end, i2.end[`       |
+ * | `(F)`       | `[i1.start, i2.start[, i2`                                    | `[i1.start, i2.start[, i2`                   | `i2`                                         |
+ * | `(D)`       | `[i1.start, i2.start[, i2, [i2.end, i1.end[`                  | `[i1.start, i2.start[, i2, [i2.end, i1.end[` | `i2`                                         |
+ * | `(s)`       | `i1, [i1.end, i2.end[`                                        | `i1`                                         | `i1, [i1.end, i2.end[`                       |
+ * | `(e)`       | `i1` = `i2`                                                   | `i1, i2`                                     | `i1, i2`                                     |
+ * | `(S)`       | `i2, [i2.end, i1.end[`                                        | `i2, [i2.end, i1.end[`                       | `i2`                                         |
+ * | `(d)`       | `[i2.start, i1.start[, i1, [i1.end, i2.end[`                  | `i1`                                         | `[i2.start, i1.start[, i1, [i1.end, i2.end[` |
+ * | `(f)`       | `[i2.start, i1.start[, i1`                                    | `i1`                                         | `[i2.start, i1.start[, i1`                   |
+ * | `(O)`       | `[i2.start, i1.start[, [i1.start, i2.end[ , [i2.end, i1.end[` | `[i1.start, i2.end[ , [i2.end, i1.end[`      | `[i2.start, i1.start[, [i1.start, i2.end[ `  |
+ * | `(M)`       | `i2, i1`                                                      | `i1`                                         | `i2`                                         |
+ * | `(P)`       | `i2, i1`                                                      | `i1`                                         | `i2`                                         |
+ */
+export const chops: Chopper = <T>(
+  li1: LabeledInterval<T>,
+  li2: LabeledInterval<T>,
+  compareFn?: Comparator<T>
+): ReadonlyArray<Readonly<Interval<T>>> | false => {
+  getCompareIfOk<T>([li1.interval, li2.interval], compareFn)
+
+  const gr = AllenRelation.relation(li1.interval, li2.interval, compareFn)
+  const handler: ChopAndIntersect | undefined = chopAndIntersect.get(gr)
+  ok(handler)
+  return handler.chops(li1, li2)
 }
