@@ -84,12 +84,7 @@ describe('choppedAndIntersection', function () {
     ): void {
       const cases = createIntervalCoupleCases<T>(points)
 
-      function callIt (
-        i1: Readonly<Interval<T>>,
-        i2: Readonly<Interval<T>>
-      ): Readonly<Interval<T>> | undefined | false {
-        const li1: LabeledInterval<T> = { label: label1, interval: i1 }
-        const li2: LabeledInterval<T> = { label: label2, interval: i2 }
+      function callIt (li1: LabeledInterval<T>, li2: LabeledInterval<T>): Readonly<Interval<T>> | undefined | false {
         return compareFn !== undefined && compareFn !== null
           ? /* prettier-ignore */ intersection(li1, li2, compareFn)
           : intersection(li1, li2)
@@ -101,9 +96,11 @@ describe('choppedAndIntersection', function () {
             i2
           )} and fullfils the definition`, function () {
             const calculatedRelation: AllenRelation = AllenRelation.relation(i1, i2, compareFn)
-            const result: Readonly<Interval<T>> | undefined | false = callIt(i1, i2)
+            const li1: LabeledInterval<T> = { label: label1, interval: i1 }
+            const li2: LabeledInterval<T> = { label: label2, interval: i2 }
+            const result: Readonly<Interval<T>> | undefined | false = callIt(li1, li2)
             console.log(inspect(result, { depth: 5 }))
-            const symmetric: Readonly<Interval<T>> | undefined | false = callIt(i2, i1)
+            const symmetric: Readonly<Interval<T>> | undefined | false = callIt(li2, li1)
             areSameIntervals(result, symmetric, i1, i2, pointType, compareFn)
             if (!calculatedRelation.isBasic() && !nonBasicWithIntersection.includes(calculatedRelation)) {
               should(result).equal(false)
