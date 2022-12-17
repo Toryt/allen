@@ -68,7 +68,19 @@ function areSameIntervals<T> (
     isInterval(one, pointType, compareFn).should.be.true()
     isInterval(other, pointType, compareFn).should.be.true()
     ok(other)
-    AllenRelation.relation(one, other, compareFn).should.equal(AllenRelation.EQUALS)
+    const oneOtherRelation = AllenRelation.relation(one, other, compareFn)
+    console.log('one')
+    console.log(inspect(one, { depth: 5 }))
+    console.log('other')
+    console.log(inspect(other, { depth: 5 }))
+    console.log(oneOtherRelation.toString())
+    if (one.end === undefined) {
+      oneOtherRelation.should.equal(AllenRelation.START_TOGETHER)
+    } else if (one.start === undefined) {
+      oneOtherRelation.should.equal(AllenRelation.END_TOGETHER)
+    } else {
+      oneOtherRelation.should.equal(AllenRelation.EQUALS)
+    }
     hasExpectedReferenceIntervals(one, i1, i2)
     hasExpectedReferenceIntervals(other, i1, i2)
     should(one.referenceIntervals).deepEqual(other.referenceIntervals)
@@ -99,6 +111,7 @@ describe('choppedAndIntersection', function () {
             const li1: LabeledInterval<T> = { label: label1, interval: i1 }
             const li2: LabeledInterval<T> = { label: label2, interval: i2 }
             const result: Readonly<Interval<T>> | undefined | false = callIt(li1, li2)
+            console.log('result')
             console.log(inspect(result, { depth: 5 }))
             const symmetric: Readonly<Interval<T>> | undefined | false = callIt(li2, li1)
             areSameIntervals(result, symmetric, i1, i2, pointType, compareFn)
