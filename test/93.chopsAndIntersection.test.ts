@@ -180,8 +180,8 @@ describe('choppedAndIntersection', function () {
             const result: ReadonlyArray<Readonly<Interval<T>>> | false = callIt(li1, li2)
             if (expected === false) {
               should(result).equal(expected)
-              // } else {
-              //   moreOrLessEqual(expected, result)
+            } else {
+              result.should.containDeep(expected)
             }
             const commuted: ReadonlyArray<Readonly<Interval<T>>> | false = callIt(li2, li1)
             commuted.should.eql(result)

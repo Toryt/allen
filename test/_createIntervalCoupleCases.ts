@@ -372,7 +372,10 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
       relation: AllenRelation.PRECEDES,
       comparison: -1,
       intersection: undefined,
-      chops: false
+      chops: [
+        { start: pts[0], end: pts[1] },
+        { start: pts[2], end: pts[3] }
+      ]
     },
     {
       i1: { start: pts[0], end: pts[1] },
@@ -380,7 +383,10 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
       relation: AllenRelation.MEETS,
       comparison: -1,
       intersection: undefined,
-      chops: false
+      chops: [
+        { start: pts[0], end: pts[1] },
+        { start: pts[1], end: pts[3] }
+      ]
     },
     {
       i1: { start: pts[0], end: pts[2] },
@@ -420,7 +426,7 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
       relation: AllenRelation.EQUALS,
       comparison: 0,
       intersection: { start: pts[0], end: pts[1] },
-      chops: false
+      chops: [{ start: pts[0], end: pts[1] }]
     },
     {
       i1: { start: pts[0], end: pts[3] },
@@ -460,7 +466,10 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
       relation: AllenRelation.MET_BY,
       comparison: +1,
       intersection: undefined,
-      chops: false
+      chops: [
+        { start: pts[0], end: pts[1] },
+        { start: pts[1], end: pts[2] }
+      ]
     },
     {
       i1: { start: pts[2], end: pts[3] },
@@ -468,7 +477,10 @@ export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTest
       relation: AllenRelation.PRECEDED_BY,
       comparison: +1,
       intersection: undefined,
-      chops: false
+      chops: [
+        { start: pts[0], end: pts[1] },
+        { start: pts[2], end: pts[3] }
+      ]
     },
 
     /* test with null */
