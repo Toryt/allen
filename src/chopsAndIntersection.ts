@@ -359,6 +359,38 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
   [AllenRelation.FULL, new ChopAndIntersect({ intersection: intersectionNotDefined, chops: chopsNotDefined })]
 ])
 
+/**
+ * Returns the sequence of intervals that are the result of chopping `i1` and `i2` with each other.
+ *
+ * There is always a chopped sequence if the relation between `i1` and `i2` is basic. This is true if `i1` and `i2` are
+ * definite intervals. For indefinite intervals, it is only true if the relation is `(p)`, `(m)`, `(M)`, `(P)`.
+ * If the relation between `i1` and `i2` is not basic, we cannot determine the chopped sequence, because we are missing
+ * a necessary intermediate point. In this case, `false` is returned.
+ *
+ *
+ * Chops commutes: `chops(i1, i2) = chops(i2, i1)`.
+ *
+ * #### Result
+ *
+ * For basic relations we get the following results. The subsequences indicate in which interval of the result `i1`,
+ * respectively `i2`, are mentioned as reference intervals.
+ *
+ * | `i1 (.) i2` | chopped sequence                                              | subsequence `i1`                             | subsequence `i2`                             |
+ * | ----------- | ------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
+ * | `(p)`       | `i1, i2`                                                      | `i1`                                         | `i2`                                         |
+ * | `(m)`       | `i1, i2`                                                      | `i1`                                         | `i2`                                         |
+ * | `(o)`       | `[i1.start, i2.start[, [i2.start, i1.end[ , [i1.end, i2.end[` | `[i1.start, i2.start[, [i2.start, i1.end[`   | `[i2.start, i1.end[, [i1.end, i2.end[`       |
+ * | `(F)`       | `[i1.start, i2.start[, i2`                                    | `[i1.start, i2.start[, i2`                   | `i2`                                         |
+ * | `(D)`       | `[i1.start, i2.start[, i2, [i2.end, i1.end[`                  | `[i1.start, i2.start[, i2, [i2.end, i1.end[` | `i2`                                         |
+ * | `(s)`       | `i1, [i1.end, i2.end[`                                        | `i1`                                         | `i1, [i1.end, i2.end[`                       |
+ * | `(e)`       | `i1` = `i2`                                                   | `i1, i2`                                     | `i1, i2`                                     |
+ * | `(S)`       | `i2, [i2.end, i1.end[`                                        | `i2, [i2.end, i1.end[`                       | `i2`                                         |
+ * | `(d)`       | `[i2.start, i1.start[, i1, [i1.end, i2.end[`                  | `i1`                                         | `[i2.start, i1.start[, i1, [i1.end, i2.end[` |
+ * | `(f)`       | `[i2.start, i1.start[, i1`                                    | `i1`                                         | `[i2.start, i1.start[, i1`                   |
+ * | `(O)`       | `[i2.start, i1.start[, [i1.start, i2.end[ , [i2.end, i1.end[` | `[i1.start, i2.end[ , [i2.end, i1.end[`      | `[i2.start, i1.start[, [i1.start, i2.end[ `  |
+ * | `(M)`       | `i2, i1`                                                      | `i1`                                         | `i2`                                         |
+ * | `(P)`       | `i2, i1`                                                      | `i1`                                         | `i2`                                         |
+ */
 export const chops: Chopper = <T>(
   li1: LabeledInterval<T>,
   li2: LabeledInterval<T>,
@@ -375,24 +407,57 @@ export const chops: Chopper = <T>(
 /**
  * Returns the intervals that form the intersections between `i1` and `i2`.
  *
+ * The relation between the intersection `i` and `i1` (`i (.) i1`), and `i2` (`i (.) i2`), must be one of
+ *
+ * * {@link AllenRelation.CONTAINS_END `(DSO)`}
+ * * {@link AllenRelation.STARTED_BY `(S)`}
+ * * {@link AllenRelation.START_TOGETHER `(seS)`}
+ * * {@link AllenRelation.EQUALS `(e)`}
+ * * {@link AllenRelation.CONTAINS `(D)`}
+ * * {@link AllenRelation.END_TOGETHER `(Fef)`}
+ * * {@link AllenRelation.FINISHED_BY `(F)`}
+ * * {@link AllenRelation.CONTAINS_START `(oFD)`}
+ *
+ * When there is definitely no intersection, `undefined` is returned. When we cannot determine whether or not there is
+ * an intersection, which can happend with indefinite intervals, `false` is returned.
+ *
+ * Both `i1` and `i2` are mentioned under their label in the reference intervals of the intersection, if there is an
+ * intersection.
+ *
+ * The intersection commutes: `intersection(i1, i2) = intersection(i2, i1)`.
+ *
  * #### Result
  *
+ * For the 26 possible actual relations between `i1` and `i2`, we get:
  *
- * For fully definite intervals
- *
- * | `i1 (.) i2`  | result                                                                        |
- * | ------------ | ----------------------------------------------------------------------------- |
- * | `i1 (pm) i2` | `i1{i1}, i2{i2]`                                                              |
- * | `i1 (o) i2`  | `[i1.start, i2.start[{i1}, [i2.start, i1.end[{i1, i2} , [i1.end, i2.end[{i2}` |
- * | `i1 (F) i2`  | `[i1.start, i2.start[{i1}, [i2.start, i2.end[{i1, i2}`                        |
- * | `i1 (D) i2`  | `[i1.start, i2.start[{i1}, i2{i1, i2}, [i2.end, i1.end[{i1}`                  |
- * | `i1 (s) i2`  | `i1{i1, i2}, [i1.end, i2.end[{i2}`                                            |
- * | `i1 (e) i2`  | `i1{i1, i2}`                                                                  |
- * | `i1 (S) i2`  | `i2{i2, i1}, [i2.end, i1.end[{i1}`                                            |
- * | `i1 (d) i2`  | `[i2.start, i1.start[{i2}, i1{i2, i1}, [i1.end, i2.end[{i2}`                  |
- * | `i1 (f) i2`  | `[i2.start, i1.start[{i2}, [i1.start, i1.end[{i2, i1}`                        |
- * | `i1 (O) i2`  | `[i2.start, i1.start[{i2}, [i1.start, i2.end[{i2, i1} , [i2.end, i1.end[{i1}` |
- * | `i1 (MP) i2` | `i2{i2}, i1{i1}`                                                              |
+ * | `i1 (.) i2`     | intersection                |
+ * | --------------- | --------------------------- |
+ * | `(p)`           | —                           |
+ * | `(m)`           | —                           |
+ * | `(o)`           | `[i2.start, i1.end[`        |
+ * | `(F)`           | `i2`                        |
+ * | `(D)`           | `i2`                        |
+ * | `(s)`           | `i1`                        |
+ * | `(e)`           | `i1` = `i2`                 |
+ * | `(S)`           | `i2`                        |
+ * | `(d)`           | `i1`                        |
+ * | `(f)`           | `i1`                        |
+ * | `(O)`           | `[i1.start, i2.end[`        |
+ * | `(M)`           | —                           |
+ * | `(P)`           | —                           |
+ * | `(pmoFDseSdfO)` | ❌                          |
+ * | `(pmoFD)`       | ❌                          |
+ * | `(pmosd)`       | ❌                          |
+ * | `(osd)`         | `[🤷, i1.end[`              |
+ * | `(oFD)`         | `[i2.start, 🤷[`            |
+ * | `(seS)`         | `[i1.start = i2.start, 🤷[` |
+ * | `(Fef)`         | `[🤷, i1.end = i2.end[`     |
+ * | `(dfO)`         | `[i1.start, 🤷[`            |
+ * | `(DSO)`         | `[🤷, i2.end[`              |
+ * | `(DSOMP)`       | ❌                          |
+ * | `(dfOMP)`       | ❌                          |
+ * | `(oFDseSdfOMP)` | ❌                          |
+ * | full            | ❌                          |                                                          |
  */
 export const intersection: Intersector = <T>(
   li1: LabeledInterval<T>,
