@@ -177,8 +177,10 @@ describe('choppedAndIntersection', function () {
           )} ${relation.toString()} and fullfils the definition`, function () {
             const li1: LabeledInterval<T> = { label: label1, interval: i1 }
             const li2: LabeledInterval<T> = { label: label2, interval: i2 }
-            const calculatedRelation: AllenRelation = AllenRelation.relation(i1, i2, compareFn)
             const result: ReadonlyArray<Readonly<Interval<T>>> | false = callIt(li1, li2)
+            const symmetric: ReadonlyArray<Readonly<Interval<T>>> | false = callIt(li2, li1)
+            symmetric.should.eql(result)
+            const calculatedRelation: AllenRelation = AllenRelation.relation(i1, i2, compareFn)
             if (!calculatedRelation.isBasic()) {
               should(result).equal(false)
             } else {
