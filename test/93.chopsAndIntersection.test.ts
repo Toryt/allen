@@ -47,6 +47,17 @@ describe('choppedAndIntersection', function () {
         AllenRelation.CONTAINS_END
       ]
 
+      const intersectionWithSourceRelations = [
+        AllenRelation.STARTS,
+        AllenRelation.START_TOGETHER,
+        AllenRelation.STARTS_IN,
+        AllenRelation.EQUALS,
+        AllenRelation.DURING,
+        AllenRelation.ENDS_IN,
+        AllenRelation.END_TOGETHER,
+        AllenRelation.FINISHES
+      ]
+
       const cases = createIntervalCoupleCases<T>(points)
 
       function callIt (li1: LabeledInterval<T>, li2: LabeledInterval<T>): Readonly<Interval<T>> | undefined | false {
@@ -131,10 +142,12 @@ describe('choppedAndIntersection', function () {
               calculatedRelation.implies(AllenRelation.DOES_NOT_CONCUR_WITH).should.be.true()
             } else {
               should(result).be.an.Object()
-              const i1Relation = AllenRelation.relation(i1, result, compareFn)
+              const i1Relation = AllenRelation.relation(result, i1, compareFn)
               i1Relation.implies(AllenRelation.CONCURS_WITH).should.be.true()
-              const i2Relation = AllenRelation.relation(i2, result, compareFn)
+              i1Relation.should.be.oneOf(intersectionWithSourceRelations)
+              const i2Relation = AllenRelation.relation(result, i2, compareFn)
               i2Relation.implies(AllenRelation.CONCURS_WITH).should.be.true()
+              i2Relation.should.be.oneOf(intersectionWithSourceRelations)
             }
           })
         })
