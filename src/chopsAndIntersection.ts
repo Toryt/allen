@@ -363,10 +363,30 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
  * Returns the sequence of intervals that are the result of chopping `i1` and `i2` with each other.
  *
  * There is always a chopped sequence if the relation between `i1` and `i2` is basic. This is true if `i1` and `i2` are
- * definite intervals. For indefinite intervals, it is only true if the relation is `(p)`, `(m)`, `(M)`, `(P)`.
+ * definite intervals. For indefinite intervals, it is only true if the relation is `(p)`, `(m)`, `(M)`, `(P)`. The
+ * chopped sequence contains 1, 2, or 3 intervals.
+ *
  * If the relation between `i1` and `i2` is not basic, we cannot determine the chopped sequence, because we are missing
  * a necessary intermediate point. In this case, `false` is returned.
  *
+ * The relation between the intervals of the chopped sequence `csi` and `i1` (`csi (.) i1`), and `i2` (`csi (.) i2`),
+ * must be one of
+ *
+ * * {@link AllenRelation.PRECEDES `(p)`}
+ * * {@link AllenRelation.MEETS `(m)`}
+ * * {@link AllenRelation.STARTS `(s)`}
+ * * {@link AllenRelation.START_TOGETHER `(seS)`}
+ * * {@link AllenRelation.EQUALS `(e)`}
+ * * {@link AllenRelation.DURING `(d)`}
+ * * {@link AllenRelation.END_TOGETHER `(Fef)`}
+ * * {@link AllenRelation.FINISHES `(f)`}
+ * * {@link AllenRelation.MET_BY `(M)`}
+ * * {@link AllenRelation.PRECEDED_BY `(P)`}
+ *
+ * If `i1` and `i2` have an {@link intersection}, and there is a chopped sequence, the intersection is an element of the
+ * chopped sequence. When the relation between `i1` and `i2` is {@link AllenRelation.STARTS_IN `(dfO)`} or
+ * {@link AllenRelation.ENDS_IN `(osd)`}, we cannot determine the chopped sequence, although there is an
+ * {@link intersection}.
  *
  * Chops commutes: `chops(i1, i2) = chops(i2, i1)`.
  *
@@ -409,14 +429,14 @@ export const chops: Chopper = <T>(
  *
  * The relation between the intersection `i` and `i1` (`i (.) i1`), and `i2` (`i (.) i2`), must be one of
  *
- * * {@link AllenRelation.CONTAINS_END `(DSO)`}
- * * {@link AllenRelation.STARTED_BY `(S)`}
+ * * {@link AllenRelation.STARTS `(s)`}
  * * {@link AllenRelation.START_TOGETHER `(seS)`}
+ * * {@link AllenRelation.STARTS_IN `(dfO)`}
  * * {@link AllenRelation.EQUALS `(e)`}
- * * {@link AllenRelation.CONTAINS `(D)`}
+ * * {@link AllenRelation.DURING `(d)`}
+ * * {@link AllenRelation.ENDS_IN `(osd)`}
  * * {@link AllenRelation.END_TOGETHER `(Fef)`}
- * * {@link AllenRelation.FINISHED_BY `(F)`}
- * * {@link AllenRelation.CONTAINS_START `(oFD)`}
+ * * {@link AllenRelation.FINISHES `(f)`}
  *
  * When there is definitely no intersection, `undefined` is returned. When we cannot determine whether or not there is
  * an intersection, which can happend with indefinite intervals, `false` is returned.
