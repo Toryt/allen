@@ -520,36 +520,30 @@ Here, we want to determine the collection of all intersection intervals for the 
 collections of intervals _I<sub>k</sub>, k ∈ ℕ<sub>1</sub>, k ≤ n_, with different cardinalities _#I<sub>k</sub> ∈
 ℕ<sub>0</sub>_:
 
-> ∩<sub>k ∈ ℕ<sub>1</sub>, k&nbsp;≤&nbsp;n</sub>(I<sub>k</sub>)
->
-> ≜ {i<sub>kj</sub> | k ∈ ℕ<sub>1</sub>, k&nbsp;≤&nbsp;n; j ∈ ℕ<sub>0</sub>, j&nbsp;<&nbsp;#I<sub>k</sub>;
-> (i<sub>kj</sub>) ∈ ×<sub>k</sub>(I<sub>k</sub>); i<sub>kj</sub> = ∩((i<sub>kj</sub>)); i<sub>kj</sub> ≠ ∅ }
+> ∩<sub>k ∈ ℕ<sub>1</sub>, k&nbsp;≤&nbsp;n</sub>(I<sub>k</sub>) ≝ { i | ∃ k ∈ ℕ<sub>1</sub>, k&nbsp;≤&nbsp;n; ∃ j ∈
+> ℕ<sub>0</sub>, j&nbsp;<&nbsp;#I<sub>k</sub>; (i<sub>kj</sub>) ∈ ×(I<sub>k</sub>); i = ∩((i<sub>kj</sub>)); i ≠ ∅ }
 
 In other words, we take the cross product of all _I<sub>k</sub>_ (1-based counting). The elements are tuples of
 intervals, whose second index is limited to the cardinality of the collection it originates from (0-based counting):
 
-> (i<sub>1p</sub>, i<sub>2q</sub>, …, i<sub>nr</sub>) ∈ _I<sub>1</sub> × I<sub>2</sub> × … × I<sub>n</sub>_, where
+> (i<sub>1p</sub>, i<sub>2q</sub>, …, i<sub>nr</sub>) ∈ _I<sub>1</sub> × I<sub>2</sub> × … × I<sub>n</sub>_,
 >
-> p ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;#I<sub>1</sub>,
->
-> q ∈ ℕ<sub>0</sub>, q&nbsp;<&nbsp;#I<sub>2</sub>,
->
-> …,
->
-> r ∈ ℕ<sub>0</sub>, r&nbsp;<&nbsp;#I<sub>r</sub>
+> where p ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;#I<sub>1</sub>, q ∈ ℕ<sub>0</sub>, q&nbsp;<&nbsp;#I<sub>2</sub>, …, r ∈
+> ℕ<sub>0</sub>, r&nbsp;<&nbsp;#I<sub>r</sub>
 
 The collection of intersection intervals are the intersection intervals of all these tuples _∩(i<sub>1p</sub>,
 i<sub>2q</sub>, …, i<sub>nr</sub>)_.
 
 The intersection is only defined as a binary operation _∩(i<sub>1</sub>, i<sub>2</sub>)_ up until now. We extend this
-definition to the intersection of tuples of intervals _∩((i<sub>s</sub>))_ using currying. for _m ∈ ℕ<sub>0</sub>_
+definition to the intersection of tuples of intervals _∩((i<sub>s</sub>)<sub>s ∈ ℕ<sub>1</sub>, s&nbsp;≤&nbsp;m</sub>)_
+for _m ∈ ℕ<sub>0</sub>_ using [currying](https://en.wikipedia.org/wiki/Currying):
 
-|                                                                 |     |                 |                                                                                                 |
-| --------------------------------------------------------------- | --- | --------------- | ----------------------------------------------------------------------------------------------- |
-| ∩((i<sub>s</sub>)<sub>s ∈ ℕ<sub>1</sub>, s&nbsp;≤&nbsp;m</sub>) | ≜   | m&nbsp;=&nbsp;0 | ∅                                                                                               |
-|                                                                 |     | m&nbsp;=&nbsp;1 | i<sub>1</sub>                                                                                   |
-|                                                                 |     | m&nbsp;=&nbsp;2 | ∩(i<sub>1</sub>, i<sub>2</sub>)                                                                 |
-|                                                                 |     | m&nbsp;>&nbsp;2 | ∩(∩((i<sub>t</sub>)<sub>t ∈ ℕ<sub>1</sub>, t&nbsp;≤&nbsp;m&nbsp;-&nbsp;1</sub>), i<sub>m</sub>) |
+|                                                                 |     |                 |                                                                                              |
+| --------------------------------------------------------------- | --- | --------------- | -------------------------------------------------------------------------------------------- |
+| ∩((i<sub>s</sub>)<sub>s ∈ ℕ<sub>1</sub>, s&nbsp;≤&nbsp;m</sub>) | ≝   | m&nbsp;=&nbsp;0 | ∅                                                                                            |
+|                                                                 |     | m&nbsp;=&nbsp;1 | i<sub>1</sub>                                                                                |
+|                                                                 |     | m&nbsp;=&nbsp;2 | i<sub>1</sub> ∩ i<sub>2</sub>                                                                |
+|                                                                 |     | m&nbsp;>&nbsp;2 | ∩((i<sub>t</sub>)<sub>t ∈ ℕ<sub>1</sub> t&nbsp;≤&nbsp;m&nbsp;-&nbsp;1</sub>) ∩ i<sub>m</sub> |
 
 Since the binary intersection commutes, the order of the elements in the tuple is irrelevant.
 
@@ -558,6 +552,67 @@ extends to the intersection of tuples of intervals. If 1 of the curried intersec
 is empty. If one of the curried intersections is not well-defined, the final intersection is not well-defined. This,
 again, extends to the collection intersection. Empty tuple intersections are not included in the result. If one of the
 tuple intersections is not well-defined, the collection intersection is not well-defined.
+
+This gives us the opportunity to optimize the algorithm to determine the collection intersection collection. Instead of
+evaluating all possible tuples in _×<sub>k</sub>(I<sub>k</sub>)_, which can become large quickly, and eliminating
+duplicates, we can instead [curry](https://en.wikipedia.org/wiki/Currying) the intersection collection too:
+
+|                                                               |     |                 |                                                                                             |
+| ------------------------------------------------------------- | --- | --------------- | ------------------------------------------------------------------------------------------- |
+| ∩<sub>k ∈ ℕ<sub>1</sub>, k&nbsp;≤&nbsp;n</sub>(I<sub>k</sub>) | ≝   | n&nbsp;=&nbsp;0 | ∅                                                                                           |
+|                                                               |     | n&nbsp;=&nbsp;1 | I<sub>1</sub>                                                                               |
+|                                                               |     | n&nbsp;=&nbsp;2 | I<sub>1</sub> ∩ I<sub>2</sub>                                                               |
+|                                                               |     | n&nbsp;>&nbsp;2 | ∩<sub>l ∈ ℕ<sub>1</sub>, l&nbsp;≤&nbsp;n&nbsp;-&nbsp;1</sub>(I<sub>l</sub>) ∩ i<sub>n</sub> |
+
+where the binary operation is defined as:
+
+> I<sub>1</sub> ∩ I<sub>2</sub> ≝ { i | v ∈ I<sub>1</sub>; w ∈ I<sub>2</sub>; i = v ∩ w; i ≠ ∅ }
+
+If either _I<sub>1</sub>_ or _I<sub>2</sub>_ is the empty collection, the intersection collection is empty too. If any
+_v ∩ w_ is not well-defined, the intersection collection is not well-defined either.
+
+Since _v ∩ w_ commutes, _I<sub>1</sub> ∩ I<sub>2</sub>_ commutes too.
+
+Some, and in practice most, _(v, w)_ combinations will have no intersection, which means that _#(I<sub>1</sub> ∩
+I<sub>2</sub>) ≤ #I<sub>1</sub>&nbsp;⋅&nbsp;#I<sub>2</sub>_. When this result is combined with I<sub>3</sub> to
+determine _(I<sub>1</sub> ∩ I<sub>2</sub>) ∩ I<sub>3</sub>_, _#(I<sub>1</sub> ∩ I<sub>2</sub>)
+&nbsp;⋅&nbsp;#I<sub>3</sub>_ evaluations have to be done. The number of evaluations necessary to determine
+_(I<sub>1</sub> ∩ I<sub>2</sub>) ∩ I<sub>3</sub> ≡ ∩(I<sub>1</sub>, I<sub>2</sub>, I<sub>3</sub>)_ is then
+_#I<sub>1</sub>&nbsp;⋅&nbsp;#I<sub>2</sub> + #(I<sub>1</sub> ∩ I<sub>2</sub>)&nbsp;⋅&nbsp;#I<sub>3</sub> ≤
+#I<sub>1</sub>&nbsp;⋅&nbsp;#I<sub>2</sub>&nbsp;⋅&nbsp;#I<sub>3</sub>_.
+
+When both interval collections are sequences (which implies that all intervals in the collection _i_ are distinct),
+I<sub>1</sub> ∩ I<sub>2</sub> is a sequence too. Indeed, suppose that there are 2 intersections _e ∩ g_ and _f ∩ h_ that
+have at least 1 point in common:
+
+> ∃ e ∈ I<sub>1</sub>, ∃ f ∈ I<sub>1</sub>, ∃ g ∈ I<sub>2</sub>, ∃ h ∈ I<sub>2</sub>: (e ∩ g) ∩ (f ∩ h) ≠ ∅
+>
+> ⇔ ∃ e ∈ I<sub>1</sub>, ∃ f ∈ I<sub>1</sub>, ∃ g ∈ I<sub>2</sub>, ∃ h ∈ I<sub>2</sub>, ∃ x: x ∈ (e ∩ g) ∧ x ∈ (f ∩ h)
+>
+> ⇔ ∃ e ∈ I<sub>1</sub>, ∃ f ∈ I<sub>1</sub>, ∃ g ∈ I<sub>2</sub>, ∃ h ∈ I<sub>2</sub>, ∃ x: (x ∈ e ∧ x ∈ g) ∧ (x ∈ f ∧
+> x ∈ h)
+>
+> ⇔ ∃ e ∈ I<sub>1</sub>, ∃ f ∈ I<sub>1</sub>, ∃ g ∈ I<sub>2</sub>, ∃ h ∈ I<sub>2</sub>, ∃ x: (x ∈ e ∧ x ∈ f) ∧ (x ∈ g ∧
+> x ∈ h)
+>
+> ⇔ ∃ e ∈ I<sub>1</sub>, ∃ f ∈ I<sub>1</sub>, ∃ g ∈ I<sub>2</sub>, ∃ h ∈ I<sub>2</sub>: (e ∩ f ≠ ∅) ∧ (g ∩ h ≠ ∅)
+
+I.e., if _I<sub>1</sub> ∩ I<sub>2</sub>_ is not a sequence, neither _I<sub>1</sub>_, nor _I<sub>2</sub>_, is a sequence.
+In other words, if either _I<sub>1</sub>_ or _I<sub>2</sub>_ is a sequence, _I<sub>1</sub> ∩ I<sub>2</sub>_ is a
+sequence. Recursively: if any _I<sub>k</sub>_ is a sequence, _∩<sub>k ∈ ℕ<sub>1</sub>,
+k&nbsp;≤&nbsp;n</sub>(I<sub>k</sub>)_ is a sequence.
+
+We can also define the intersection collection of a collection of intervals _I_ with 1 interval _v_, as follows:
+
+> I ∩ v ≝ { w | i ∈ I; w = i ∩ v; w ≠ ∅ }
+
+(Note that _i ∩ v_ might generate duplicate entries, which appear only once in a set.)
+
+Note that when _I_ is a sequence (which implies that all intervals _i_ are distinct), _I ∩ v_ is a sequence too.
+
+Then
+
+> I<sub>1</sub> ∩ I<sub>2</sub> ≡ ∪<sub>v ∈ I<sub>2</sub></sub>(I<sub>1</sub> ∩ v)
 
 ## Inference
 
