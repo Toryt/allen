@@ -1,5 +1,5 @@
 /*
- Copyright © 2022 by Jan Dockx
+ Copyright © 2022 – 2023 by Jan Dockx
 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
@@ -740,7 +740,7 @@ export class AllenRelation extends Relation {
    * ### Invariants
    *
    * ```ts
-   * CONTAINS_END == or(CONTAINS, STARTED_BY, OVERLAPPED_BY)
+   * CONTAINS_END == or(FINISHED_BY, CONTAINS, EQUALS, STARTED_BY)
    * ```
    */
   static readonly ENCLOSES: AllenRelation = AllenRelation.or(
@@ -749,6 +749,22 @@ export class AllenRelation extends Relation {
     AllenRelation.EQUALS,
     AllenRelation.STARTED_BY
   )
+
+  /**
+   * `(sedf)` — a non-basic interval relation that is often handy to use, which expresses that an interval `i1`
+   * is enclosed by an interval `i2`.
+   *
+   * ```
+   * (i1.start ≠ undefined) ∧ (i1.end ≠ undefined) ∧ (i2.end ≠ undefined) ∧ (i2.start ≤ i1.start) ∧ (i1.end ≤ i2.end)
+   * ```
+   *
+   * ### Invariants
+   *
+   * ```ts
+   * CONTAINS_END == or(STARTS, EQUALS, DURING, FINISHES)
+   * ```
+   */
+  static readonly ENCLOSED_BY: AllenRelation = AllenRelation.ENCLOSES.converse()
 
   /* endregion */
 

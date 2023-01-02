@@ -1,5 +1,5 @@
 /*
- Copyright © 2022 by Jan Dockx
+ Copyright © 2022 – 2023 by Jan Dockx
 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
@@ -65,7 +65,8 @@ describe('AllenRelation', function () {
       { name: 'ENDS_LATER', representation: 'DSOMP' },
       { name: 'CONTAINS_START', representation: 'oFD' },
       { name: 'CONTAINS_END', representation: 'DSO' },
-      { name: 'ENCLOSES', representation: 'FDeS' }
+      { name: 'ENCLOSES', representation: 'FDeS' },
+      { name: 'ENCLOSED_BY', representation: 'sedf' }
     ],
     false // there are 67108864; it takes hours to test all combinations
   )
