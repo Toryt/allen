@@ -514,32 +514,50 @@ smallest uncertainty. When the uncertainly `> 1/6`, the intersection is not defi
 | `(oFDseSdfOMP)` | ❌               | ❌                          |
 | full            | ❌               | ❌                          |
 
-### Intersection collection
+### Collection intersection collection
 
 Here, we want to determine the collection of all intersection intervals for the cross product of _n ∈ ℕ<sub>0</sub>_
-collections of intervals _I<sub>k</sub>, k ∈ ℕ<sub>1</sub>, 0 < k ≤ n_, with different cardinalities _#I<sub>k</sub> ∈
+collections of intervals _I<sub>k</sub>, k ∈ ℕ<sub>1</sub>, k ≤ n_, with different cardinalities _#I<sub>k</sub> ∈
 ℕ<sub>0</sub>_:
 
-> ∩<sub>[k ∈ ℕ<sub>1</sub>, 0&nbsp;<&nbsp;k&nbsp;≤&nbsp;n]</sub>(I<sub>k</sub>)
+> ∩<sub>k ∈ ℕ<sub>1</sub>, k&nbsp;≤&nbsp;n</sub>(I<sub>k</sub>)
 >
-> ≜ {∩<sub>[k ∈ > ℕ<sub>1</sub>,0&nbsp;<&nbsp;k&nbsp;≤&nbsp;n, j ∈ ℕ<sub>0</sub>, >
-> 0&nbsp;≤&nbsp;j&nbsp;<&nbsp;#I<sub>k</sub>]</sub>(i<sub>kj</sub>)}
+> ≜ {i<sub>kj</sub> | k ∈ ℕ<sub>1</sub>, k&nbsp;≤&nbsp;n; j ∈ ℕ<sub>0</sub>, j&nbsp;<&nbsp;#I<sub>k</sub>;
+> (i<sub>kj</sub>) ∈ ×<sub>k</sub>(I<sub>k</sub>); i<sub>kj</sub> = ∩((i<sub>kj</sub>)); i<sub>kj</sub> ≠ ∅ }
 
 In other words, we take the cross product of all _I<sub>k</sub>_ (1-based counting). The elements are tuples of
 intervals, whose second index is limited to the cardinality of the collection it originates from (0-based counting):
 
 > (i<sub>1p</sub>, i<sub>2q</sub>, …, i<sub>nr</sub>) ∈ _I<sub>1</sub> × I<sub>2</sub> × … × I<sub>n</sub>_, where
 >
-> p ∈ ℕ<sub>0</sub>, 0&nbsp;≤&nbsp;p&nbsp;<&nbsp;#I<sub>1</sub>,
+> p ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;#I<sub>1</sub>,
 >
-> q ∈ ℕ<sub>0</sub>, 0&nbsp;≤&nbsp;q&nbsp;<&nbsp;#I<sub>2</sub>,
+> q ∈ ℕ<sub>0</sub>, q&nbsp;<&nbsp;#I<sub>2</sub>,
 >
 > …,
 >
-> r ∈ ℕ<sub>0</sub>, 0&nbsp;≤&nbsp;r&nbsp;<&nbsp;#I<sub>r</sub>
+> r ∈ ℕ<sub>0</sub>, r&nbsp;<&nbsp;#I<sub>r</sub>
 
-The collection of intersection intervals are the intersection interval of all these tuples _(i<sub>1p</sub>,
+The collection of intersection intervals are the intersection intervals of all these tuples _∩(i<sub>1p</sub>,
 i<sub>2q</sub>, …, i<sub>nr</sub>)_.
+
+The intersection is only defined as a binary operation _∩(i<sub>1</sub>, i<sub>2</sub>)_ up until now. We extend this
+definition to the intersection of tuples of intervals _∩((i<sub>s</sub>))_ using currying. for _m ∈ ℕ<sub>0</sub>_
+
+|                                                                 |     |                 |                                                                                                 |
+| --------------------------------------------------------------- | --- | --------------- | ----------------------------------------------------------------------------------------------- |
+| ∩((i<sub>s</sub>)<sub>s ∈ ℕ<sub>1</sub>, s&nbsp;≤&nbsp;m</sub>) | ≜   | m&nbsp;=&nbsp;0 | ∅                                                                                               |
+|                                                                 |     | m&nbsp;=&nbsp;1 | i<sub>1</sub>                                                                                   |
+|                                                                 |     | m&nbsp;=&nbsp;2 | ∩(i<sub>1</sub>, i<sub>2</sub>)                                                                 |
+|                                                                 |     | m&nbsp;>&nbsp;2 | ∩(∩((i<sub>t</sub>)<sub>t ∈ ℕ<sub>1</sub>, t&nbsp;≤&nbsp;m&nbsp;-&nbsp;1</sub>), i<sub>m</sub>) |
+
+Since the binary intersection commutes, the order of the elements in the tuple is irrelevant.
+
+We know from the binary operation that some intersections are empty, and some intersections are not well-defined. This
+extends to the intersection of tuples of intervals. If 1 of the curried intersections is empty, the final intersection
+is empty. If one of the curried intersections is not well-defined, the final intersection is not well-defined. This,
+again, extends to the collection intersection. Empty tuple intersections are not included in the result. If one of the
+tuple intersections is not well-defined, the collection intersection is not well-defined.
 
 ## Inference
 
