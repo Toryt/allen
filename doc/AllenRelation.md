@@ -332,19 +332,24 @@ The following table gives a graphical overview of the 8 actual relations that ar
 ## Chop and intersection
 
 Given 2 intervals `i1` and `i2`, we can consider their _chopped sequence_. This is an ordered sequence such that both
-`i1` and `i2` are “covered” a gapless subsequence `ss` of one or more intervals in it. The minimal enclosing interval of
-the subsequence `minimalEnclosing(ss) (e) i1`, respectively `minimalEnclosing(ss) (e) i2`. All intervals in the chopped
-sequence are part of such a subsequence. There is such a subsequence for both `i1` and `i2`. For each interval in the
-subsequence, its relation with `i1` or `i2` must imply `(sedf)`, or the relation between `i1` or `i2` and the intervals
-in their subsequence must imply `ENCLOSES`. I imagine both intervals to be cooky cutters, which slice the other interval
-at the `start` and `end`.
+`i1` and `i2` are “covered” by a gapless subsequence `ss1` and `ss2` of one or more intervals. The minimal enclosing
+interval of the subsequence `minimalEnclosing(ss1) (e) i1`, respectively `minimalEnclosing(ss2) (e) i2`. All intervals
+in the chopped sequence are part of such a subsequence. For each interval `isspq` in the subsequence `ssp`, its relation
+with `ip` must imply `(sedf)` (`isspq ENCLOSED_BY ip`). I imagine both intervals to be cooky cutters, which slice the
+other interval at the `start` and `end`.
 
-When we only retain the intervals from the chopped sequence that are enclosed by both `i1` and `i2`, we get the
-_intersection sequence_.
+The _intersection_ of 2 intervals `i1` and `i2` is the maximal interval `is` that is enclosed by both `i1` and `i2`:
+
+```
+is ENCLOSED_BY i1 ∧ is ENCLOSED_BY i2
+```
+
+When `i1 DOES_NOT_CONCUR_WITH i2`, there is no intersection interval.
 
 ### Definite intervals
 
-For fully definite intervals, we get the following intersection sequences and subsequences, depending on their relation.
+For fully definite intervals, we get the following chopped sequences and subsequences, and intersection, depending on
+their relation.
 
 | `i1 (.) i2` | chopped sequence                                              | subsequence `i1`                             | subsequence `i2`                             | intersection         |
 | ----------- | ------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------- | -------------------- |
@@ -362,8 +367,8 @@ For fully definite intervals, we get the following intersection sequences and su
 | `i1 (M) i2` | `i2, i1`                                                      | `i1`                                         | `i2`                                         | —                    |
 | `i1 (P) i2` | `i2, i1`                                                      | `i1`                                         | `i2`                                         | —                    |
 
-Note there are always 1, 2, or 3 intervals in the chopped sequence. The intersection sequence has zero or 1 interval,
-which is `i1` or `i2` (or both for `(e)`), or a new interval for `(o)` and `(O)`.
+Note there are always 1, 2, or 3 intervals in the chopped sequence. The intersection does not exist, is `i1` or `i2` (or
+both for `(e)`), or a new interval for `(o)` and `(O)`.
 
 We get the same results for `i2 (.) i1`. Chopping, and the intersection, commute.
 
@@ -407,7 +412,7 @@ is no intersection in these cases.
 
 When `lii.end > i.start`, and `i.end` definite, and `rii.start < i.end`, and `i.start` definite however, we have 3
 different cases where the actual relation is not a basic relation, and there are 3, respectively 5, possible chopped
-sequences. Let's display them visually:
+sequences and intersections. Let's display them visually:
 
 | `[i.start, –` |             | `…, lii.end[` |             | `lii (.) i` | chopped sequence                                       | intersection            | most meaningfull intersection |
 | ------------- | ----------- | ------------- | ----------- | ----------- | ------------------------------------------------------ | ----------------------- | ----------------------------- |
@@ -479,11 +484,11 @@ about constraints that they have.
 
 The chopped sequence is not well-defined for `(d)`, `(f)`, `(O)` and `(P)`, respectively `(d)`, `(s)`,`(p)`,`(o)`, and
 well-defined for the other cases. If we know the relation between `lii` and `i`, or `rii` and `i` respectively, and it
-is one of the well-defined cases, we would be sure about the intersection. In the cases that are not well-defined, we
-cannot use an indefinite point 🤷 to replace the unknown points (`?`), with indefinite intervals, the result would not
-be guaranteed to be a sequence. There are intervals following an indefinite `end`, or preceding an indefinite `start`.
-But, in general, there are simply 3, 3, and 5 possible sequences, of which 2, 2, and 3, respectively, are well-defined.
-Even the well-defined cases differ in the number of intervals in the sequence.
+is one of the well-defined cases, we would be sure about the chopped sequence. In the cases that are not well-defined,
+we cannot use an indefinite point 🤷 to replace the unknown points (`?`). With indefinite intervals, the result would
+not be guaranteed to be a sequence. There are intervals following an indefinite `end`, or preceding an indefinite
+`start`. But, in general, there are simply 3, 3, and 5 possible sequences, of which 2, 2, and 3, respectively, are
+well-defined. Even the well-defined cases differ in the number of intervals in the sequence.
 
 Therefor, we only define the chopped sequence for fully definite intervals. Users should apply “Reasoning with unknown
 but constrained start and end point” to the indefinite intervals first, to express the extra knowledge about constraints
