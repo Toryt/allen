@@ -514,6 +514,33 @@ smallest uncertainty. When the uncertainly `> 1/6`, the intersection is not defi
 | `(oFDseSdfOMP)` | ❌               | ❌                          |
 | full            | ❌               | ❌                          |
 
+### Intersection collection
+
+Here, we want to determine the collection of all intersection intervals for the cross product of _n ∈ ℕ<sub>0</sub>_
+collections of intervals _I<sub>k</sub>, k ∈ ℕ<sub>1</sub>, 0 < k ≤ n_, with different cardinalities _#I<sub>k</sub> ∈
+ℕ<sub>0</sub>_:
+
+> ∩<sub>[k ∈ ℕ<sub>1</sub>, 0&nbsp;<&nbsp;k&nbsp;≤&nbsp;n]</sub>(I<sub>k</sub>)
+>
+> ≜ {∩<sub>[k ∈ > ℕ<sub>1</sub>,0&nbsp;<&nbsp;k&nbsp;≤&nbsp;n, j ∈ ℕ<sub>0</sub>, >
+> 0&nbsp;≤&nbsp;j&nbsp;<&nbsp;#I<sub>k</sub>]</sub>(i<sub>kj</sub>)}
+
+In other words, we take the cross product of all _I<sub>k</sub>_ (1-based counting). The elements are tuples of
+intervals, whose second index is limited to the cardinality of the collection it originates from (0-based counting):
+
+> (i<sub>1p</sub>, i<sub>2q</sub>, …, i<sub>nr</sub>) ∈ _I<sub>1</sub> × I<sub>2</sub> × … × I<sub>n</sub>_, where
+>
+> p ∈ ℕ<sub>0</sub>, 0&nbsp;≤&nbsp;p&nbsp;<&nbsp;#I<sub>1</sub>,
+>
+> q ∈ ℕ<sub>0</sub>, 0&nbsp;≤&nbsp;q&nbsp;<&nbsp;#I<sub>2</sub>,
+>
+> …,
+>
+> r ∈ ℕ<sub>0</sub>, 0&nbsp;≤&nbsp;r&nbsp;<&nbsp;#I<sub>r</sub>
+
+The collection of intersection intervals are the intersection interval of all these tuples _(i<sub>1p</sub>,
+i<sub>2q</sub>, …, i<sub>nr</sub>)_.
+
 ## Inference
 
 **Be aware that, in general, inference over intervals, also using Allen relations, is NP-complete.** This means that the
