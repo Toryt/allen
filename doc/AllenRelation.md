@@ -666,6 +666,11 @@ the order is the "other" relation? no; it is; the order _must be_ that relation 
 
 this sort is impossible
 
+is it? with `pmoFDs` or `(pmoFDS)` we can work backwards! (but then we can't work forwards) (both are transitive) with
+`(FDSOMP)` or `(DSfOMP)` we can work forward (but we cannot work backwards) (both are transitive)
+
+choose
+
 _ρ_, or _δ_, has to define a total strict order, so that it can be used in [`Array.prototype.sort` as `compareFn`].
 `compareFn` has to be pure, stable, reflexive, anti-symmetric, and transitive. Notably, if
 <code>compareFn(i<sub>q</sub>, i<sub>p</sub>)</code> returns `-1`, `0`, or `+1`:
