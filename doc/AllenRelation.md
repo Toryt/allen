@@ -610,9 +610,110 @@ We can also define the intersection collection of a collection of intervals _I_ 
 
 Note that when _I_ is a sequence (which implies that all intervals _i_ are distinct), _I ∩ v_ is a sequence too.
 
-Then
+To limit the number of _i ∩ v_ couple evaluations necessary when deterimining _I ∩ v_, it would be nice if we could
+order _I_ in such a way that we know for certain what the final result will be from a certain point on. We know that
+there is no intersection if `i (pmMP) v`. We will try to order _I_ in such a way that, with information about
 
-> I<sub>1</sub> ∩ I<sub>2</sub> ≡ ∪<sub>v ∈ I<sub>2</sub></sub>(I<sub>1</sub> ∩ v)
+> i<sub>p</sub>, p ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;#I, i<sub>p</sub> ∈ I
+
+we know for certain that
+
+> i<sub>q</sub> (MP) v, q ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;q&nbsp;<&nbsp;#I, i<sub>q</sub> ∈ I
+
+We are looking for the relation _i<sub>p</sub> ρ i<sub>q</sub>_, such that, given the relation _i<sub>p</sub> λ v_, we
+are certain that _i<sub>q</sub> (MP) v_. If we use the converse of ρ, _i<sub>q</sub> δ i<sub>p</sub>_, we use
+composition to express the equation
+
+> δ ⊕ λ ⇒ (MP)
+
+When we look at the [basic compositions table], we see there are many possibilities to reach `(M)` or `(P)`. Possible
+values of _λ_ are `(F)`, `(D)`, `(e)`, `(S)`, `(f)`, `(O)`, `(M)`, and `(P)`. The only values of _λ_ that make it
+impossible to reach `(MP)` are `(p)`, `(m)`, `(o)`, `(s)`, `(d)`. Where it is possible, _δ_ has to be:
+
+| _δ_          | _λ_   |
+| ------------ | ----- |
+| `(MP)`       | `(F)` |
+| `(MP)`       | `(D)` |
+| `(MP)`       | `(e)` |
+| `(MP)`       | `(S)` |
+| `(MP)`       | `(f)` |
+| `(MP)`       | `(O)` |
+| `(seSdfOMP)` | `(M)` |
+| `(seSdfOMP)` | `(P)` |
+
+| _v (.) i<sub>p</sub>_ | _i<sub>p</sub> (.) i<sub>q</sub>_ | _v (.) i<sub>q</sub>_          |
+| --------------------- | --------------------------------- | ------------------------------ |
+| `(pm)`                | `(pmoFDseS)`                      | `(pm)` q -> p                  |
+| `(MP)`                | `(SdfOMP)`                        | `(MP)` or `(dfOMP)` for `(d)`! |
+| `(MP)`                | `(FDeSfOMP)`                      | `(MP)` p -> q                  |
+
+| _i<sub>q</sub> (.) i<sub>p</sub>_       | _i<sub>p</sub> (.) v_ | _i<sub>q</sub> (.) v_ |
+| --------------------------------------- | --------------------- | --------------------- |
+| `(pmoFsedf)` not `D`!                   | `(pm)`                | `(pm)`                |
+| converse is `(FDeSfOMP)`, same as above | `(pm)`                | `(pm)` p -> q         |
+| `(seSdfOMP)`                            | `(MP)`                | `(MP)`                |
+| converse is `(pmoFDseS)`, same as above | `(MP)`                | `(MP)` q -> p         |
+
+earlier elements are `(pmoFDseS)`, later elements are `(FDeSfOMP)`, is what we want
+
+both are 8 basic relations, and contain a converse; we need to drop `e` in any case (0). in the first, we need to drop
+the `s` or `S`, in the second we need to drop `F` or `f` for anti-symmetric. We get `(pmoFDS)` or `(pmoFDs)`, and
+`(FDSOMP)` or `(DSfOMP)`. Note that `D` appears everywhere, and `d` appears nowhere. **`(pmMP)` cannot be reached with
+composition when `d` is in the second relation, or when `D` is in the first relation!!**
+
+but that cannot be the issue, because if we choose _λ_ as that relation, where are only interested in `pmMP`, who cares?
+the order is the "other" relation? no; it is; the order _must be_ that relation for concat; see above
+
+this sort is impossible
+
+_ρ_, or _δ_, has to define a total strict order, so that it can be used in [`Array.prototype.sort` as `compareFn`].
+`compareFn` has to be pure, stable, reflexive, anti-symmetric, and transitive. Notably, if
+<code>compareFn(i<sub>q</sub>, i<sub>p</sub>)</code> returns `-1`, `0`, or `+1`:
+
+> - **reflexive**: <code>compareFn(i<sub>p</sub>, i<sub>p</sub>) === 0</code>
+>
+> - **anti-symmetric**: <code>compareFn(i<sub>p</sub>, i<sub>q</sub>) === - compareFn(i<sub>q</sub>,
+>   i<sub>p</sub>)</code>
+>
+> - **transitive**: <code>compareFn(i<sub>p</sub>, i<sub>q</sub>) === compareFn(i<sub>q</sub>,
+>   i<sub>r</sub>)</code><br />⇒ <code>compareFn (i<sub>q</sub>, i<sub>r</sub>) === compareFn(i<sub>p</sub>,
+>   i<sub>q</sub>) === compareFn(i<sub>q</sub>, i<sub>r</sub>)</code>
+
+Since _i<sub>p</sub> (e) i<sub>p</sub>_, reflexivity imposes that `compareFn` returns `0` when the Allen relation is
+`(e)`.
+
+The anti-symmetric requirement can only be realised if `compareFn` returns opposite signs for relations that are each
+other’s converse. For definite intervals, `compareFn` can return `-1` if _i<sub>p</sub> (pmoFDs) i<sub>q</sub>_, and
+`+1` if _i<sub>p</sub> (SdfOMP) i<sub>q</sub>_.
+
+We can verify the transitivity requirement with the composition. The [basic compositions table] shows that
+
+> - (pmoFDs) ⊕ (pmoFDs) = (pmoFDs)
+> - (e) ⊕ (e) = (e)
+> - (SdfOMP) ⊕ (SdfOMP) = (SdfOMP)
+
+However, there are also 13 possible non-basic relations when indefinite intervals are involved. When the uncertainly
+`> 1/6` _for λ_, the intersection is not defined, but we cannot use this in sorting _I_ with _ρ_, or _δ_. For 8 of the
+13 non-basic relations, there is no issue. For the remaining 7, it is non-trivial what to return.
+
+| _i<sub>p</sub> (.) i<sub>q</sub>_ | <code>compareFn(i<sub>p</sub>, i<sub>q</sub>)</code> |
+| --------------------------------- | ---------------------------------------------------- |
+| `(pmoFDseSdfO)`                   | ❌                                                   |
+| `(pmoFD)`                         | `-1`                                                 |
+| `(pmosd)`                         | `-1`                                                 |
+| `(osd)`                           | `-1`                                                 |
+| `(oFD)`                           | `-1`                                                 |
+| `(seS)`                           | ❌                                                   |
+| `(Fef)`                           | ❌                                                   |
+| `(dfO)`                           | `+1`                                                 |
+| `(DSO)`                           | `+1`                                                 |
+| `(DSOMP)`                         | `+1`                                                 |
+| `(dfOMP)`                         | `+1`                                                 |
+| `(oFDseSdfOMP)`                   | ❌                                                   |
+| full                              | ❌                                                   |
+
+If _i<sub>p</sub> (pm) i<sub>q</sub>_, and _i<sub>p</sub> (FDeSfOMP) v_, _i<sub>q</sub> ∩ v = ∅_. If _i<sub>p</sub>
+(pmoFDseS) i<sub>q</sub>_, and _i<sub>p</sub> (MP) v_, _i<sub>q</sub> (MP) v_, and thus _i<sub>q</sub> ∩ v = ∅_.
 
 ## Inference
 
@@ -623,3 +724,7 @@ impractical (i.e., with realistic parameters the algorithm would take longer tha
 There are subsets of the Allen relations for which there exist algorithms that perform much better.
 
 This library does not offer inference functions at this time. The main intention of this library is validation.
+
+[basic compositions table]: https://www.ics.uci.edu/~alspaugh/cls/shr/allen.html#BasicCompositionsTable
+[`array.prototype.sort` as `comparefn`]:
+  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#description
