@@ -667,7 +667,10 @@ the order is the "other" relation? no; it is; the order _must be_ that relation 
 this sort is impossible
 
 is it? with `pmoFDs` or `(pmoFDS)` we can work backwards! (but then we can't work forwards) (both are transitive) with
-`(FDSOMP)` or `(DSfOMP)` we can work forward (but we cannot work backwards) (both are transitive)
+`(FDSOMP)` or `(DSfOMP)` we can work forward (but we cannot work backwards) (both are transitive) BUT THIS IS BACKWARDS!
+no, not necessarily; this is a relation: we can choose +1 or -1 at will
+
+converse is `(SdfOMP)`, `(sdfOMP)`, or `(pmosdf)`, `(pmoFsd)`
 
 choose
 
@@ -698,21 +701,21 @@ We can verify the transitivity requirement with the composition. The [basic comp
 > - (SdfOMP) ⊕ (SdfOMP) = (SdfOMP)
 
 However, there are also 13 possible non-basic relations when indefinite intervals are involved. When the uncertainly
-`> 1/6` _for λ_, the intersection is not defined, but we cannot use this in sorting _I_ with _ρ_, or _δ_. For 8 of the
-13 non-basic relations, there is no issue. For the remaining 7, it is non-trivial what to return.
+`> 1/6` _for λ_, the intersection is not defined, but we cannot use this in sorting _I_ with _ρ_, or _δ_. For 4 of the
+13 non-basic relations, there is no issue. For the remaining 9, it is non-trivial what to return.
 
 | _i<sub>p</sub> (.) i<sub>q</sub>_ | <code>compareFn(i<sub>p</sub>, i<sub>q</sub>)</code> |
 | --------------------------------- | ---------------------------------------------------- |
 | `(pmoFDseSdfO)`                   | ❌                                                   |
 | `(pmoFD)`                         | `-1`                                                 |
-| `(pmosd)`                         | `-1`                                                 |
-| `(osd)`                           | `-1`                                                 |
+| `(pmosd)`                         | ❌ `-1` contains `d`                                 |
+| `(osd)`                           | ❌ `-1` contains `d`                                 |
 | `(oFD)`                           | `-1`                                                 |
 | `(seS)`                           | ❌                                                   |
 | `(Fef)`                           | ❌                                                   |
 | `(dfO)`                           | `+1`                                                 |
-| `(DSO)`                           | `+1`                                                 |
-| `(DSOMP)`                         | `+1`                                                 |
+| `(DSO)`                           | ❌ `+1`                                              |
+| `(DSOMP)`                         | ❌ `+1`                                              |
 | `(dfOMP)`                         | `+1`                                                 |
 | `(oFDseSdfOMP)`                   | ❌                                                   |
 | full                              | ❌                                                   |
