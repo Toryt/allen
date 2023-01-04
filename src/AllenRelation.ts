@@ -999,7 +999,7 @@ export class AllenRelation extends Relation {
 
   /**
    * Given 3 intervals `i1`, `i2`, and `i3`, given `gr1 = relation(i1, i2)` and `gr2 = relation(i2, i3)`,
-   * `gr1.compose(gr2) = relation(i1, i2)`.
+   * `gr1.compose(gr2) = relation(i1, i3)`.
    *
    * Composition is not commutative but is both left and right associative, and distributes over `or`.
    *
