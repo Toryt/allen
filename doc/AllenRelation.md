@@ -611,8 +611,52 @@ We can also define the intersection collection of a collection of intervals _I_ 
 Note that when _I_ is a sequence (which implies that all intervals _i_ are distinct), _I ∩ v_ is a sequence too.
 
 To limit the number of _i ∩ v_ couple evaluations necessary when deterimining _I ∩ v_, it would be nice if we could
-order _I_ in such a way that we know for certain what the final result will be from a certain point on. We know that
-there is no intersection if `i (pmMP) v`. We will try to order _I_ in such a way that, with information about
+order _I_ in such a way that we know for certain what the final result will be from a certain point on. Consider the
+naive order of `compareIntervals`. This function sorts intervals, first on their `start`, and if that is equal, on their
+`end`. An `undefined` `start` is considered the smallest possible value, so that left-indefinite intervals come first in
+the order. An `undefined` `end` is considered the largest possible value, so that the subcollection of left-indefinite
+intervals end with the fully indefinite intervals, and that the left-definite, right-indefinite intervals come last in
+the order.
+
+For fully definite and left-definite, right-indefinite intervals, we know at least that later intervals in the sorted
+collection start at the same point or later. Using indices _p, q ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;q&nbsp;<&nbsp; #I_ to
+denote an intervals position zero-based in the sorted collection _I_:
+
+> ∀ p ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;#I, i<sub>p</sub> ∈ I, i<sub>p</sub>.start ≠ undefined; ∀ q ∈ ℕ<sub>1</sub>,
+> p&nbsp;<&nbsp;q&nbsp;<&nbsp;#I, i<sub>q</sub> ∈ I, i<sub>q</sub>.start ≠ undefined: i<sub>p</sub>.start ≤
+> i<sub>q</sub>.start
+
+i.e.,
+
+> ∀ p ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;#I, i<sub>p</sub> ∈ I, i<sub>p</sub>.start ≠ undefined; ∀ q ∈ ℕ<sub>1</sub>,
+> p&nbsp;<&nbsp;q&nbsp;<&nbsp;#I, i<sub>q</sub> ∈ I, i<sub>q</sub>.start ≠ undefined: i<sub>p</sub> (pmoFDseS)
+> i<sub>q</sub>
+
+When _v (pm) i<sub>p</sub>_, we can compose this to get the relation of _v_ with _i<sub>q</sub>_:
+
+> ∀ p ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;#I, i<sub>p</sub> ∈ I, i<sub>p</sub>.start ≠ undefined; ∀ q ∈ ℕ<sub>1</sub>,
+> p&nbsp;<&nbsp;q&nbsp;<&nbsp;#I, i<sub>q</sub> ∈ I, i<sub>q</sub>.start ≠ undefined; ∀ v: v (pm) i<sub>p</sub> ⇒ v
+> ((pm) ⊕ (pmoFDseS)) i<sub>q</sub> = v (pm) i<sub>q</sub> ⇒ v ∩ i<sub>q</sub> = ∅
+
+_v (pm) i<sub>q</sub>_ implies the intersection of _v_ and i<sub>q</sub> is well-defined, but empty (even if
+_i<sub>q</sub>_ is left-definite, right-indefinite, or _v_ is left-indefinite, right-definite). When we traverse _I_ in
+this order, we can stop after we determined that _v (pm) i<sub>p</sub>_. If _v_ is right-indefinite or fully indefinite,
+its relation with any other interval can never be _(pm)_, so _v (pm) i<sub>p</sub>_ will never become true, and the
+traversal will continue to the end. In some of these cases, we might discover that an intersection is not well-defined.
+
+When _I_ contains left-indefinite intervals or fully indefinite intervals, we encounter them at the start of the
+traversal. Their relation with any _v_ can never be _(pm)_. In some of these cases too, we might discover that an
+intersection is not well-defined.
+
+In reverse
+
+> ∀ p ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;#I, i<sub>p</sub> ∈ I, i<sub>p</sub>.start ≠ undefined; ∀ q ∈ ℕ<sub>1</sub>,
+> p&nbsp;<&nbsp;q&nbsp;<&nbsp;#I, i<sub>q</sub> ∈ I, i<sub>q</sub>.start ≠ undefined; ∀ v: v (MP) i<sub>q</sub> ⇒ v
+> ((MP) ⊕ (seSdfOMP)) i<sub>p</sub> = v (dfOMP) i<sub>p</sub>
+
+In this case, the intersection _v ∩ i<sub>p</sub>_ might be well-defined or not, and be empty or not. To be able to skip
+evaluations at the start of the order, we would need another sort order, that sorts first on _i<sub>q</sub>.end_. We
+can't have both.
 
 > i<sub>p</sub>, p ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;#I, i<sub>p</sub> ∈ I
 
