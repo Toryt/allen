@@ -630,7 +630,7 @@ i.e.,
 
 > ∀ p ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;#I, i<sub>p</sub> ∈ I, i<sub>p</sub>.start ≠ undefined; ∀ q ∈ ℕ<sub>1</sub>,
 > p&nbsp;<&nbsp;q&nbsp;<&nbsp;#I, i<sub>q</sub> ∈ I, i<sub>q</sub>.start ≠ undefined: i<sub>p</sub> (pmoFDseS)
-> i<sub>q</sub>
+> i<sub>q</sub> = i<sub>p</sub> R<sub>order</sub> i<sub>q</sub>
 
 When _v (pm) i<sub>p</sub>_, we can compose this to get the relation of _v_ with _i<sub>q</sub>_:
 
@@ -657,6 +657,26 @@ In reverse
 In this case, the intersection _v ∩ i<sub>p</sub>_ might be well-defined or not, and be empty or not. To be able to skip
 evaluations at the start of the order, we would need another sort order, that sorts first on _i<sub>q</sub>.end_. We
 can't have both.
+
+Note that, because
+
+> ∀ v, w; w.start ≠ undefined; (v ∩ w) ≠ ∅: (v ∩ w) (FseSdfO) v = (v ∩ w) R<sub>∩</sub> v
+
+> ∀ p ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;#I, i<sub>p</sub> ∈ I, i<sub>p</sub>.start ≠ undefined; ∀ q ∈ ℕ<sub>1</sub>,
+> p&nbsp;<&nbsp;q&nbsp;<&nbsp;#I, i<sub>q</sub> ∈ I, i<sub>q</sub>.start ≠ undefined; ∀ v: i<sub>p</sub> (pmoFDseS)
+> i<sub>q</sub> ⇒ (v ∩ i<sub>p</sub>) (R<sub>∩</sub> ⊕ R<sub>order</sub> ⊕ Ṙ<sub>∩</sub>) (v ∩ i<sub>q</sub>)
+>
+> = (v ∩ i<sub>p</sub>) ((FseSdfO) ⊕ (pmoFDseS) ⊕ Ṙ<sub>∩</sub>) (v ∩ i<sub>q</sub>)
+>
+> = (v ∩ i<sub>p</sub>) ((pmoFDseSdfOMP) ⊕ Ṙ<sub>∩</sub>) (v ∩ i<sub>q</sub>)
+>
+> = (v ∩ i<sub>p</sub>) ((pmoFDseSdfOMP) ⊕ (oFDseSf)) (v ∩ i<sub>q</sub>)
+>
+> = (v ∩ i<sub>p</sub>) (pmoFDseSdfOMP) (v ∩ i<sub>q</sub>)
+
+because `dfO` is in R<sub>∩</sub>, the order is not conserved. **But that is wrong, isn't it? It seems like it should be
+conserved by intersection. Probably because oftern either intersection with p or q, but not both? The offending cases
+give an empty intersection?**
 
 ## Inference
 
