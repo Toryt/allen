@@ -192,10 +192,10 @@ representations, representing intervals of fixed minimum length `pl`. We then kn
 | --------- | ----------- | ------------------------------- | --------------------------- |
 | <         | `(pm)`      | `(pm)`                          | `(pmoFsedf)`                |
 | =         | `(e)`       | `(s)`                           | `(M)`                       |
-| >         | `(MP)`      | `(dfOMP)`                       | `(P)`                       |
+| &gt;      | `(MP)`      | `(dfOMP)`                       | `(P)`                       |
 | 🤷        | `(pmeMP)`   | `(pmsdfOMP)`                    | `(pmoFsedfMP)`              |
 
-When then calculate the conjunction of the relationship between `p` and `i.start` with the relationship between `p` and
+We then calculate the conjunction of the relationship between `p` and `i.start` with the relationship between `p` and
 `i.end`. `p (.) i` is `(p (.) i.start ⊕ i.start (s) i) ∧ (p (.) i.end ⊕ i.end (M) i)`.
 
 | `p ⨀ i.start` | `p (.) i.start` | `p ⨀ i.end` | `p (.) i.end` | `p (.) i`                   | conjunction |
@@ -208,7 +208,7 @@ When then calculate the conjunction of the relationship between `p` and `i.start
 |               |                 | =           | `(e)`         | `(s) ∧ (M)`                 | `()`        |
 |               |                 | >           | `(MP)`        | `(s) ∧ (P)`                 | `()`        |
 |               |                 | 🤷          | `(pmeMP)`     | `(s) ∧ (pmoFsedfMP)`        | `(s)`       |
-| >             | `(MP)`          | <           | `(pm)`        | `(dfOMP) ∧ (pmoFsedf)`      | `(df)`      |
+| &gt;          | `(MP)`          | <           | `(pm)`        | `(dfOMP) ∧ (pmoFsedf)`      | `(df)`      |
 |               |                 | =           | `(e)`         | `(dfOMP) ∧ (M)`             | `(M)`       |
 |               |                 | >           | `(MP)`        | `(dfOMP) ∧ (P)`             | `(P)`       |
 |               |                 | 🤷          | `(pmeMP)`     | `(dfOMP) ∧ (pmoFsedfMP)`    | `(dfMP)`    |
@@ -228,8 +228,8 @@ relations we found for point interval relations:
 | terminates | `(t)`                     | `(M)`          |
 | after      | `(a)`                     | `(P)`          |
 
-Note the assymmetry. This is a consequence of our choice to work with right half-open intervals. With another choice,
-the same reasoning applies, but we would find different basic relations.
+Note the asymmetry. This is a consequence of our choice to work with right half-open intervals. With another choice, the
+same reasoning applies, but we would find different basic relations.
 
 Given 5 basic relations, we get 32 (= 2<sup>5</sup>) possible general relations between points and intervals. This
 includes the EMPTY relation `()`, and a full relation, which is `(pmsdfMP)` for point – interval relations.
