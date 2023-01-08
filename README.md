@@ -194,6 +194,12 @@ There are some pitfalls.
 - [Intervals]
 - [Point – Interval Relations]
 - [Allen Relations]
+- [Interval Constraints]
+- [Reasoning with unknown but constrained start and end point]
+- [Points as intervals]
+- [Comparing points with intervals]
+- [Intersection]
+- [Chops]
 - [Code documentation]
 
 All functions and methods are protected with explicit `assert`s, that throw when a precondition is violated. Although
@@ -250,6 +256,13 @@ last updated in December 2008.
 [intervals]: https://bitbucket.org/toryt/allen/src/master/doc/Intervals.md
 [point – interval relations]: https://bitbucket.org/toryt/allen/src/master/doc/PointIntervalRelation.md
 [allen relations]: https://bitbucket.org/toryt/allen/src/master/doc/AllenRelation.md
+[interval constraints]: https://bitbucket.org/toryt/allen/src/master/doc/IntervalConstraints.md
+[reasoning with unknown but constrained start and end point]:
+  https://bitbucket.org/toryt/allen/src/master/doc/ReasoningWithUnknownButConstrained.md
+[points as intervals]: https://bitbucket.org/toryt/allen/src/master/doc/PointAsIntervals.md
+[comparing points with intervals]: https://bitbucket.org/toryt/allen/src/master/doc/ComparingPointsWithIntervals.md
+[intersection]: https://bitbucket.org/toryt/allen/src/master/doc/Intersection.md
+[chops]: https://bitbucket.org/toryt/allen/src/master/doc/Chops.md
 [code documentation]: docs/index.html
 [bitbucket]: https://bitbucket.org/toryt/allen
 [github]: https://github.com/Toryt/allen
