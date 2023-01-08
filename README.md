@@ -31,7 +31,12 @@ Good synopses of this theory are
 - [Wikipedia]
 - [Thomas A. Alspaugh “Allen's interval algebra”].
 
-This library does not help with inference.
+This library is aimed in the first place at dealing with intervals in traditional software.
+
+This library only offers limited support for inference. Be aware that, in general, inference over intervals, also using
+Allen relations, is NP-complete. This means that the time the execution of inference algorithms will take, is at least
+difficult to ascertain, and quickly completely impractical. There are subsets of the Allen relations for which there
+exist algorithms that perform much better. Such optimizations are not supported by this library.
 
 [ppwcode dotnet-util-allen] offers a C# version of the functionality of this library.
 
