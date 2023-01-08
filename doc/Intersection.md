@@ -199,7 +199,7 @@ smallest uncertainty. When the uncertainly `> 1/6`, the intersection is not defi
 | `(oFDseSdfOMP)` | ❌               | ❌                          |
 | full            | ❌               | ❌                          |
 
-### Collection intersection collection
+### Collection intersection set
 
 Here, we want to determine the collection of all intersection intervals for the cross product of _n ∈ ℕ<sub>0</sub>_
 collections of intervals _I<sub>k</sub>, k ∈ ℕ<sub>1</sub>, k ≤ n_, with different cardinalities _#I<sub>k</sub> ∈
