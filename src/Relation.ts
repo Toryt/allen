@@ -1,5 +1,5 @@
 /*
- Copyright © 2022 by Jan Dockx
+ Copyright © 2022 – 2023 by Jan Dockx
 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
@@ -544,8 +544,9 @@ export class Relation {
   }
 
   /**
-   * The conjunction of the point – interval relations in `gr`.
-   * This is the intersection of all point – interval relations in `gr`, when they are considered as sets of basic
+   * The conjunction of all the relations in `gr`.
+   *
+   * This is the intersection of all relations in `gr`, when they are considered as sets of basic
    * relations.
    *
    * `and` is commutative and associative.

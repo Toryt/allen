@@ -769,7 +769,7 @@ export class AllenRelation extends Relation {
   /* endregion */
 
   /**
-   * The _converse_ of a relation `x1 ⊡ x2` between to values of the same type `x1` and `x2` is the relation `x2 ⊡ x1`:
+   * The _converse_ of a relation `x1 ⊡ x2` between two values of the same type `x1` and `x2` is the relation `x2 ⊡ x1`:
    *
    * ```ts
    * compare(x2, x3).converse() === compare(x1, x2)
