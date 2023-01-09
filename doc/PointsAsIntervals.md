@@ -81,7 +81,7 @@ When we interpret the point representation `rp` as the interval `i` such that `p
 representing `i2`, then means
 
 ```
-  (rp1 ∈ i1) ∧ (rp2 ∈ = i2) ∧ (|i1| = pl) ∧ (|i2| = pl) ∧ (rp1 = rp2)
+  (rp1 ∈ i1) ∧ (rp2 ∈ i2) ∧ (|i1| = pl) ∧ (|i2| = pl) ∧ (rp1 = rp2)
 ⇔ (rp1 = rp2 ∈ i1) ∧ (rp1 = rp2 ∈ i2)
 ⇔ (rp1 = rp2 ∈ i1 ∩ i2)
 ⇔ (i1 ∩ i2 ≠ ∅)
@@ -92,12 +92,12 @@ The relationship where 2 half-open intervals have at least 1 common point is `i1
 
 ### Unequal point representations (<, >)
 
-When a point interpretation is smaller than the other, e.g., `rp1 < rp2`, with `rp1` representing `i1` and `rp2`
+When a point representation is smaller than the other, e.g., `rp1 < rp2`, with `rp1` representing `i1` and `rp2`
 representing `i2`, this means the smallest possible element of `i1` must be smaller than the largest possible element of
 `i2`. When we are working with right half-open intervals, with a fixed minimum length `pl`, this means:
 
 ```
-  (rp1 ∈ i1) ∧ (rp2 ∈ = i2) ∧ (|i1| = pl) ∧ (|i2| = pl) ∧ (rp1 < rp2)
+  (rp1 ∈ i1) ∧ (rp2 ∈ i2) ∧ (|i1| = pl) ∧ (|i2| = pl) ∧ (rp1 < rp2)
 ⇔ (rp1 ∈ [i1.start, i1.start + pl[) ∧ (rp2 ∈ [i2.start, i2.start + pl[) ∧ (rp1 < rp2)  [A]
 ⇔ i1.start < i2.start + pl = i2.end
 ```
