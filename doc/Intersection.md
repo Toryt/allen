@@ -266,9 +266,9 @@ _(I<sub>1</sub> ∩ I<sub>2</sub>) ∩ I<sub>3</sub> ≡ ∩(I<sub>1</sub>, I<su
 _#I<sub>1</sub>&nbsp;⋅&nbsp;#I<sub>2</sub> + #(I<sub>1</sub> ∩ I<sub>2</sub>)&nbsp;⋅&nbsp;#I<sub>3</sub> ≤
 #I<sub>1</sub>&nbsp;⋅&nbsp;#I<sub>2</sub>&nbsp;⋅&nbsp;#I<sub>3</sub>_.
 
-When both interval collections are sequences (which implies that all intervals in the collection _i_ are distinct),
-I<sub>1</sub> ∩ I<sub>2</sub> is a sequence too. Indeed, suppose that there are 2 intersections _e ∩ g_ and _f ∩ h_ that
-have at least 1 point in common:
+When one of the interval collections is a sequence (which implies that all intervals in the collection _i_ are
+distinct), I<sub>1</sub> ∩ I<sub>2</sub> is a sequence too. Indeed, suppose that there are 2 intersections _e ∩ g_ and
+_f ∩ h_ that have at least 1 point in common:
 
 > ∃ e ∈ I<sub>1</sub>, ∃ f ∈ I<sub>1</sub>, ∃ g ∈ I<sub>2</sub>, ∃ h ∈ I<sub>2</sub>: (e ∩ g) ∩ (f ∩ h) ≠ ∅
 >
