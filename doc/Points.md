@@ -191,8 +191,8 @@ exclude mixed usage of `Date`s with, e.g., `moment.js` `object`s, this is up to 
 The library user can override the `@@toPrimitive()`, `valueOf()` `toNumber()`, or `toString()` methods of `function`
 instances, as they can for any `object`. It is impossible in JavaScript to create subtypes of `Function` that are still
 `Callable`, but a library user might set things up to compare `function` instances with other `function` instances or
-`object`s. Therefor, `function` instances are threathed as any other `object`, and, `function` instances are considered
-“of the same type” as other `function` instances, and finally any other `object`.
+`object`s. Therefor, `function` instances are threathed as any other `object`: `function` instances are considered “of
+the same type” as other `function` instances, and finally any other `object`.
 
 When using TypeScript, the library user can limit the “common type” more using generics.
 
@@ -214,7 +214,7 @@ be able to calculate with durations (e.g., ”2 days after `t`“). When you use
 a good idea to apply [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601).
 
 “Exact” points-in-time should be represented as UTC: `'2022-11-13T10:08:11.854Z'`. It is important to agree on the
-precision, and to explicitly include trailing zeros in the mantisse. A string representation then has a fixed with.
+precision, and to explicitly include trailing zeros in the mantisse. A string representation then has a fixed width.
 E.g., when we agree that a point in time is expressed to ms (10<sup>-3</sup> s) precision, it should be represented as
 `'2022-11-13T10:08:11.800Z'`, and when we choose to work to μs (10<sup>-6</sup> s) precision, as
 `'2022-11-13T10:08:11.800000Z'`. Note that, at the time of writing, μs is the most precise precision that can be used in
@@ -225,7 +225,7 @@ precision.
 
 When the domain demands working with day dates, months, or years, it is best to represent the concept directly, and to
 not convert it to an exact representation. Given timezones, the interpretation of a date, month, or year, depends on the
-semantics and the timezone of evaluation. While humas gloss over this, computers cannot without extra work. A year
+semantics and the timezone of evaluation. While humans gloss over this, computers cannot without extra work. A year
 should be represented as `2022`, a month as `2022-11`, and a day date as `2022-11-13`. Whether
 `'2022-11-13T10:08:11.854884Z'` is in `2022-11-13` depends on the time zone of the evaluation. How to interpret this
 cannot be defined in general, and should be left to the place where the evaluation is made. Representing `2022-11-13`
