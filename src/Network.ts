@@ -140,8 +140,8 @@ export class Network {
       this.update(toDo.i, toDo.j, toDo.r)
       this._intervals.forEach(k => {
         if (k !== toDo.i && k !== toDo.j) {
-          const rkj: AllenRelation = AllenRelation.and(this.get(k, toDo.j), this.get(k, toDo.i).compose(toDo.r))
           const nkj = this.get(k, toDo.j)
+          const rkj: AllenRelation = AllenRelation.and(nkj, this.get(k, toDo.i).compose(toDo.r))
           if (rkj !== nkj && rkj.implies(nkj)) {
             todos.push({ i: k, j: toDo.j, r: rkj })
           }
@@ -149,8 +149,8 @@ export class Network {
       })
       this._intervals.forEach(k => {
         if (k !== toDo.i && k !== toDo.j) {
-          const rik: AllenRelation = AllenRelation.and(this.get(toDo.i, k), toDo.r.compose(this.get(toDo.j, k)))
           const nik = this.get(toDo.i, k)
+          const rik: AllenRelation = AllenRelation.and(nik, toDo.r.compose(this.get(toDo.j, k)))
           if (rik !== nik && rik.implies(nik)) {
             todos.push({ i: toDo.i, j: k, r: rik })
           }
