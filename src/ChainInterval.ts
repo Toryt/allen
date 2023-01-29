@@ -40,7 +40,7 @@ export interface ChainInterval<T> {
   start: T
 }
 
-export function isChainInterval<TR extends TypeRepresentation> (
+export function isChainInterval<TR extends TypeRepresentation>(
   ci: unknown,
   pointType: TypeRepresentation
 ): ci is Readonly<ChainInterval<TypeFor<TR>>> {
@@ -60,11 +60,13 @@ const haveCommonType: string = 'i1.start and i2.start must be of a common type'
 /**
  * Assert that the parameters are acceptable, and return the {@link Comparator} to use.
  */
-export function getCompareIfOk<T> (
+export function getCompareIfOk<T>(
   cis: ReadonlyArray<Readonly<ChainInterval<T>>>,
   compareFn?: Comparator<T>
 ): Comparator<T> {
-  cis.forEach(ci => { assert(typeof ci === 'object' && ci !== null) })
+  cis.forEach(ci => {
+    assert(typeof ci === 'object' && ci !== null)
+  })
   assert(
     compareFn !== undefined || cis.every(ci => isLTComparableOrIndefinite(ci.start)),
     '`compareFn` is mandatory when `iN.start` is a `symbol` or `NaN`'
@@ -84,7 +86,7 @@ export function getCompareIfOk<T> (
 /**
  * Compare function with the traditional semantics for {@link ChainInterval}s. Compares on `start` (which is mandatory).
  */
-export function compareChainIntervals<T> (
+export function compareChainIntervals<T>(
   i1: Readonly<ChainInterval<T>>,
   i2: Readonly<ChainInterval<T>>,
   compareFn?: Comparator<T>

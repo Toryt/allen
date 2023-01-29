@@ -28,14 +28,14 @@ export const typeRepresentations: TypeRepresentation[] = pptsAsTypeRepresentatio
   Function
 ])
 
-export function notAConstructor1 (): string {
+export function notAConstructor1(): string {
   return 'not a constructor 1'
 }
 
 // noinspection JSUnusedGlobalSymbols
 notAConstructor1.prototype.constructor = A
 
-export function notAConstructor2 (): string {
+export function notAConstructor2(): string {
   return 'not a constructor 2'
 }
 

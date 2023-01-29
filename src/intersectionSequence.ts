@@ -34,7 +34,7 @@ import { intersection } from './chopsAndIntersection'
  *
  * The resulting sequence is ordered, might have gaps, and might be left- and / or right-indefinite.
  */
-export function intersectionSequence<T> (
+export function intersectionSequence<T>(
   sources: Readonly<ReferenceIntervals<T>>,
   compareFn?: Comparator<T>
 ): ReadonlyArray<Readonly<Interval<T>>> | false {

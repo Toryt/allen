@@ -47,7 +47,7 @@ describe('PointIntervalRelation', function () {
   )
 
   describe('compose', function () {
-    function validateCompose (pir: PointIntervalRelation, ar: AllenRelation, result: PointIntervalRelation): void {
+    function validateCompose(pir: PointIntervalRelation, ar: AllenRelation, result: PointIntervalRelation): void {
       PointIntervalRelation.BASIC_RELATIONS.forEach((bpir: PointIntervalRelation) => {
         if (bpir.implies(pir)) {
           AllenRelation.BASIC_RELATIONS.forEach((bar: AllenRelation) => {
@@ -77,7 +77,7 @@ describe('PointIntervalRelation', function () {
     //   })
     // })
     it('composes some relations as expected', function () {
-      function testACombination (pirNr: number, arNumber: number): void {
+      function testACombination(pirNr: number, arNumber: number): void {
         const pir: PointIntervalRelation = PointIntervalRelation.generalRelation(pirNr)
         const ar: AllenRelation = AllenRelation.generalRelation(arNumber)
         validateCompose(pir, ar, pir.compose(ar))
@@ -95,14 +95,14 @@ describe('PointIntervalRelation', function () {
   })
 
   describe('relation', function () {
-    function generatePointIntervalRelationTests<T> (
+    function generatePointIntervalRelationTests<T>(
       label: string,
       interval: Interval<T>,
       points: T[],
       expected: PointIntervalRelation[],
       compareFn?: (a1: T, a2: T) => number
     ): void {
-      function callIt (t: Readonly<T> | undefined | null, i: Readonly<Interval<T>>): PointIntervalRelation {
+      function callIt(t: Readonly<T> | undefined | null, i: Readonly<Interval<T>>): PointIntervalRelation {
         return compareFn !== undefined && compareFn !== null
           ? /* prettier-ignore */ PointIntervalRelation.relation(t, i, compareFn)
           : PointIntervalRelation.relation(t, i)
@@ -110,11 +110,11 @@ describe('PointIntervalRelation', function () {
 
       type BasicRelationDefinition = (t: T, i: Interval<T>) => boolean
 
-      function isDefinite (t: T | undefined | null): t is T {
+      function isDefinite(t: T | undefined | null): t is T {
         return t !== undefined && t !== null
       }
 
-      function compare (t1: T, c: '<' | '=' | '>', t2: T | undefined | null): boolean {
+      function compare(t1: T, c: '<' | '=' | '>', t2: T | undefined | null): boolean {
         const compare = compareFn ?? ltCompare
 
         if (!isDefinite(t2)) {
@@ -137,7 +137,7 @@ describe('PointIntervalRelation', function () {
         [PointIntervalRelation.AFTER, (t: T, i: Interval<T>) => !isDefinite(t) || compare(t, '>', i.end)]
       ]
 
-      function shouldNotViolateBasicRelationDefinitions (t: T, result: PointIntervalRelation): void {
+      function shouldNotViolateBasicRelationDefinitions(t: T, result: PointIntervalRelation): void {
         basicRelationDefinition.forEach(([br, def]) => {
           if (result.implies(br)) {
             def(t, interval).should.be.true()
@@ -166,7 +166,7 @@ describe('PointIntervalRelation', function () {
       })
     }
 
-    function generateAllPointIntervalRelationTests<T> (
+    function generateAllPointIntervalRelationTests<T>(
       label: string,
       points: T[],
       compare?: (a1: T, a2: T) => number

@@ -47,7 +47,7 @@ const startCases: ReadonlyArray<StartCase<any>> = [
 
   { start: new C(), okFor: [C, Object] },
   {
-    start: function functionAsStart () {
+    start: function functionAsStart() {
       return 5
     },
     okFor: [Function, Object]
@@ -91,8 +91,8 @@ describe('ChainInterval', function () {
     })
   })
   describe('compareChainIntervals', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
-      function callIt (ci1: ChainInterval<T>, ci2: ChainInterval<T>): number {
+    function generateTests<T>(label: string, points: T[], compareFn?: Comparator<T>): void {
+      function callIt(ci1: ChainInterval<T>, ci2: ChainInterval<T>): number {
         return compareFn === undefined || compareFn === null
           ? compareChainIntervals(ci1, ci2)
           : compareChainIntervals(ci1, ci2, compareFn)

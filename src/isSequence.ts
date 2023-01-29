@@ -98,7 +98,7 @@ export interface SequenceOptions<T> {
  *                   is.some((j: Interval<T>) => AllenRelation.relation(j, i, compare).implies(AllenRelation.MEETS)))
  *             )
  */
-export function isSequence<T> (candidate: ReadonlyArray<Readonly<Interval<T>>>, options?: SequenceOptions<T>): boolean {
+export function isSequence<T>(candidate: ReadonlyArray<Readonly<Interval<T>>>, options?: SequenceOptions<T>): boolean {
   assert(options === undefined || typeof options === 'object')
   const compareFn: Comparator<T> = getCompareIfOk(candidate, options?.compareFn) // asserts preconditions
   const leftDefinite: boolean = options?.leftDefinite ?? false
@@ -109,7 +109,7 @@ export function isSequence<T> (candidate: ReadonlyArray<Readonly<Interval<T>>>, 
     return true
   }
 
-  function intervalCompare (i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): number {
+  function intervalCompare(i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): number {
     return compareIntervals(i1, i2, options?.compareFn)
   }
 
@@ -122,7 +122,7 @@ export function isSequence<T> (candidate: ReadonlyArray<Readonly<Interval<T>>>, 
     return false
   }
 
-  function endsBefore (i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): boolean {
+  function endsBefore(i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): boolean {
     if (i1.end === undefined || i1.end === null || i2.start === undefined || i2.start === null) {
       return false
     }

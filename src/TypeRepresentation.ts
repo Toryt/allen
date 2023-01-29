@@ -40,7 +40,7 @@ export type Constructor<T extends object> = new (...args: never[]) => T
  * care”. `TypeRepresentation` does not include `undefined`, because in some cases that is not allowed. When an
  * `undefined` `TypeRepresentation` has meaning in its context, use `TypeRepresentation | undefined` as type.
  */
-export type TypeRepresentation = typeof primitiveTypeRepresentations[number] | Constructor<object>
+export type TypeRepresentation = (typeof primitiveTypeRepresentations)[number] | Constructor<object>
 
 /**
  * Approximation of determining whether `u` is a {@link TypeRepresentation}.
@@ -49,7 +49,7 @@ export type TypeRepresentation = typeof primitiveTypeRepresentations[number] | C
  * {@link primitiveTypeRepresentations}), but we can only determine dynamically in JS that `u` is a function, and not necessarily
  * a constructor according to TS, although we can come close.
  */
-export function isTypeRepresentation (u: unknown): boolean {
+export function isTypeRepresentation(u: unknown): boolean {
   return (
     (primitiveTypeRepresentations as unknown as unknown[]).includes(u) ||
     (typeof u === 'function' && 'prototype' in u && 'constructor' in u.prototype && u.prototype.constructor === u)
@@ -61,7 +61,7 @@ export function isTypeRepresentation (u: unknown): boolean {
  *
  * Returns `undefined` when `p` is `undefined` or `null`, expressing “don't know 🤷”.
  */
-export function typeRepresentationOf (u: unknown): TypeRepresentation | undefined {
+export function typeRepresentationOf(u: unknown): TypeRepresentation | undefined {
   if (u === undefined || u === null) {
     return undefined
   }
@@ -76,7 +76,7 @@ interface Acc {
   result: boolean
 }
 
-export function mostSpecializedCommonType (c1: Constructor<object>, c2: Constructor<object>): Constructor<object> {
+export function mostSpecializedCommonType(c1: Constructor<object>, c2: Constructor<object>): Constructor<object> {
   if (c1 === c2 || c2.prototype instanceof c1) {
     return c1
   }
@@ -91,7 +91,7 @@ export function mostSpecializedCommonType (c1: Constructor<object>, c2: Construc
  *
  * If there is no common type between the parameters, `false` is returned.
  */
-export function commonTypeRepresentation (...p: unknown[]): TypeRepresentation | undefined | false {
+export function commonTypeRepresentation(...p: unknown[]): TypeRepresentation | undefined | false {
   const { type, result } = p.reduce(
     ({ type, result }: Acc, e: unknown): Acc => {
       if (!result) {
@@ -133,7 +133,7 @@ export function commonTypeRepresentation (...p: unknown[]): TypeRepresentation |
  * The arguments are not allowed to be `undefined`. Whether `undefined` is an acceptable subtype of another type is
  * context dependent. The case must be handled in situ, before calling this function.
  */
-export function representsSuperType (
+export function representsSuperType(
   superRepresentation: TypeRepresentation,
   typeRepresentation: TypeRepresentation
 ): boolean {

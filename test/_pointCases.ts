@@ -87,6 +87,6 @@ export const sixDates = [
   new Date(2048, 9, 3, 19, 49, 34, 848)
 ]
 export const sixArrays = sixNumbers.map(p => [p])
-export function generateSixSymbols (discriminator: string): symbol[] {
+export function generateSixSymbols(discriminator: string): symbol[] {
   return sixStrings.map(s => Symbol(`${s} ${discriminator}`))
 }

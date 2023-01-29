@@ -89,8 +89,8 @@ describe('choppedSequence', function () {
       })
     })
   })
-  function generateTests<T> (label: string, points: readonly T[], compareFn?: Comparator<T>): void {
-    function validateResult (
+  function generateTests<T>(label: string, points: readonly T[], compareFn?: Comparator<T>): void {
+    function validateResult(
       sources: Readonly<ReferenceIntervals<T>>,
       result: ReadonlyArray<Readonly<Interval<T>>>,
       gaps?: boolean
@@ -131,7 +131,7 @@ describe('choppedSequence', function () {
       })
     }
 
-    function callIt (sources: Readonly<ReferenceIntervals<T>>): ReadonlyArray<Readonly<Interval<T>>> {
+    function callIt(sources: Readonly<ReferenceIntervals<T>>): ReadonlyArray<Readonly<Interval<T>>> {
       return compareFn !== undefined && compareFn !== null
         ? /* prettier-ignore */ choppedSequence(sources, compareFn)
         : choppedSequence(sources)

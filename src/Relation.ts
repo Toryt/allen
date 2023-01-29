@@ -218,12 +218,12 @@ export class Relation {
    */
   protected readonly bitPattern: number
 
-  protected typedConstructor (): RelationConstructor<this> {
+  protected typedConstructor(): RelationConstructor<this> {
     // this cast means that _each subclass_ **MUST** override BASIC_RELATIONS and RELATIONS
     return this.constructor as RelationConstructor<this>
   }
 
-  protected nrOfBits (): number {
+  protected nrOfBits(): number {
     return this.typedConstructor().NR_OF_BITS
   }
 
@@ -231,7 +231,7 @@ export class Relation {
    * There is only 1 constructor, that constructs the wrapper object
    * around the bitpattern. This is used exclusively in {@link RelationConstructor.generalRelation} initialization code.
    */
-  protected constructor (bitPattern: number) {
+  protected constructor(bitPattern: number) {
     assert(bitPattern >= EMPTY_BIT_PATTERN)
     assert(bitPattern <= nrOfRelations(this.nrOfBits()) - 1)
 
@@ -260,7 +260,7 @@ export class Relation {
   /* region instance methods */
   // -------------------------------------------------------------------------------------------------------------------
 
-  public isBasic (): boolean {
+  public isBasic(): boolean {
     return isBasicRelationBitPattern(this.nrOfBits(), this.bitPattern)
   }
 
@@ -276,7 +276,7 @@ export class Relation {
    * !isBasic() || BASIC_RELATIONS[this.ordinal()] === this
    * ```
    */
-  public ordinal (): number {
+  public ordinal(): number {
     /*
      * This is the bit position, 0-based, in the NR_OF_BITS-bit bit pattern, of the bit representing this as basic
      * relation.
@@ -300,7 +300,7 @@ export class Relation {
    *            ? NaN
    *            : BASIC_RELATIONS.reduce((acc, br) => br.implies(this) ? acc + 1 : acc, -1) / (NR_OF_BITS - 1)
    */
-  uncertainty (): number {
+  uncertainty(): number {
     const count = bitCount(this.bitPattern)
     if (count === 0) {
       return NaN
@@ -333,7 +333,7 @@ export class Relation {
    *
    * @returns `BASIC_RELATIONS.every(br => !gr.impliedBy(br) || this.impliedBy(br))`
    */
-  impliedBy (gr: this): boolean {
+  impliedBy(gr: this): boolean {
     assert(gr instanceof this.typedConstructor())
 
     return (this.bitPattern & gr.bitPattern) === gr.bitPattern
@@ -364,7 +364,7 @@ export class Relation {
    *
    * @returns `gr.impliedBy(this)`
    */
-  implies (gr: this): boolean {
+  implies(gr: this): boolean {
     assert(gr instanceof this.typedConstructor())
 
     return (gr.bitPattern & this.bitPattern) === this.bitPattern
@@ -449,7 +449,7 @@ export class Relation {
    *
    * @returns BASIC_RELATIONS.every(br => this.impliedBy(br) === !result.impliedBy(br))
    */
-  complement (): this {
+  complement(): this {
     /*
      * implemented as the XOR of the FULL bit pattern with this bit pattern;
      * this simply replaces 0 with 1 and 1 with 0.
@@ -460,7 +460,7 @@ export class Relation {
   /**
    * @return BASIC_RELATIONS.every(br => result.impliedBy(br) === this.impliedBy(br) && !gr.impliedBy(br))
    */
-  min (gr: this): this {
+  min(gr: this): this {
     /* e.g.,
        this 10011 01100
          gr 11011 00101
@@ -474,7 +474,7 @@ export class Relation {
   /**
    * A representation of the relation in using BASIC_REPRESENTATIONS for basic relations.
    */
-  toString (): string {
+  toString(): string {
     return `(${this.typedConstructor()
       .BASIC_RELATIONS.reduce((acc: string[], br) => {
         if (this.impliedBy(br)) {
@@ -500,7 +500,7 @@ export class Relation {
    * R.RELATIONS.every(gr => gr === emptyRelation() || !emptyRelation().impliedBy(gr))
    * ```
    */
-  public static emptyRelation<R extends Relation> (this: RelationConstructor<R>): R {
+  public static emptyRelation<R extends Relation>(this: RelationConstructor<R>): R {
     return this.generalRelation(EMPTY_BIT_PATTERN)
   }
 
@@ -513,7 +513,7 @@ export class Relation {
    * R.RELATIONS.every(gr => fullRelation().impliedBy(gr))
    * ```
    */
-  public static fullRelation<R extends Relation> (this: RelationConstructor<R>): R {
+  public static fullRelation<R extends Relation>(this: RelationConstructor<R>): R {
     return this.generalRelation(fullBitPattern(this.NR_OF_BITS))
   }
 
@@ -534,7 +534,7 @@ export class Relation {
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.some(gr => gr.impliedBy(br)))
    */
-  public static or<R extends Relation> (...gr: readonly R[]): R {
+  public static or<R extends Relation>(...gr: readonly R[]): R {
     // noinspection SuspiciousTypeOfGuard
     assert(gr.every(grr => grr instanceof this))
 
@@ -553,7 +553,7 @@ export class Relation {
    *
    * @result BASIC_RELATIONS.every(br => result.impliedBy(br) === gr.every(gr => gr.impliedBy(br)))
    */
-  public static and<R extends Relation> (...gr: R[]): R {
+  public static and<R extends Relation>(...gr: R[]): R {
     // noinspection SuspiciousTypeOfGuard
     assert(gr.every(grr => grr instanceof this))
 
@@ -573,7 +573,7 @@ export class Relation {
    *               .filter(l => BASIC_REPRESENTATIONS.includes(l))
    *               .every(l => s.includes(l))
    */
-  public static fromString<R extends Relation> (this: RelationConstructor<R>, s: string): R {
+  public static fromString<R extends Relation>(this: RelationConstructor<R>, s: string): R {
     // noinspection SuspiciousTypeOfGuard
     assert(typeof s === 'string')
 

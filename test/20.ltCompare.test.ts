@@ -43,7 +43,7 @@ const cases: Array<Case<unknown>> = [
   { label: 'Boolean', smaller: Boolean(false), larger: Boolean(true) },
   { label: 'array', smaller: [1, 3], larger: [2, 3] },
   { label: 'array', smaller: [11], larger: [2] },
-  { label: 'function', smaller: () => 5, larger: function a () {} },
+  { label: 'function', smaller: () => 5, larger: function a() {} },
   { label: 'function vs object', smaller: () => 5, larger: {} }
 ]
 
@@ -91,11 +91,11 @@ describe('ltComparator', function () {
         class A {
           private readonly i: number
 
-          constructor (i: number) {
+          constructor(i: number) {
             this.i = i
           }
 
-          [Symbol.toPrimitive] (): number {
+          [Symbol.toPrimitive](): number {
             return this.i
           }
         }
@@ -112,11 +112,11 @@ describe('ltComparator', function () {
         class A {
           private readonly i: number
 
-          constructor (i: number) {
+          constructor(i: number) {
             this.i = i
           }
 
-          valueOf (): number {
+          valueOf(): number {
             return this.i
           }
         }
@@ -133,11 +133,11 @@ describe('ltComparator', function () {
         class A {
           private readonly i: number
 
-          constructor (i: number) {
+          constructor(i: number) {
             this.i = i
           }
 
-          toString (): string {
+          toString(): string {
             return this.i.toString()
           }
         }

@@ -25,7 +25,7 @@ import { createIntervalCoupleCases, type NonDegenerateTestIntervals } from './_c
 import { intervalToString } from './_intervalToString'
 
 describe('compareIntervals', function () {
-  function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
+  function generateTests<T>(label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
     const crossReference26 = new Map<AllenRelation, number[]>()
     crossReference26.set(AllenRelation.PRECEDES, [-1])
     crossReference26.set(AllenRelation.MEETS, [-1])
@@ -56,7 +56,7 @@ describe('compareIntervals', function () {
 
     const cases = createIntervalCoupleCases<T>(points)
 
-    function callIt (i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): number {
+    function callIt(i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): number {
       return compareFn !== undefined && compareFn !== null
         ? /* prettier-ignore */ compareIntervals(i1, i2, compareFn)
         : compareIntervals(i1, i2)

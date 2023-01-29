@@ -39,7 +39,7 @@ export class UpdateConflict extends Error {
   public readonly oldIJRelation: AllenRelation
   public readonly newIJRelation: AllenRelation
 
-  constructor (i: string, j: string, oldIJRelation: AllenRelation, newIJRelation: AllenRelation) {
+  constructor(i: string, j: string, oldIJRelation: AllenRelation, newIJRelation: AllenRelation) {
     super(`Conflicting relation update: ${i} -- ${oldIJRelation.toString()} / ${newIJRelation.toString()} -> ${j}`)
     this.i = i
     this.j = j
@@ -54,7 +54,7 @@ export class Network {
 
   private readonly known: IntervalRelations = {}
 
-  private isEarlierOrUnknownInterval (i: string, j: string): boolean {
+  private isEarlierOrUnknownInterval(i: string, j: string): boolean {
     notEqual(i, j)
 
     const indexI = this.intervals.indexOf(i)
@@ -68,7 +68,7 @@ export class Network {
     return indexI < indexJ
   }
 
-  private sparseRead (i: string, j: string): AllenRelation {
+  private sparseRead(i: string, j: string): AllenRelation {
     assert(i !== j)
     assert(this.isEarlierOrUnknownInterval(i, j))
 
@@ -78,7 +78,7 @@ export class Network {
     return result ?? AllenRelation.FULL
   }
 
-  get (i: string, j: string): AllenRelation {
+  get(i: string, j: string): AllenRelation {
     return i === j
       ? AllenRelation.EQUALS
       : /* prettier-ignore */ this.isEarlierOrUnknownInterval(i, j)
@@ -86,7 +86,7 @@ export class Network {
         : this.sparseRead(j, i).converse()
   }
 
-  private lazySparseUpdate (i: string, j: string, rij: AllenRelation): void {
+  private lazySparseUpdate(i: string, j: string, rij: AllenRelation): void {
     assert(i !== j)
     assert(this.isEarlierOrUnknownInterval(i, j))
 
@@ -105,7 +105,7 @@ export class Network {
     o[j] = rij
   }
 
-  private update (i: string, j: string, rij: AllenRelation): void {
+  private update(i: string, j: string, rij: AllenRelation): void {
     if (i === j) {
       return
     }
@@ -117,7 +117,7 @@ export class Network {
     }
   }
 
-  add (i: string, j: string, r: AllenRelation): void {
+  add(i: string, j: string, r: AllenRelation): void {
     if (!this.intervals.includes(i)) {
       this.intervals.push(i)
     }
@@ -154,7 +154,7 @@ export class Network {
   /**
    * Markdown table representation of the network.
    */
-  toString (): string {
+  toString(): string {
     /* maximum lenght of interval name, for padding */
     const padI = Math.max(
       this.intervals.reduce((acc, i) => {

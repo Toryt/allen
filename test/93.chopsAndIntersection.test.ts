@@ -32,7 +32,7 @@ const label2 = 'second label'
 
 describe('choppedAndIntersection', function () {
   describe('intersection', function () {
-    function generateTests<T> (
+    function generateTests<T>(
       label: string,
       pointType: TypeRepresentation,
       points: T[],
@@ -60,7 +60,7 @@ describe('choppedAndIntersection', function () {
 
       const cases = createIntervalCoupleCases<T>(points)
 
-      function callIt (
+      function callIt(
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
       ): Readonly<Interval<T>> | undefined | false {
@@ -69,7 +69,7 @@ describe('choppedAndIntersection', function () {
           : intersection(li1, li2)
       }
 
-      function moreOrLessEqual (one: Readonly<Interval<T>>, other: Readonly<Interval<T>> | undefined | false): void {
+      function moreOrLessEqual(one: Readonly<Interval<T>>, other: Readonly<Interval<T>> | undefined | false): void {
         ok(other)
         const oneOtherRelation = AllenRelation.relation(one, other, compareFn)
         if (one.end === undefined) {
@@ -81,7 +81,7 @@ describe('choppedAndIntersection', function () {
         }
       }
 
-      function hasExpectedReferenceIntervals (
+      function hasExpectedReferenceIntervals(
         i: Readonly<Interval<T>>,
         i1: Readonly<Interval<T>>,
         i2: Readonly<Interval<T>>
@@ -93,7 +93,7 @@ describe('choppedAndIntersection', function () {
         i.referenceIntervals[label2][0].should.equal(i2)
       }
 
-      function areSameIntervals (
+      function areSameIntervals(
         one: Readonly<Interval<T>> | undefined | false,
         other: Readonly<Interval<T>> | undefined | false,
         i1: Readonly<Interval<T>>,
@@ -168,7 +168,7 @@ describe('choppedAndIntersection', function () {
     )
   })
   describe('chops', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
+    function generateTests<T>(label: string, points: T[], compareFn?: Comparator<T>): void {
       const chopWithSourceRelations = [
         AllenRelation.PRECEDES,
         AllenRelation.MEETS,
@@ -184,7 +184,7 @@ describe('choppedAndIntersection', function () {
 
       const cases = createIntervalCoupleCases<T>(points)
 
-      function callIt (
+      function callIt(
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
       ): ReadonlyArray<Readonly<Interval<T>>> | false {
@@ -193,7 +193,7 @@ describe('choppedAndIntersection', function () {
           : chops(li1, li2)
       }
 
-      function callIntersection (
+      function callIntersection(
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
       ): Readonly<Interval<T>> | undefined | false {

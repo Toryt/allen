@@ -31,7 +31,7 @@ import { type TypeFor } from './type'
  */
 export type Chain<T> = ReadonlyArray<Readonly<ChainInterval<T>>> & { __brand: 'ChainIntervalChain' }
 
-export function isChain<TR extends TypeRepresentation> (
+export function isChain<TR extends TypeRepresentation>(
   candidate: unknown,
   pointType: TR,
   compareFn?: Comparator<TypeFor<TR>>
@@ -72,7 +72,7 @@ export function isChain<TR extends TypeRepresentation> (
  * Elements of the result have the {@link ChainInterval} they represent as prototype. The last one does not have an
  * `end`.
  */
-export function chainToGaplessLeftDefiniteSequence<T> (
+export function chainToGaplessLeftDefiniteSequence<T>(
   cis: Chain<T>,
   compareFn?: Comparator<T>
 ): ReadonlyArray<Readonly<Interval<T>>> {

@@ -23,7 +23,7 @@ export class E extends Relation {
   public static readonly NR_OF_BITS = 3
   public static readonly BASIC_REPRESENTATIONS = Object.freeze(['x', 'y', 'z'] as const)
 
-  public static generalRelation (index: number): E {
+  public static generalRelation(index: number): E {
     if (RELATIONS_CACHE[index] === undefined) {
       RELATIONS_CACHE[index] = new E(index)
     }
@@ -38,26 +38,26 @@ export class E extends Relation {
     basicRelationBitPatterns(this.NR_OF_BITS).map(bitPattern => E.generalRelation(bitPattern))
   )
 
-  extraMethod (): number {
+  extraMethod(): number {
     return 4
   }
 
-  noParamReturnsThisType (): this {
+  noParamReturnsThisType(): this {
     return this.typedConstructor().BASIC_RELATIONS[0]
   }
 
-  noParamReturnsE (): E {
+  noParamReturnsE(): E {
     return E.BASIC_RELATIONS[0]
   }
 
-  thisParamReturnsThisType (t: this): this {
+  thisParamReturnsThisType(t: this): this {
     if (this.implies(t)) {
       return this.typedConstructor().generalRelation(this.bitPattern & t.bitPattern)
     }
     return this.typedConstructor().generalRelation(this.bitPattern | t.bitPattern)
   }
 
-  thisParamReturnsE (t: this): E {
+  thisParamReturnsE(t: this): E {
     if (this.implies(t)) {
       return this.typedConstructor().generalRelation(this.bitPattern & t.bitPattern)
     }
@@ -74,7 +74,7 @@ export class E extends Relation {
   //   return this.typedConstructor().RELATIONS[this.bitPattern | t.bitPattern]
   // }
 
-  public static e (s: string): E {
+  public static e(s: string): E {
     return this.fromString<E>(s)
   }
 }

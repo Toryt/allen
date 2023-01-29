@@ -17,7 +17,7 @@
 export class A {
   public a: number
 
-  constructor (a: number) {
+  constructor(a: number) {
     this.a = a
   }
 }
@@ -25,7 +25,7 @@ export class A {
 export class B extends A {
   public b: string
 
-  constructor () {
+  constructor() {
     super(444)
     this.b = 'a string'
   }
@@ -34,7 +34,7 @@ export class B extends A {
 export class C {
   public c: boolean
 
-  constructor () {
+  constructor() {
     this.c = false
   }
 }

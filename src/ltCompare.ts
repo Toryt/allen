@@ -30,7 +30,7 @@ import { commonTypeRepresentation } from './TypeRepresentation'
  *
  * is accepted by TypeScript. There is no way in TypeScript to express “not a `symbol`”.
  */
-export function isLTComparableOrIndefinite (u: unknown): boolean {
+export function isLTComparableOrIndefinite(u: unknown): boolean {
   return u === undefined || u === null || (typeof u !== 'symbol' && !Number.isNaN(u))
 }
 
@@ -44,7 +44,7 @@ const haveCommonType: string = 't1 and t2 must be of a common type'
  * This function cannot be used with `symbol` valus or `NaN` (unless some methods used by the `<` operator are
  * overridden in a very clever way).
  */
-export function ltCompare<T> (t1: T, t2: T): number {
+export function ltCompare<T>(t1: T, t2: T): number {
   notStrictEqual(t1, undefined, noUndefined)
   notStrictEqual(t2, undefined, noUndefined)
   notStrictEqual(t1, null, noNull)

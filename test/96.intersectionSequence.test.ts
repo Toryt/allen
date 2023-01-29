@@ -29,8 +29,8 @@ import { transposeAndOrder } from '../src/transposeAndOrder'
 const sedf = AllenRelation.fromString<AllenRelation>('sedf')
 
 describe('intersectionSequence', function () {
-  function generateTests<T> (label: string, points: readonly T[], compareFn?: Comparator<T>): void {
-    function validateResult (
+  function generateTests<T>(label: string, points: readonly T[], compareFn?: Comparator<T>): void {
+    function validateResult(
       sources: Readonly<ReferenceIntervals<T>>,
       result: ReadonlyArray<Readonly<Interval<T>>>,
       gaps?: boolean
@@ -75,7 +75,7 @@ describe('intersectionSequence', function () {
       })
     }
 
-    function callIt (sources: Readonly<ReferenceIntervals<T>>): ReadonlyArray<Readonly<Interval<T>>> | false {
+    function callIt(sources: Readonly<ReferenceIntervals<T>>): ReadonlyArray<Readonly<Interval<T>>> | false {
       return compareFn !== undefined && compareFn !== null
         ? /* prettier-ignore */ intersectionSequence(sources, compareFn)
         : intersectionSequence(sources)

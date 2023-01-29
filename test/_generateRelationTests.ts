@@ -25,7 +25,7 @@ export interface RelationExpectations {
   representation: string
 }
 
-export function generateRelationTests<R extends Relation> (
+export function generateRelationTests<R extends Relation>(
   relationName: string,
   RConstructor: RelationConstructor<R>,
   basicRelationConstants: RelationExpectations[],
@@ -43,7 +43,7 @@ export function generateRelationTests<R extends Relation> (
     r2: R
   }
 
-  function relationConstant (brName: string): R {
+  function relationConstant(brName: string): R {
     return (RConstructor as any)[brName]
   }
 
@@ -337,7 +337,7 @@ export function generateRelationTests<R extends Relation> (
     })
   })
   describe('#min', function () {
-    function check (ra: R, rb: R): void {
+    function check(ra: R, rb: R): void {
       const result = ra.min(rb)
       RConstructor.BASIC_RELATIONS.forEach(br =>
         result.impliedBy(br).should.equal(ra.impliedBy(br) && !rb.impliedBy(br))

@@ -27,7 +27,7 @@ import assert from 'assert'
 
 const sixSymbols = generateSixSymbols('enclosing')
 
-function hasSmallerStart<T> (i1: Interval<T>, i2: Interval<T>, compare: Comparator<T>): boolean {
+function hasSmallerStart<T>(i1: Interval<T>, i2: Interval<T>, compare: Comparator<T>): boolean {
   assert(i2.start !== undefined && i2.start !== null)
 
   if (i1.start === undefined || i1.start === null) {
@@ -92,7 +92,7 @@ const optionCases: OptionCase[] = [
 ]
 
 describe('isSequence', function () {
-  function generateSequenceTests<T> (
+  function generateSequenceTests<T>(
     callIt: (is: Array<Interval<T>>, optionsBase: OptionsBase | undefined) => boolean,
     points: T[]
   ): void {
@@ -355,8 +355,8 @@ describe('isSequence', function () {
     })
   }
 
-  function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
-    function callIt (is: Array<Interval<T>>, optionsBase: OptionsBase | undefined): boolean {
+  function generateTests<T>(label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
+    function callIt(is: Array<Interval<T>>, optionsBase: OptionsBase | undefined): boolean {
       const options: SequenceOptions<T> | undefined =
         optionsBase === undefined
           ? compareFn === undefined || compareFn === null

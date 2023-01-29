@@ -46,12 +46,12 @@ class ChopAndIntersect {
   intersection: SimpleIntersector
   chops: Chopper
 
-  constructor ({ intersection, chops }: ChopAndIntersectKwargs) {
+  constructor({ intersection, chops }: ChopAndIntersectKwargs) {
     this.intersection = intersection
     this.chops = chops
   }
 
-  referencingIntersection<T> (
+  referencingIntersection<T>(
     li1: ReferencedInterval<T>,
     li2: ReferencedInterval<T>
   ): Readonly<Interval<T>> | undefined | false {
@@ -64,7 +64,7 @@ class ChopAndIntersect {
     return { ...provisional, referenceIntervals: { [li1.reference]: [li1.interval], [li2.reference]: [li2.interval] } }
   }
 
-  cleanIntersection<T> (li1: ReferencedInterval<T>, li2: ReferencedInterval<T>): Readonly<Interval<T>> {
+  cleanIntersection<T>(li1: ReferencedInterval<T>, li2: ReferencedInterval<T>): Readonly<Interval<T>> {
     const provisional: Interval<T> | undefined | false = this.referencingIntersection(li1, li2)
     ok(provisional)
 
@@ -106,7 +106,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
         start: i2.start,
         end: i1.end
       }),
-      chops: function <T> (
+      chops: function <T>(
         this: ChopAndIntersect,
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
@@ -125,7 +125,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
     AllenRelation.FINISHED_BY,
     new ChopAndIntersect({
       intersection: <T>(_: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): Readonly<Interval<T>> => i2,
-      chops: function <T> (
+      chops: function <T>(
         this: ChopAndIntersect,
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
@@ -143,7 +143,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
     AllenRelation.CONTAINS,
     new ChopAndIntersect({
       intersection: <T>(_: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): Readonly<Interval<T>> => i2,
-      chops: function <T> (
+      chops: function <T>(
         this: ChopAndIntersect,
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
@@ -162,7 +162,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
     AllenRelation.STARTS,
     new ChopAndIntersect({
       intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => i1,
-      chops: function <T> (
+      chops: function <T>(
         this: ChopAndIntersect,
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
@@ -180,7 +180,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
     AllenRelation.EQUALS,
     new ChopAndIntersect({
       intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => i1,
-      chops: function <T> (
+      chops: function <T>(
         this: ChopAndIntersect,
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
@@ -193,7 +193,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
     AllenRelation.STARTED_BY,
     new ChopAndIntersect({
       intersection: <T>(_: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): Readonly<Interval<T>> => i2,
-      chops: function <T> (
+      chops: function <T>(
         this: ChopAndIntersect,
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
@@ -211,7 +211,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
     AllenRelation.DURING,
     new ChopAndIntersect({
       intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => i1,
-      chops: function <T> (
+      chops: function <T>(
         this: ChopAndIntersect,
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
@@ -230,7 +230,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
     AllenRelation.FINISHES,
     new ChopAndIntersect({
       intersection: <T>(i1: Readonly<Interval<T>>): Readonly<Interval<T>> => i1,
-      chops: function <T> (
+      chops: function <T>(
         this: ChopAndIntersect,
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
@@ -251,7 +251,7 @@ const chopAndIntersect = new Map<AllenRelation, ChopAndIntersect>([
         start: i1.start,
         end: i2.end
       }),
-      chops: function <T> (
+      chops: function <T>(
         this: ChopAndIntersect,
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>

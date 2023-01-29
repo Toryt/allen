@@ -52,14 +52,14 @@ import { getCompareIfOk } from './getCompareIfOk'
  * If the result is `0`, the actual relation is implied by `(e)`. There are no other meaningful correlations, but the
  * table shows the symmetry.
  */
-export function compareIntervals<T> (
+export function compareIntervals<T>(
   i1: Readonly<Interval<T>>,
   i2: Readonly<Interval<T>>,
   compareFn?: Comparator<T>
 ): number {
   const compare: Comparator<T> = getCompareIfOk([i1, i2], compareFn) // asserts preconditions
 
-  function compareEnd (i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): number {
+  function compareEnd(i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): number {
     if (i1.end === undefined || i1.end === null) {
       if (i2.end !== undefined && i2.end !== null) {
         return +1

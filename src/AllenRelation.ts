@@ -40,7 +40,7 @@ export class AllenRelation extends Relation {
    * not exported from this module. This means, the constructor can be used to refer to, but cannot be called outside
    * this module.
    */
-  private constructor (bitPattern: number, privateSymbol: typeof constructorPrivateSymbol) {
+  private constructor(bitPattern: number, privateSymbol: typeof constructorPrivateSymbol) {
     equal(
       privateSymbol,
       constructorPrivateSymbol,
@@ -81,7 +81,7 @@ export class AllenRelation extends Relation {
    *
    * There are no other `AllenRelation`s than the instances of this array.
    */
-  public static generalRelation (index: number): AllenRelation {
+  public static generalRelation(index: number): AllenRelation {
     equal(typeof index, 'number')
     assert(Number.isInteger(index))
     assert(index >= EMPTY_BIT_PATTERN)
@@ -788,7 +788,7 @@ export class AllenRelation extends Relation {
    * BASIC_RELATIONS.every(br => !this.impliedBy(br) || this.converse().impliedBy(br.converse()))
    * ```
    */
-  converse (): AllenRelation {
+  converse(): AllenRelation {
     /* Given the order in which the basic relations occur in the bit pattern, the converse is the reverse bit pattern
        (read the bit pattern from left to right instead of right to left). We need to add a `32 - NR_OF_BITS` bit shift
        to compensate for the fact that we store the `NR_OF_BITS` bit bitpattern in a 32 bit int. */
@@ -1012,7 +1012,7 @@ export class AllenRelation extends Relation {
    *
    * @result BASIC_RELATIONS.every(br1 => BASIC_RELATIONS.every(br2 => !br1.implies(this) || !br2.implies(gr) || result.impliedBy(BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()]))
    */
-  compose (gr: AllenRelation): AllenRelation {
+  compose(gr: AllenRelation): AllenRelation {
     // noinspection SuspiciousTypeOfGuard
     assert(gr instanceof AllenRelation)
 
@@ -1074,7 +1074,7 @@ export class AllenRelation extends Relation {
    * @param compareFn - optional compare function with traditional semantics; mandatory when any point is `NaN`, or
    *                    symbols are used
    */
-  static relation<T> (i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>, compareFn?: Comparator<T>): AllenRelation {
+  static relation<T>(i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>, compareFn?: Comparator<T>): AllenRelation {
     const compare: Comparator<T> = getCompareIfOk([i1, i2], compareFn)
 
     const i1Start: Indefinite<T> = i1.start

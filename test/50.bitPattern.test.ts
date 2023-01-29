@@ -189,7 +189,7 @@ describe('bitPattern', function () {
           it('reverses the bitPattern correctly', function () {
             this.timeout(5000)
 
-            function bits (n: number): string[] {
+            function bits(n: number): string[] {
               const result = n.toString(2).split('')
               while (result.length < nrOfBits) {
                 result.unshift('0')

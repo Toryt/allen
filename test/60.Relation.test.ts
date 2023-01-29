@@ -19,7 +19,7 @@ import { Relation } from '../src/Relation'
 import { generateRelationTests } from './_generateRelationTests'
 import { E } from './_E'
 
-function isEAsExpected (e: E, isBasic?: boolean, noRecursion?: boolean): void {
+function isEAsExpected(e: E, isBasic?: boolean, noRecursion?: boolean): void {
   e.should.be.an.instanceof(E)
   e.should.be.an.instanceof(Relation)
   if (isBasic === true) {

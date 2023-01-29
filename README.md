@@ -49,7 +49,7 @@ exist algorithms that perform much better. Such optimizations are not supported 
 ```javascript
 const { AllenRelation, PointIntervalRelation } = require('@toryt/allen')
 
-function allenRelationExample () {
+function allenRelationExample() {
   const iiCondition1 = AllenRelation.fromString('psSd')
   const iiCondition2 = AllenRelation.fromString('sde')
   const iiCondition = iiCondition1.compose(iiCondition2)
@@ -65,7 +65,7 @@ function allenRelationExample () {
   return iiActual
 }
 
-function pointIntervalExample () {
+function pointIntervalExample() {
   const piCondition1 = PointIntervalRelation.or(PointIntervalRelation.BEFORE, PointIntervalRelation.TERMINATES)
   const iiCondition2 = AllenRelation.fromString('sde')
   const piCondition = piCondition1.compose(iiCondition2)
@@ -87,7 +87,7 @@ function pointIntervalExample () {
 ```ts
 import { AllenRelation, Interval, PointIntervalRelation } from '@toryt/allen'
 
-function allenRelationExample (): AllenRelation {
+function allenRelationExample(): AllenRelation {
   const iiCondition1: AllenRelation = AllenRelation.fromString<AllenRelation>('psSd')
   const iiCondition2: AllenRelation = AllenRelation.fromString<AllenRelation>('sde')
   const iiCondition: AllenRelation = iiCondition1.compose(iiCondition2)
@@ -103,7 +103,7 @@ function allenRelationExample (): AllenRelation {
   return iiActual
 }
 
-function pointIntervalExample (): PointIntervalRelation {
+function pointIntervalExample(): PointIntervalRelation {
   const piCondition1: PointIntervalRelation = PointIntervalRelation.or(
     PointIntervalRelation.BEFORE,
     PointIntervalRelation.TERMINATES

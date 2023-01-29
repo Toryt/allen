@@ -50,7 +50,7 @@ export class PointIntervalRelation extends Relation {
    *
    * There are no other `PointIntervalRelation`s than the instances of this array.
    */
-  public static generalRelation (index: number): PointIntervalRelation {
+  public static generalRelation(index: number): PointIntervalRelation {
     equal(typeof index, 'number')
     assert(Number.isInteger(index))
     assert(index >= EMPTY_BIT_PATTERN)
@@ -328,7 +328,7 @@ export class PointIntervalRelation extends Relation {
    *
    * @result BASIC_RELATIONS.every(bpir => AllenRelation.BASIC_RELATIONS.every(bar => !bpir.implies(this) || !bar.implies(ar) || result.impliedBy(BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]))
    */
-  compose (ar: AllenRelation): PointIntervalRelation {
+  compose(ar: AllenRelation): PointIntervalRelation {
     // noinspection SuspiciousTypeOfGuard
     assert(ar instanceof AllenRelation)
 
@@ -375,7 +375,7 @@ export class PointIntervalRelation extends Relation {
    * @param compareFn - optional compare function with traditional semantics; mandatory when any point is `NaN`, or
    *                    `symbols` are used
    */
-  static relation<T> (
+  static relation<T>(
     t: Readonly<T> | undefined | null,
     i: Readonly<Interval<T>>,
     compareFn?: Comparator<T>

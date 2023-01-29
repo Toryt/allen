@@ -34,7 +34,7 @@ export interface NonDegenerateTestIntervals<T> extends TestIntervals<T> {
  *
  * When `i1` and `i2` are swapped, we expect the `converse` relation.
  */
-export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTestIntervals<T>> {
+export function createIntervalCoupleCases<T>(pts: T[]): Array<NonDegenerateTestIntervals<T>> {
   return [
     /* all indefinite */
     {

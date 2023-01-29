@@ -124,7 +124,7 @@ const trueCases: Array<Case<TypeRepresentation>> = [
     label: 'functions',
     pointType: Function,
     p1: () => 0,
-    p2: function a () {
+    p2: function a() {
       return true
     }
   },
@@ -352,13 +352,13 @@ describe('Interval', function () {
     typeRepresentations.forEach(targetPointType => {
       describe(`pointType ${inspect(targetPointType)}`, function () {
         trueCases.forEach(({ label, pointType, p1, p2, compareFn, compareFnOptional }) => {
-          function reverse<TR extends TypeRepresentation> (comp: Comparator<TypeFor<TR>>) {
-            return function <T extends TypeFor<TR>> (t1: T, t2: T): number {
+          function reverse<TR extends TypeRepresentation>(comp: Comparator<TypeFor<TR>>) {
+            return function <T extends TypeFor<TR>>(t1: T, t2: T): number {
               return -1 * comp(t1, t2)
             }
           }
 
-          function callIt (i: unknown, reverseCompare?: boolean): boolean {
+          function callIt(i: unknown, reverseCompare?: boolean): boolean {
             return reverseCompare !== undefined
               ? compareFn !== undefined
                 ? isInterval(i, targetPointType, reverse(compareFn))

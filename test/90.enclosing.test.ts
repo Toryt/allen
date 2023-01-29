@@ -28,8 +28,8 @@ const sixSymbols = generateSixSymbols('enclosing')
 
 describe('enclosing', function () {
   describe('isEnclosing', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
-      function callIt (i: Interval<T>, is: Array<Interval<T>>): boolean {
+    function generateTests<T>(label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
+      function callIt(i: Interval<T>, is: Array<Interval<T>>): boolean {
         return compareFn !== undefined && compareFn !== null ? isEnclosing(i, is, compareFn) : isEnclosing(i, is)
       }
 
@@ -111,7 +111,7 @@ describe('enclosing', function () {
     expected: Interval<T>
   }
 
-  function generateEnclosingCases<T> (points: T[]): Array<EnclosingCase<T>> {
+  function generateEnclosingCases<T>(points: T[]): Array<EnclosingCase<T>> {
     // expected.start < index 2, expected.end > index 3
     return [
       { label: 'empty collection', is: [], expected: {} },
@@ -182,12 +182,12 @@ describe('enclosing', function () {
   }
 
   describe('isMinimalEnclosing', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
+    function generateTests<T>(label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
       // function compare (t1: T, t2: T): number {
       //   return compareFn !== undefined && compareFn !== null ? compareFn(t1, t2) : ltCompare(t1, t2)
       // }
 
-      function callIt (i: Readonly<Interval<T>>, is: ReadonlyArray<Readonly<Interval<T>>>): boolean {
+      function callIt(i: Readonly<Interval<T>>, is: ReadonlyArray<Readonly<Interval<T>>>): boolean {
         return compareFn !== undefined && compareFn !== null
           ? isMinimalEnclosing(i, is, compareFn)
           : isMinimalEnclosing(i, is)
@@ -242,16 +242,16 @@ describe('enclosing', function () {
     )
   })
   describe('minimalEnclosing', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
-      function compare (t1: T, t2: T): number {
+    function generateTests<T>(label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
+      function compare(t1: T, t2: T): number {
         return compareFn !== undefined && compareFn !== null ? compareFn(t1, t2) : ltCompare(t1, t2)
       }
 
-      function callIt (is: ReadonlyArray<Readonly<Interval<T>>>): Readonly<Interval<T>> {
+      function callIt(is: ReadonlyArray<Readonly<Interval<T>>>): Readonly<Interval<T>> {
         return compareFn !== undefined && compareFn !== null ? minimalEnclosing(is, compareFn) : minimalEnclosing(is)
       }
 
-      function callIsMinimalEnclosing (i: Readonly<Interval<T>>, is: ReadonlyArray<Readonly<Interval<T>>>): boolean {
+      function callIsMinimalEnclosing(i: Readonly<Interval<T>>, is: ReadonlyArray<Readonly<Interval<T>>>): boolean {
         return compareFn !== undefined && compareFn !== null
           ? isMinimalEnclosing(i, is, compareFn)
           : isMinimalEnclosing(i, is)

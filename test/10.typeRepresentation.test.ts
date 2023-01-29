@@ -88,7 +88,7 @@ const trueCases: Array<TrueCase<unknown>> = [
     elements: [
       () => 0,
       undefined,
-      function a () {
+      function a() {
         return true
       }
     ],
