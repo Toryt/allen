@@ -1,5 +1,5 @@
 /*
- Copyright © 2022 by Jan Dockx
+ Copyright © 2022 – 2023 by Jan Dockx
 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
@@ -178,9 +178,9 @@ describe('TypeRepresentation', function () {
   })
   describe('mostSpecializedCommonType', function () {
     interface CommonCase {
-      c1: Constructor<Object>
-      c2: Constructor<Object>
-      expected: Constructor<Object>
+      c1: Constructor<object>
+      c2: Constructor<object>
+      expected: Constructor<object>
     }
 
     const cases: CommonCase[] = [
