@@ -16,20 +16,20 @@
 
 export {
   primitiveTypeRepresentations,
-  Constructor,
-  TypeRepresentation,
+  type Constructor,
+  type TypeRepresentation,
   isTypeRepresentation,
   commonTypeRepresentation
 } from './TypeRepresentation'
-export { TypeFor, Indefinite } from './type'
-export { Comparator } from './Comparator'
+export type { TypeFor, Indefinite } from './type'
+export type { Comparator } from './Comparator'
 export { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
-export { ReferenceIntervals, Interval, isInterval, isReferenceIntervals } from './Interval'
-export { RelationConstructor, Relation } from './Relation' // ok higher
+export { type ReferenceIntervals, type Interval, isInterval, isReferenceIntervals } from './Interval'
+export { type RelationConstructor, Relation } from './Relation' // ok higher
 export { AllenRelation } from './AllenRelation'
 export { PointIntervalRelation } from './PointIntervalRelation'
 export { isEnclosing, isMinimalEnclosing, minimalEnclosing } from './enclosing'
 export { compareIntervals } from './compareIntervals'
-export { isSequence, SequenceOptions } from './isSequence'
-export { ChainInterval, isChainInterval } from './ChainInterval'
-export { Chain, isChain, chainToGaplessLeftDefiniteSequence } from './Chain'
+export { isSequence, type SequenceOptions } from './isSequence'
+export { type ChainInterval, isChainInterval } from './ChainInterval'
+export { type Chain, isChain, chainToGaplessLeftDefiniteSequence } from './Chain'

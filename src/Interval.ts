@@ -18,12 +18,12 @@ import {
   commonTypeRepresentation,
   isTypeRepresentation,
   representsSuperType,
-  TypeRepresentation
+  type TypeRepresentation
 } from './TypeRepresentation'
-import { Indefinite, TypeFor } from './type'
+import { type Indefinite, type TypeFor } from './type'
 import assert from 'assert'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
-import { Comparator } from './Comparator'
+import { type Comparator } from './Comparator'
 
 /**
  * Map where each property holds a collection of Intervals. The property name is often used to refer to the collection.

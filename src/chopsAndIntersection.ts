@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-import { Interval, ReferencedInterval } from './Interval'
-import { Comparator } from './Comparator'
+import { type Interval, type ReferencedInterval } from './Interval'
+import { type Comparator } from './Comparator'
 import { notEqual, ok } from 'assert'
 import { getCompareIfOk } from './getCompareIfOk'
 import { AllenRelation } from './AllenRelation'

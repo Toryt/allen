@@ -16,15 +16,15 @@
 
 /* eslint-env mocha */
 
-import { createIntervalCoupleCases, NonDegenerateTestIntervals } from './_createIntervalCoupleCases'
-import { Interval, isInterval, ReferencedInterval } from '../src/Interval'
+import { createIntervalCoupleCases, type NonDegenerateTestIntervals } from './_createIntervalCoupleCases'
+import { type Interval, isInterval, type ReferencedInterval } from '../src/Interval'
 import { intervalToString } from './_intervalToString'
 import { AllenRelation } from '../src/AllenRelation'
 import { chops, intersection } from '../src/chopsAndIntersection'
-import { Comparator } from '../src/Comparator'
+import { type Comparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import should from 'should'
-import { isSequence, TypeRepresentation } from '../src'
+import { isSequence, type TypeRepresentation } from '../src'
 import { ok } from 'assert'
 
 const label1 = 'first label'
@@ -164,7 +164,7 @@ describe('choppedAndIntersection', function () {
       'symbol',
       'symbol',
       generateSixSymbols('comparareIntervals'),
-      (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
+      (s1: symbol, s2: symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
     )
   })
   describe('chops', function () {
@@ -272,7 +272,7 @@ describe('choppedAndIntersection', function () {
     generateTests<number>('number', sixNumbers)
     generateTests<string>('string', sixStrings)
     generateTests<Date>('Date', sixDates)
-    generateTests<symbol>('symbol', generateSixSymbols('comparareIntervals'), (s1: Symbol, s2: Symbol): number =>
+    generateTests<symbol>('symbol', generateSixSymbols('comparareIntervals'), (s1: symbol, s2: symbol): number =>
       s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
     )
   })

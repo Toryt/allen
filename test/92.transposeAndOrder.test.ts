@@ -17,7 +17,7 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { Interval } from '../src/Interval'
+import { type Interval } from '../src/Interval'
 import { ltCompare } from '../src/ltCompare'
 import { compareIntervals } from '../src/compareIntervals'
 import { transposeAndOrder } from '../src/transposeAndOrder'

@@ -19,7 +19,7 @@
 import should from 'should'
 import { isEnclosing, isMinimalEnclosing, minimalEnclosing } from '../src/enclosing'
 import { AllenRelation } from '../src/AllenRelation'
-import { Interval } from '../src/Interval'
+import { type Interval } from '../src/Interval'
 import { ltCompare } from '../src/ltCompare'
 import assert, { ok } from 'assert'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
@@ -100,7 +100,7 @@ describe('enclosing', function () {
     generateTests<number>('number', sixNumbers)
     generateTests<string>('string', sixStrings)
     generateTests<Date>('Date', sixDates)
-    generateTests<symbol>('symbol', sixSymbols, (s1: Symbol, s2: Symbol): number =>
+    generateTests<symbol>('symbol', sixSymbols, (s1: symbol, s2: symbol): number =>
       s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
     )
   })
@@ -237,7 +237,7 @@ describe('enclosing', function () {
     generateTests<number>('number', sixNumbers)
     generateTests<string>('string', sixStrings)
     generateTests<Date>('Date', sixDates)
-    generateTests<symbol>('symbol', sixSymbols, (s1: Symbol, s2: Symbol): number =>
+    generateTests<symbol>('symbol', sixSymbols, (s1: symbol, s2: symbol): number =>
       s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
     )
   })
@@ -311,7 +311,7 @@ describe('enclosing', function () {
     generateTests<number>('number', sixNumbers)
     generateTests<string>('string', sixStrings)
     generateTests<Date>('Date', sixDates)
-    generateTests<symbol>('symbol', sixSymbols, (s1: Symbol, s2: Symbol): number =>
+    generateTests<symbol>('symbol', sixSymbols, (s1: symbol, s2: symbol): number =>
       s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
     )
   })

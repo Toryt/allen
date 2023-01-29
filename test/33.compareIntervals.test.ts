@@ -17,11 +17,11 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { Interval } from '../src/Interval'
+import { type Interval } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import { compareIntervals } from '../src/compareIntervals'
 import { AllenRelation } from '../src/AllenRelation'
-import { createIntervalCoupleCases, NonDegenerateTestIntervals } from './_createIntervalCoupleCases'
+import { createIntervalCoupleCases, type NonDegenerateTestIntervals } from './_createIntervalCoupleCases'
 import { intervalToString } from './_intervalToString'
 
 describe('compareIntervals', function () {
@@ -80,7 +80,7 @@ describe('compareIntervals', function () {
   generateTests<number>('number', sixNumbers)
   generateTests<string>('string', sixStrings)
   generateTests<Date>('Date', sixDates)
-  generateTests<symbol>('symbol', generateSixSymbols('comparareIntervals'), (s1: Symbol, s2: Symbol): number =>
+  generateTests<symbol>('symbol', generateSixSymbols('comparareIntervals'), (s1: symbol, s2: symbol): number =>
     s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
   )
 })

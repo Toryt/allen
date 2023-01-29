@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import { Constructor, TypeRepresentation } from './TypeRepresentation'
+import { type Constructor, type TypeRepresentation } from './TypeRepresentation'
 
 export type TypeFor<T extends TypeRepresentation> =
   /* prettier-ignore */ T extends 'number'

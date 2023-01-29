@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import { Interval } from '../src/Interval'
+import { type Interval } from '../src/Interval'
 import { inspect } from 'util'
 
 export function intervalToString<T> (i: Interval<T>): string {

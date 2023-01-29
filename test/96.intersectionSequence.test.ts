@@ -17,9 +17,9 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { Interval, ReferencedInterval, ReferenceIntervals } from '../src/Interval'
+import { type Interval, type ReferencedInterval, type ReferenceIntervals } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { Comparator } from '../src/Comparator'
+import { type Comparator } from '../src/Comparator'
 import { AllenRelation } from '../src/AllenRelation'
 import { isSequence } from '../src/isSequence'
 import { intersectionSequence } from '../src/intersectionSequence'
@@ -172,7 +172,7 @@ describe('intersectionSequence', function () {
   generateTests<number>('number', sixNumbers)
   generateTests<string>('string', sixStrings)
   generateTests<Date>('Date', sixDates)
-  generateTests<symbol>('symbol', generateSixSymbols('interSectionSequence'), (s1: Symbol, s2: Symbol): number =>
+  generateTests<symbol>('symbol', generateSixSymbols('interSectionSequence'), (s1: symbol, s2: symbol): number =>
     s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
   )
 })

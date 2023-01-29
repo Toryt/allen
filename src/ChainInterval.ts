@@ -19,11 +19,11 @@ import {
   commonTypeRepresentation,
   isTypeRepresentation,
   representsSuperType,
-  TypeRepresentation,
+  type TypeRepresentation,
   typeRepresentationOf
 } from './TypeRepresentation'
-import { TypeFor } from './type'
-import { Comparator } from './Comparator'
+import { type TypeFor } from './type'
+import { type Comparator } from './Comparator'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 
 /**
@@ -64,7 +64,7 @@ export function getCompareIfOk<T> (
   cis: ReadonlyArray<Readonly<ChainInterval<T>>>,
   compareFn?: Comparator<T>
 ): Comparator<T> {
-  cis.forEach(ci => assert(typeof ci === 'object' && ci !== null))
+  cis.forEach(ci => { assert(typeof ci === 'object' && ci !== null) })
   assert(
     compareFn !== undefined || cis.every(ci => isLTComparableOrIndefinite(ci.start)),
     '`compareFn` is mandatory when `iN.start` is a `symbol` or `NaN`'

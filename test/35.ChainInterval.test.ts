@@ -20,12 +20,12 @@ import 'should'
 import { typeRepresentations } from './_typeRepresentationCases'
 import { inspect } from 'util'
 import { stuffWithUndefined } from './_stuff'
-import { ChainInterval, compareChainIntervals, isChainInterval } from '../src/ChainInterval'
+import { type ChainInterval, compareChainIntervals, isChainInterval } from '../src/ChainInterval'
 import { A, B, C } from './_someClasses'
-import { TypeFor } from '../src/type'
-import { TypeRepresentation } from '../src/TypeRepresentation'
+import { type TypeFor } from '../src/type'
+import { type TypeRepresentation } from '../src/TypeRepresentation'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { Comparator } from '../src/Comparator'
+import { type Comparator } from '../src/Comparator'
 
 const notAnIntervalCandidate = stuffWithUndefined.filter(s => typeof s !== 'object' && typeof s !== 'function')
 
@@ -114,7 +114,7 @@ describe('ChainInterval', function () {
     generateTests('numbers', sixNumbers)
     generateTests('string', sixStrings)
     generateTests('dates', sixDates)
-    generateTests('symbols', generateSixSymbols('compare chain intervals'), (s1: Symbol, s2: Symbol): number =>
+    generateTests('symbols', generateSixSymbols('compare chain intervals'), (s1: symbol, s2: symbol): number =>
       s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
     )
   })

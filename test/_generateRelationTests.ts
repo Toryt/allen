@@ -18,7 +18,7 @@
 
 import 'should'
 import { nrOfRelations, relationBitPatterns } from '../src/bitPattern'
-import { Relation, RelationConstructor } from '../src/Relation'
+import { type Relation, type RelationConstructor } from '../src/Relation'
 
 export interface RelationExpectations {
   name: string

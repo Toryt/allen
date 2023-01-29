@@ -14,13 +14,13 @@
  limitations under the License.
  */
 
-import { Comparator } from './Comparator'
+import { type Comparator } from './Comparator'
 import { ltCompare } from './ltCompare'
-import { commonTypeRepresentation, isTypeRepresentation, TypeRepresentation } from './TypeRepresentation'
-import { ChainInterval, compareChainIntervals, isChainInterval } from './ChainInterval'
-import { Interval } from './Interval'
+import { commonTypeRepresentation, isTypeRepresentation, type TypeRepresentation } from './TypeRepresentation'
+import { type ChainInterval, compareChainIntervals, isChainInterval } from './ChainInterval'
+import { type Interval } from './Interval'
 import assert, { notEqual, ok } from 'assert'
-import { TypeFor } from './type'
+import { type TypeFor } from './type'
 
 /**
  * An array of {@link ChainInterval} elements. Each element has a definite `start`. The `end` of each element is

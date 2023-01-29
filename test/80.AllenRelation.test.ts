@@ -19,11 +19,11 @@
 import 'should'
 import { generateRelationTests } from './_generateRelationTests'
 import { AllenRelation } from '../src/AllenRelation'
-import { Interval } from '../src/Interval'
+import { type Interval } from '../src/Interval'
 import { ltCompare } from '../src/ltCompare'
 import { intervalToString } from './_intervalToString'
 import { generateSixSymbols, sixArrays, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { createIntervalCoupleCases, NonDegenerateTestIntervals, TestIntervals } from './_createIntervalCoupleCases'
+import { createIntervalCoupleCases, type NonDegenerateTestIntervals, type TestIntervals } from './_createIntervalCoupleCases'
 import { relationBitPatterns } from '../src/bitPattern'
 
 describe('AllenRelation', function () {
@@ -310,7 +310,7 @@ describe('AllenRelation', function () {
     generateTests<symbol>(
       'symbol with compare',
       generateSixSymbols('allen relation'),
-      (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
+      (s1: symbol, s2: symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
     )
   })
 })

@@ -19,17 +19,17 @@
 import 'should'
 import { inspect } from 'util'
 import { stuff, stuffWithUndefined } from './_stuff'
-import { Interval, isInterval, isReferenceIntervals, ReferenceIntervals } from '../src/Interval'
+import { type Interval, isInterval, isReferenceIntervals, type ReferenceIntervals } from '../src/Interval'
 import { typeRepresentations } from './_typeRepresentationCases'
 import {
   commonTypeRepresentation,
   representsSuperType,
-  TypeRepresentation,
+  type TypeRepresentation,
   typeRepresentationOf
 } from '../src/TypeRepresentation'
-import { TypeFor } from '../src/type'
+import { type TypeFor } from '../src/type'
 import { A, B, C } from './_someClasses'
-import { Comparator } from '../src/Comparator'
+import { type Comparator } from '../src/Comparator'
 import { ltCompare } from '../src/ltCompare'
 import { ok } from 'assert'
 

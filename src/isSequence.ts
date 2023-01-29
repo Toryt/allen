@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-import { Comparator } from './Comparator'
-import { Interval } from './Interval'
+import { type Comparator } from './Comparator'
+import { type Interval } from './Interval'
 import { getCompareIfOk } from './getCompareIfOk'
 import assert from 'assert'
 import { compareIntervals } from './compareIntervals'

@@ -17,9 +17,9 @@
 import assert, { equal } from 'assert'
 import { Relation } from './Relation'
 import { basicRelationBitPatterns, EMPTY_BIT_PATTERN, fullBitPattern, reverse } from './bitPattern'
-import { Interval } from './Interval'
-import { Comparator } from './Comparator'
-import { Indefinite } from './type'
+import { type Interval } from './Interval'
+import { type Comparator } from './Comparator'
+import { type Indefinite } from './type'
 import { getCompareIfOk } from './getCompareIfOk'
 
 const RELATIONS_CACHE: AllenRelation[] = []

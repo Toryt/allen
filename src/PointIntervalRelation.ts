@@ -15,8 +15,8 @@
  */
 
 import assert, { equal, ok } from 'assert'
-import { Interval, isInterval } from './Interval'
-import { Comparator } from './Comparator'
+import { type Interval, isInterval } from './Interval'
+import { type Comparator } from './Comparator'
 import { commonTypeRepresentation } from './TypeRepresentation'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { Relation } from './Relation'

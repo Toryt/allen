@@ -18,7 +18,7 @@
 
 import 'should'
 import { PointIntervalRelation } from '../src/PointIntervalRelation'
-import { Interval } from '../src/Interval'
+import { type Interval } from '../src/Interval'
 import { inspect } from 'util'
 import { intervalToString } from './_intervalToString'
 import { generateRelationTests } from './_generateRelationTests'
@@ -230,7 +230,7 @@ describe('PointIntervalRelation', function () {
     generateAllPointIntervalRelationTests(
       'symbol',
       generateSixSymbols('point interval relation'),
-      (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
+      (s1: symbol, s2: symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
     )
   })
 })

@@ -17,15 +17,15 @@
 import should from 'should'
 import {
   AllenRelation,
-  Chain,
-  ChainInterval,
+  type Chain,
+  type ChainInterval,
   chainToGaplessLeftDefiniteSequence,
   commonTypeRepresentation,
-  Comparator,
+  type Comparator,
   compareIntervals,
-  Constructor,
-  Indefinite,
-  Interval,
+  type Constructor,
+  type Indefinite,
+  type Interval,
   isChain,
   isChainInterval,
   isEnclosing,
@@ -39,12 +39,12 @@ import {
   minimalEnclosing,
   PointIntervalRelation,
   primitiveTypeRepresentations,
-  ReferenceIntervals,
+  type ReferenceIntervals,
   Relation,
-  RelationConstructor,
-  SequenceOptions,
-  TypeFor,
-  TypeRepresentation
+  type RelationConstructor,
+  type SequenceOptions,
+  type TypeFor,
+  type TypeRepresentation
 } from '../src'
 import assert from 'assert'
 import { basicRelationBitPatterns, relationBitPatterns } from '../src/bitPattern'

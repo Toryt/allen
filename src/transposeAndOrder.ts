@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-import { isReferenceIntervals, ReferencedInterval, ReferenceIntervals } from './Interval'
-import { Comparator } from './Comparator'
+import { isReferenceIntervals, type ReferencedInterval, type ReferenceIntervals } from './Interval'
+import { type Comparator } from './Comparator'
 import assert, { equal, ok } from 'assert'
 import { compareIntervals } from './compareIntervals'
 import { commonTypeRepresentation } from './TypeRepresentation'

@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-import { Interval, ReferencedInterval, ReferenceIntervals } from './Interval'
-import { Comparator } from './Comparator'
+import { type Interval, type ReferencedInterval, type ReferenceIntervals } from './Interval'
+import { type Comparator } from './Comparator'
 import { equal, ok } from 'assert'
 import { transposeAndOrder } from './transposeAndOrder'
 

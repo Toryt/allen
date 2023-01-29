@@ -17,11 +17,11 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { Interval } from '../src/Interval'
+import { type Interval } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { isSequence, SequenceOptions } from '../src/isSequence'
+import { isSequence, type SequenceOptions } from '../src/isSequence'
 import { AllenRelation } from '../src/AllenRelation'
-import { Comparator } from '../src/Comparator'
+import { type Comparator } from '../src/Comparator'
 import { ltCompare } from '../src/ltCompare'
 import assert from 'assert'
 
@@ -459,7 +459,7 @@ describe('isSequence', function () {
   generateTests<number>('number', sixNumbers)
   generateTests<string>('string', sixStrings)
   generateTests<Date>('Date', sixDates)
-  generateTests<symbol>('symbol', sixSymbols, (s1: Symbol, s2: Symbol): number =>
+  generateTests<symbol>('symbol', sixSymbols, (s1: symbol, s2: symbol): number =>
     s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
   )
 })

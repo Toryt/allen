@@ -18,12 +18,12 @@
 
 import {
   commonTypeRepresentation,
-  Constructor,
+  type Constructor,
   isTypeRepresentation,
   mostSpecializedCommonType,
   primitiveTypeRepresentations,
   representsSuperType,
-  TypeRepresentation,
+  type TypeRepresentation,
   typeRepresentationOf
 } from '../src/TypeRepresentation'
 import { inspect } from 'util'
