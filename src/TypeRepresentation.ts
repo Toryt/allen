@@ -1,5 +1,5 @@
 /*
- Copyright © 2022 – 2023 by Jan Dockx
+ Copyright © 2022 by Jan Dockx
 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
@@ -25,13 +25,8 @@ export const primitiveTypeRepresentations = ['number', 'bigint', 'string', 'bool
  * An `object` or `function` instances dynamic type is expressed by its constructor.
  *
  * Any constructor represents a type.
- *
- * Why is this using `Record`? Because of feedback from `eslint`:
- *
- * > Don't use `Object` as a type. The `Object` type actually means “any non-nullish value”, so it is marginally better
- * > than `unknown`. If you want a type meaning “any object”, you probably want `Record<string, unknown>` instead.
  */
-export type Constructor<T extends Record<string, unknown>> = new (...args: never[]) => T
+export type Constructor<T extends Object> = new (...args: never[]) => T
 
 /**
  * _Dynamic representation_ of a type.
@@ -44,13 +39,8 @@ export type Constructor<T extends Record<string, unknown>> = new (...args: never
  * `undefined` as `TypeRepresentation` demands values to be `undefined` or `null`. It notable does _not_ mean “don't
  * care”. `TypeRepresentation` does not include `undefined`, because in some cases that is not allowed. When an
  * `undefined` `TypeRepresentation` has meaning in its context, use `TypeRepresentation | undefined` as type.
- *
- * Why is this using `Record`? Because of feedback from `eslint`:
- *
- * > Don't use `Object` as a type. The `Object` type actually means “any non-nullish value”, so it is marginally better
- * > than `unknown`. If you want a type meaning “any object”, you probably want `Record<string, unknown>` instead.
  */
-export type TypeRepresentation = typeof primitiveTypeRepresentations[number] | Constructor<Record<string, unknown>>
+export type TypeRepresentation = typeof primitiveTypeRepresentations[number] | Constructor<Object>
 
 /**
  * Approximation of determining whether `u` is a {@link TypeRepresentation}.
@@ -77,9 +67,7 @@ export function typeRepresentationOf (u: unknown): TypeRepresentation | undefine
   }
   const typeOfU = typeof u
   assert(typeOfU !== 'undefined')
-  return typeOfU === 'object' || typeOfU === 'function'
-    ? (u.constructor as Constructor<Record<string, unknown>>)
-    : typeOfU
+  return typeOfU === 'object' || typeOfU === 'function' ? (u.constructor as Constructor<Object>) : typeOfU
 }
 
 interface Acc {
@@ -88,10 +76,7 @@ interface Acc {
   result: boolean
 }
 
-export function mostSpecializedCommonType (
-  c1: Constructor<Record<string, unknown>>,
-  c2: Constructor<Record<string, unknown>>
-): Constructor<Record<string, unknown>> {
+export function mostSpecializedCommonType (c1: Constructor<Object>, c2: Constructor<Object>): Constructor<Object> {
   if (c1 === c2 || c2.prototype instanceof c1) {
     return c1
   }
