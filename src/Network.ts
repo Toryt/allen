@@ -18,8 +18,20 @@ import { AllenRelation } from './AllenRelation'
 import assert, { notEqual, ok } from 'assert'
 import { EOL } from 'os'
 
+/**
+ * Map of interval names to an {@link AllenRelation}.
+ *
+ * This represents a sparse row in a matrix of {@link AllenRelation} from the interval for which this row is defined to
+ * all other intervals named in this object.
+ */
 type Relations = Record<string, AllenRelation>
 
+/**
+ * Map of interval names to a {@link Relations} object.
+ *
+ * This is a sparse matrix of the {@link AllenRelation} from the interval named here to all other intervals that are
+ * later in the `intervals` array.
+ */
 type IntervalRelations = Record<string, Relations>
 
 interface ToDo {
@@ -149,6 +161,27 @@ export class Network {
         }
       })
     }
+  }
+
+  /**
+   * Create a new {@link Network}, with the same intervals and Allen relations between them.
+   *
+   * After this, they can evolve separately with {@link add}.
+   *
+   * (Subtypes should override this method to add extra properties they might have.)
+   */
+  clone(): this {
+    const copy: this = new (this.constructor as new () => this)()
+    this.intervals.forEach(interval => {
+      copy.intervals.push(interval)
+    })
+    Object.entries(this.known).forEach(([from, relations]: [string, Relations]) => {
+      copy.known[from] = Object.entries(relations).reduce((acc2: Relations, [to, ar]: [string, AllenRelation]) => {
+        acc2[to] = ar
+        return acc2
+      }, {})
+    }, copy.known)
+    return copy
   }
 
   /**
