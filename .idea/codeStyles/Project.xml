@@ -16,9 +16,6 @@
       <option name="HEX_COLOR_LOWER_CASE" value="true" />
       <option name="HEX_COLOR_LONG_FORMAT" value="true" />
     </CssCodeStyleSettings>
-    <HCL-Terraform>
-      <option name="PROPERTY_ALIGNMENT" value="2" />
-    </HCL-Terraform>
     <HTMLCodeStyleSettings>
       <option name="HTML_KEEP_WHITESPACES" value="true" />
       <option name="HTML_ATTRIBUTE_WRAP" value="4" />
