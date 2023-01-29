@@ -263,12 +263,12 @@ describe('TypeRepresentation', function () {
             }
           })
           it(`${inspect(ptr1)} does not represent 'function'`, function () {
-            // @ts-expect-error
+            // @ts-expect-error because we are testing that indeed this throws
             representsSuperType.bind(undefined, ptr1, 'function').should.throw()
           })
           idiotTypeRepresentations.forEach(s => {
             it(`${inspect(ptr1)} — ${inspect(s)} throws`, function () {
-              // @ts-expect-error
+              // @ts-expect-error because we are testing that indeed this throws
               representsSuperType.bind(undefined, ptr1, s).should.throw()
             })
           })
@@ -280,17 +280,17 @@ describe('TypeRepresentation', function () {
         describe(inspect(s1), function () {
           typeRepresentations.forEach(ptr2 => {
             it(`${inspect(s1)} — ${inspect(ptr2)} throws`, function () {
-              // @ts-expect-error
+              // @ts-expect-error because we are testing that indeed this throws
               representsSuperType.bind(undefined, s1, ptr2).should.throw()
             })
           })
           it(`${inspect(s1)} — 'function' throws`, function () {
-            // @ts-expect-error
+            // @ts-expect-error because we are testing that indeed this throws
             representsSuperType.bind(undefined, s1, 'function').should.throw()
           })
           idiotTypeRepresentations.forEach(s => {
             it(`${inspect(s1)} does not represent ${inspect(s)}`, function () {
-              // @ts-expect-error
+              // @ts-expect-error because we are testing that indeed this throws
               representsSuperType.bind(undefined, s1, s).should.throw()
             })
           })
