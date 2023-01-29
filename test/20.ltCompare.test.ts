@@ -1,12 +1,12 @@
 /*
- Copyright © 2022 by Jan Dockx
-
+ Copyright © 2022 – 2023 by Jan Dockx
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -57,21 +57,20 @@ describe('ltComparator', function () {
           ltCompare(c.smaller, c.larger).should.be.lessThan(0)
         })
         it(`returns zero when the first argument is equal to the second (${inspect(c.smaller)})`, function () {
-          /* prettier-ignore */
           const t =
             c.smaller instanceof Date
               ? new Date(c.smaller.getTime())
               : c.smaller instanceof Number
-                ? Number(c.smaller.valueOf())
-                : c.smaller instanceof BigInt
-                  ? BigInt(c.smaller.valueOf())
-                  : c.smaller instanceof String
-                    ? String(c.smaller.valueOf())
-                    : c.smaller instanceof Boolean
-                      ? Boolean(c.smaller.valueOf())
-                      : typeof c.smaller === 'object'
-                        ? { ...c.smaller }
-                        : c.smaller
+              ? Number(c.smaller.valueOf())
+              : c.smaller instanceof BigInt
+              ? BigInt(c.smaller.valueOf())
+              : c.smaller instanceof String
+              ? String(c.smaller.valueOf())
+              : c.smaller instanceof Boolean
+              ? Boolean(c.smaller.valueOf())
+              : typeof c.smaller === 'object'
+              ? { ...c.smaller }
+              : c.smaller
           ltCompare(t, t).should.equal(0)
         })
         it(`returns a positive number when the first argument (${inspect(

@@ -1,12 +1,12 @@
 /*
- Copyright © 2022 by Jan Dockx
-
+ Copyright © 2022 – 2023 by Jan Dockx
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -60,9 +60,8 @@ export function generateRelationTests<R extends Relation>(
       []
     )
 
-    this['grCombinations'] =
-      /* prettier-ignore */ fullCombinationTest
-        ? allRelations.reduce(
+    this['grCombinations'] = fullCombinationTest
+      ? allRelations.reduce(
           (acc1: RCombination[], gr1: R) =>
             allRelations.reduce((acc2: RCombination[], gr2: R) => {
               acc2.push({ r1: gr1, r2: gr2 })
@@ -70,7 +69,7 @@ export function generateRelationTests<R extends Relation>(
             }, acc1),
           []
         )
-        : allRelations.map((r1, i) => ({
+      : allRelations.map((r1, i) => ({
           r1,
           r2: allRelations[allRelations.length - i - 1]
         }))

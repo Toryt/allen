@@ -1,12 +1,12 @@
 /*
- Copyright © 2022 by Jan Dockx
-
+ Copyright © 2022 – 2023 by Jan Dockx
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -65,7 +65,7 @@ describe('choppedAndIntersection', function () {
         li2: ReferencedInterval<T>
       ): Readonly<Interval<T>> | undefined | false {
         return compareFn !== undefined && compareFn !== null
-          ? /* prettier-ignore */ intersection(li1, li2, compareFn)
+          ? intersection(li1, li2, compareFn)
           : intersection(li1, li2)
       }
 
@@ -188,9 +188,7 @@ describe('choppedAndIntersection', function () {
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
       ): ReadonlyArray<Readonly<Interval<T>>> | false {
-        return compareFn !== undefined && compareFn !== null
-          ? /* prettier-ignore */ chops(li1, li2, compareFn)
-          : chops(li1, li2)
+        return compareFn !== undefined && compareFn !== null ? chops(li1, li2, compareFn) : chops(li1, li2)
       }
 
       function callIntersection(
@@ -198,7 +196,7 @@ describe('choppedAndIntersection', function () {
         li2: ReferencedInterval<T>
       ): Readonly<Interval<T>> | undefined | false {
         return compareFn !== undefined && compareFn !== null
-          ? /* prettier-ignore */ intersection(li1, li2, compareFn)
+          ? intersection(li1, li2, compareFn)
           : intersection(li1, li2)
       }
 

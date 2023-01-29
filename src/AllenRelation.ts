@@ -1,12 +1,12 @@
 /*
  Copyright © 2022 – 2023 by Jan Dockx
-
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -1018,14 +1018,14 @@ export class AllenRelation extends Relation {
 
     return this.typedConstructor().BASIC_RELATIONS.reduce(
       (acc1: this, br1: this) =>
-        /* prettier-ignore */ this.impliedBy(br1)
+        this.impliedBy(br1)
           ? this.typedConstructor().BASIC_RELATIONS.reduce(
-            (acc2: this, br2: this) =>
-              gr.impliedBy(br2)
-                ? AllenRelation.or(acc2, AllenRelation.BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()] as this)
-                : acc2,
-            acc1
-          )
+              (acc2: this, br2: this) =>
+                gr.impliedBy(br2)
+                  ? AllenRelation.or(acc2, AllenRelation.BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()] as this)
+                  : acc2,
+              acc1
+            )
           : acc1,
       this.typedConstructor().emptyRelation()
     )

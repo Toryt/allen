@@ -1,12 +1,12 @@
 /*
- Copyright © 2022 by Jan Dockx
-
+ Copyright © 2022 – 2023 by Jan Dockx
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -334,17 +334,17 @@ export class PointIntervalRelation extends Relation {
 
     return this.typedConstructor().BASIC_RELATIONS.reduce(
       (acc1: PointIntervalRelation, bpir: this) =>
-        /* prettier-ignore */ this.impliedBy(bpir)
+        this.impliedBy(bpir)
           ? AllenRelation.BASIC_RELATIONS.reduce(
-            (acc2: PointIntervalRelation, bar: AllenRelation) =>
-              ar.impliedBy(bar)
-                ? PointIntervalRelation.or(
-                  acc2,
-                  PointIntervalRelation.BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]
-                )
-                : acc2,
-            acc1
-          )
+              (acc2: PointIntervalRelation, bar: AllenRelation) =>
+                ar.impliedBy(bar)
+                  ? PointIntervalRelation.or(
+                      acc2,
+                      PointIntervalRelation.BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]
+                    )
+                  : acc2,
+              acc1
+            )
           : acc1,
       this.typedConstructor().emptyRelation()
     )
