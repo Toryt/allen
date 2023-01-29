@@ -1,5 +1,5 @@
 /*
- Copyright © 2022 – 2023 by Jan Dockx
+ Copyright © 2022 by Jan Dockx
 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
@@ -22,73 +22,13 @@ import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCa
 import { Comparator } from '../src/Comparator'
 import { AllenRelation } from '../src/AllenRelation'
 import { isSequence } from '../src/isSequence'
-import { choppedSequence } from '../src/choppedSequence'
+import { intersectionSequence } from '../src/intersectionSequence'
 import { ok } from 'assert'
 import { transposeAndOrder } from '../src/transposeAndOrder'
 
 const sedf = AllenRelation.fromString<AllenRelation>('sedf')
 
-describe('choppedSequence', function () {
-  describe('compositions', function () {
-    it('has compositions', function () {
-      // possible relations, ordered i1 vs i2: `(pmoFDse)`
-      interface PartRelations {
-        i1: AllenRelation[]
-        i2: AllenRelation[]
-      }
-      const relations = new Map<AllenRelation, PartRelations>()
-      relations.set(AllenRelation.PRECEDES, {
-        i1: [AllenRelation.EQUALS, AllenRelation.PRECEDES],
-        i2: [AllenRelation.PRECEDED_BY, AllenRelation.EQUALS]
-      })
-      relations.set(AllenRelation.MEETS, {
-        i1: [AllenRelation.EQUALS, AllenRelation.MEETS],
-        i2: [AllenRelation.MET_BY, AllenRelation.EQUALS]
-      })
-      relations.set(AllenRelation.OVERLAPS, {
-        i1: [AllenRelation.STARTED_BY, AllenRelation.FINISHED_BY, AllenRelation.MET_BY],
-        i2: [AllenRelation.MET_BY, AllenRelation.STARTED_BY, AllenRelation.FINISHED_BY]
-      })
-      relations.set(AllenRelation.FINISHED_BY, {
-        i1: [AllenRelation.STARTED_BY, AllenRelation.FINISHED_BY],
-        i2: [AllenRelation.MET_BY, AllenRelation.EQUALS]
-      })
-      relations.set(AllenRelation.CONTAINS, {
-        i1: [AllenRelation.STARTED_BY, AllenRelation.CONTAINS, AllenRelation.FINISHED_BY],
-        i2: [AllenRelation.MET_BY, AllenRelation.EQUALS, AllenRelation.MEETS]
-      })
-      relations.set(AllenRelation.STARTS, {
-        i1: [AllenRelation.EQUALS, AllenRelation.MEETS],
-        i2: [AllenRelation.STARTED_BY, AllenRelation.FINISHED_BY]
-      })
-      relations.set(AllenRelation.EQUALS, {
-        i1: [AllenRelation.EQUALS, AllenRelation.EQUALS],
-        i2: [AllenRelation.EQUALS, AllenRelation.EQUALS]
-      })
-      const possibleRelationsI2Vsi3 = [
-        AllenRelation.PRECEDES,
-        AllenRelation.MEETS,
-        AllenRelation.OVERLAPS,
-        AllenRelation.FINISHED_BY,
-        AllenRelation.CONTAINS,
-        AllenRelation.STARTS,
-        AllenRelation.EQUALS
-      ]
-      // we know i2vsi3; we know i2vs elements; what is i3 vs elements?
-      possibleRelationsI2Vsi3.forEach(i2Vsi3 => {
-        const i3VsI2 = i2Vsi3.converse()
-        console.log(`i3 ${i3VsI2.toString()} i2`)
-        relations.forEach((partRelations, i1Vsi2) => {
-          console.log(`  i2 ${i1Vsi2.converse().toString()} i1`)
-          partRelations.i2.forEach((i2VsPart, index) => {
-            const i3VsPart = i3VsI2.compose(i2VsPart)
-            const doesNotConcur = i3VsPart.implies(AllenRelation.DOES_NOT_CONCUR_WITH)
-            console.log(`   i3 ${i3VsPart.toString()} i[${index}] ${doesNotConcur ? '❎' : '❌'}`)
-          })
-        })
-      })
-    })
-  })
+describe('intersectionSequence', function () {
   function generateTests<T> (label: string, points: readonly T[], compareFn?: Comparator<T>): void {
     function validateResult (
       sources: Readonly<ReferenceIntervals<T>>,
@@ -101,9 +41,13 @@ describe('choppedSequence', function () {
         compareFn
       )
       result.forEach(resultInterval => {
-        should(resultInterval).have.ownProperty('referenceIntervals')
         const resultIntervalReferenceIntervals: ReferenceIntervals<T> | undefined = resultInterval.referenceIntervals
+        should(resultIntervalReferenceIntervals).be.an.Object()
         ok(resultIntervalReferenceIntervals)
+        Object.keys(sources).forEach(sk => {
+          should(resultIntervalReferenceIntervals).have.property(sk)
+          resultIntervalReferenceIntervals[sk].should.be.an.Array()
+        })
         sourceReferencedIntervals.forEach((sourceReferencedInterval: Readonly<ReferencedInterval<T>>) => {
           const sourceInterval: Interval<T> = sourceReferencedInterval.interval
           const sourceReference: string = sourceReferencedInterval.reference
@@ -131,16 +75,17 @@ describe('choppedSequence', function () {
       })
     }
 
-    function callIt (sources: Readonly<ReferenceIntervals<T>>): ReadonlyArray<Readonly<Interval<T>>> {
+    function callIt (sources: Readonly<ReferenceIntervals<T>>): ReadonlyArray<Readonly<Interval<T>>> | false {
       return compareFn !== undefined && compareFn !== null
-        ? /* prettier-ignore */ choppedSequence(sources, compareFn)
-        : choppedSequence(sources)
+        ? /* prettier-ignore */ intersectionSequence(sources, compareFn)
+        : intersectionSequence(sources)
     }
 
     describe(label, function () {
       it('returns the empty sequence without sources', function () {
         const sources: ReferenceIntervals<T> = {}
         const result = callIt(sources)
+        ok(result)
         result.should.be.an.Array()
         result.length.should.equal(0)
         validateResult(sources, result)
@@ -149,6 +94,7 @@ describe('choppedSequence', function () {
         const aSource = [{ start: points[0], end: points[1] }]
         const sources: ReferenceIntervals<T> = { aSource }
         const result = callIt(sources)
+        ok(result)
         result.should.be.an.Array()
         result.length.should.equal(1)
         validateResult(sources, result)
@@ -161,6 +107,7 @@ describe('choppedSequence', function () {
         ]
         const sources: ReferenceIntervals<T> = { aSource }
         const result = callIt(sources)
+        ok(result)
         result.should.be.an.Array()
         result.length.should.equal(3)
         validateResult(sources, result)
@@ -171,9 +118,9 @@ describe('choppedSequence', function () {
       //   const i3: Readonly<Interval<T>> = { start: points[0], end: points[2] } // duplicates i1
       //   /* i1 (o) i2
       //        i1 (e) i3
-      //        i2 (O) i3
+      //        i2 (O) i
       //        expect [0, 1[, [1, 2[, [1, 3[ */
-      //   const i4: Readonly<Interval<T>> = { start: points[4], end: points[5] }
+      //   const i4: Readonly<Interval<T>> = { start: points[4], end: poin2ts[5] }
       //   /* i1, i2, i3 (p) i4 */
       //   // MUDO need more points to cover all relations
       //   const sources: Readonly<ReferenceIntervals<T>> = {

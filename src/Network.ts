@@ -18,13 +18,9 @@ import { AllenRelation } from './AllenRelation'
 import assert, { notEqual, ok } from 'assert'
 import { EOL } from 'os'
 
-export interface Relations {
-  [interval: string]: AllenRelation
-}
+type Relations = Record<string, AllenRelation>
 
-export type IntervalRelations = {
-  [interval: string]: Relations
-}
+type IntervalRelations = Record<string, Relations>
 
 interface ToDo {
   i: string
@@ -44,7 +40,7 @@ export class UpdateConflict extends Error {
   public readonly newIJRelation: AllenRelation
 
   constructor (i: string, j: string, oldIJRelation: AllenRelation, newIJRelation: AllenRelation) {
-    super(`Conflicting relation update: ${i} -- ${oldIJRelation} / ${newIJRelation} -> ${j}`)
+    super(`Conflicting relation update: ${i} -- ${oldIJRelation.toString()} / ${newIJRelation.toString()} -> ${j}`)
     this.i = i
     this.j = j
     this.oldIJRelation = oldIJRelation
@@ -54,22 +50,18 @@ export class UpdateConflict extends Error {
 }
 
 export class Network {
-  private _intervals: string[] = []
+  private readonly intervals: string[] = []
 
   private readonly known: IntervalRelations = {}
-
-  get intervals (): readonly string[] {
-    return this._intervals
-  }
 
   private isEarlierOrUnknownInterval (i: string, j: string): boolean {
     notEqual(i, j)
 
-    const indexI = this._intervals.indexOf(i)
+    const indexI = this.intervals.indexOf(i)
     if (indexI < 0) {
       return true
     }
-    const indexJ = this._intervals.indexOf(j)
+    const indexJ = this.intervals.indexOf(j)
     if (indexJ < 0) {
       return true
     }
@@ -89,9 +81,9 @@ export class Network {
   get (i: string, j: string): AllenRelation {
     return i === j
       ? AllenRelation.EQUALS
-      : this.isEarlierOrUnknownInterval(i, j)
-      ? this.sparseRead(i, j)
-      : this.sparseRead(j, i).converse()
+      : /* prettier-ignore */ this.isEarlierOrUnknownInterval(i, j)
+        ? this.sparseRead(i, j)
+        : this.sparseRead(j, i).converse()
   }
 
   private lazySparseUpdate (i: string, j: string, rij: AllenRelation): void {
@@ -126,11 +118,11 @@ export class Network {
   }
 
   add (i: string, j: string, r: AllenRelation): void {
-    if (!this._intervals.includes(i)) {
-      this._intervals.push(i)
+    if (!this.intervals.includes(i)) {
+      this.intervals.push(i)
     }
-    if (!this._intervals.includes(j)) {
-      this._intervals.push(j)
+    if (!this.intervals.includes(j)) {
+      this.intervals.push(j)
     }
     const todos: ToDo[] = []
     todos.push({ i, j, r })
@@ -138,7 +130,7 @@ export class Network {
       const toDo: ToDo | undefined = todos.shift()
       ok(toDo)
       this.update(toDo.i, toDo.j, toDo.r)
-      this._intervals.forEach(k => {
+      this.intervals.forEach(k => {
         if (k !== toDo.i && k !== toDo.j) {
           const nkj = this.get(k, toDo.j)
           const rkj: AllenRelation = AllenRelation.and(nkj, this.get(k, toDo.i).compose(toDo.r))
@@ -147,7 +139,7 @@ export class Network {
           }
         }
       })
-      this._intervals.forEach(k => {
+      this.intervals.forEach(k => {
         if (k !== toDo.i && k !== toDo.j) {
           const nik = this.get(toDo.i, k)
           const rik: AllenRelation = AllenRelation.and(nik, toDo.r.compose(this.get(toDo.j, k)))
@@ -165,19 +157,19 @@ export class Network {
   toString (): string {
     /* maximum lenght of interval name, for padding */
     const padI = Math.max(
-      this._intervals.reduce((acc, i) => {
+      this.intervals.reduce((acc, i) => {
         return Math.max(acc, i.length)
       }, 0),
       3
     )
     return (
-      `| ${'(.)'.padEnd(padI)} |${this._intervals.map(i => ` ${i.padEnd(padAR)} |`).join('')}
-| ${'-'.repeat(padI)} |${this._intervals.map(() => ` ${'-'.repeat(padAR)} |`).join('')}` +
-      this._intervals
+      `| ${'(.)'.padEnd(padI)} |${this.intervals.map(i => ` ${i.padEnd(padAR)} |`).join('')}
+| ${'-'.repeat(padI)} |${this.intervals.map(() => ` ${'-'.repeat(padAR)} |`).join('')}` +
+      this.intervals
         .map(
           i1 =>
             EOL +
-            `| ${i1.padEnd(padI)} |${this._intervals
+            `| ${i1.padEnd(padI)} |${this.intervals
               .map(i2 => ` ${this.get(i1, i2).toString().padEnd(padAR)} |`)
               .join('')}`
         )

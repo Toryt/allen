@@ -225,7 +225,7 @@ describe('compose', function () {
     // console.log()
     // network.add('q', 'vIp', AllenRelation.BEFORE)
     // console.log(network.toString())
-    console.log(`vIp -- ${network.get('vIp', 'vIq')} --> vIq`)
+    console.log(`vIp -- ${network.get('vIp', 'vIq').toString()} --> vIq`)
   })
   it('a', function () {
     console.log()
@@ -240,7 +240,7 @@ describe('compose', function () {
     network.add('q', 'v', AllenRelation.fromString<AllenRelation>('oFDseS'))
     network.add('vIq', 'v', AllenRelation.fromString<AllenRelation>('se'))
     console.log(network.toString())
-    console.log(`vIp -- ${network.get('vIp', 'vIq')} --> vIq`)
+    console.log(`vIp -- ${network.get('vIp', 'vIq').toString()} --> vIq`)
   })
   it('b', function () {
     console.log()
@@ -255,7 +255,7 @@ describe('compose', function () {
     network.add('q', 'v', AllenRelation.fromString<AllenRelation>('oFDseS'))
     network.add('vIq', 'v', AllenRelation.fromString<AllenRelation>('se'))
     console.log(network.toString())
-    console.log(`vIp -- ${network.get('vIp', 'vIq')} --> vIq`)
+    console.log(`vIp -- ${network.get('vIp', 'vIq').toString()} --> vIq`)
   })
   it('c', function () {
     console.log()
@@ -270,7 +270,7 @@ describe('compose', function () {
     network.add('q', 'v', AllenRelation.fromString<AllenRelation>('dfO'))
     network.add('vIq', 'q', AllenRelation.fromString<AllenRelation>('se'))
     console.log(network.toString())
-    console.log(`vIp -- ${network.get('vIp', 'vIq')} --> vIq`)
+    console.log(`vIp -- ${network.get('vIp', 'vIq').toString()} --> vIq`)
   })
   it('d', function () {
     console.log()
@@ -285,6 +285,6 @@ describe('compose', function () {
     network.add('q', 'v', AllenRelation.fromString<AllenRelation>('dfO'))
     network.add('vIq', 'q', AllenRelation.fromString<AllenRelation>('se'))
     console.log(network.toString())
-    console.log(`vIp -- ${network.get('vIp', 'vIq')} --> vIq`)
+    console.log(`vIp -- ${network.get('vIp', 'vIq').toString()} --> vIq`)
   })
 })
