@@ -230,6 +230,13 @@ pull requests there will not be reviewed.</p>
 This code uses the [application to TypeScript][eslint-config-standard-with-typescript] of the [Standard] coding style.
 Tests require complete code coverage.
 
+### Linting and formatting
+
+`eslint` is used for linting, and `prettier` for code formatting. But it is hell to get them to work together nicely,
+for years. At this time,
+[Setting up ESlint with Standard and Prettier](https://medium.com/nerd-for-tech/setting-up-eslint-with-standard-and-prettier-be245cb9fc64)
+seems to be a viable approach.
+
 ## License
 
 Released under the [Apache License, Version 2.0][license].
