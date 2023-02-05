@@ -25,6 +25,7 @@ describe('Network', function () {
     it('can be constructed', function () {
       const subject: Network = new Network()
       should(subject).be.instanceof(Network)
+      subject.intervals().should.be.empty()
       subject.get('a', 'b').should.equal(AllenRelation.FULL)
       subject.get('c', 'c').should.equal(AllenRelation.EQUALS)
     })
