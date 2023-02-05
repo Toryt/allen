@@ -19,6 +19,8 @@
 import { AllenRelation } from '../src'
 import { Network } from '../src/Network'
 import should from 'should'
+import { beforeEach } from 'mocha'
+import { EOL } from 'os'
 
 function relationShouldBe(network: Network, i1: string, i2: string, r: AllenRelation): void {
   network.get(i1, i2).should.equal(r)
@@ -109,45 +111,73 @@ describe('Network', function () {
         this.relationShouldBe('q ∩ v', 'p ∩ v', AllenRelation.FULL)
       })
     })
-    describe('#clone', function () {
-      it('intersections', function () {
+    describe('prepared', function () {
+      beforeEach(function () {
         this.subject.add('p', 'q', AllenRelation.AFTER.complement())
         this.subject.add('p ∩ v', 'p', AllenRelation.ENCLOSED_BY)
         this.subject.add('p ∩ v', 'v', AllenRelation.ENCLOSED_BY)
         this.subject.add('q ∩ v', 'q', AllenRelation.ENCLOSED_BY)
         this.subject.add('q ∩ v', 'v', AllenRelation.ENCLOSED_BY)
+      })
+      describe('#clone', function () {
+        it('intersections', function () {
+          const clone = this.subject.clone()
+          const cloneIntervals = clone.intervals()
+          cloneIntervals.should.be.deepEqual(this.subject.intervals())
+          // console.log(clone.toString())
+          // console.log()
+          cloneIntervals.forEach((ci1, i1) => {
+            cloneIntervals.forEach((ci2, i2) => {
+              if (i2 >= i1) {
+                relationShouldBe(clone, ci1, ci2, this.subject.get(ci1, ci2))
+              }
+            })
+          })
 
-        const clone = this.subject.clone()
+          // clone is separate
+          this.subject.add('a', 'b', AllenRelation.emptyRelation<AllenRelation>())
+          this.subject.intervals().should.containDeep(['a', 'b'])
+          this.subject.get('a', 'b').should.equal(AllenRelation.emptyRelation<AllenRelation>())
+          clone.intervals().should.not.containEql('a')
+          clone.intervals().should.not.containEql('b')
+          clone.get('a', 'b').should.equal(AllenRelation.FULL)
 
-        const cloneIntervals = clone.intervals()
-        cloneIntervals.should.be.deepEqual(this.subject.intervals())
-        // console.log(clone.toString())
-        // console.log()
-        cloneIntervals.forEach((ci1, i1) => {
-          cloneIntervals.forEach((ci2, i2) => {
-            if (i2 >= i1) {
-              relationShouldBe(clone, ci1, ci2, this.subject.get(ci1, ci2))
-            }
+          clone.add('c', 'd', AllenRelation.emptyRelation<AllenRelation>())
+          clone.intervals().should.containDeep(['c', 'd'])
+          clone.get('c', 'd').should.equal(AllenRelation.emptyRelation<AllenRelation>())
+          this.subject.intervals().should.not.containEql('c')
+          this.subject.intervals().should.not.containEql('d')
+          this.subject.get('c', 'd').should.equal(AllenRelation.FULL)
+        })
+      })
+      describe('#toString', function () {
+        it('works', function () {
+          const result = this.subject.toString()
+          console.log(result)
+          const resultLines = result.split(EOL)
+          const intervals = this.subject.intervals()
+          resultLines.forEach((rl, j) => {
+            const regexp = new RegExp(
+              j === 0
+                ? `^\\| \\(\\.\\) +${intervals.map(i2 => `\\| ${i2} +`).join('')} \\|$`
+                : j === 1
+                ? `^\\| ---+ (\\| ---+ ){${intervals.length}}\\|$`
+                : `^\\\\| ${intervals[j - 2]} +${intervals
+                    .map(
+                      i2 =>
+                        `\\| ${this.subject
+                          .get(intervals[j - 2], i2)
+                          .toString()
+                          .replace(/\(/g, '\\(')
+                          .replace(/\)/g, '\\)')} +`
+                    )
+                    .join('')}\\|$`
+            )
+            rl.should.match(regexp)
           })
         })
-
-        // clone is separate
-        this.subject.add('a', 'b', AllenRelation.emptyRelation<AllenRelation>())
-        this.subject.intervals().should.containDeep(['a', 'b'])
-        this.subject.get('a', 'b').should.equal(AllenRelation.emptyRelation<AllenRelation>())
-        clone.intervals().should.not.containEql('a')
-        clone.intervals().should.not.containEql('b')
-        clone.get('a', 'b').should.equal(AllenRelation.FULL)
-
-        clone.add('c', 'd', AllenRelation.emptyRelation<AllenRelation>())
-        clone.intervals().should.containDeep(['c', 'd'])
-        clone.get('c', 'd').should.equal(AllenRelation.emptyRelation<AllenRelation>())
-        this.subject.intervals().should.not.containEql('c')
-        this.subject.intervals().should.not.containEql('d')
-        this.subject.get('c', 'd').should.equal(AllenRelation.FULL)
       })
     })
-    describe('#toString', function () {})
   })
   it('all', function () {
     console.log()
