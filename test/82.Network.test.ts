@@ -117,20 +117,19 @@ describe('Network', function () {
         this.subject.add('q ∩ v', 'q', AllenRelation.ENCLOSED_BY)
         this.subject.add('q ∩ v', 'v', AllenRelation.ENCLOSED_BY)
 
-        const clone = this['subject'].clone()
-        clone.intervals().should.be.containDeep(['p', 'q', 'p ∩ v', 'v', 'q ∩ v'])
+        const clone = this.subject.clone()
+
+        const cloneIntervals = clone.intervals()
+        cloneIntervals.should.be.deepEqual(this.subject.intervals())
         // console.log(clone.toString())
         // console.log()
-        relationShouldBe(clone, 'p', 'q', AllenRelation.AFTER.complement())
-        relationShouldBe(clone, 'p ∩ v', 'p', AllenRelation.ENCLOSED_BY)
-        relationShouldBe(clone, 'p ∩ v', 'q', AllenRelation.FULL)
-        relationShouldBe(clone, 'p ∩ v', 'v', AllenRelation.ENCLOSED_BY)
-        relationShouldBe(clone, 'p', 'v', AllenRelation.CONCURS_WITH)
-        relationShouldBe(clone, 'q', 'v', AllenRelation.CONCURS_WITH)
-        relationShouldBe(clone, 'q ∩ v', 'p', AllenRelation.FULL)
-        relationShouldBe(clone, 'q ∩ v', 'q', AllenRelation.ENCLOSED_BY)
-        relationShouldBe(clone, 'q ∩ v', 'v', AllenRelation.ENCLOSED_BY)
-        relationShouldBe(clone, 'q ∩ v', 'p ∩ v', AllenRelation.FULL)
+        cloneIntervals.forEach((ci1, i1) => {
+          cloneIntervals.forEach((ci2, i2) => {
+            if (i2 >= i1) {
+              relationShouldBe(clone, ci1, ci2, this.subject.get(ci1, ci2))
+            }
+          })
+        })
       })
     })
     describe('#toString', function () {})
