@@ -20,6 +20,11 @@ import { AllenRelation } from '../src'
 import { Network } from '../src/Network'
 import should from 'should'
 
+function relationShouldBe(network: Network, i1: string, i2: string, r: AllenRelation): void {
+  network.get(i1, i2).should.equal(r)
+  network.get(i2, i1).should.equal(r.converse())
+}
+
 describe('Network', function () {
   describe('constructor', function () {
     it('can be constructed', function () {
@@ -33,10 +38,7 @@ describe('Network', function () {
   describe('instance methods', function () {
     beforeEach(function () {
       this['subject'] = new Network()
-      this['relationShouldBe'] = function relationShouldBe(i1: string, i2: string, r: AllenRelation) {
-        this['subject'].get(i1, i2).should.equal(r)
-        this['subject'].get(i2, i1).should.equal(r.converse())
-      }
+      this['relationShouldBe'] = relationShouldBe.bind(undefined, this['subject'])
     })
 
     describe('#add', function () {
@@ -100,6 +102,31 @@ describe('Network', function () {
         this['relationShouldBe']('q ∩ v', 'p ∩ v', AllenRelation.FULL)
       })
     })
+    describe('#clone', function () {
+      it('intersections', function () {
+        this['subject'].add('p', 'q', AllenRelation.AFTER.complement())
+        this['subject'].add('p ∩ v', 'p', AllenRelation.ENCLOSED_BY)
+        this['subject'].add('p ∩ v', 'v', AllenRelation.ENCLOSED_BY)
+        this['subject'].add('q ∩ v', 'q', AllenRelation.ENCLOSED_BY)
+        this['subject'].add('q ∩ v', 'v', AllenRelation.ENCLOSED_BY)
+
+        const clone = this['subject'].clone()
+        clone.intervals().should.be.containDeep(['p', 'q', 'p ∩ v', 'v', 'q ∩ v'])
+        // console.log(clone.toString())
+        // console.log()
+        relationShouldBe(clone, 'p', 'q', AllenRelation.AFTER.complement())
+        relationShouldBe(clone, 'p ∩ v', 'p', AllenRelation.ENCLOSED_BY)
+        relationShouldBe(clone, 'p ∩ v', 'q', AllenRelation.FULL)
+        relationShouldBe(clone, 'p ∩ v', 'v', AllenRelation.ENCLOSED_BY)
+        relationShouldBe(clone, 'p', 'v', AllenRelation.CONCURS_WITH)
+        relationShouldBe(clone, 'q', 'v', AllenRelation.CONCURS_WITH)
+        relationShouldBe(clone, 'q ∩ v', 'p', AllenRelation.FULL)
+        relationShouldBe(clone, 'q ∩ v', 'q', AllenRelation.ENCLOSED_BY)
+        relationShouldBe(clone, 'q ∩ v', 'v', AllenRelation.ENCLOSED_BY)
+        relationShouldBe(clone, 'q ∩ v', 'p ∩ v', AllenRelation.FULL)
+      })
+    })
+    describe('#toString', function () {})
   })
   it('all', function () {
     console.log()
