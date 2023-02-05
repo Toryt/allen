@@ -30,6 +30,77 @@ describe('Network', function () {
       subject.get('c', 'c').should.equal(AllenRelation.EQUALS)
     })
   })
+  describe('instance methods', function () {
+    beforeEach(function () {
+      this['subject'] = new Network()
+      this['relationShouldBe'] = function relationShouldBe(i1: string, i2: string, r: AllenRelation) {
+        this['subject'].get(i1, i2).should.equal(r)
+        this['subject'].get(i2, i1).should.equal(r.converse())
+      }
+    })
+
+    describe('#add', function () {
+      it('intersections', function () {
+        /* Set up a network that describes the intersection of an interval 'v' with and interal 'p' and with an interval
+           'q'. Given the relation between 'p' and 'q', what is the relation beween 'p ∩ v' and 'q ∩ v'? */
+        this['subject'].add('p', 'q', AllenRelation.AFTER.complement()) // p not after q
+        this['subject'].intervals().should.be.containDeep(['p', 'q'])
+        // console.log(this['subject'].toString())
+        // console.log()
+        this['relationShouldBe']('p', 'q', AllenRelation.AFTER.complement())
+
+        this['subject'].add('p ∩ v', 'p', AllenRelation.ENCLOSED_BY)
+        this['subject'].intervals().should.be.containDeep(['p', 'q', 'p ∩ v'])
+        // console.log(this['subject'].toString())
+        // console.log()
+        this['relationShouldBe']('p', 'q', AllenRelation.AFTER.complement())
+        this['relationShouldBe']('p ∩ v', 'p', AllenRelation.ENCLOSED_BY)
+        this['relationShouldBe']('p ∩ v', 'q', AllenRelation.FULL)
+
+        this['subject'].add('p ∩ v', 'v', AllenRelation.ENCLOSED_BY)
+        this['subject'].intervals().should.be.containDeep(['p', 'q', 'p ∩ v', 'v'])
+        // console.log(this['subject'].toString())
+        // console.log()
+        this['relationShouldBe']('p', 'q', AllenRelation.AFTER.complement())
+        this['relationShouldBe']('p ∩ v', 'p', AllenRelation.ENCLOSED_BY)
+        this['relationShouldBe']('p ∩ v', 'q', AllenRelation.FULL)
+        this['relationShouldBe']('p ∩ v', 'v', AllenRelation.ENCLOSED_BY)
+        this['relationShouldBe']('p', 'v', AllenRelation.CONCURS_WITH)
+        this['relationShouldBe']('q', 'v', AllenRelation.FULL)
+
+        this['subject'].add('q ∩ v', 'q', AllenRelation.ENCLOSED_BY)
+        this['subject'].intervals().should.be.containDeep(['p', 'q', 'p ∩ v', 'v', 'q ∩ v'])
+        // console.log(this['subject'].toString())
+        // console.log()
+        this['relationShouldBe']('p', 'q', AllenRelation.AFTER.complement())
+        this['relationShouldBe']('p ∩ v', 'p', AllenRelation.ENCLOSED_BY)
+        this['relationShouldBe']('p ∩ v', 'q', AllenRelation.FULL)
+        this['relationShouldBe']('p ∩ v', 'v', AllenRelation.ENCLOSED_BY)
+        this['relationShouldBe']('p', 'v', AllenRelation.CONCURS_WITH)
+        this['relationShouldBe']('q', 'v', AllenRelation.FULL)
+        this['relationShouldBe']('q ∩ v', 'p', AllenRelation.FULL)
+        this['relationShouldBe']('q ∩ v', 'q', AllenRelation.ENCLOSED_BY)
+        this['relationShouldBe']('q ∩ v', 'v', AllenRelation.FULL)
+        this['relationShouldBe']('q ∩ v', 'p ∩ v', AllenRelation.FULL)
+
+        this['subject'].add('q ∩ v', 'v', AllenRelation.ENCLOSED_BY)
+        this['subject'].intervals().should.be.containDeep(['p', 'q', 'p ∩ v', 'v', 'q ∩ v'])
+        // console.log(this['subject'].toString())
+        // console.log()
+        this['relationShouldBe']('p', 'q', AllenRelation.AFTER.complement())
+        this['relationShouldBe']('p ∩ v', 'p', AllenRelation.ENCLOSED_BY)
+        this['relationShouldBe']('p ∩ v', 'q', AllenRelation.FULL)
+        this['relationShouldBe']('p ∩ v', 'v', AllenRelation.ENCLOSED_BY)
+        this['relationShouldBe']('p', 'v', AllenRelation.CONCURS_WITH)
+        this['relationShouldBe']('q', 'v', AllenRelation.CONCURS_WITH)
+        this['relationShouldBe']('q ∩ v', 'p', AllenRelation.FULL)
+        this['relationShouldBe']('q ∩ v', 'q', AllenRelation.ENCLOSED_BY)
+        this['relationShouldBe']('q ∩ v', 'v', AllenRelation.ENCLOSED_BY)
+        /* there is no sensible conclusion */
+        this['relationShouldBe']('q ∩ v', 'p ∩ v', AllenRelation.FULL)
+      })
+    })
+  })
   // it('composes', function () {
   //   const Rintersection = AllenRelation.fromString<AllenRelation>('sedf')
   //   console.log(`Rintersection: ${Rintersection.toString()}`)
