@@ -130,6 +130,21 @@ describe('Network', function () {
             }
           })
         })
+
+        // clone is separate
+        this.subject.add('a', 'b', AllenRelation.emptyRelation<AllenRelation>())
+        this.subject.intervals().should.containDeep(['a', 'b'])
+        this.subject.get('a', 'b').should.equal(AllenRelation.emptyRelation<AllenRelation>())
+        clone.intervals().should.not.containEql('a')
+        clone.intervals().should.not.containEql('b')
+        clone.get('a', 'b').should.equal(AllenRelation.FULL)
+
+        clone.add('c', 'd', AllenRelation.emptyRelation<AllenRelation>())
+        clone.intervals().should.containDeep(['c', 'd'])
+        clone.get('c', 'd').should.equal(AllenRelation.emptyRelation<AllenRelation>())
+        this.subject.intervals().should.not.containEql('c')
+        this.subject.intervals().should.not.containEql('d')
+        this.subject.get('c', 'd').should.equal(AllenRelation.FULL)
       })
     })
     describe('#toString', function () {})
