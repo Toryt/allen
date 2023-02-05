@@ -106,10 +106,10 @@ export class Network {
     assert(i !== j)
     assert(this.isEarlierOrUnknownInterval(i, j))
 
-    const old = this.get(i, j)
-    if (!rij.implies(old)) {
-      throw new UpdateConflict(i, j, old, rij)
-    }
+    // const old = this.get(i, j)
+    // if (!rij.implies(old)) {
+    //   throw new UpdateConflict(i, j, old, rij)
+    // }
 
     if (this.known[i] === undefined) {
       this.known[i] = {}
@@ -122,6 +122,7 @@ export class Network {
   }
 
   private update(i: string, j: string, rij: AllenRelation): void {
+    console.log(`${i} -- ${this.get(i, j).toString()} / ${rij.toString()} --> ${j}`)
     if (i === j) {
       return
     }
