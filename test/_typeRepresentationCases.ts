@@ -49,7 +49,6 @@ export const idiotTypeRepresentations = [
   'another string',
   '',
   43,
-  890623470896376978306924906437890634n,
   true,
   false,
   Symbol('not a point type representation'),

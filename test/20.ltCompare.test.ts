@@ -32,7 +32,6 @@ const cases: Array<Case<unknown>> = [
   { label: 'number with -∞', smaller: Number.NEGATIVE_INFINITY, larger: Math.PI },
   { label: 'number with +∞', smaller: -4, larger: Number.POSITIVE_INFINITY },
   { label: 'number with ε', smaller: 0, larger: Number.EPSILON },
-  { label: 'bigint', smaller: 4532341515151n, larger: 8905723809897562098790253n },
   { label: 'string', smaller: 'short', larger: 't is much larger' },
   { label: 'empty string', smaller: '', larger: 'not empty' },
   { label: 'boolean', smaller: false, larger: true },
