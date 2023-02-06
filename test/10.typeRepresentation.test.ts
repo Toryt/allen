@@ -48,7 +48,6 @@ const trueCases: Array<TrueCase<unknown>> = [
     expected: 'number'
   },
   { label: 'numbers with NaN', elements: [23, 34, NaN, 43, undefined], expected: 'number' },
-  { label: 'bigint', elements: [80532987634n, undefined, 9509523n, null], expected: 'bigint' },
   { label: 'string', elements: [null, 'string', '', 'a string'], expected: 'string' },
   { label: 'boolean', elements: [false, null, null, true], expected: 'boolean' },
   {

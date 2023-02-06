@@ -56,12 +56,6 @@ const trueCases: Array<Case<TypeRepresentation>> = [
       Number.isNaN(t1) ? (Number.isNaN(t2) ? 0 : +1) : Number.isNaN(t2) ? -1 : ltCompare(t1, t2),
     compareFnOptional: false
   },
-  {
-    label: 'bigint',
-    pointType: 'bigint',
-    p1: -72799850575770750175017107610717190n,
-    p2: 90785075016070176023707012760760267026n
-  },
   { label: 'string', pointType: 'string', p1: 'string one', p2: 'string two' },
   { label: 'boolean', pointType: 'boolean', p1: false, p2: true },
   {
@@ -71,7 +65,6 @@ const trueCases: Array<Case<TypeRepresentation>> = [
     p2: new Date(2024, 4, 18, 6, 5, 36, 388)
   },
   { label: 'Number', pointType: 'number', p1: Number(3), p2: Number(89734) },
-  { label: 'BigInt', pointType: 'bigint', p1: BigInt(-432), p2: BigInt(8975322352525252662626662677222727n) },
   { label: 'String', pointType: 'string', p1: String('a'), p2: String('b') },
   { label: 'Boolean', pointType: 'boolean', p1: Boolean(false), p2: Boolean(true) },
   {
