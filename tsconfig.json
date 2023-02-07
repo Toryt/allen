@@ -23,7 +23,7 @@
     "allowJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "target": "ES2021",
+    "target": "ES2015",
     "listEmittedFiles": true,
     "listFiles": false,
     "incremental": true,

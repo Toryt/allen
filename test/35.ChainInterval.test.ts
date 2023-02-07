@@ -36,7 +36,6 @@ interface StartCase<TR extends TypeRepresentation> {
 
 const startCases: ReadonlyArray<StartCase<any>> = [
   { start: 3, okFor: ['number'] },
-  { start: 389579784n, okFor: ['bigint'] },
   { start: 'a string', okFor: ['string'] },
   { start: false, okFor: ['boolean'] },
   { start: Symbol('start case'), okFor: ['symbol'] },
