@@ -4,6 +4,10 @@
 
 ### 0.8
 
+#### 0.8.2
+
+- lower TS build target to ES2015 (reason: Cypress does not seem to support ES2021 syntax (Nullish coalescing, BigInt))
+
 #### 0.8.1
 
 - `undefined` is now allowed as `pointType` in `isInterval` and `isReferenceIntervals` (meaning all intervals _must_ be
