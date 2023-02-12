@@ -31,6 +31,16 @@ Good synopses of this theory are
 - [Wikipedia]
 - [Thomas A. Alspaugh “Allen's interval algebra”].
 
+More:
+
+- [van Beek, Peter; Cohen, Robin “Exact and Approximate Reasoning about Temporal Relations”](https://cs.
+  uwaterloo.ca/~vanbeek/Publications/ci90.pdf), _Computational Intelligence 6:132-144, 1990_
+- [Hogge, J. C. “TPLAN: A Temporal Interval-Based Planner with Novel Extensions”](), _University of Illinois Department
+  of Computer Science Technical Report UIUCDCS-R-87-1367, September 1987_
+- [Freuder, E. C. “Synthesizing Constraint Expressions”](), _Communications of the ACM 21 pages 958-966; November 1978_
+- [Eriksson, Leif; Lagerkvist, Victor “Improved Algorithms for Allen’s Interval Algebra: a Dynamic Programming Approach”](https://www.ijcai.org/proceedings/2021/0258.pdf),
+  _Proceedings of the Thirtieth International Joint Conference on Artificial Intelligence (IJCAI-21)_
+
 This library is aimed in the first place at dealing with intervals in traditional software.
 
 This library only offers limited support for inference. Be aware that, in general, inference over intervals, also using
