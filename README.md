@@ -35,11 +35,13 @@ More:
 
 - [van Beek, Peter; Cohen, Robin “Exact and Approximate Reasoning about Temporal Relations”](https://cs.
   uwaterloo.ca/~vanbeek/Publications/ci90.pdf), _Computational Intelligence 6:132-144, 1990_
-- [Hogge, J. C. “TPLAN: A Temporal Interval-Based Planner with Novel Extensions”](), _University of Illinois Department
+- [Hogge, J. C. “TPLAN: A Temporal Interval-Based Planner with Novel Extensions”](https://books.google.be/books/about/TPLAN.html?id=Sm85jtrtS7gC&redir_esc=y), _University of Illinois Department
   of Computer Science Technical Report UIUCDCS-R-87-1367, September 1987_
 - [Freuder, E. C. “Synthesizing Constraint Expressions”](), _Communications of the ACM 21 pages 958-966; November 1978_
 - [Eriksson, Leif; Lagerkvist, Victor “Improved Algorithms for Allen’s Interval Algebra: a Dynamic Programming Approach”](https://www.ijcai.org/proceedings/2021/0258.pdf),
   _Proceedings of the Thirtieth International Joint Conference on Artificial Intelligence (IJCAI-21)_
+- [”Principles of Knowledge Representation and Reasoning; Proceedings of the Second International Conference”]
+  (https://kr.org/proceedings/KR-1991-proceedings-scanned.pdf)
 
 This library is aimed in the first place at dealing with intervals in traditional software.
 
@@ -59,7 +61,7 @@ exist algorithms that perform much better. Such optimizations are not supported 
 ```javascript
 const { AllenRelation, PointIntervalRelation } = require('@toryt/allen')
 
-function allenRelationExample() {
+function allenRelationExample () {
   const iiCondition1 = AllenRelation.fromString('psSd')
   const iiCondition2 = AllenRelation.fromString('sde')
   const iiCondition = iiCondition1.compose(iiCondition2)
@@ -75,7 +77,7 @@ function allenRelationExample() {
   return iiActual
 }
 
-function pointIntervalExample() {
+function pointIntervalExample () {
   const piCondition1 = PointIntervalRelation.or(PointIntervalRelation.BEFORE, PointIntervalRelation.TERMINATES)
   const iiCondition2 = AllenRelation.fromString('sde')
   const piCondition = piCondition1.compose(iiCondition2)
@@ -97,7 +99,7 @@ function pointIntervalExample() {
 ```ts
 import { AllenRelation, Interval, PointIntervalRelation } from '@toryt/allen'
 
-function allenRelationExample(): AllenRelation {
+function allenRelationExample (): AllenRelation {
   const iiCondition1: AllenRelation = AllenRelation.fromString<AllenRelation>('psSd')
   const iiCondition2: AllenRelation = AllenRelation.fromString<AllenRelation>('sde')
   const iiCondition: AllenRelation = iiCondition1.compose(iiCondition2)
@@ -113,7 +115,7 @@ function allenRelationExample(): AllenRelation {
   return iiActual
 }
 
-function pointIntervalExample(): PointIntervalRelation {
+function pointIntervalExample (): PointIntervalRelation {
   const piCondition1: PointIntervalRelation = PointIntervalRelation.or(
     PointIntervalRelation.BEFORE,
     PointIntervalRelation.TERMINATES
