@@ -178,6 +178,104 @@ describe('Network', function () {
         })
       })
     })
+    describe('intersection ok', function () {
+      it(' works with a distributed or, 4 cases', function () {
+        /* | `w (.) v` | `w ∩ v (.) w` | `w ∩ v (.) v` |
+         | --------- | ------------- | ------------- |
+         | `(p)`     | `()`          | `()`          |
+         | `(m)`     | `()`          | `()`          |
+         | `(o)`     | `(f)`         | `(s)`         |
+         | `(F)`     | `(f)`         | `(e)`         |
+         | `(D)`     | `(d)`         | `(e)`         |
+         | `(s)`     | `(e)`         | `(s)`         |
+         | `(e)`     | `(e)`         | `(e)`         |
+         | `(S)`     | `(s)`         | `(e)`         |
+         | `(d)`     | `(e)`         | `(d)`         |
+         | `(f)`     | `(e)`         | `(f)`         |
+         | `(O)`     | `(s)`         | `(f)`         |
+         | `(M)`     | `()`          | `()`          |
+         | `(P)`     | `()`          | `()`          | */
+
+        interface IntersectionRelations {
+          toFirst: AllenRelation
+          toSecond: AllenRelation
+        }
+
+        const intersections: Map<AllenRelation, IntersectionRelations> = new Map<AllenRelation, IntersectionRelations>()
+        intersections.set(AllenRelation.OVERLAPS, {
+          toFirst: AllenRelation.FINISHES,
+          toSecond: AllenRelation.STARTS
+        })
+        intersections.set(AllenRelation.FINISHED_BY, {
+          toFirst: AllenRelation.FINISHES,
+          toSecond: AllenRelation.EQUALS
+        })
+        intersections.set(AllenRelation.CONTAINS, {
+          toFirst: AllenRelation.DURING,
+          toSecond: AllenRelation.EQUALS
+        })
+        intersections.set(AllenRelation.STARTS, {
+          toFirst: AllenRelation.EQUALS,
+          toSecond: AllenRelation.STARTS
+        })
+        intersections.set(AllenRelation.EQUALS, {
+          toFirst: AllenRelation.EQUALS,
+          toSecond: AllenRelation.EQUALS
+        })
+        intersections.set(AllenRelation.STARTED_BY, {
+          toFirst: AllenRelation.STARTS,
+          toSecond: AllenRelation.EQUALS
+        })
+        intersections.set(AllenRelation.DURING, {
+          toFirst: AllenRelation.EQUALS,
+          toSecond: AllenRelation.DURING
+        })
+        intersections.set(AllenRelation.FINISHES, {
+          toFirst: AllenRelation.EQUALS,
+          toSecond: AllenRelation.FINISHES
+        })
+        intersections.set(AllenRelation.OVERLAPPED_BY, {
+          toFirst: AllenRelation.STARTS,
+          toSecond: AllenRelation.FINISHES
+        })
+
+        const results: string[] = []
+        this.subject.add('p', 'q', AllenRelation.AFTER.complement())
+        intersections.forEach(({ toFirst: pIvRp, toSecond: pIvRv }, pRv) => {
+          const networkP = this.subject.clone()
+          console.log()
+          console.log()
+          console.log()
+          console.log(`p ${pRv.toString()} v`)
+          console.log('================================')
+          networkP.add('p', 'v', pRv)
+          networkP.add('p ∩ v', 'p', pIvRp)
+          networkP.add('p ∩ v', 'v', pIvRv)
+          // console.log(networkP.toString())
+          intersections.forEach(({ toFirst: qIvRq, toSecond: qIvRv }, qRv) => {
+            const networkPQ = networkP.clone()
+            console.log()
+            console.log(`q ${qRv.toString()} v`)
+            console.log('--------------')
+            networkPQ.add('q', 'v', qRv)
+            // console.log(networkPQ.toString())
+            networkPQ.add('q ∩ v', 'q', qIvRq)
+            // console.log(networkPQ.toString())
+            networkPQ.add('q ∩ v', 'v', qIvRv)
+            // console.log(networkPQ.toString())
+            console.log(`p ∩ v ${networkPQ.get('p ∩ v', 'q ∩ v')} q ∩ v`)
+            results.push(`p ${pRv.toString()} v; q ${qRv.toString()} v: p ∩ v ${networkPQ.get('p ∩ v', 'q ∩ v')} q ∩ v`)
+          })
+        })
+        console.log()
+        console.log()
+        console.log()
+        console.log()
+        results.forEach(r => {
+          console.log(r)
+        })
+      })
+    })
   })
   it('all', function () {
     console.log()
