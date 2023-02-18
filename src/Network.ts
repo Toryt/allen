@@ -154,10 +154,6 @@ export class Network {
           if (rkj !== nkj) {
             todos.push({ i: k, j: toDo.j, r: rkj })
           }
-        }
-      })
-      this._intervals.forEach(k => {
-        if (k !== toDo.i && k !== toDo.j) {
           const nik = this.get(toDo.i, k)
           const rik: AllenRelation = AllenRelation.and(nik, toDo.r.compose(this.get(toDo.j, k)))
           // `rik` implies `nik`, because of `and`, but it might be stronger
