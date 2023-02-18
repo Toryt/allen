@@ -150,7 +150,8 @@ export class Network {
         if (k !== toDo.i && k !== toDo.j) {
           const nkj = this.get(k, toDo.j)
           const rkj: AllenRelation = AllenRelation.and(nkj, this.get(k, toDo.i).compose(toDo.r))
-          if (rkj !== nkj && rkj.implies(nkj)) {
+          // `rkj` implies `nkj`, because of `and`, but it might be stronger
+          if (rkj !== nkj) {
             todos.push({ i: k, j: toDo.j, r: rkj })
           }
         }
@@ -159,7 +160,8 @@ export class Network {
         if (k !== toDo.i && k !== toDo.j) {
           const nik = this.get(toDo.i, k)
           const rik: AllenRelation = AllenRelation.and(nik, toDo.r.compose(this.get(toDo.j, k)))
-          if (rik !== nik && rik.implies(nik)) {
+          // `rik` implies `nik`, because of `and`, but it might be stronger
+          if (rik !== nik) {
             todos.push({ i: toDo.i, j: k, r: rik })
           }
         }
