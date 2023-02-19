@@ -34,6 +34,66 @@ declare module 'mocha' {
   }
 }
 
+interface IntersectionRelations {
+  toFirst: AllenRelation
+  toSecond: AllenRelation
+}
+
+/**
+ * | `w (.) v` | `w ∩ v (.) w` | `w ∩ v (.) v` |
+ * | --------- | ------------- | ------------- |
+ * | `(p)`     | `()`          | `()`          |
+ * | `(m)`     | `()`          | `()`          |
+ * | `(o)`     | `(f)`         | `(s)`         |
+ * | `(F)`     | `(f)`         | `(e)`         |
+ * | `(D)`     | `(d)`         | `(e)`         |
+ * | `(s)`     | `(e)`         | `(s)`         |
+ * | `(e)`     | `(e)`         | `(e)`         |
+ * | `(S)`     | `(s)`         | `(e)`         |
+ * | `(d)`     | `(e)`         | `(d)`         |
+ * | `(f)`     | `(e)`         | `(f)`         |
+ * | `(O)`     | `(s)`         | `(f)`         |
+ * | `(M)`     | `()`          | `()`          |
+ * | `(P)`     | `()`          | `()`          |
+ */
+const intersections: Map<AllenRelation, IntersectionRelations> = new Map<AllenRelation, IntersectionRelations>()
+intersections.set(AllenRelation.OVERLAPS, {
+  toFirst: AllenRelation.FINISHES,
+  toSecond: AllenRelation.STARTS
+})
+intersections.set(AllenRelation.FINISHED_BY, {
+  toFirst: AllenRelation.FINISHES,
+  toSecond: AllenRelation.EQUALS
+})
+intersections.set(AllenRelation.CONTAINS, {
+  toFirst: AllenRelation.DURING,
+  toSecond: AllenRelation.EQUALS
+})
+intersections.set(AllenRelation.STARTS, {
+  toFirst: AllenRelation.EQUALS,
+  toSecond: AllenRelation.STARTS
+})
+intersections.set(AllenRelation.EQUALS, {
+  toFirst: AllenRelation.EQUALS,
+  toSecond: AllenRelation.EQUALS
+})
+intersections.set(AllenRelation.STARTED_BY, {
+  toFirst: AllenRelation.STARTS,
+  toSecond: AllenRelation.EQUALS
+})
+intersections.set(AllenRelation.DURING, {
+  toFirst: AllenRelation.EQUALS,
+  toSecond: AllenRelation.DURING
+})
+intersections.set(AllenRelation.FINISHES, {
+  toFirst: AllenRelation.EQUALS,
+  toSecond: AllenRelation.FINISHES
+})
+intersections.set(AllenRelation.OVERLAPPED_BY, {
+  toFirst: AllenRelation.STARTS,
+  toSecond: AllenRelation.FINISHES
+})
+
 describe('Network', function () {
   describe('constructor', function () {
     it('can be constructed', function () {
@@ -180,65 +240,6 @@ describe('Network', function () {
     })
     describe('intersection ok', function () {
       it(' works with a distributed or, 4 cases', function () {
-        /* | `w (.) v` | `w ∩ v (.) w` | `w ∩ v (.) v` |
-         | --------- | ------------- | ------------- |
-         | `(p)`     | `()`          | `()`          |
-         | `(m)`     | `()`          | `()`          |
-         | `(o)`     | `(f)`         | `(s)`         |
-         | `(F)`     | `(f)`         | `(e)`         |
-         | `(D)`     | `(d)`         | `(e)`         |
-         | `(s)`     | `(e)`         | `(s)`         |
-         | `(e)`     | `(e)`         | `(e)`         |
-         | `(S)`     | `(s)`         | `(e)`         |
-         | `(d)`     | `(e)`         | `(d)`         |
-         | `(f)`     | `(e)`         | `(f)`         |
-         | `(O)`     | `(s)`         | `(f)`         |
-         | `(M)`     | `()`          | `()`          |
-         | `(P)`     | `()`          | `()`          | */
-
-        interface IntersectionRelations {
-          toFirst: AllenRelation
-          toSecond: AllenRelation
-        }
-
-        const intersections: Map<AllenRelation, IntersectionRelations> = new Map<AllenRelation, IntersectionRelations>()
-        intersections.set(AllenRelation.OVERLAPS, {
-          toFirst: AllenRelation.FINISHES,
-          toSecond: AllenRelation.STARTS
-        })
-        intersections.set(AllenRelation.FINISHED_BY, {
-          toFirst: AllenRelation.FINISHES,
-          toSecond: AllenRelation.EQUALS
-        })
-        intersections.set(AllenRelation.CONTAINS, {
-          toFirst: AllenRelation.DURING,
-          toSecond: AllenRelation.EQUALS
-        })
-        intersections.set(AllenRelation.STARTS, {
-          toFirst: AllenRelation.EQUALS,
-          toSecond: AllenRelation.STARTS
-        })
-        intersections.set(AllenRelation.EQUALS, {
-          toFirst: AllenRelation.EQUALS,
-          toSecond: AllenRelation.EQUALS
-        })
-        intersections.set(AllenRelation.STARTED_BY, {
-          toFirst: AllenRelation.STARTS,
-          toSecond: AllenRelation.EQUALS
-        })
-        intersections.set(AllenRelation.DURING, {
-          toFirst: AllenRelation.EQUALS,
-          toSecond: AllenRelation.DURING
-        })
-        intersections.set(AllenRelation.FINISHES, {
-          toFirst: AllenRelation.EQUALS,
-          toSecond: AllenRelation.FINISHES
-        })
-        intersections.set(AllenRelation.OVERLAPPED_BY, {
-          toFirst: AllenRelation.STARTS,
-          toSecond: AllenRelation.FINISHES
-        })
-
         const results: string[] = []
         this.subject.add('p', 'q', AllenRelation.AFTER.complement())
         intersections.forEach(({ toFirst: pIvRp, toSecond: pIvRv }, pRv) => {
@@ -257,6 +258,17 @@ describe('Network', function () {
         results.forEach(r => {
           console.log(r)
         })
+      })
+      it('fails for p(d)v, q(d)v', function () {
+        this.subject.add('p', 'q', AllenRelation.AFTER.complement())
+        const { toFirst, toSecond }: IntersectionRelations = intersections.get(AllenRelation.DURING)!
+        this.subject.add('p', 'v', AllenRelation.DURING)
+        this.subject.add('p ∩ v', 'p', toFirst)
+        this.subject.add('p ∩ v', 'v', toSecond)
+        this.subject.add('q', 'v', AllenRelation.DURING)
+        this.subject.add('q ∩ v', 'q', toFirst)
+        this.subject.add('q ∩ v', 'v', toSecond)
+        console.log(this.subject.toString())
       })
     })
   })
