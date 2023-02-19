@@ -220,7 +220,6 @@ export class Network {
   }
 
   add(i: string, j: string, r: AllenRelation): void {
-    console.log(`add ${i} -- ${r.toString()} -> ${j}`)
     if (!this._intervals.includes(i)) {
       this._intervals.push(i)
     }
@@ -230,22 +229,17 @@ export class Network {
     const toDos: ToDos = new ToDos()
     toDos.add({ i, j, r })
     while (toDos.notEmpty()) {
-      console.log('todos:')
-      console.log(toDos.toString())
       const toDo: ToDo = toDos.pop()
-      console.log(`    adding ${toDo.i} -- ${toDo.r.toString()} -> ${toDo.j}`)
       this.update(toDo.i, toDo.j, toDo.r)
       this._intervals.forEach(k => {
         if (k !== toDo.i && k !== toDo.j) {
           const nkj = this.get(k, toDo.j)
-          console.log(`        consider ${k} -- ${nkj.toString()} -> ${toDo.j}`)
           const rkj: AllenRelation = AllenRelation.and(nkj, this.get(k, toDo.i).compose(toDo.r))
           // `rkj` implies `nkj`, because of `and`, but it might be stronger
           if (rkj !== nkj) {
             toDos.add({ i: k, j: toDo.j, r: rkj })
           }
           const nik = this.get(toDo.i, k)
-          console.log(`        consider ${toDo.i} -- ${nik.toString()} -> ${k}`)
           const rik: AllenRelation = AllenRelation.and(nik, toDo.r.compose(this.get(toDo.j, k)))
           // `rik` implies `nik`, because of `and`, but it might be stronger
           if (rik !== nik) {
