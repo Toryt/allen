@@ -132,44 +132,18 @@ export class ToDos {
  */
 const padAR = 15
 
-export class UpdateConflict extends Error {
-  public readonly i: string
-  public readonly j: string
-  public readonly oldIJRelation: AllenRelation
-  public readonly newIJRelation: AllenRelation
-
-  constructor(i: string, j: string, oldIJRelation: AllenRelation, newIJRelation: AllenRelation) {
-    super(`Conflicting relation update: ${i} -- ${oldIJRelation.toString()} / ${newIJRelation.toString()} -> ${j}`)
-    this.i = i
-    this.j = j
-    this.oldIJRelation = oldIJRelation
-    this.newIJRelation = newIJRelation
-    Object.setPrototypeOf(this, UpdateConflict.prototype)
-  }
-}
-
 export class Network {
   private readonly _intervals: string[] = []
 
   private readonly known: IntervalRelations = {}
 
-  private isEarlierOrUnknownInterval(i: string, j: string): boolean {
-    notEqual(i, j)
-
-    const indexI = this._intervals.indexOf(i)
-    if (indexI < 0) {
-      return true
-    }
-    const indexJ = this._intervals.indexOf(j)
-    if (indexJ < 0) {
-      return true
-    }
-    return indexI < indexJ
-  }
-
+  /**
+   * ### Precondition
+   *
+   * `i < j`
+   */
   private sparseRead(i: string, j: string): AllenRelation {
-    assert(i !== j)
-    assert(this.isEarlierOrUnknownInterval(i, j))
+    assert(i < j)
 
     const o: Relations | undefined = this.known[i]
 
@@ -182,42 +156,23 @@ export class Network {
   }
 
   get(i: string, j: string): AllenRelation {
-    return i === j
-      ? AllenRelation.EQUALS
-      : this.isEarlierOrUnknownInterval(i, j)
-      ? this.sparseRead(i, j)
-      : this.sparseRead(j, i).converse()
+    return i === j ? AllenRelation.EQUALS : i < j ? this.sparseRead(i, j) : this.sparseRead(j, i).converse()
   }
 
-  private lazySparseUpdate(i: string, j: string, rij: AllenRelation): void {
-    assert(i !== j)
-    assert(this.isEarlierOrUnknownInterval(i, j))
-
-    const old = this.get(i, j)
-    if (!rij.implies(old)) {
-      throw new UpdateConflict(i, j, old, rij)
-    }
+  /**
+   * ### Precondition
+   *
+   * `i < j`
+   * `get(i, j).impliedBy(rij)`
+   */
+  private update(i: string, j: string, rij: AllenRelation): void {
+    assert(i < j)
+    assert(this.get(i, j).impliedBy(rij))
 
     if (this.known[i] === undefined) {
       this.known[i] = {}
     }
-
-    const o: Relations | undefined = this.known[i]
-    ok(o)
-
-    o[j] = rij
-  }
-
-  private update(i: string, j: string, rij: AllenRelation): void {
-    if (i === j) {
-      return
-    }
-
-    if (this.isEarlierOrUnknownInterval(i, j)) {
-      this.lazySparseUpdate(i, j, rij)
-    } else {
-      this.lazySparseUpdate(j, i, rij.converse())
-    }
+    this.known[i][j] = rij
   }
 
   add(i: string, j: string, r: AllenRelation): void {
