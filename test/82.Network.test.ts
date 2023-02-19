@@ -21,6 +21,7 @@ import { Network } from '../src/Network'
 import should from 'should'
 import { beforeEach } from 'mocha'
 import { EOL } from 'os'
+import { ok } from 'assert'
 
 function relationShouldBe(network: Network, i1: string, i2: string, r: AllenRelation): void {
   network.get(i1, i2).should.equal(r)
@@ -252,7 +253,9 @@ describe('Network', function () {
             networkPQ.add('q', 'v', qRv)
             networkPQ.add('q ∩ v', 'q', qIvRq)
             networkPQ.add('q ∩ v', 'v', qIvRv)
-            results.push(`p ${pRv.toString()} v; q ${qRv.toString()} v: p ∩ v ${networkPQ.get('p ∩ v', 'q ∩ v')} q ∩ v`)
+            results.push(
+              `p ${pRv.toString()} v; q ${qRv.toString()} v: p ∩ v ${networkPQ.get('p ∩ v', 'q ∩ v').toString()} q ∩ v`
+            )
           })
         })
         results.forEach(r => {
@@ -261,7 +264,9 @@ describe('Network', function () {
       })
       it('fails for p(d)v, q(d)v', function () {
         this.subject.add('p', 'q', AllenRelation.AFTER.complement())
-        const { toFirst, toSecond }: IntersectionRelations = intersections.get(AllenRelation.DURING)!
+        const intersectionRelations = intersections.get(AllenRelation.DURING)
+        ok(intersectionRelations)
+        const { toFirst, toSecond }: IntersectionRelations = intersectionRelations
         this.subject.add('p', 'v', AllenRelation.DURING)
         this.subject.add('p ∩ v', 'p', toFirst)
         this.subject.add('p ∩ v', 'v', toSecond)

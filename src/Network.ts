@@ -15,7 +15,7 @@
  */
 
 import { AllenRelation } from './AllenRelation'
-import assert, { notEqual, ok } from 'assert'
+import assert, { ok } from 'assert'
 import { EOL } from 'os'
 
 /**
@@ -50,10 +50,10 @@ export class ToDos {
   private readonly direct: Record<string, Record<string, AllenRelation>> = {}
   private list: TodoAndUncertainty | undefined = undefined
 
-  private insert(todo: ToDo) {
+  private insert(todo: ToDo): void {
     const u = todo.r.uncertainty()
 
-    let previous: TodoAndUncertainty | undefined = undefined
+    let previous: TodoAndUncertainty | undefined
     let next: TodoAndUncertainty | undefined = this.list
     while (next !== undefined && next.u < u) {
       previous = next // next ≠ undefined, so now previous ≠ undefined
@@ -108,7 +108,8 @@ export class ToDos {
    * `notEmpty()`
    */
   pop(): ToDo {
-    const result: TodoAndUncertainty = this.list!
+    const result: TodoAndUncertainty | undefined = this.list
+    ok(result)
     this.list = result.next
     delete this.direct[result.todo.i][result.todo.j]
     // there is no need to delete this.direct[result.todo.i] if it is empty
