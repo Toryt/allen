@@ -121,7 +121,7 @@ export class ToDos {
     let counter: number = 0
     let next: TodoAndUncertainty | undefined = this.list
     while (next !== undefined) {
-      result += `${EOL}  ${counter}: (${next.u}) ${next.todo.i} -- ${next.todo.r.toString()} -> ${next.todo.j}`
+      result += `${EOL}  ${counter}: ${next.todo.i} ${next.todo.r.toString()} ${next.todo.j} (${next.u})`
       next = next.next
       counter++
     }
@@ -187,6 +187,7 @@ export class Network {
     const toDos: ToDos = new ToDos()
     toDos.add({ i, j, r })
     while (toDos.notEmpty()) {
+      console.log(toDos.toString())
       const toDo: ToDo = toDos.pop()
       this.update(toDo.i, toDo.j, toDo.r)
       this._intervals.forEach(k => {
