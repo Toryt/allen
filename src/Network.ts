@@ -40,6 +40,82 @@ interface ToDo {
   r: AllenRelation
 }
 
+interface TodoAndUncertainty {
+  todo: ToDo
+  u: number
+  next: TodoAndUncertainty | undefined
+}
+
+export class Todos {
+  private readonly direct: Record<string, Record<string, AllenRelation>> = {}
+  private list: TodoAndUncertainty | undefined = undefined
+
+  private insert(todo: ToDo) {
+    const u = todo.r.uncertainty()
+
+    let previous: TodoAndUncertainty | undefined = undefined
+    let next: TodoAndUncertainty | undefined = this.list
+    while (next !== undefined && next.u < u) {
+      previous = next // next ≠ undefined, so now previous ≠ undefined
+      next = previous.next
+    }
+
+    if (previous === undefined) {
+      /* If we went through the iteration at least once, the list was not empty; but then `previous ≠ undefined`.
+         So here we know the list was empty. Start it. */
+      this.list = { todo, u, next: undefined }
+      return
+    }
+
+    /* `previous ≠ undefined`, so we went through the iteration at least once. The list was not empty. Either:
+       * We are now at the end of the list (`next === undefined`). `previous` was the last element, and we need to add
+         the new element at the end after `previous`, or
+       * We are now in the middle of the list (`next !== undefined`), and the new element needs to be spliced between
+         `previous` and `next`.
+       In any case, `next` is the entry after the new element. */
+    previous.next = { todo, u, next }
+  }
+
+  /**
+   * Adds the `todo` for `todo.i (todo.r) todo.j` if `todo.i < todo.j`, and for `todo.j (todo.r)^ todo.i` if
+   * `todo.i > todo.j`. Nothing is added if `todo.i = todo.j`.
+   *
+   * If there already is an entry `todo.i (s) todo.j` in the data structure, it is replaced with `todo.i (s ∧ todo.r) todo.j`.
+   *
+   * ### Precondition
+   *
+   * `i ≠ j`
+   */
+  add({ i, j, r }: ToDo): void {
+    assert(i !== j)
+    const [k, l]: [string, string] = i < j ? [i, j] : [j, i]
+    if (!(k in this.direct)) {
+      this.direct[k] = {}
+    }
+    const previous: AllenRelation | undefined = this.direct[k][l]
+    const strictR = previous !== undefined ? AllenRelation.and(previous, r) : r
+    this.direct[k][l] = strictR
+    this.insert({ i: k, j: l, r: strictR })
+  }
+
+  notEmpty(): boolean {
+    return this.list !== undefined
+  }
+
+  /**
+   * ### Precondition
+   *
+   * `notEmpty()`
+   */
+  pop(): ToDo {
+    const result: TodoAndUncertainty = this.list!
+    this.list = result.next
+    delete this.direct[result.todo.i][result.todo.j]
+    // there is no need to delete this.direct[result.todo.i] if it is empty
+    return result.todo
+  }
+}
+
 /**
  * Maximum lenght of {@link AllenRelation.toString()}, for padding.
  */
