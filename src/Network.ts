@@ -46,7 +46,7 @@ interface TodoAndUncertainty {
   next: TodoAndUncertainty | undefined
 }
 
-export class Todos {
+export class ToDos {
   private readonly direct: Record<string, Record<string, AllenRelation>> = {}
   private list: TodoAndUncertainty | undefined = undefined
 
@@ -88,12 +88,12 @@ export class Todos {
    */
   add({ i, j, r }: ToDo): void {
     assert(i !== j)
-    const [k, l]: [string, string] = i < j ? [i, j] : [j, i]
+    const [k, l, s]: [string, string, AllenRelation] = i < j ? [i, j, r] : [j, i, r.converse()]
     if (!(k in this.direct)) {
       this.direct[k] = {}
     }
     const previous: AllenRelation | undefined = this.direct[k][l]
-    const strictR = previous !== undefined ? AllenRelation.and(previous, r) : r
+    const strictR = previous !== undefined ? AllenRelation.and(previous, s) : s
     this.direct[k][l] = strictR
     this.insert({ i: k, j: l, r: strictR })
   }
@@ -113,6 +113,16 @@ export class Todos {
     delete this.direct[result.todo.i][result.todo.j]
     // there is no need to delete this.direct[result.todo.i] if it is empty
     return result.todo
+  }
+
+  toString(): string {
+    let result: string = '['
+    const counter: number = 0
+    let next: TodoAndUncertainty | undefined = this.list
+    if (next !== undefined) {
+      result += `${EOL}  ${counter}: (${next.u}) ${next.todo.i} -- ${next.todo.r.toString()} -> ${next.todo.j}`
+    }
+    return result + `${EOL}]`
   }
 }
 
@@ -217,15 +227,12 @@ export class Network {
     if (!this._intervals.includes(j)) {
       this._intervals.push(j)
     }
-    const todos: ToDo[] = []
-    todos.push({ i, j, r })
-    while (todos.length > 0) {
+    const toDos: ToDos = new ToDos()
+    toDos.add({ i, j, r })
+    while (toDos.notEmpty()) {
       console.log('todos:')
-      todos.forEach(({ i, j, r }) => {
-        console.log(`    set ${i} -- ${r.toString()} -> ${j}`)
-      })
-      const toDo: ToDo | undefined = todos.shift()
-      ok(toDo)
+      console.log(toDos.toString())
+      const toDo: ToDo = toDos.pop()
       console.log(`    adding ${toDo.i} -- ${toDo.r.toString()} -> ${toDo.j}`)
       this.update(toDo.i, toDo.j, toDo.r)
       this._intervals.forEach(k => {
@@ -235,14 +242,14 @@ export class Network {
           const rkj: AllenRelation = AllenRelation.and(nkj, this.get(k, toDo.i).compose(toDo.r))
           // `rkj` implies `nkj`, because of `and`, but it might be stronger
           if (rkj !== nkj) {
-            todos.push({ i: k, j: toDo.j, r: rkj })
+            toDos.add({ i: k, j: toDo.j, r: rkj })
           }
           const nik = this.get(toDo.i, k)
           console.log(`        consider ${toDo.i} -- ${nik.toString()} -> ${k}`)
           const rik: AllenRelation = AllenRelation.and(nik, toDo.r.compose(this.get(toDo.j, k)))
           // `rik` implies `nik`, because of `and`, but it might be stronger
           if (rik !== nik) {
-            todos.push({ i: toDo.i, j: k, r: rik })
+            toDos.add({ i: toDo.i, j: k, r: rik })
           }
         }
       })
