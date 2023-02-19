@@ -118,10 +118,12 @@ export class ToDos {
 
   toString(): string {
     let result: string = '['
-    const counter: number = 0
+    let counter: number = 0
     let next: TodoAndUncertainty | undefined = this.list
-    if (next !== undefined) {
+    while (next !== undefined) {
       result += `${EOL}  ${counter}: (${next.u}) ${next.todo.i} -- ${next.todo.r.toString()} -> ${next.todo.j}`
+      next = next.next
+      counter++
     }
     return result + `${EOL}]`
   }
