@@ -187,7 +187,6 @@ export class Network {
     const toDos: ToDos = new ToDos()
     toDos.add({ i, j, r })
     while (toDos.notEmpty()) {
-      console.log(toDos.toString())
       const toDo: ToDo = toDos.pop()
       this.update(toDo.i, toDo.j, toDo.r)
       this._intervals.forEach(k => {
