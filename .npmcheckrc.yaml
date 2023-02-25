@@ -3,3 +3,4 @@ depcheck:
   ignoreMatches:
     - eslint-config-standard
     - prettier
+    - typedoc-plugin-markdown
