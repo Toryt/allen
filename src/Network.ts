@@ -47,7 +47,7 @@ interface TodoAndUncertainty {
 }
 
 export class ToDos {
-  private readonly direct: Record<string, Record<string, AllenRelation>> = {}
+  private readonly direct: Map<string, Map<string, AllenRelation>> = new Map<string, Map<string, AllenRelation>>()
   private list: TodoAndUncertainty | undefined = undefined
 
   private insert(todo: ToDo): void {
@@ -89,12 +89,14 @@ export class ToDos {
   add({ i, j, r }: ToDo): void {
     assert(i !== j)
     const [k, l, s]: [string, string, AllenRelation] = i < j ? [i, j, r] : [j, i, r.converse()]
-    if (!(k in this.direct)) {
-      this.direct[k] = {}
+    if (!this.direct.has(k)) {
+      this.direct.set(k, new Map<string, AllenRelation>())
     }
-    const previous: AllenRelation | undefined = this.direct[k][l]
+    const kMap: Map<string, AllenRelation> | undefined = this.direct.get(k)
+    ok(kMap)
+    const previous: AllenRelation | undefined = kMap.get(l)
     const strictR = previous !== undefined ? AllenRelation.and(previous, s) : s
-    this.direct[k][l] = strictR
+    kMap.set(l, strictR)
     this.insert({ i: k, j: l, r: strictR })
   }
 
@@ -111,7 +113,9 @@ export class ToDos {
     const result: TodoAndUncertainty | undefined = this.list
     ok(result)
     this.list = result.next
-    delete this.direct[result.todo.i][result.todo.j]
+    const iMap: Map<string, AllenRelation> | undefined = this.direct.get(result.todo.i)
+    ok(iMap)
+    iMap.delete(result.todo.j)
     // there is no need to delete this.direct[result.todo.i] if it is empty
     return result.todo
   }
