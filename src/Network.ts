@@ -61,9 +61,9 @@ export class ToDos {
     }
 
     if (previous === undefined) {
-      /* If we went through the iteration at least once, the list was not empty; but then `previous ≠ undefined`.
-         So here we know the list was empty. Start it. */
-      this.list = { todo, u, next: undefined }
+      /* If we went through the iteration at least once `previous ≠ undefined`. Otherwise, we need to add the new
+         element at the start of the list, which might have been empty. */
+      this.list = { todo, u, next }
       return
     }
 
