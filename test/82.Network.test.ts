@@ -242,6 +242,7 @@ describe('Network', function () {
     describe('intersection ok', function () {
       it(' works with a distributed or, 4 cases', function () {
         const results: string[] = []
+        let allTogether: AllenRelation = AllenRelation.emptyRelation<AllenRelation>()
         this.subject.add('p', 'q', AllenRelation.AFTER.complement())
         intersections.forEach(({ toFirst: pIvRp, toSecond: pIvRv }, pRv) => {
           const networkP = this.subject.clone()
@@ -256,11 +257,15 @@ describe('Network', function () {
             results.push(
               `p ${pRv.toString()} v; q ${qRv.toString()} v: p ∩ v ${networkPQ.get('p ∩ v', 'q ∩ v').toString()} q ∩ v`
             )
+            allTogether = AllenRelation.or(allTogether, networkPQ.get('p ∩ v', 'q ∩ v'))
           })
         })
         results.forEach(r => {
           console.log(r)
         })
+        console.log()
+        console.log(`p ∩ v ${allTogether.toString()} q ∩ v`)
+        allTogether.should.equal(AllenRelation.AFTER.complement())
       })
       it('fails for p(d)v, q(d)v', function () {
         this.subject.add('p', 'q', AllenRelation.AFTER.complement())
