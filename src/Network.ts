@@ -189,28 +189,17 @@ export class Network {
     while (toDos.notEmpty()) {
       console.log(toDos.toString())
       const toDo: ToDo = toDos.pop()
-      console.log(`    adding ${toDo.i} ${toDo.r.toString()} ${toDo.j}`)
       this.update(toDo.i, toDo.j, toDo.r)
       this._intervals.forEach(k => {
         if (k !== toDo.i && k !== toDo.j) {
           const nkj = this.get(k, toDo.j)
-          console.log(`        consider ${k} ${nkj.toString()} ${toDo.j}`)
-          console.log(
-            `          ${this.get(k, toDo.i).toString()} . ${toDo.r} = ${this.get(k, toDo.i).compose(toDo.r)}`
-          )
           const rkj: AllenRelation = AllenRelation.and(nkj, this.get(k, toDo.i).compose(toDo.r))
-          console.log(`          new: ${rkj}`)
           // `rkj` implies `nkj`, because of `and`, but it might be stronger
           if (rkj !== nkj) {
             toDos.add({ i: k, j: toDo.j, r: rkj })
           }
           const nik = this.get(toDo.i, k)
-          console.log(`        consider ${toDo.i} ${nik.toString()} ${k}`)
-          console.log(
-            `          ${toDo.r} . ${this.get(toDo.j, k).toString()} = ${toDo.r.compose(this.get(toDo.j, k))}`
-          )
           const rik: AllenRelation = AllenRelation.and(nik, toDo.r.compose(this.get(toDo.j, k)))
-          console.log(`          new: ${rik}`)
           // `rik` implies `nik`, because of `and`, but it might be stronger
           if (rik !== nik) {
             toDos.add({ i: toDo.i, j: k, r: rik })
