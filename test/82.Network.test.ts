@@ -273,6 +273,7 @@ describe('Network', function () {
         this.subject.add('q', 'v', AllenRelation.DURING)
         this.subject.add('q ∩ v', 'q', toFirst)
         this.subject.add('q ∩ v', 'v', toSecond)
+        this.subject.get('p ∩ v', 'q ∩ v').should.equal(AllenRelation.AFTER.complement())
       })
     })
   })
