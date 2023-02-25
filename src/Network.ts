@@ -88,7 +88,6 @@ export class ToDos {
    */
   add({ i, j, r }: ToDo): void {
     assert(i !== j)
-    console.log(`            adding to todo: ${i} ${r.toString()} ${j}`)
     const [k, l, s]: [string, string, AllenRelation] = i < j ? [i, j, r] : [j, i, r.converse()]
     if (!(k in this.direct)) {
       this.direct[k] = {}
@@ -97,8 +96,6 @@ export class ToDos {
     const strictR = previous !== undefined ? AllenRelation.and(previous, s) : s
     this.direct[k][l] = strictR
     this.insert({ i: k, j: l, r: strictR })
-    console.log('              added')
-    console.log(this.toString())
   }
 
   notEmpty(): boolean {
@@ -190,8 +187,6 @@ export class Network {
     const toDos: ToDos = new ToDos()
     toDos.add({ i, j, r })
     while (toDos.notEmpty()) {
-      console.log()
-      console.log('LOOP')
       console.log(toDos.toString())
       const toDo: ToDo = toDos.pop()
       console.log(`    adding ${toDo.i} ${toDo.r.toString()} ${toDo.j}`)
