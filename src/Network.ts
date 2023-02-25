@@ -1,12 +1,12 @@
 /*
  Copyright © 2023 by Jan Dockx
-
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -143,29 +143,30 @@ export class Network {
 
   private readonly known: IntervalRelations = new Map<string, Relations>()
 
-  /**
-   * ### Precondition
-   *
-   * `i < j`
-   */
-  private sparseRead(i: string, j: string): AllenRelation {
-    assert(i < j)
-
-    const iMap: Relations | undefined = this.known.get(i)
-
-    if (iMap === undefined) {
-      return AllenRelation.FULL
-    }
-
-    return iMap.get(j) ?? AllenRelation.FULL
-  }
-
   intervals(): string[] {
     return this._intervals.slice()
   }
 
   get(i: string, j: string): AllenRelation {
-    return i === j ? AllenRelation.EQUALS : i < j ? this.sparseRead(i, j) : this.sparseRead(j, i).converse()
+    if (i === j) {
+      return AllenRelation.EQUALS
+    }
+
+    const [k, l]: [string, string] = i < j ? [i, j] : [j, i]
+
+    const kMap: Relations | undefined = this.known.get(k)
+
+    if (kMap === undefined) {
+      return AllenRelation.FULL
+    }
+
+    const klAR: AllenRelation | undefined = kMap.get(l)
+
+    if (klAR === undefined) {
+      return AllenRelation.FULL
+    }
+
+    return i < j ? klAR : klAR.converse()
   }
 
   /**
