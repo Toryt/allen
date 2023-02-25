@@ -141,7 +141,7 @@ const padAR = 15
 export class Network {
   private readonly _intervals: string[] = []
 
-  private readonly known: IntervalRelations = {}
+  private readonly known: IntervalRelations = new Map<string, Relations>()
 
   /**
    * ### Precondition
@@ -151,10 +151,13 @@ export class Network {
   private sparseRead(i: string, j: string): AllenRelation {
     assert(i < j)
 
-    const o: Relations | undefined = this.known[i]
+    const iMap: Relations | undefined = this.known.get(i)
 
-    const result: AllenRelation | undefined = o === undefined ? undefined : o[j]
-    return result ?? AllenRelation.FULL
+    if (iMap === undefined) {
+      return AllenRelation.FULL
+    }
+
+    return iMap.get(j) ?? AllenRelation.FULL
   }
 
   intervals(): string[] {
@@ -175,10 +178,13 @@ export class Network {
     assert(i < j)
     assert(this.get(i, j).impliedBy(rij))
 
-    if (this.known[i] === undefined) {
-      this.known[i] = {}
+    if (!this.known.has(i)) {
+      this.known.set(i, new Map<string, AllenRelation>())
     }
-    this.known[i][j] = rij
+
+    const iMap: Relations | undefined = this.known.get(i)
+    ok(iMap)
+    iMap.set(j, rij)
   }
 
   add(i: string, j: string, r: AllenRelation): void {
@@ -224,12 +230,13 @@ export class Network {
     this._intervals.forEach(interval => {
       copy._intervals.push(interval)
     })
-    Object.entries(this.known).forEach(([from, relations]: [string, Relations]) => {
-      copy.known[from] = Object.entries(relations).reduce((acc2: Relations, [to, ar]: [string, AllenRelation]) => {
-        acc2[to] = ar
-        return acc2
-      }, {})
-    }, copy.known)
+    this.known.forEach((relations: Relations, from: string) => {
+      const fromMap = new Map<string, AllenRelation>()
+      relations.forEach((ar: AllenRelation, to: string) => {
+        fromMap.set(to, ar)
+      })
+      copy.known.set(from, fromMap)
+    })
     return copy
   }
 
