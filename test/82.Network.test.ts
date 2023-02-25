@@ -239,8 +239,19 @@ describe('Network', function () {
         })
       })
     })
-    describe('intersection ok', function () {
-      it(' works with a distributed or, 4 cases', function () {
+    describe('intersection keeps order', function () {
+      it('does not produce the desired result with a general intersection statement', function () {
+        const intersection = AllenRelation.fromString<AllenRelation>('sedf')
+        this.subject.add('p', 'q', AllenRelation.AFTER.complement())
+        this.subject.add('p ∩ v', 'p', intersection)
+        this.subject.add('p ∩ v', 'v', intersection)
+        this.subject.add('q ∩ v', 'q', intersection)
+        this.subject.add('q ∩ v', 'v', intersection)
+        const result = this.subject.get('p ∩ v', 'q ∩ v')
+        console.log(`p ∩ v ${result.toString()} q ∩ v`)
+        result.should.equal(AllenRelation.FULL) // ≠ AllenRelation.AFTER.complement()
+      })
+      it('does produce the desired result with a distributed or', function () {
         const results: string[] = []
         let allTogether: AllenRelation = AllenRelation.emptyRelation<AllenRelation>()
         this.subject.add('p', 'q', AllenRelation.AFTER.complement())
@@ -267,7 +278,7 @@ describe('Network', function () {
         console.log(`p ∩ v ${allTogether.toString()} q ∩ v`)
         allTogether.should.equal(AllenRelation.AFTER.complement())
       })
-      it('fails for p(d)v, q(d)v', function () {
+      it('behaves as expected for p(d)v, q(d)v', function () {
         this.subject.add('p', 'q', AllenRelation.AFTER.complement())
         const intersectionRelations = intersections.get(AllenRelation.DURING)
         ok(intersectionRelations)
