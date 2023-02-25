@@ -24,7 +24,7 @@ import { EOL } from 'os'
  * This represents a sparse row in a matrix of {@link AllenRelation} from the interval for which this row is defined to
  * all other intervals named in this object.
  */
-type Relations = Record<string, AllenRelation>
+type Relations = Map<string, AllenRelation>
 
 /**
  * Map of interval names to a {@link Relations} object.
@@ -32,7 +32,7 @@ type Relations = Record<string, AllenRelation>
  * This is a sparse matrix of the {@link AllenRelation} from the interval named here to all other intervals that are
  * later in the `intervals` array.
  */
-type IntervalRelations = Record<string, Relations>
+type IntervalRelations = Map<string, Relations>
 
 interface ToDo {
   i: string
@@ -47,7 +47,7 @@ interface TodoAndUncertainty {
 }
 
 export class ToDos {
-  private readonly direct: Map<string, Map<string, AllenRelation>> = new Map<string, Map<string, AllenRelation>>()
+  private readonly direct: IntervalRelations = new Map<string, Relations>()
   private list: TodoAndUncertainty | undefined = undefined
 
   private insert(todo: ToDo): void {
@@ -92,7 +92,7 @@ export class ToDos {
     if (!this.direct.has(k)) {
       this.direct.set(k, new Map<string, AllenRelation>())
     }
-    const kMap: Map<string, AllenRelation> | undefined = this.direct.get(k)
+    const kMap: Relations | undefined = this.direct.get(k)
     ok(kMap)
     const previous: AllenRelation | undefined = kMap.get(l)
     const strictR = previous !== undefined ? AllenRelation.and(previous, s) : s
@@ -113,7 +113,7 @@ export class ToDos {
     const result: TodoAndUncertainty | undefined = this.list
     ok(result)
     this.list = result.next
-    const iMap: Map<string, AllenRelation> | undefined = this.direct.get(result.todo.i)
+    const iMap: Relations | undefined = this.direct.get(result.todo.i)
     ok(iMap)
     iMap.delete(result.todo.j)
     // there is no need to delete this.direct[result.todo.i] if it is empty
