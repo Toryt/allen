@@ -1,12 +1,12 @@
 /*
- Copyright © 2022 by Jan Dockx
-
+ Copyright © 2022 – 2023 by Jan Dockx
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,17 +17,17 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { Interval } from '../src/Interval'
+import { type Interval } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { isSequence, SequenceOptions } from '../src/isSequence'
+import { isSequence, type SequenceOptions } from '../src/isSequence'
 import { AllenRelation } from '../src/AllenRelation'
-import { Comparator } from '../src/Comparator'
+import { type Comparator } from '../src/Comparator'
 import { ltCompare } from '../src/ltCompare'
 import assert from 'assert'
 
 const sixSymbols = generateSixSymbols('enclosing')
 
-function hasSmallerStart<T> (i1: Interval<T>, i2: Interval<T>, compare: Comparator<T>): boolean {
+function hasSmallerStart<T>(i1: Interval<T>, i2: Interval<T>, compare: Comparator<T>): boolean {
   assert(i2.start !== undefined && i2.start !== null)
 
   if (i1.start === undefined || i1.start === null) {
@@ -92,7 +92,7 @@ const optionCases: OptionCase[] = [
 ]
 
 describe('isSequence', function () {
-  function generateSequenceTests<T> (
+  function generateSequenceTests<T>(
     callIt: (is: Array<Interval<T>>, optionsBase: OptionsBase | undefined) => boolean,
     points: T[]
   ): void {
@@ -355,16 +355,16 @@ describe('isSequence', function () {
     })
   }
 
-  function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
-    function callIt (is: Array<Interval<T>>, optionsBase: OptionsBase | undefined): boolean {
+  function generateTests<T>(label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
+    function callIt(is: Array<Interval<T>>, optionsBase: OptionsBase | undefined): boolean {
       const options: SequenceOptions<T> | undefined =
         optionsBase === undefined
           ? compareFn === undefined || compareFn === null
             ? undefined
             : { compareFn }
-          : /* prettier-ignore */ compareFn === undefined || compareFn === null
-            ? optionsBase
-            : { ...optionsBase, compareFn }
+          : compareFn === undefined || compareFn === null
+          ? optionsBase
+          : { ...optionsBase, compareFn }
       const result = options === undefined ? isSequence(is) : isSequence(is, options)
       const compare = compareFn !== undefined && compareFn !== null ? compareFn : ltCompare
       // the definition, split in parts
@@ -459,7 +459,7 @@ describe('isSequence', function () {
   generateTests<number>('number', sixNumbers)
   generateTests<string>('string', sixStrings)
   generateTests<Date>('Date', sixDates)
-  generateTests<symbol>('symbol', sixSymbols, (s1: Symbol, s2: Symbol): number =>
+  generateTests<symbol>('symbol', sixSymbols, (s1: symbol, s2: symbol): number =>
     s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
   )
 })

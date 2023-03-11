@@ -1,12 +1,12 @@
 /*
- Copyright © 2022 by Jan Dockx
-
+ Copyright © 2022 – 2023 by Jan Dockx
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,7 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { Interval } from '../src/Interval'
+import { type Interval } from '../src/Interval'
 import { ltCompare } from '../src/ltCompare'
 import { compareIntervals } from '../src/compareIntervals'
 import { transposeAndOrder } from '../src/transposeAndOrder'
@@ -60,14 +60,13 @@ describe('transposeAndOrder', function () {
       .concat(property3)
       .sort(compareIntervals)
     result.forEach((e, i) => {
-      const expectedReference =
-        /* prettier-ignore */ property1.includes(e.interval)
-          ? 'property1'
-          : property2.includes(e.interval)
-            ? 'property2'
-            : property3.includes(e.interval)
-              ? 'property3'
-              : 'error'
+      const expectedReference = property1.includes(e.interval)
+        ? 'property1'
+        : property2.includes(e.interval)
+        ? 'property2'
+        : property3.includes(e.interval)
+        ? 'property3'
+        : 'error'
       e.reference.should.equal(expectedReference)
       e.interval.should.equal(ordered[i])
     })

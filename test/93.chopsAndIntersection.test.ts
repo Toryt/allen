@@ -1,12 +1,12 @@
 /*
- Copyright © 2022 by Jan Dockx
-
+ Copyright © 2022 – 2023 by Jan Dockx
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,15 +16,15 @@
 
 /* eslint-env mocha */
 
-import { createIntervalCoupleCases, NonDegenerateTestIntervals } from './_createIntervalCoupleCases'
-import { Interval, isInterval, ReferencedInterval } from '../src/Interval'
+import { createIntervalCoupleCases, type NonDegenerateTestIntervals } from './_createIntervalCoupleCases'
+import { type Interval, isInterval, type ReferencedInterval } from '../src/Interval'
 import { intervalToString } from './_intervalToString'
 import { AllenRelation } from '../src/AllenRelation'
 import { chops, intersection } from '../src/chopsAndIntersection'
-import { Comparator } from '../src/Comparator'
+import { type Comparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import should from 'should'
-import { isSequence, TypeRepresentation } from '../src'
+import { isSequence, type TypeRepresentation } from '../src'
 import { ok } from 'assert'
 
 const label1 = 'first label'
@@ -32,7 +32,7 @@ const label2 = 'second label'
 
 describe('choppedAndIntersection', function () {
   describe('intersection', function () {
-    function generateTests<T> (
+    function generateTests<T>(
       label: string,
       pointType: TypeRepresentation,
       points: T[],
@@ -60,16 +60,16 @@ describe('choppedAndIntersection', function () {
 
       const cases = createIntervalCoupleCases<T>(points)
 
-      function callIt (
+      function callIt(
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
       ): Readonly<Interval<T>> | undefined | false {
         return compareFn !== undefined && compareFn !== null
-          ? /* prettier-ignore */ intersection(li1, li2, compareFn)
+          ? intersection(li1, li2, compareFn)
           : intersection(li1, li2)
       }
 
-      function moreOrLessEqual (one: Readonly<Interval<T>>, other: Readonly<Interval<T>> | undefined | false): void {
+      function moreOrLessEqual(one: Readonly<Interval<T>>, other: Readonly<Interval<T>> | undefined | false): void {
         ok(other)
         const oneOtherRelation = AllenRelation.relation(one, other, compareFn)
         if (one.end === undefined) {
@@ -81,7 +81,7 @@ describe('choppedAndIntersection', function () {
         }
       }
 
-      function hasExpectedReferenceIntervals (
+      function hasExpectedReferenceIntervals(
         i: Readonly<Interval<T>>,
         i1: Readonly<Interval<T>>,
         i2: Readonly<Interval<T>>
@@ -93,7 +93,7 @@ describe('choppedAndIntersection', function () {
         i.referenceIntervals[label2][0].should.equal(i2)
       }
 
-      function areSameIntervals (
+      function areSameIntervals(
         one: Readonly<Interval<T>> | undefined | false,
         other: Readonly<Interval<T>> | undefined | false,
         i1: Readonly<Interval<T>>,
@@ -164,11 +164,11 @@ describe('choppedAndIntersection', function () {
       'symbol',
       'symbol',
       generateSixSymbols('comparareIntervals'),
-      (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
+      (s1: symbol, s2: symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
     )
   })
   describe('chops', function () {
-    function generateTests<T> (label: string, points: T[], compareFn?: Comparator<T>): void {
+    function generateTests<T>(label: string, points: T[], compareFn?: Comparator<T>): void {
       const chopWithSourceRelations = [
         AllenRelation.PRECEDES,
         AllenRelation.MEETS,
@@ -184,21 +184,19 @@ describe('choppedAndIntersection', function () {
 
       const cases = createIntervalCoupleCases<T>(points)
 
-      function callIt (
+      function callIt(
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
       ): ReadonlyArray<Readonly<Interval<T>>> | false {
-        return compareFn !== undefined && compareFn !== null
-          ? /* prettier-ignore */ chops(li1, li2, compareFn)
-          : chops(li1, li2)
+        return compareFn !== undefined && compareFn !== null ? chops(li1, li2, compareFn) : chops(li1, li2)
       }
 
-      function callIntersection (
+      function callIntersection(
         li1: ReferencedInterval<T>,
         li2: ReferencedInterval<T>
       ): Readonly<Interval<T>> | undefined | false {
         return compareFn !== undefined && compareFn !== null
-          ? /* prettier-ignore */ intersection(li1, li2, compareFn)
+          ? intersection(li1, li2, compareFn)
           : intersection(li1, li2)
       }
 
@@ -272,7 +270,7 @@ describe('choppedAndIntersection', function () {
     generateTests<number>('number', sixNumbers)
     generateTests<string>('string', sixStrings)
     generateTests<Date>('Date', sixDates)
-    generateTests<symbol>('symbol', generateSixSymbols('comparareIntervals'), (s1: Symbol, s2: Symbol): number =>
+    generateTests<symbol>('symbol', generateSixSymbols('comparareIntervals'), (s1: symbol, s2: symbol): number =>
       s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
     )
   })

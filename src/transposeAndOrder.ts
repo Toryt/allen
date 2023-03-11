@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-import { isReferenceIntervals, ReferencedInterval, ReferenceIntervals } from './Interval'
-import { Comparator } from './Comparator'
+import { isReferenceIntervals, type ReferencedInterval, type ReferenceIntervals } from './Interval'
+import { type Comparator } from './Comparator'
 import assert, { equal, ok } from 'assert'
 import { compareIntervals } from './compareIntervals'
 import { commonTypeRepresentation } from './TypeRepresentation'
@@ -26,7 +26,7 @@ const haveCommonType: string = 'all `start` and `end` values of all intervals mu
  * Turn a {@link ReferenceIntervals} instance into an array of {@link ReferencedInterval} instances, ordered with
  * {@link compareIntervals} on their `interval` values.
  */
-export function transposeAndOrder<T> (
+export function transposeAndOrder<T>(
   sources: Readonly<ReferenceIntervals<T>>,
   compareFn?: Comparator<T>
 ): Array<Readonly<ReferencedInterval<T>>> {
@@ -55,7 +55,7 @@ export function transposeAndOrder<T> (
   assert(cType !== false, haveCommonType)
   assert(isReferenceIntervals(sources, cType, compareFn))
 
-  function compareReferencedIntervals (
+  function compareReferencedIntervals(
     ri1: Readonly<ReferencedInterval<T>>,
     ri2: Readonly<ReferencedInterval<T>>
   ): number {

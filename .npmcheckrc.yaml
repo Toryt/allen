@@ -2,4 +2,5 @@ depcheck:
   # skip unused check, but still monitor for outdated versions
   ignoreMatches:
     - eslint-config-standard
-    - prettier-standard
+    - prettier
+    - typedoc-plugin-markdown

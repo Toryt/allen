@@ -31,7 +31,24 @@ Good synopses of this theory are
 - [Wikipedia]
 - [Thomas A. Alspaugh “Allen's interval algebra”].
 
-This library does not help with inference.
+More:
+
+- [van Beek, Peter; Cohen, Robin “Exact and Approximate Reasoning about Temporal Relations”](https://cs.
+  uwaterloo.ca/~vanbeek/Publications/ci90.pdf), _Computational Intelligence 6:132-144, 1990_
+- [Hogge, J. C. “TPLAN: A Temporal Interval-Based Planner with Novel Extensions”](https://books.google.be/books/about/TPLAN.html?id=Sm85jtrtS7gC&redir_esc=y), _University of Illinois Department
+  of Computer Science Technical Report UIUCDCS-R-87-1367, September 1987_
+- [Freuder, E. C. “Synthesizing Constraint Expressions”](), _Communications of the ACM 21 pages 958-966; November 1978_
+- [Eriksson, Leif; Lagerkvist, Victor “Improved Algorithms for Allen’s Interval Algebra: a Dynamic Programming Approach”](https://www.ijcai.org/proceedings/2021/0258.pdf),
+  _Proceedings of the Thirtieth International Joint Conference on Artificial Intelligence (IJCAI-21)_
+- [”Principles of Knowledge Representation and Reasoning; Proceedings of the Second International Conference”]
+  (https://kr.org/proceedings/KR-1991-proceedings-scanned.pdf)
+
+This library is aimed in the first place at dealing with intervals in traditional software.
+
+This library only offers limited support for inference. Be aware that, in general, inference over intervals, also using
+Allen relations, is NP-complete. This means that the time the execution of inference algorithms will take, is at least
+difficult to ascertain, and quickly completely impractical. There are subsets of the Allen relations for which there
+exist algorithms that perform much better. Such optimizations are not supported by this library.
 
 [ppwcode dotnet-util-allen] offers a C# version of the functionality of this library.
 
@@ -194,6 +211,12 @@ There are some pitfalls.
 - [Intervals]
 - [Point – Interval Relations]
 - [Allen Relations]
+- [Interval Constraints]
+- [Reasoning with unknown but constrained start and end point]
+- [Points as intervals]
+- [Comparing points with intervals]
+- [Intersection]
+- [Chops]
 - [Code documentation]
 
 All functions and methods are protected with explicit `assert`s, that throw when a precondition is violated. Although
@@ -218,6 +241,13 @@ pull requests there will not be reviewed.</p>
 
 This code uses the [application to TypeScript][eslint-config-standard-with-typescript] of the [Standard] coding style.
 Tests require complete code coverage.
+
+### Linting and formatting
+
+`eslint` is used for linting, and `prettier` for code formatting. But it is hell to get them to work together nicely,
+for years. At this time,
+[Setting up ESlint with Standard and Prettier](https://medium.com/nerd-for-tech/setting-up-eslint-with-standard-and-prettier-be245cb9fc64)
+seems to be a viable approach.
 
 ## License
 
@@ -250,6 +280,13 @@ last updated in December 2008.
 [intervals]: https://bitbucket.org/toryt/allen/src/master/doc/Intervals.md
 [point – interval relations]: https://bitbucket.org/toryt/allen/src/master/doc/PointIntervalRelation.md
 [allen relations]: https://bitbucket.org/toryt/allen/src/master/doc/AllenRelation.md
+[interval constraints]: https://bitbucket.org/toryt/allen/src/master/doc/IntervalConstraints.md
+[reasoning with unknown but constrained start and end point]:
+  https://bitbucket.org/toryt/allen/src/master/doc/ReasoningWithUnknownButConstrained.md
+[points as intervals]: https://bitbucket.org/toryt/allen/src/master/doc/PointAsIntervals.md
+[comparing points with intervals]: https://bitbucket.org/toryt/allen/src/master/doc/ComparingPointsWithIntervals.md
+[intersection]: https://bitbucket.org/toryt/allen/src/master/doc/Intersection.md
+[chops]: https://bitbucket.org/toryt/allen/src/master/doc/Chops.md
 [code documentation]: docs/index.html
 [bitbucket]: https://bitbucket.org/toryt/allen
 [github]: https://github.com/Toryt/allen

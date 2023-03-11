@@ -17,15 +17,15 @@
 import should from 'should'
 import {
   AllenRelation,
-  Chain,
-  ChainInterval,
+  type Chain,
+  type ChainInterval,
   chainToGaplessLeftDefiniteSequence,
   commonTypeRepresentation,
-  Comparator,
+  type Comparator,
   compareIntervals,
-  Constructor,
-  Indefinite,
-  Interval,
+  type Constructor,
+  type Indefinite,
+  type Interval,
   isChain,
   isChainInterval,
   isEnclosing,
@@ -39,12 +39,12 @@ import {
   minimalEnclosing,
   PointIntervalRelation,
   primitiveTypeRepresentations,
-  ReferenceIntervals,
+  type ReferenceIntervals,
   Relation,
-  RelationConstructor,
-  SequenceOptions,
-  TypeFor,
-  TypeRepresentation
+  type RelationConstructor,
+  type SequenceOptions,
+  type TypeFor,
+  type TypeRepresentation
 } from '../src'
 import assert from 'assert'
 import { basicRelationBitPatterns, relationBitPatterns } from '../src/bitPattern'
@@ -57,7 +57,7 @@ describe('index TS', function () {
     it('exports Constructor', function () {
       class A {
         n: number
-        constructor (n: number) {
+        constructor(n: number) {
           this.n = n
         }
       }
@@ -109,7 +109,7 @@ describe('index TS', function () {
       isInterval<'string'>({ start: 4 }, 'string').should.be.false()
     })
     it('exports RelationConstructor', function () {
-      function x (x: RelationConstructor<Relation>): string {
+      function x(x: RelationConstructor<Relation>): string {
         return x.emptyRelation().toString()
       }
       x.should.be.a.Function()
@@ -130,7 +130,7 @@ describe('index TS', function () {
         )
       }
 
-      function x (x: RR): string {
+      function x(x: RR): string {
         return x.toString()
       }
       x.should.be.a.Function()
@@ -184,7 +184,7 @@ describe('index TS', function () {
   })
   describe('examples', function () {
     it('ts README Allen compiles and works', function () {
-      function allenRelationExample (): AllenRelation {
+      function allenRelationExample(): AllenRelation {
         const iiCondition1: AllenRelation = AllenRelation.fromString<AllenRelation>('psSd')
         const iiCondition2: AllenRelation = AllenRelation.fromString<AllenRelation>('sde')
         const iiCondition: AllenRelation = iiCondition1.compose(iiCondition2)
@@ -203,7 +203,7 @@ describe('index TS', function () {
       allenRelationExample.should.throw('i1 and i2 do no uphold (pmoseSdfO)')
     })
     it('ts README point-interval compiles and works', function () {
-      function pointIntervalExample (): PointIntervalRelation {
+      function pointIntervalExample(): PointIntervalRelation {
         const piCondition1: PointIntervalRelation = PointIntervalRelation.or(
           PointIntervalRelation.BEFORE,
           PointIntervalRelation.TERMINATES

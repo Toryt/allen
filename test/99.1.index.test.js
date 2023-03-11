@@ -95,7 +95,7 @@ describe('index JS', function () {
   })
   describe('examples', function () {
     it('ts README Allen compiles and works', function () {
-      function allenRelationExample () {
+      function allenRelationExample() {
         /** @type {AllenRelation} */
         const iiCondition1 = AllenRelation.fromString('psSd')
         /** @type {AllenRelation} */
@@ -116,7 +116,7 @@ describe('index JS', function () {
       allenRelationExample.should.throw('i1 and i2 do no uphold (pmoseSdfO)')
     })
     it('ts README point-interval compiles and works', function () {
-      function pointIntervalExample () {
+      function pointIntervalExample() {
         /** @type {PointIntervalRelation} */
         const piCondition1 = PointIntervalRelation.or(PointIntervalRelation.BEFORE, PointIntervalRelation.TERMINATES)
         /** @type {AllenRelation} */

@@ -19,11 +19,15 @@
 import 'should'
 import { generateRelationTests } from './_generateRelationTests'
 import { AllenRelation } from '../src/AllenRelation'
-import { Interval } from '../src/Interval'
+import { type Interval } from '../src/Interval'
 import { ltCompare } from '../src/ltCompare'
 import { intervalToString } from './_intervalToString'
 import { generateSixSymbols, sixArrays, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { createIntervalCoupleCases, NonDegenerateTestIntervals, TestIntervals } from './_createIntervalCoupleCases'
+import {
+  createIntervalCoupleCases,
+  type NonDegenerateTestIntervals,
+  type TestIntervals
+} from './_createIntervalCoupleCases'
 import { relationBitPatterns } from '../src/bitPattern'
 
 describe('AllenRelation', function () {
@@ -110,7 +114,7 @@ describe('AllenRelation', function () {
   })
 
   describe('#compose', function () {
-    function validateCompose (ar1: AllenRelation, ar2: AllenRelation, result: AllenRelation): void {
+    function validateCompose(ar1: AllenRelation, ar2: AllenRelation, result: AllenRelation): void {
       AllenRelation.BASIC_RELATIONS.forEach((br1: AllenRelation) => {
         if (br1.implies(ar1)) {
           AllenRelation.BASIC_RELATIONS.forEach((br2: AllenRelation) => {
@@ -141,7 +145,7 @@ describe('AllenRelation', function () {
     //   })
     // })
     it('composes some relations as expected', function () {
-      function testACombination (nr1: number, nr2: number): void {
+      function testACombination(nr1: number, nr2: number): void {
         const ar1: AllenRelation = AllenRelation.generalRelation(nr1)
         const ar: AllenRelation = AllenRelation.generalRelation(nr2)
         validateCompose(ar1, ar, ar1.compose(ar))
@@ -159,7 +163,7 @@ describe('AllenRelation', function () {
     })
   })
   describe('relation', function () {
-    function createDegenerateIntervals<T> (pts: T[]): Array<TestIntervals<T>> {
+    function createDegenerateIntervals<T>(pts: T[]): Array<TestIntervals<T>> {
       return [
         /* test with 1 empty interval (converse for swapped parameters) */
         { i1: { start: pts[0], end: pts[0] }, i2: { start: pts[2], end: pts[3] } },
@@ -196,14 +200,14 @@ describe('AllenRelation', function () {
       AllenRelation.FULL
     ])
 
-    function generateTests<T> (label: string, pts: T[], compareFn?: (a1: T, a2: T) => number): void {
+    function generateTests<T>(label: string, pts: T[], compareFn?: (a1: T, a2: T) => number): void {
       type BasicRelationDefinition = (i1: Interval<T>, i2: Interval<T>) => boolean
 
-      function isDefinite (t: T | undefined | null): t is T {
+      function isDefinite(t: T | undefined | null): t is T {
         return t !== undefined && t !== null
       }
 
-      function compare (
+      function compare(
         t1: T | undefined | null,
         c: '<' | '=' | '>',
         t2: T | undefined | null,
@@ -242,7 +246,7 @@ describe('AllenRelation', function () {
         [AllenRelation.PRECEDED_BY, (i1, i2) => compare(i2.end, '<', i1.start)]
       ]
 
-      function callIt (i1: Interval<T>, i2: Interval<T>): AllenRelation {
+      function callIt(i1: Interval<T>, i2: Interval<T>): AllenRelation {
         return compareFn !== undefined && compareFn !== null
           ? AllenRelation.relation(i1, i2, compareFn)
           : AllenRelation.relation(i1, i2)
@@ -255,7 +259,7 @@ describe('AllenRelation', function () {
             const i2: Interval<T> = ti.i2
             const relation: AllenRelation = ti.relation
 
-            function shouldNotViolateBasicRelationDefinitions (
+            function shouldNotViolateBasicRelationDefinitions(
               i1: Interval<T>,
               i2: Interval<T>,
               result: AllenRelation
@@ -310,7 +314,7 @@ describe('AllenRelation', function () {
     generateTests<symbol>(
       'symbol with compare',
       generateSixSymbols('allen relation'),
-      (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
+      (s1: symbol, s2: symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
     )
   })
 })

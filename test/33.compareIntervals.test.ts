@@ -1,12 +1,12 @@
 /*
- Copyright © 2022 by Jan Dockx
-
+ Copyright © 2022 – 2023 by Jan Dockx
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,15 +17,15 @@
 /* eslint-env mocha */
 
 import should from 'should'
-import { Interval } from '../src/Interval'
+import { type Interval } from '../src/Interval'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
 import { compareIntervals } from '../src/compareIntervals'
 import { AllenRelation } from '../src/AllenRelation'
-import { createIntervalCoupleCases, NonDegenerateTestIntervals } from './_createIntervalCoupleCases'
+import { createIntervalCoupleCases, type NonDegenerateTestIntervals } from './_createIntervalCoupleCases'
 import { intervalToString } from './_intervalToString'
 
 describe('compareIntervals', function () {
-  function generateTests<T> (label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
+  function generateTests<T>(label: string, points: T[], compareFn?: (a1: T, a2: T) => number): void {
     const crossReference26 = new Map<AllenRelation, number[]>()
     crossReference26.set(AllenRelation.PRECEDES, [-1])
     crossReference26.set(AllenRelation.MEETS, [-1])
@@ -56,9 +56,9 @@ describe('compareIntervals', function () {
 
     const cases = createIntervalCoupleCases<T>(points)
 
-    function callIt (i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): number {
+    function callIt(i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>): number {
       return compareFn !== undefined && compareFn !== null
-        ? /* prettier-ignore */ compareIntervals(i1, i2, compareFn)
+        ? compareIntervals(i1, i2, compareFn)
         : compareIntervals(i1, i2)
     }
 
@@ -80,7 +80,7 @@ describe('compareIntervals', function () {
   generateTests<number>('number', sixNumbers)
   generateTests<string>('string', sixStrings)
   generateTests<Date>('Date', sixDates)
-  generateTests<symbol>('symbol', generateSixSymbols('comparareIntervals'), (s1: Symbol, s2: Symbol): number =>
+  generateTests<symbol>('symbol', generateSixSymbols('comparareIntervals'), (s1: symbol, s2: symbol): number =>
     s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0
   )
 })

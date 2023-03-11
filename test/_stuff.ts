@@ -32,7 +32,7 @@ export const stuff: unknown[] = [
   [],
   [24],
   () => 'an arrow function',
-  function aFunction () {
+  function aFunction() {
     return 5
   },
   Date,

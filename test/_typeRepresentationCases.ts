@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-import { primitiveTypeRepresentations, TypeRepresentation } from '../src/TypeRepresentation'
+import { primitiveTypeRepresentations, type TypeRepresentation } from '../src/TypeRepresentation'
 import { A, B, C } from './_someClasses'
 
 const pptsAsTypeRepresentations: readonly TypeRepresentation[] = primitiveTypeRepresentations
@@ -28,14 +28,14 @@ export const typeRepresentations: TypeRepresentation[] = pptsAsTypeRepresentatio
   Function
 ])
 
-export function notAConstructor1 (): string {
+export function notAConstructor1(): string {
   return 'not a constructor 1'
 }
 
 // noinspection JSUnusedGlobalSymbols
 notAConstructor1.prototype.constructor = A
 
-export function notAConstructor2 (): string {
+export function notAConstructor2(): string {
   return 'not a constructor 2'
 }
 

@@ -1,12 +1,12 @@
 /*
  Copyright © 2022 – 2023 by Jan Dockx
-
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +17,9 @@
 import assert, { equal } from 'assert'
 import { Relation } from './Relation'
 import { basicRelationBitPatterns, EMPTY_BIT_PATTERN, fullBitPattern, reverse } from './bitPattern'
-import { Interval } from './Interval'
-import { Comparator } from './Comparator'
-import { Indefinite } from './type'
+import { type Interval } from './Interval'
+import { type Comparator } from './Comparator'
+import { type Indefinite } from './type'
 import { getCompareIfOk } from './getCompareIfOk'
 
 const RELATIONS_CACHE: AllenRelation[] = []
@@ -40,7 +40,7 @@ export class AllenRelation extends Relation {
    * not exported from this module. This means, the constructor can be used to refer to, but cannot be called outside
    * this module.
    */
-  private constructor (bitPattern: number, privateSymbol: typeof constructorPrivateSymbol) {
+  private constructor(bitPattern: number, privateSymbol: typeof constructorPrivateSymbol) {
     equal(
       privateSymbol,
       constructorPrivateSymbol,
@@ -81,7 +81,7 @@ export class AllenRelation extends Relation {
    *
    * There are no other `AllenRelation`s than the instances of this array.
    */
-  public static generalRelation (index: number): AllenRelation {
+  public static generalRelation(index: number): AllenRelation {
     equal(typeof index, 'number')
     assert(Number.isInteger(index))
     assert(index >= EMPTY_BIT_PATTERN)
@@ -769,7 +769,7 @@ export class AllenRelation extends Relation {
   /* endregion */
 
   /**
-   * The _converse_ of a relation `x1 ⊡ x2` between to values of the same type `x1` and `x2` is the relation `x2 ⊡ x1`:
+   * The _converse_ of a relation `x1 ⊡ x2` between two values of the same type `x1` and `x2` is the relation `x2 ⊡ x1`:
    *
    * ```ts
    * compare(x2, x3).converse() === compare(x1, x2)
@@ -788,7 +788,7 @@ export class AllenRelation extends Relation {
    * BASIC_RELATIONS.every(br => !this.impliedBy(br) || this.converse().impliedBy(br.converse()))
    * ```
    */
-  converse (): AllenRelation {
+  converse(): AllenRelation {
     /* Given the order in which the basic relations occur in the bit pattern, the converse is the reverse bit pattern
        (read the bit pattern from left to right instead of right to left). We need to add a `32 - NR_OF_BITS` bit shift
        to compensate for the fact that we store the `NR_OF_BITS` bit bitpattern in a 32 bit int. */
@@ -1012,20 +1012,20 @@ export class AllenRelation extends Relation {
    *
    * @result BASIC_RELATIONS.every(br1 => BASIC_RELATIONS.every(br2 => !br1.implies(this) || !br2.implies(gr) || result.impliedBy(BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()]))
    */
-  compose (gr: AllenRelation): AllenRelation {
+  compose(gr: AllenRelation): AllenRelation {
     // noinspection SuspiciousTypeOfGuard
     assert(gr instanceof AllenRelation)
 
     return this.typedConstructor().BASIC_RELATIONS.reduce(
       (acc1: this, br1: this) =>
-        /* prettier-ignore */ this.impliedBy(br1)
+        this.impliedBy(br1)
           ? this.typedConstructor().BASIC_RELATIONS.reduce(
-            (acc2: this, br2: this) =>
-              gr.impliedBy(br2)
-                ? AllenRelation.or(acc2, AllenRelation.BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()] as this)
-                : acc2,
-            acc1
-          )
+              (acc2: this, br2: this) =>
+                gr.impliedBy(br2)
+                  ? AllenRelation.or(acc2, AllenRelation.BASIC_COMPOSITIONS[br1.ordinal()][br2.ordinal()] as this)
+                  : acc2,
+              acc1
+            )
           : acc1,
       this.typedConstructor().emptyRelation()
     )
@@ -1074,7 +1074,7 @@ export class AllenRelation extends Relation {
    * @param compareFn - optional compare function with traditional semantics; mandatory when any point is `NaN`, or
    *                    symbols are used
    */
-  static relation<T> (i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>, compareFn?: Comparator<T>): AllenRelation {
+  static relation<T>(i1: Readonly<Interval<T>>, i2: Readonly<Interval<T>>, compareFn?: Comparator<T>): AllenRelation {
     const compare: Comparator<T> = getCompareIfOk([i1, i2], compareFn)
 
     const i1Start: Indefinite<T> = i1.start

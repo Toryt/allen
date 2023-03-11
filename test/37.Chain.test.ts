@@ -16,22 +16,22 @@
 
 /* eslint-env mocha */
 
-import { Comparator } from '../src/Comparator'
+import { type Comparator } from '../src/Comparator'
 import { generateSixSymbols, sixDates, sixNumbers, sixStrings } from './_pointCases'
-import { Chain, chainToGaplessLeftDefiniteSequence, isChain } from '../src/Chain'
+import { type Chain, chainToGaplessLeftDefiniteSequence, isChain } from '../src/Chain'
 import { stuffWithUndefined } from './_stuff'
 import { inspect } from 'util'
-import { ChainInterval, compareChainIntervals } from '../src/ChainInterval'
-import { Interval } from '../src/Interval'
-import { isSequence, SequenceOptions } from '../src/isSequence'
+import { type ChainInterval, compareChainIntervals } from '../src/ChainInterval'
+import { type Interval } from '../src/Interval'
+import { isSequence, type SequenceOptions } from '../src/isSequence'
 import assert from 'assert'
 import should from 'should'
-import { TypeFor, TypeRepresentation } from '../src'
+import { type TypeFor, type TypeRepresentation } from '../src'
 
 describe('Chain', function () {
   describe('isChain', function () {
-    function generateTests<T> (label: string, ptr: TypeRepresentation, points: T[], compareFn?: Comparator<T>): void {
-      function callIt (cis: unknown): boolean {
+    function generateTests<T>(label: string, ptr: TypeRepresentation, points: T[], compareFn?: Comparator<T>): void {
+      function callIt(cis: unknown): boolean {
         return compareFn === undefined || compareFn === null ? isChain(cis, ptr) : isChain(cis, ptr, compareFn)
       }
 
@@ -93,11 +93,11 @@ describe('Chain', function () {
       'symbols',
       'symbol',
       generateSixSymbols('compare chain intervals'),
-      (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
+      (s1: symbol, s2: symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
     )
   })
   describe('chainToGaplessLeftDefiniteSequence', function () {
-    function generateTests<TR extends TypeRepresentation> (
+    function generateTests<TR extends TypeRepresentation>(
       label: string,
       ptr: TR,
       points: Array<TypeFor<TR>>,
@@ -108,7 +108,7 @@ describe('Chain', function () {
         sequenceOptions.compareFn = compareFn
       }
 
-      function callIt (cis: Chain<TypeFor<TR>>): ReadonlyArray<Readonly<Interval<TypeFor<TR>>>> {
+      function callIt(cis: Chain<TypeFor<TR>>): ReadonlyArray<Readonly<Interval<TypeFor<TR>>>> {
         return compareFn === undefined || compareFn === null
           ? chainToGaplessLeftDefiniteSequence(cis)
           : chainToGaplessLeftDefiniteSequence(cis, compareFn)
@@ -163,7 +163,7 @@ describe('Chain', function () {
       'symbols',
       'symbol',
       generateSixSymbols('compare chain intervals'),
-      (s1: Symbol, s2: Symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
+      (s1: symbol, s2: symbol): number => (s1.toString() < s2.toString() ? -1 : s1.toString() > s2.toString() ? +1 : 0)
     )
   })
 })

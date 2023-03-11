@@ -14,11 +14,11 @@
  limitations under the License.
  */
 
-import { Interval } from '../src/Interval'
+import { type Interval } from '../src/Interval'
 import { inspect } from 'util'
 
-export function intervalToString<T> (i: Interval<T>): string {
-  function valueToString (v: T | undefined | null): string {
+export function intervalToString<T>(i: Interval<T>): string {
+  function valueToString(v: T | undefined | null): string {
     if (typeof v === 'string') {
       return v
     }

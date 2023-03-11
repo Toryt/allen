@@ -28,7 +28,7 @@ import assert from 'assert'
    only. See also `bitCount`.  */
 export const largestNrOfBits = 16
 
-export function nrOfRelations (nrOfBits: number): number {
+export function nrOfRelations(nrOfBits: number): number {
   assert(Number.isInteger(nrOfBits))
   assert(nrOfBits >= 0)
   assert(nrOfBits <= largestNrOfBits)
@@ -38,19 +38,19 @@ export function nrOfRelations (nrOfBits: number): number {
 
 export const EMPTY_BIT_PATTERN = 0 // 00000
 
-export function fullBitPattern (nrOfBits: number): number {
+export function fullBitPattern(nrOfBits: number): number {
   // preconditions in nrOfRelations
 
   return nrOfRelations(nrOfBits) - 1
 }
 
-export function relationBitPatterns (nrOfBits: number): readonly number[] {
+export function relationBitPatterns(nrOfBits: number): readonly number[] {
   // preconditions in nrOfRelations
 
   return [...Array(nrOfRelations(nrOfBits)).keys()]
 }
 
-export function isRelationBitPattern (nrOfBits: number, candidate: unknown): candidate is number {
+export function isRelationBitPattern(nrOfBits: number, candidate: unknown): candidate is number {
   // preconditions in nrOfRelations
 
   return (
@@ -61,7 +61,7 @@ export function isRelationBitPattern (nrOfBits: number, candidate: unknown): can
   )
 }
 
-export function basicRelationBitPatterns (nrOfBits: number): readonly number[] {
+export function basicRelationBitPatterns(nrOfBits: number): readonly number[] {
   assert(Number.isInteger(nrOfBits))
   assert(nrOfBits >= 0)
   assert(nrOfBits <= largestNrOfBits)
@@ -72,7 +72,7 @@ export function basicRelationBitPatterns (nrOfBits: number): readonly number[] {
 /**
  * A basic relation is expressed by a single bit in the bit pattern.
  */
-export function isBasicRelationBitPattern (nrOfBits: number, candidate: unknown): candidate is number {
+export function isBasicRelationBitPattern(nrOfBits: number, candidate: unknown): candidate is number {
   // preconditions in isRelationBitPattern
 
   /* http://graphics.stanford.edu/~seander/bithacks.html
@@ -92,7 +92,7 @@ export const largestBitInteger = 2 ** (32 - 1)
 /**
  * Reverses the `bitPattern` of `nrOfBits` long.
  */
-export function reverse (nrOfBits: number, n: number): number {
+export function reverse(nrOfBits: number, n: number): number {
   assert(Number.isInteger(nrOfBits))
   assert(nrOfBits >= 0)
   assert(nrOfBits <= largestNrOfBits)
@@ -113,7 +113,7 @@ export function reverse (nrOfBits: number, n: number): number {
   return rev
 }
 
-export function bitCount (n: number): number {
+export function bitCount(n: number): number {
   assert(Number.isInteger(n))
   assert(n >= 0)
   assert(n <= largestBitInteger) // otherwise the algoritm flips the sign bit

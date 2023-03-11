@@ -1,5 +1,5 @@
 /*
- Copyright © 2022 by Jan Dockx
+ Copyright © 2022 – 2023 by Jan Dockx
 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@
 
 import {
   commonTypeRepresentation,
-  Constructor,
+  type Constructor,
   isTypeRepresentation,
   mostSpecializedCommonType,
   primitiveTypeRepresentations,
   representsSuperType,
-  TypeRepresentation,
+  type TypeRepresentation,
   typeRepresentationOf
 } from '../src/TypeRepresentation'
 import { inspect } from 'util'
@@ -87,7 +87,7 @@ const trueCases: Array<TrueCase<unknown>> = [
     elements: [
       () => 0,
       undefined,
-      function a () {
+      function a() {
         return true
       }
     ],
@@ -177,9 +177,9 @@ describe('TypeRepresentation', function () {
   })
   describe('mostSpecializedCommonType', function () {
     interface CommonCase {
-      c1: Constructor<Object>
-      c2: Constructor<Object>
-      expected: Constructor<Object>
+      c1: Constructor<object>
+      c2: Constructor<object>
+      expected: Constructor<object>
     }
 
     const cases: CommonCase[] = [
@@ -262,12 +262,12 @@ describe('TypeRepresentation', function () {
             }
           })
           it(`${inspect(ptr1)} does not represent 'function'`, function () {
-            // @ts-expect-error
+            // @ts-expect-error because we are testing that indeed this throws
             representsSuperType.bind(undefined, ptr1, 'function').should.throw()
           })
           idiotTypeRepresentations.forEach(s => {
             it(`${inspect(ptr1)} — ${inspect(s)} throws`, function () {
-              // @ts-expect-error
+              // @ts-expect-error because we are testing that indeed this throws
               representsSuperType.bind(undefined, ptr1, s).should.throw()
             })
           })
@@ -279,17 +279,17 @@ describe('TypeRepresentation', function () {
         describe(inspect(s1), function () {
           typeRepresentations.forEach(ptr2 => {
             it(`${inspect(s1)} — ${inspect(ptr2)} throws`, function () {
-              // @ts-expect-error
+              // @ts-expect-error because we are testing that indeed this throws
               representsSuperType.bind(undefined, s1, ptr2).should.throw()
             })
           })
           it(`${inspect(s1)} — 'function' throws`, function () {
-            // @ts-expect-error
+            // @ts-expect-error because we are testing that indeed this throws
             representsSuperType.bind(undefined, s1, 'function').should.throw()
           })
           idiotTypeRepresentations.forEach(s => {
             it(`${inspect(s1)} does not represent ${inspect(s)}`, function () {
-              // @ts-expect-error
+              // @ts-expect-error because we are testing that indeed this throws
               representsSuperType.bind(undefined, s1, s).should.throw()
             })
           })

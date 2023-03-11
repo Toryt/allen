@@ -15,19 +15,21 @@
  */
 
 import assert from 'assert'
-import { Interval, isInterval } from './Interval'
-import { Comparator } from './Comparator'
+import { type Interval, isInterval } from './Interval'
+import { type Comparator } from './Comparator'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { commonTypeRepresentation } from './TypeRepresentation'
-import { Indefinite } from './type'
+import { type Indefinite } from './type'
 
 const haveCommonType: string = 'i1.start, i1.end, i2.start and i2.end must be of a common type'
 
 /**
  * Assert that the parameters are acceptable, and return the {@link Comparator} to use.
  */
-export function getCompareIfOk<T> (i: ReadonlyArray<Readonly<Interval<T>>>, compareFn?: Comparator<T>): Comparator<T> {
-  i.forEach(j => assert(typeof j === 'object' && j !== null))
+export function getCompareIfOk<T>(i: ReadonlyArray<Readonly<Interval<T>>>, compareFn?: Comparator<T>): Comparator<T> {
+  i.forEach(j => {
+    assert(typeof j === 'object' && j !== null)
+  })
   assert(
     compareFn !== undefined || i.every(j => isLTComparableOrIndefinite(j.start) && isLTComparableOrIndefinite(j.end)),
     '`compareFn` is mandatory when `iN.start` or `iN.end` is a `symbol` or `NaN`'

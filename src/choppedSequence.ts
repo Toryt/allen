@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-import { Interval, ReferencedInterval, ReferenceIntervals } from './Interval'
-import { Comparator } from './Comparator'
+import { type Interval, type ReferencedInterval, type ReferenceIntervals } from './Interval'
+import { type Comparator } from './Comparator'
 import { equal, ok } from 'assert'
 import { transposeAndOrder } from './transposeAndOrder'
 
@@ -34,7 +34,7 @@ import { transposeAndOrder } from './transposeAndOrder'
  *
  * The resulting sequence is ordered, might have gaps, and might be left- and / or right-indefinite.
  */
-export function choppedSequence<T> (
+export function choppedSequence<T>(
   sources: Readonly<ReferenceIntervals<T>>,
   compareFn?: Comparator<T>
 ): ReadonlyArray<Readonly<Interval<T>>> {

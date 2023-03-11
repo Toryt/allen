@@ -15,8 +15,8 @@
  */
 
 import { AllenRelation } from './AllenRelation'
-import { Interval } from './Interval'
-import { Comparator } from './Comparator'
+import { type Interval } from './Interval'
+import { type Comparator } from './Comparator'
 import assert from 'assert'
 import { getCompareIfOk } from './getCompareIfOk'
 
@@ -25,7 +25,7 @@ import { getCompareIfOk } from './getCompareIfOk'
  *
  * When any interval is fully or partially indefinite, this cannot be guaranteed, and `false` is returned.
  */
-export function isEnclosing<T> (
+export function isEnclosing<T>(
   i: Readonly<Interval<T>>,
   is: ReadonlyArray<Readonly<Interval<T>>>,
   compareFn?: Comparator<T>
@@ -56,7 +56,7 @@ export function isEnclosing<T> (
  *         is.some(j => j.end !== undefined && j.end !== null && i.end === j.end)
  * ```
  */
-export function isMinimalEnclosing<T> (
+export function isMinimalEnclosing<T>(
   i: Readonly<Interval<T>>,
   is: ReadonlyArray<Readonly<Interval<T>>>,
   compareFn?: Comparator<T>
@@ -113,7 +113,7 @@ export function isMinimalEnclosing<T> (
  * result.end === undefined || is.every(i => i.end !== undefined && i.end !== null && !(result.end < i.end))
  * ```
  */
-export function minimalEnclosing<T> (
+export function minimalEnclosing<T>(
   is: ReadonlyArray<Readonly<Interval<T>>>,
   compareFn?: Comparator<T>
 ): Readonly<Interval<T>> {

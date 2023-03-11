@@ -32,21 +32,21 @@ algebra&quot;</cite></a>, on which the conventions used here are based.
 
 Allen finds that there are 13 _basic relations_ possible between definite intervals:
 
-| Basic relation             | `(.)` | Illustration                                        | Definition (mentioned properties must be definite, and …)   |
-| -------------------------- | ----- | --------------------------------------------------- | ----------------------------------------------------------- |
-| `i1` precedes `i2`         | `(p)` | ![precedes](AllenRelation-precedes.png)             | `i1.end < i2.start`                                         |
-| `i1` meets `i2`            | `(m)` | ![meets](AllenRelation-meets.png)                   | `i1.end = i2.start`                                         |
-| `i1` overlaps `i2`         | `(o)` | ![overlaps](AllenRelation-overlaps.png)             | `i1.start < i2.start ∧ i2.start < i1.end ∧ i1.end < i2.end` |
-| `i1` is finished by `i2`   | `(F)` | ![is finished by](AllenRelation-finishedBy.png)     | `i1.start < i2.start ∧ i1.end = i2.end`                     |
-| `i1` contains `i2`         | `(D)` | ![contains](AllenRelation-contains.png)             | `i1.start < i2.start ∧ i2.end < i1.end`                     |
-| `i1` starts `i2`           | `(s)` | ![starts](AllenRelation-starts.png)                 | `i1.start = i2.start ∧ i1.end < i2.end`                     |
-| `i1` equals `i2`           | `(e)` | ![equals](AllenRelation-equals.png)                 | `i1.start = i2.start ∧ i1.end = i2.end`                     |
-| `i1` is started by `i2`    | `(S)` | ![is started by](AllenRelation-startedBy.png)       | `i2.start = i1.start ∧ i2.end < i1.end`                     |
-| `i1` during `i2`           | `(d)` | ![during](AllenRelation-during.png)                 | `i2.start < i1.start ∧ i1.end < i2.end`                     |
-| `i1` finishes `i2`         | `(f)` | ![finishes](AllenRelation-finishes.png)             | `i2.start < i1.start ∧ i1.end = i2.end`                     |
-| `i1` is overlapped by `i2` | `(O)` | ![is overlapped by](AllenRelation-overlappedBy.png) | `i2.start < i1.start ∧ i1.start < i2.end ∧ i2.end < i1.end` |
-| `i1` is met by `i2`        | `(M)` | ![is met by](AllenRelation-metBy.png)               | `i2.end = i1.start`                                         |
-| `i1` is preceded by `i2`   | `(P)` | ![is preceded by](AllenRelation-precededBy.png)     | `i2.end < i1.start`                                         |
+| Basic relation             | `(.)` | Illustration        | Definition (mentioned properties must be definite, and …)   |
+| -------------------------- | ----- | ------------------- | ----------------------------------------------------------- |
+| `i1` precedes `i2`         | `(p)` | ![precedes]         | `i1.end < i2.start`                                         |
+| `i1` meets `i2`            | `(m)` | ![meets]            | `i1.end = i2.start`                                         |
+| `i1` overlaps `i2`         | `(o)` | ![overlaps]         | `i1.start < i2.start ∧ i2.start < i1.end ∧ i1.end < i2.end` |
+| `i1` is finished by `i2`   | `(F)` | ![is finished by]   | `i1.start < i2.start ∧ i1.end = i2.end`                     |
+| `i1` contains `i2`         | `(D)` | ![contains]         | `i1.start < i2.start ∧ i2.end < i1.end`                     |
+| `i1` starts `i2`           | `(s)` | ![starts]           | `i1.start = i2.start ∧ i1.end < i2.end`                     |
+| `i1` equals `i2`           | `(e)` | ![equals]           | `i1.start = i2.start ∧ i1.end = i2.end`                     |
+| `i1` is started by `i2`    | `(S)` | ![is started by]    | `i2.start = i1.start ∧ i2.end < i1.end`                     |
+| `i1` during `i2`           | `(d)` | ![during]           | `i2.start < i1.start ∧ i1.end < i2.end`                     |
+| `i1` finishes `i2`         | `(f)` | ![finishes]         | `i2.start < i1.start ∧ i1.end = i2.end`                     |
+| `i1` is overlapped by `i2` | `(O)` | ![is overlapped by] | `i2.start < i1.start ∧ i1.start < i2.end ∧ i2.end < i1.end` |
+| `i1` is met by `i2`        | `(M)` | ![is met by]        | `i2.end = i1.start`                                         |
+| `i1` is preceded by `i2`   | `(P)` | ![is preceded by]   | `i2.end < i1.start`                                         |
 
 These basic relations can be compared to the relations `<`, `=`, and `>` between 2 points.
 
@@ -60,566 +60,218 @@ relations are an _orthogonal basis_ for all possible general relations. This inc
 you are from Barcelona. The `EMPTY` relation is not a true relation. It does not express a relational condition between
 two intervals. It is needed for consistency with some algebraic operations on relations.
 
-## Interval constraints
-
-<div style="background-color: red; color: yellow;"><strong>MUDO: port remaining text</strong></div>
-
-## Reasoning with unknown but constrained start and end point
-
-<div style="background-color: red; color: yellow;"><strong>MUDO: port remaining text</strong></div>
-
-## Points as intervals
-
-“Points”, including the `start` and `end` of intervals, are never realy points. Due to Heisenberg's uncertainty
-principle, we know that we fundamentally cannot be more precise, e.g., for time, than the
-[Planck duration](https://en.wikipedia.org/wiki/Planck_units#Planck_time) (~ 5.39.10<sup>−44</sup> s). In practice, any
-measurement, any clock, has a limited precision. The “points” we are using are actually also intervals. E.g., given an
-interval with ms precision:
-
-```ts
-const i = {
-  start: '2022-10-29T16:03:53.263Z',
-  end: '2022-10-29T16:04:20.870Z'
-}
-```
-
-`start` actually represents the interval `is = [2022-10-29T16:03:53.263Z, 2022-10-29T16:03:53.264Z[`, and `end` actually
-represents the interval `ie = [2022-10-29T16:04:20.870Z, 2022-10-29T16:04:20.871Z[`. The interval `i` starts somewhere
-in `is`, and ends somewhere in `ie`.
-
-With this reasoning, when we compare isolated “points” `p1` and `p2`, we are actually comparing definite intervals,
-_represented by a point_, too. The Allen relation between the point representations will be a basic relation, because
-`p1` and `p2` are _definite_ intervals. When we limit ourselves to point representations with a defined precision, the
-same for `p1` and `p2`, we know both point-intervals have the same length or duration, and a shorter length is
-impossible. This limits the possibilities further.
-
-| `p1 (.) p2` | Illustration                                        | Definition (mentioned properties must be definite, and …)   | Point relation |
-| ----------- | --------------------------------------------------- | ----------------------------------------------------------- | -------------- |
-| `p1 (p) p2` | ![precedes](AllenRelation-precedes.png)             | `p1.end < p2.start`                                         | `p1 < p2`      |
-| `p1 (m) p2` | ![meets](AllenRelation-meets.png)                   | `p1.end = p2.start`                                         | `p1 < p2`      |
-| `p1 (o) p2` | ![overlaps](AllenRelation-overlaps.png)             | `p1.start < p2.start ∧ p2.start < p1.end ∧ p1.end < p2.end` | ❌ 3.          |
-| `p1 (F) p2` | ![is finished by](AllenRelation-finishedBy.png)     | `p1.start < p2.start ∧ p1.end = p2.end`                     | ❌ 1. 2.       |
-| `p1 (D) p2` | ![contains](AllenRelation-contains.png)             | `p1.start < p2.start ∧ p2.end < p1.end`                     | ❌ 2.          |
-| `p1 (s) p2` | ![starts](AllenRelation-starts.png)                 | `p1.start = p2.start ∧ p1.end < p2.end`                     | ❌ 1.          |
-| `p1 (e) p2` | ![equals](AllenRelation-equals.png)                 | `p1.start = p2.start ∧ p1.end = p2.end`                     | `p1 = p2`      |
-| `p1 (S) p2` | ![is started by](AllenRelation-startedBy.png)       | `p2.start = p1.start ∧ p2.end < p1.end`                     | ❌ 1.          |
-| `p1 (d) p2` | ![during](AllenRelation-during.png)                 | `p2.start < p1.start ∧ p1.end < p2.end`                     | ❌ 2.          |
-| `p1 (f) p2` | ![finishes](AllenRelation-finishes.png)             | `p2.start < p1.start ∧ p1.end = p2.end`                     | ❌ 1. 2.       |
-| `p1 (O) p2` | ![is overlapped by](AllenRelation-overlappedBy.png) | `p2.start < p1.start ∧ p1.start < p2.end ∧ p2.end < p1.end` | ❌ 3.          |
-| `p1 (M) p2` | ![is met by](AllenRelation-metBy.png)               | `p2.end = p1.start`                                         | `p2 < p1`      |
-| `p1 (P) p2` | ![is preceded by](AllenRelation-precededBy.png)     | `p2.end < p1.start`                                         | `p2 < p1`      |
-
-1. When either `start` or `end` of `p1` and `p2` should be equal according to the definition (`(F)`, `(s)`, `(e)`,
-   ` (S)`, `(f)`), the other end will be equal too, since `p1` and `p2` as intervals have equal length. This is only
-   satisfied by `(e)`.
-
-2. If either `start` or `end` of `p1` and `p2` should not be equal according to the definition, but either relate as `<`
-   or `>` (`(p)`, `(o)`, `(F)`, `(D)`, `(s)`, `(S)`, `(d)`, `(f)`, `(O)`, `(P)`), the other ends will have the same
-   relation, since `p1` and `p2` as intervals have equal length. `(o)` and `(O)` satisfy this condition. `(p)` and `(P)`
-   avoid the condition by not expressing the relation of the other end. The definitions of `(F)`, `(D)`, `(s)`, `(S)`,
-   `(d)`, or `(f)`, cannot be satisfied for intervals of equal lenght.
-
-3. If `p1.start < p2.start`, `p1.end = p1.start + pl ≤ p2.start`, since `p1` has the smallest possible length `pl > 0`.
-   Adding the smallest possible length to `p1.start` can at most make it equal to `p2.start`, but can cannot make it
-   larger. If `p2.start < p1. start`, `p2.end = p2.start + pl ≤ p1. start`, since `p2` has the smallest possible length
-   `pl > 0`. Adding the smallest possible length to `p2.start` can at most make it equal to `p1.start`, but can cannot
-   make it larger. (`(p)`, `(o)`, `(F)`, `(D)`, `(s)`, `(S)`, `(d)`, `(f)`, `(O)`, `(P)`) have this relation between
-   their starting points. (`(p)`, `(F)`, `(D)`, `(s)`, `(S)`, `(d)`, `(f)`, `(P)`) avoid the condition by not expressing
-   the cross relation with the `end` of the other point. The definitions of `(o)` and `(O)` cannot be satisfied for
-   intervals of minimum length.
-
-### Equal point reprsentations (=)
-
-When we interpret the point representation `rp` as the interval `i` such that `p ∈ i`, two equal point representations
-`rp1 = rp2` do not necessarily represent the same interval. `rp1 = rp2`, with `rp1` representing `i1` and `rp2`
-representing `i2`, then means
-
-```
-  (rp1 ∈ i1) ∧ (rp2 ∈ = i2) ∧ (|i1| = pl) ∧ (|i2| = pl) ∧ (rp1 = rp2)
-⇔ (rp1 = rp2 ∈ i1) ∧ (rp1 = rp2 ∈ i2)
-⇔ (rp1 = rp2 ∈ i1 ∩ i2)
-⇔ (i1 ∩ i2 ≠ ∅)
-```
-
-The relationship where 2 half-open intervals have at least 1 common point is `i1 (oFDseSdfO) i2`. Since `(F)`, `(D)`,
-`(s)`, `(S)`, `(d)`, and `(f)`, and `(o)` and `(O)` cannot be satisfied with point-intervals, only `i1 (e) i2` remains.
-
-### Unequal point representations (<, >)
-
-When a point interpretation is smaller than the other, e.g., `rp1 < rp2`, with `rp1` representing `i1` and `rp2`
-representing `i2`, this means the smallest possible element of `i1` must be smaller than the largest possible element of
-`i2`. When we are working with right half-open intervals, with a fixed minimum length `pl`, this means:
-
-```
-  (rp1 ∈ i1) ∧ (rp2 ∈ = i2) ∧ (|i1| = pl) ∧ (|i2| = pl) ∧ (rp1 < rp2)
-⇔ (rp1 ∈ [i1.start, i1.start + pl[) ∧ (rp2 ∈ [i2.start, i2.start + pl[) ∧ (rp1 < rp2)  [A]
-⇔ i1.start < i2.start + pl = i2.end
-```
-
-The relationship where `i1.start < i2.end` is possible is `i1 (pmoFDseSdfO) i2`. Barring definitions that cannot be
-satisfied for point-intervals, this results in `i1 (pme) i2`. The symmetric case, for `rp2 < rp1`, results in
-`i1 (eMP) i2`. `(e)` turns up here because the intervals `i1` and `i2` are not precisely known, and only knowing
-`i1. start < i2.end` does not bar interval equality. For that `p1.start = p2.start ∧ p1.end = p2.end` has to be false in
-all cases. If this was true, with `p1.start = p2.start = pstart` and `p1.end = p2.end = pstart + pl` (reductio ad
-absurdum):
-
-```
-  [A]
-⇔ (rp1 ∈ [pstart, pstart + pl[) ∧ (rp2 ∈ [pstart, pstart + pl[)
-⇔ |rp1 - rp2| < pl
-```
-
-The point representations `rp1` and `rp2` have to be less than `pl` apart. That is impossible, since `pl` is the
-smallest precision that can be expressed in the point representations. Finally, the resulting relations are
-`i1 (pm) i2`, and `i1 (MP) i2` for the symmetric case.
-
-### Indefinite points
-
-When a point representation is indefinite, we do not know what interval it represents, but we do know that it represents
-an interval of fixed minimal length `pl`. This means the above rules apply, and that the comparison of an indefinite
-point representation with another, definite or indefinite point representation, must be `(pm)`, `(e)`, or `(MP)`. Since
-we do not know where on the number line this interval is located, we cannot limit the relation more, and the result is
-`(pmeMP)`.
-
-## Comparing points with intervals
-
-We can also compare point representations with regular intervals. Consider the `start` and `end` of intervals as point
-representations, representing intervals of fixed minimum length `pl`. We then know, with right half-open intervals,
-`i.start (s) i` and `i.end (M) i`. We can now compose the relationship of a point representation `p` with `i.start` and
-`i.end` with these relations, to find the relation with `i`. `⊕` represents the composition operator.
-
-| `p ⨀ i.P` | `p (.) i.P` | `p (.) i.start ⊕ i.start (s) i` | `p (.) i.end ⊕ i.end (M) i` |
-| --------- | ----------- | ------------------------------- | --------------------------- |
-| <         | `(pm)`      | `(pm)`                          | `(pmoFsedf)`                |
-| =         | `(e)`       | `(s)`                           | `(M)`                       |
-| >         | `(MP)`      | `(dfOMP)`                       | `(P)`                       |
-| 🤷        | `(pmeMP)`   | `(pmsdfOMP)`                    | `(pmoFsedfMP)`              |
-
-When then calculate the conjunction of the relationship between `p` and `i.start` with the relationship between `p` and
-`i.end`. `p (.) i` is `(p (.) i.start ⊕ i.start (s) i) ∧ (p (.) i.end ⊕ i.end (M) i)`.
-
-| `p ⨀ i.start` | `p (.) i.start` | `p ⨀ i.end` | `p (.) i.end` | `p (.) i`                   | conjunction |
-| ------------- | --------------- | ----------- | ------------- | --------------------------- | ----------- |
-| <             | `(pm)`          | <           | `(pm)`        | `(pm) ∧ (pmoFsedf)`         | `(pm)`      |
-|               |                 | =           | `(e)`         | `(pm) ∧ (M)`                | `()`        |
-|               |                 | >           | `(MP)`        | `(pm) ∧ (P)`                | `()`        |
-|               |                 | 🤷          | `(pmeMP)`     | `(pm) ∧ (pmoFsedfMP)`       | `(pm)`      |
-| =             | `(e)`           | <           | `(pm)`        | `(s) ∧ (pmoFsedf)`          | `(s)`       |
-|               |                 | =           | `(e)`         | `(s) ∧ (M)`                 | `()`        |
-|               |                 | >           | `(MP)`        | `(s) ∧ (P)`                 | `()`        |
-|               |                 | 🤷          | `(pmeMP)`     | `(s) ∧ (pmoFsedfMP)`        | `(s)`       |
-| >             | `(MP)`          | <           | `(pm)`        | `(dfOMP) ∧ (pmoFsedf)`      | `(df)`      |
-|               |                 | =           | `(e)`         | `(dfOMP) ∧ (M)`             | `(M)`       |
-|               |                 | >           | `(MP)`        | `(dfOMP) ∧ (P)`             | `(P)`       |
-|               |                 | 🤷          | `(pmeMP)`     | `(dfOMP) ∧ (pmoFsedfMP)`    | `(dfMP)`    |
-| 🤷            | `(pmeMP)`       | <           | `(pm)`        | `(pmsdfOMP) ∧ (pmoFsedf)`   | `(pmsdf)`   |
-|               |                 | =           | `(e)`         | `(pmsdfOMP) ∧ (M)`          | `(M)`       |
-|               |                 | >           | `(MP)`        | `(pmsdfOMP) ∧ (P)`          | `(P)`       |
-|               |                 | 🤷          | `(pmeMP)`     | `(pmsdfOMP) ∧ (pmoFsedfMP)` | `(pmsdfMP)` |
-
-We get a subalgebra with an orthogonal basis of 5 possible Allen relations as result, that correspond to the basic
-relations we found for point interval relations:
-
-|            | Point – interval relation | Allen relation |
-| ---------- | ------------------------- | -------------- |
-| before     | `(b)`                     | `(pm)`         |
-| commences  | `(c)`                     | `(s)`          |
-| in         | `(i)`                     | `(df)`         |
-| terminates | `(t)`                     | `(M)`          |
-| after      | `(a)`                     | `(P)`          |
-
-Note the assymmetry. This is a consequence of our choice to work with right half-open intervals. With another choice,
-the same reasoning applies, but we would find different basic relations.
-
-Given 5 basic relations, we get 32 (= 2<sup>5</sup>) possible general relations between points and intervals. This
-includes the EMPTY relation `()`, and a full relation, which is `(pmsdfMP)` for point – interval relations.
-
-There are 8 actual relations that can exist between points and intervals:
-
-|                                            | Point – interval relation | Allen relation |
-| ------------------------------------------ | ------------------------- | -------------- |
-| the 5 basic relations                      | `(b)`                     | `(pm)`         |
-|                                            | `(c)`                     | `(s)`          |
-|                                            | `(i)`                     | `(df)`         |
-|                                            | `(t)`                     | `(M)`          |
-|                                            | `(a)`                     | `(P)`          |
-| relations with indefinite `start` or `end` | `(bci)`                   | `(pmsdf)`      |
-|                                            | `(ita)`                   | `(dfMP)`       |
-| the full relation                          | `(bcita)`                 | `(pmsdfMP)`    |
-
-Note that `(o)`, `(F)`, `(D)`, `(e)`, `(S)`, and `(O)` can never appear in actual point — interval relations, in part
-because of the fixed minimal lenght of points-as-intervals, in part because we choose to work with right half-open
-intervals.
-
-The following table gives a graphical overview of the 8 actual relations that are possible:
-
-|     | `[start,` |     | `end[` |     | actual    |             |
-| --- | --------- | --- | ------ | --- | --------- | ----------- |
-| `p` |           |     |        |     | `(b)`     | `(pm)`      |
-|     | `p`       |     |        |     | `(c)`     | `(s)`       |
-|     |           | `p` |        |     | `(i)`     | `(df)`      |
-|     |           |     | `p`    |     | `(t)`     | `(M)`       |
-|     |           |     |        | `p` | `(a)`     | `(P)`       |
-| 🤷  | 🤷        | 🤷  | 🤷     | 🤷  | `(bcita)` | `(pmsdfMP)` |
-
-| `[🤷,` | `end[` |     | actual    |             |
-| ------ | ------ | --- | --------- | ----------- |
-| `p`    |        |     | `(bci)`   | `(pmsdf)`   |
-|        | `p`    |     | `(t)`     | `(M)`       |
-|        |        | `p` | `(a)`     | `(P)`       |
-| 🤷     | 🤷     | 🤷  | `(bcita)` | `(pmsdfMP)` |
-
-|     | `[start,` | `🤷[` | actual    |             |
-| --- | --------- | ----- | --------- | ----------- |
-| `p` |           |       | `(b)`     | `(pm)`      |
-|     | `p`       |       | `(c)`     | `(s)`       |
-|     |           | `p`   | `(ita)`   | `(dfMP)`    |
-| 🤷  | 🤷        | 🤷    | `(bcita)` | `(pmsdfMP)` |
-
-When comparing an interval with a point, instead of a point with an interval, the converse relationships apply for the
-basic relations, as expected. This generates a separate algebra with a separate set of basic relations:
-
-|                  | Point – interval relation | Allen relation |
-| ---------------- | ------------------------- | -------------- |
-| prior to         | `(A)`                     | `(p)`          |
-| is terminated by | `(T)`                     | `(m)`          |
-| encloses         | `(I)`                     | `(FD)`         |
-| is commenced by  | `(C)`                     | `(S)`          |
-| anterior to      | `(B)`                     | `(MP)`         |
-
-The full relation for interval — point relations is `(pmFDSMP)`.
-
-`(o)`, `(s)`, `(e)`, `(d)`, `(f)`, and `(O)` can never appear in actual interval — point relations.
-
-There are 8 actual relations that can exist between intervals and point:
-
-|                                            | Point – interval relation | Allen relation |
-| ------------------------------------------ | ------------------------- | -------------- |
-| the 5 basic relations                      | `(A)`                     | `(p)`          |
-|                                            | `(T)`                     | `(m)`          |
-|                                            | `(I)`                     | `(FD)`         |
-|                                            | `(C)`                     | `(S)`          |
-|                                            | `(B)`                     | `(MP)`         |
-| relations with indefinite `start` or `end` | `(ATI)`                   | `(pmFD)`       |
-|                                            | `(ICB)`                   | `(FDSMP)`      |
-| the full relation                          | `(ATICB)`                 | `(pmFDSMP)`    |
-
-The following table gives a graphical overview of the 8 actual relations that are possible:
-
-|     | `[start,` |     | `end[` |     | actual    |             |
-| --- | --------- | --- | ------ | --- | --------- | ----------- |
-|     |           |     |        | `p` | `(A)`     | `(p)`       |
-|     |           |     | `p`    |     | `(T)`     | `(m)`       |
-|     |           | `p` |        |     | `(I)`     | `(FD)`      |
-|     | `p`       |     |        |     | `(C)`     | `(S)`       |
-| `p` |           |     |        |     | `(B)`     | `(MP)`      |
-| 🤷  | 🤷        | 🤷  | 🤷     | 🤷  | `(ATICB)` | `(pmFDSMP)` |
-
-| `[🤷,` | `end[` |     | actual    |             |
-| ------ | ------ | --- | --------- | ----------- |
-|        |        | `p` | `(A)`     | `(p)`       |
-|        | `p`    |     | `(T)`     | `(m)`       |
-| `p`    |        |     | `(ICB)`   | `(FDSMP)`   |
-| 🤷     | 🤷     | 🤷  | `(ATICB)` | `(pmFDSMP)` |
-
-|     | `[start,` | `🤷[` | actual    |             |
-| --- | --------- | ----- | --------- | ----------- |
-|     |           | `p`   | `(ATI)`   | `(pmFD)`    |
-|     | `p`       |       | `(C)`     | `(S)`       |
-| `p` |           |       | `(B)`     | `(MP)`      |
-| 🤷  | 🤷        | 🤷    | `(ATICB)` | `(pmFDSMP)` |
-
-## Chop and intersection
-
-Given 2 intervals `i1` and `i2`, we can consider their _chopped sequence_. This is an ordered sequence such that both
-`i1` and `i2` are “covered” by a gapless subsequence `ss1` and `ss2` of one or more intervals. The minimal enclosing
-interval of the subsequence `minimalEnclosing(ss1) (e) i1`, respectively `minimalEnclosing(ss2) (e) i2`. All intervals
-in the chopped sequence are part of such a subsequence. For each interval `isspq` in the subsequence `ssp`, its relation
-with `ip` must imply `(sedf)` (`isspq ENCLOSED_BY ip`). I imagine both intervals to be cooky cutters, which slice the
-other interval at the `start` and `end`.
-
-The _intersection_ of 2 intervals `i1` and `i2` is the maximal interval `is` that is enclosed by both `i1` and `i2`:
-
-```
-is ENCLOSED_BY i1 ∧ is ENCLOSED_BY i2
-```
-
-When `i1 DOES_NOT_CONCUR_WITH i2`, there is no intersection interval.
-
-### Definite intervals
-
-For fully definite intervals, we get the following chopped sequences and subsequences, and intersection, depending on
-their relation.
-
-| `i1 (.) i2` | chopped sequence                                              | subsequence `i1`                             | subsequence `i2`                             | intersection         |
-| ----------- | ------------------------------------------------------------- | -------------------------------------------- | -------------------------------------------- | -------------------- |
-| `i1 (p) i2` | `i1, i2`                                                      | `i1`                                         | `i2`                                         | —                    |
-| `i1 (m) i2` | `i1, i2`                                                      | `i1`                                         | `i2`                                         | —                    |
-| `i1 (o) i2` | `[i1.start, i2.start[, [i2.start, i1.end[ , [i1.end, i2.end[` | `[i1.start, i2.start[, [i2.start, i1.end[`   | `[i2.start, i1.end[, [i1.end, i2.end[`       | `[i2.start, i1.end[` |
-| `i1 (F) i2` | `[i1.start, i2.start[, i2`                                    | `[i1.start, i2.start[, i2`                   | `i2`                                         | `i2`                 |
-| `i1 (D) i2` | `[i1.start, i2.start[, i2, [i2.end, i1.end[`                  | `[i1.start, i2.start[, i2, [i2.end, i1.end[` | `i2`                                         | `i2`                 |
-| `i1 (s) i2` | `i1, [i1.end, i2.end[`                                        | `i1`                                         | `i1, [i1.end, i2.end[`                       | `i1`                 |
-| `i1 (e) i2` | `i1` = `i2`                                                   | `i1, i2`                                     | `i1, i2`                                     | `i1` = `i2`          |
-| `i1 (S) i2` | `i2, [i2.end, i1.end[`                                        | `i2, [i2.end, i1.end[`                       | `i2`                                         | `i2`                 |
-| `i1 (d) i2` | `[i2.start, i1.start[, i1, [i1.end, i2.end[`                  | `i1`                                         | `[i2.start, i1.start[, i1, [i1.end, i2.end[` | `i1`                 |
-| `i1 (f) i2` | `[i2.start, i1.start[, i1`                                    | `i1`                                         | `[i2.start, i1.start[, i1`                   | `i1`                 |
-| `i1 (O) i2` | `[i2.start, i1.start[, [i1.start, i2.end[ , [i2.end, i1.end[` | `[i1.start, i2.end[ , [i2.end, i1.end[`      | `[i2.start, i1.start[, [i1.start, i2.end[ `  | `[i1.start, i2.end[` |
-| `i1 (M) i2` | `i2, i1`                                                      | `i1`                                         | `i2`                                         | —                    |
-| `i1 (P) i2` | `i2, i1`                                                      | `i1`                                         | `i2`                                         | —                    |
-
-Note there are always 1, 2, or 3 intervals in the chopped sequence. The intersection does not exist, is `i1` or `i2` (or
-both for `(e)`), or a new interval for `(o)` and `(O)`.
-
-We get the same results for `i2 (.) i1`. Chopping, and the intersection, commute.
-
-### Indefinite intervals
-
-For indefinite intervals, the result is most often indeterminate.
-
-Consider the actual relation between a left-indefinite interval `lii` and an interval `i`, and vice versa. Depending on
-the relation between `lii.end` and `i.start`, and `lii.end` and `i.end`, we get:
-
-| `lii.end ⨀ i.start` | `lii.end ⨀ i.end` | `lii (.) i`     | `i (.) lii`     |
-| ------------------- | ----------------- | --------------- | --------------- |
-| <                   | <                 | `(p)`           | `(P)`           |
-| =                   | <                 | `(m)`           | `(M)`           |
-| &gt;                | <                 | `(osd)`         | `(DSO)`         |
-|                     | =                 | `(Fef)`         | `(Fef)`         |
-|                     | >                 | `(DSOMP)`       | `(pmosd)`       |
-|                     | 🤷                | `(oFDseSdfOMP)` | `(pmoFDseSdfO)` |
-| 🤷                  | <                 | `(pmosd)`       | `(DSOMP)`       |
-|                     | =                 | `(Fef)`         | `(FeF)`         |
-|                     | >                 | `(DSOMP)`       | `(pmosd)`       |
-|                     | 🤷                | full            | full            |
-
-For a right-indefinite interval `rii` and an interval `i`, and vice versa, we get:
-
-| `rii.start ⨀ i.end` | `rii.start ⨀ i.start` | `rii (.) i`     | `i (.) rii`     |
-| ------------------- | --------------------- | --------------- | --------------- |
-| &gt;                | &gt;                  | `(P)`           | `(p)`           |
-| =                   | <                     | `(M)`           | `(m)`           |
-| <                   | >                     | `(dfO)`         | `(oFD)`         |
-|                     | =                     | `(seS)`         | `(seS)`         |
-|                     | <                     | `(pmoFD)`       | `(dfOMP)`       |
-|                     | 🤷                    | `(pmoFDseSdfO)` | `(oFDseSdfOMP)` |
-| 🤷                  | >                     | `(dfOMP)`       | `(pmoFD)`       |
-|                     | =                     | `(seS)`         | `(seS)`         |
-|                     | <                     | `(pmoFD)`       | `(dfOMP)`       |
-|                     | 🤷                    | full            | full            |
-
-`(p)`, `(m)`, `(M)`, and `(P)` are basic relations, and the chopped sequence can be looked up in the table above. There
-is no intersection in these cases.
-
-When `lii.end > i.start`, and `i.end` definite, and `rii.start < i.end`, and `i.start` definite however, we have 3
-different cases where the actual relation is not a basic relation, and there are 3, respectively 5, possible chopped
-sequences and intersections. Let's display them visually:
-
-| `[i.start, –` |             | `…, lii.end[` |             | `lii (.) i` | chopped sequence                                       | intersection            | most meaningfull intersection |
-| ------------- | ----------- | ------------- | ----------- | ----------- | ------------------------------------------------------ | ----------------------- | ----------------------------- |
-|               |             |               | `–, i.end[` | `(o)`       | `[🤷, i.start[, [i.start, lii.end[ , [lii.end, i.end[` | `[i.start, lii.end[`    | `[🤷, lii.end[`               |
-|               |             |               |             | `(s)`       | `[lii.start = i.start, lii.end[, [lii.end, i.end[`     | `[i.start, lii.end[`    |                               |
-|               |             |               |             | `(d)`       | `[i.start, ❓▶️[, [◀️❓, lii.end], [lii.end, i.end[`   | `[🤷, lii.end[`         |                               |
-|               |             | `–, i.end[`   |             | `(F)`       | `[🤷, i.start[, i`                                     | `i`                     | `[🤷, lii.end = i.end[`       |
-|               |             |               |             | `(e)`       | `i`                                                    | `i`                     |                               |
-|               |             |               |             | `(f)`       | `[i.start, ❓▶️[, [◀️❓, lii.end = i.end[`             | `[🤷, lii.end = i.end[` |                               |
-|               | `–, i.end[` |               |             | `(D)`       | `[🤷, i.start[, i, [i.end, lii.end[`                   | `i`                     | ❌                            |
-|               |             |               |             | `(S)`       | `i, [i.end, lii.end[`                                  | `i`                     |                               |
-|               |             |               |             | `(O)`       | `[i.start, ❓▶️[, [◀️❓, i.end[, [i.end, lii.end[`     | `[🤷, i.end[`           |                               |
-|               |             |               |             | `(M)`       | `i, [◀️ = i.end, lii.end[`                             | —                       |                               |
-|               |             |               |             | `(P)`       | `i, [◀️❓, lii.end[`                                   | —                       |                               |
-|               | 🤷          | 🤷            | 🤷          | `(o)`       | `[🤷, i.start[, [i.start, lii.end[ , [lii.end, 🤷[`    | `[i.start, lii.end[`    | ❌                            |
-|               |             |               |             | `(F)`       | `[🤷, i.start[, [i.start, 🤷[`                         | `i`                     |                               |
-|               |             |               |             | `(D)`       | `[🤷, i.start[, [i.start, ❓▶️[, [◀️❓, lii.end[`      | `i`                     |                               |
-|               |             |               |             | `(s)`       | `[lii.start = i.start, lii.end[, [lii.end, 🤷[`        | `[i.start, lii.end[`    |                               |
-|               |             |               |             | `(e)`       | `i`                                                    | `i`                     |                               |
-|               |             |               |             | `(S)`       | `[i.start, ❓▶️[, [◀️❓, lii.end[`                     | `i`                     |                               |
-|               |             |               |             | `(d)`       | `[i.start, ❓▶️[, [◀️❓, lii.end], [lii.end, 🤷[`      | `[🤷, lii.end[`         |                               |
-|               |             |               |             | `(f)`       | `[i.start, ❓▶️[, [◀️❓, lii.end = i.end[`             | `[🤷, lii.end = i.end[` |                               |
-|               |             |               |             | `(O)`       | `[i.start, ❓▶️[, [◀️❓, ❓▶️[, [◀️❓, lii.end[`       | `[🤷, 🤷[`              |                               |
-|               |             |               |             | `(M)`       | `[i.start, ❓▶️[, [◀️❓, lii.end[`                     | —                       |                               |
-|               |             |               |             | `(P)`       | `[i.start, ❓▶️[, [◀️❓, lii.end[`                     | —                       |                               |
-
-|               | `[rii.start, …` |               | `–, i.end[` | `rii (.) i` | chopped sequence                                         | intersection                | most meaningfull intersection |
-| ------------- | --------------- | ------------- | ----------- | ----------- | -------------------------------------------------------- | --------------------------- | ----------------------------- |
-| `[i.start, –` |                 |               |             | `(d)`       | `[i.start, rii.start[, [rii.start, ❓▶️], [◀️❓, i.end[` | `[rii.start, 🤷[`           | `[rii.start, 🤷[`             |
-|               |                 |               |             | `(f)`       | `[i.start, rii.start[, [rii.start, i.end = rii.end]`     | `[rii.start, i.end[`        |                               |
-|               |                 |               |             | `(O)`       | `[i.start, rii.start[, [rii.start, i.end[ , [i.end, 🤷[` | `[rii.start, i.end[`        |                               |
-|               | `[i.start, –`   |               |             | `(s)`       | `[i.start = rii.start, ❓▶️], [◀️❓, i.end[`             | `[i.start = rii.start, 🤷[` | `[i.start = rii.start, 🤷[`   |
-|               |                 |               |             | `(e)`       | `i`                                                      | `i`                         |                               |
-|               |                 |               |             | `(S)`       | `i, [i.end, 🤷[`                                         | `i`                         |                               |
-|               |                 | `[i.start, –` |             | `(p)`       | `[rii.start, ❓▶️[, i`                                   | —                           | ❌                            |
-|               |                 |               |             | `(m)`       | `[rii.start, ▶️ = i.start[, i`                           | —                           |                               |
-|               |                 |               |             | `(o)`       | `[rii.start, i.start[, [i.start, ❓▶️[, [◀️❓, i.end[`   | `[i.start, 🤷[`             |                               |
-|               |                 |               |             | `(F)`       | `[rii.start, i.start[, i`                                | `i`                         |                               |
-|               |                 |               |             | `(D)`       | `[rii.start, i.start[, i, [i.end, 🤷[`                   | `i`                         |                               |
-| 🤷            | 🤷              | 🤷            |             | `(p)`       | `[rii.start, ❓▶️[, [◀️❓, i.end[`                       | —                           | ❌                            |
-|               |                 |               |             | `(m)`       | `[rii.start, ❓▶️[, [◀️❓, i.end[`                       | —                           | ❌                            |
-|               |                 |               |             | `(o)`       | `[rii.start, ❓▶️[, [◀️❓, ❓▶️[, [◀️❓, i.end[`         | `[🤷, 🤷[`                  | ❌                            |
-|               |                 |               |             | `(F)`       | `[rii.start, ❓▶️[, [◀️❓, i.end[`                       | `i`                         | ❌                            |
-|               |                 |               |             | `(D)`       | `[rii.start, ❓▶️[, [◀️❓, i.end[, [i.end, 🤷[`          | `i`                         | ❌                            |
-|               |                 |               |             | `(s)`       | `[i.start = rii.start, ❓▶️], [◀️❓, i.end[`             | `[i.start = rii.start, 🤷[` | ❌                            |
-|               |                 |               |             | `(e)`       | `i`                                                      | `i`                         | ❌                            |
-|               |                 |               |             | `(S)`       | `[🤷, i.end[, [i.end, 🤷[`                               | `i`                         | ❌                            |
-|               |                 |               |             | `(d)`       | `[🤷, rii.start[, [rii.start, ❓▶️], [◀️❓, i.end[`      | `[rii.start, 🤷[`           | ❌                            |
-|               |                 |               |             | `(f)`       | `[🤷, rii.start[, [rii.start, i.end = rii.end]`          | `[rii.start, i.end[`        | ❌                            |
-|               |                 |               |             | `(O)`       | `[🤷, rii.start[, [rii.start, i.end[ , [i.end, 🤷[`      | `[rii.start, i.end[`        | ❌                            |
-
-We get the same results for `i (.) lii`, and `i (.) rii`.
-
-The intersection is well-defined in all cases. We get a left-indefinite intersection interval for `(d)`, `(f)`, `(O) `,
-respectively a right-indefinite interval for `(d)`, `(s)`, `(o)`, and no, or a definite interval in the other cases. If
-we had a little more information we might be sure about the intersection. E.g., when `lii.end > i.start`, and
-`lii.end < i.end`, if we would know that `¬ (lii (d) i)`, we are sure the intersection is `[i.start, lii.end[`. The
-choice is limited to returning a definite, or indefinite interval, when `lii.end > i.start` and `lii.end < i.end`, or
-`lii.end = i.end`, and when `rii.start < i.end` and `rii.start > i.start`, or `rii.start = i.start`. In these cases, it
-is correct to say the intersection is `[🤷, lii.end[`, and `[rii.start, 🤷[`, respectively. This does not apply to
-`lii.end > i.start` and `lii.end > i.end`, or `rii.start < i.end` and `rii.start < i.start`. `[🤷, i.end[`, respectively
-`[i.start, 🤷[` would be the intersection, except for the cases `(M)` and `(P)`, and `(p)` and `(m)`, respectively,
-where there is no intersection. Saying that the intersection is the fully indefinite interval would be wrong. It is
-`[🤷, i.end[`, respectively `[i.start, 🤷[`, or there is no intersection. We don't know.
-
-Therefor, we only define the intersection in cases where the answer is well-definined. Users should apply “Reasoning
-with unknown but constrained start and end point” to the indefinite intervals first, to express the extra knowledge
-about constraints that they have.
-
-The chopped sequence is not well-defined for `(d)`, `(f)`, `(O)` and `(P)`, respectively `(d)`, `(s)`,`(p)`,`(o)`, and
-well-defined for the other cases. If we know the relation between `lii` and `i`, or `rii` and `i` respectively, and it
-is one of the well-defined cases, we would be sure about the chopped sequence. In the cases that are not well-defined,
-we cannot use an indefinite point 🤷 to replace the unknown points (`?`). With indefinite intervals, the result would
-not be guaranteed to be a sequence. There are intervals following an indefinite `end`, or preceding an indefinite
-`start`. But, in general, there are simply 3, 3, and 5 possible sequences, of which 2, 2, and 3, respectively, are
-well-defined. Even the well-defined cases differ in the number of intervals in the sequence.
-
-Therefor, we only define the chopped sequence for fully definite intervals. Users should apply “Reasoning with unknown
-but constrained start and end point” to the indefinite intervals first, to express the extra knowledge about constraints
-that they have.
-
-When we calculate the actual relation between intervals, there are 13 possible results apart from the basic relations
-discussed above. The chopped sequence is not defined for any of them. The intersection, however, is for the 6 with the
-smallest uncertainty. When the uncertainly `> 1/6`, the intersection is not defined.
-
-| `i1 (.) i2 `    | chopped sequence | intersection                |
-| --------------- | ---------------- | --------------------------- |
-| `(pmoFDseSdfO)` | ❌               | ❌                          |
-| `(pmoFD)`       | ❌               | ❌                          |
-| `(pmosd)`       | ❌               | ❌                          |
-| `(osd)`         | ❌               | `[🤷, i1.end[`              |
-| `(oFD)`         | ❌               | `[i2.start, 🤷[`            |
-| `(seS)`         | ❌               | `[i1.start = i2.start, 🤷[` |
-| `(Fef)`         | ❌               | `[🤷, i1.end = i2.end[`     |
-| `(dfO)`         | ❌               | `[i1.start, 🤷[`            |
-| `(DSO)`         | ❌               | `[🤷, i2.end[`              |
-| `(DSOMP)`       | ❌               | ❌                          |
-| `(dfOMP)`       | ❌               | ❌                          |
-| `(oFDseSdfOMP)` | ❌               | ❌                          |
-| full            | ❌               | ❌                          |
-
-### Collection intersection collection
-
-Here, we want to determine the collection of all intersection intervals for the cross product of _n ∈ ℕ<sub>0</sub>_
-collections of intervals _I<sub>k</sub>, k ∈ ℕ<sub>1</sub>, k ≤ n_, with different cardinalities _#I<sub>k</sub> ∈
-ℕ<sub>0</sub>_:
-
-> ∩<sub>k ∈ ℕ<sub>1</sub>, k&nbsp;≤&nbsp;n</sub>(I<sub>k</sub>) ≝ { i | ∃ k ∈ ℕ<sub>1</sub>, k&nbsp;≤&nbsp;n; ∃ j ∈
-> ℕ<sub>0</sub>, j&nbsp;<&nbsp;#I<sub>k</sub>; (i<sub>kj</sub>) ∈ ×(I<sub>k</sub>); i = ∩((i<sub>kj</sub>)); i ≠ ∅ }
-
-In other words, we take the cross product of all _I<sub>k</sub>_ (1-based counting). The elements are tuples of
-intervals, whose second index is limited to the cardinality of the collection it originates from (0-based counting):
-
-> (i<sub>1p</sub>, i<sub>2q</sub>, …, i<sub>nr</sub>) ∈ _I<sub>1</sub> × I<sub>2</sub> × … × I<sub>n</sub>_,
+## Notation
+
+_i<sub>1</sub> `(sedf)` i<sub>2</sub>_ expresses that we know for certain that _i<sub>1</sub>_ starts, is equal to, is
+during, or finishes _i<sub>2</sub>_, and does not precede, meet, overlaps with, is finished by, contains, is overlapped
+by, is met by, nor is preceded by _i<sub>2</sub>_.
+
+When we are discussing an, as yet, unknown relation, we write _i<sub>1</sub> `(.)` i<sub>2</sub>_.
+
+When discussing Allen relations in isolation, we write the basic relations they are composed of in brackets, e.g.,
+`(sedf)`. As variables, they are often denoted _R<sub>1</sub>_, _R<sub>2</sub>_, …. E.g.: _R<sub>1</sub> = `(sedf)`_.
+
+Combined, _i<sub>1</sub> R<sub>1</sub> i<sub>2</sub>_ expresses that we know the Allen relation from _i<sub>1</sub>_ to
+_i<sub>2</sub>_ is _R<sub>1</sub>_.
+
+## Operations
+
+### Implication
+
+_R<sub>1</sub> ⊆ R<sub>2</sub>_ expresses that _R<sub>1</sub>_ **implies** _R<sub>2</sub>_, and that _R<sub>2</sub>_
+**is implied by** _R<sub>1</sub>_.
+
+For example, _`(se)` ⊆ `(sedf)`_: knowing _i<sub>1</sub> `(se)` i<sub>2</sub>_ **implies** knowning _i<sub>1</sub>
+`(sedf)` i<sub>2</sub>_. If _i1_ starts or is equal to _i2_, it is true that it starts, is equal to, is during, or
+finishes _i<sub>2</sub>_.
+
+The implication is often used to verify whether a constraint is upheld. We require _i<sub>1</sub> `(sedf)`
+i<sub>2</sub>_, and our reasoning leads us to known _i<sub>1</sub> `(se)` i<sub>2</sub>_. Because _`(se)` ⊆ `(sedf)`_,
+we know the constraint is upheld. When our reasoning leads us to know _i<sub>1</sub> `(sedfOMP)` i<sub>2</sub>_, or
+_i<sub>1</sub> `(pm)` i<sub>2</sub>_, e.g., the constraint is not upheld.
+
+### Complement
+
+The complement of an Allen relation is the disjunction of all basic relations that are not implied by the Allen
+relation. The complement of _R_ is denoted _~R_.
+
+> `~(pmoFDs)` = `(eSdfOMP)`
+
+The complement of a basic relation is the disjunction of all the other basic relations. E.g.:
+
+> `~(p)` = `(moFDseSdfOMP)`
+
+The complement of the complement of an Allen relation is the orginal Allen relation.
+
+> ~(~R) = R
+
+**Be aware that the complement has in general a different meaning than a logic negation.**
+
+<div style="background-color: red; color: white; padding: 5mm;">// TODO</div>
+
+### Disjunction (or)
+
+The disjunction _R<sub>1</sub> ∨ R<sub>2</sub>_ is the union of all basic relations in _R<sub>1</sub>_ and
+_R<sub>2</sub>_`, when they are considered as sets of basic relations. E.g.:
+
+> `(se)` ∨ `(edf)` = `(sedf)`
+
+The disjunction commutes, and is associative.
+
+> R<sub>1</sub> ∨ R<sub>2</sub> = R<sub>2</sub> ∨ R<sub>1</sub>
 >
-> where p ∈ ℕ<sub>0</sub>, p&nbsp;<&nbsp;#I<sub>1</sub>, q ∈ ℕ<sub>0</sub>, q&nbsp;<&nbsp;#I<sub>2</sub>, …, r ∈
-> ℕ<sub>0</sub>, r&nbsp;<&nbsp;#I<sub>r</sub>
+> (R<sub>1</sub> ∨ R<sub>2</sub>) ∨ R<sub>3</sub> = R<sub>1</sub> ∨ (R<sub>2</sub> ∨ R<sub>3</sub>)
 
-The collection of intersection intervals are the intersection intervals of all these tuples _∩(i<sub>1p</sub>,
-i<sub>2q</sub>, …, i<sub>nr</sub>)_.
+The binary disjunction can be extended to a multi-parameter function _∨(R<sub>i</sub>)_:
 
-The intersection is only defined as a binary operation _∩(i<sub>1</sub>, i<sub>2</sub>)_ up until now. We extend this
-definition to the intersection of tuples of intervals _∩((i<sub>s</sub>)<sub>s ∈ ℕ<sub>1</sub>, s&nbsp;≤&nbsp;m</sub>)_
-for _m ∈ ℕ<sub>0</sub>_ using [currying](https://en.wikipedia.org/wiki/Currying):
+> ∨(R<sub>1</sub>, R<sub>2</sub>, R<sub>3</sub>, R<sub>4</sub>) = R<sub>1</sub> ∨ R<sub>2</sub> ∨ R<sub>3</sub> ∨
+> R<sub>4</sub>
 
-|                                                                 |     |                 |                                                                                              |
-| --------------------------------------------------------------- | --- | --------------- | -------------------------------------------------------------------------------------------- |
-| ∩((i<sub>s</sub>)<sub>s ∈ ℕ<sub>1</sub>, s&nbsp;≤&nbsp;m</sub>) | ≝   | m&nbsp;=&nbsp;0 | ∅                                                                                            |
-|                                                                 |     | m&nbsp;=&nbsp;1 | i<sub>1</sub>                                                                                |
-|                                                                 |     | m&nbsp;=&nbsp;2 | i<sub>1</sub> ∩ i<sub>2</sub>                                                                |
-|                                                                 |     | m&nbsp;>&nbsp;2 | ∩((i<sub>t</sub>)<sub>t ∈ ℕ<sub>1</sub> t&nbsp;≤&nbsp;m&nbsp;-&nbsp;1</sub>) ∩ i<sub>m</sub> |
+### Conjunction (and)
 
-Since the binary intersection commutes, the order of the elements in the tuple is irrelevant.
+The conjunction _R<sub>1</sub> ∧ R<sub>2</sub>_ is the intersection of all relations in _R<sub>1</sub>_ and
+_R<sub>2</sub>_`, when they are considered as sets of basic relations. E.g.:
 
-We know from the binary operation that some intersections are empty, and some intersections are not well-defined. This
-extends to the intersection of tuples of intervals. If 1 of the curried intersections is empty, the final intersection
-is empty. If one of the curried intersections is not well-defined, the final intersection is not well-defined. This,
-again, extends to the collection intersection. Empty tuple intersections are not included in the result. If one of the
-tuple intersections is not well-defined, the collection intersection is not well-defined.
+> `(pmoOMP)` ∧ `(oOFD)` = `(oO)`
 
-This gives us the opportunity to optimize the algorithm to determine the collection intersection collection. Instead of
-evaluating all possible tuples in _×<sub>k</sub>(I<sub>k</sub>)_, which can become large quickly, and eliminating
-duplicates, we can instead [curry](https://en.wikipedia.org/wiki/Currying) the intersection collection too:
+The conjunction commutes, and is associative.
 
-|                                                               |     |                 |                                                                                             |
-| ------------------------------------------------------------- | --- | --------------- | ------------------------------------------------------------------------------------------- |
-| ∩<sub>k ∈ ℕ<sub>1</sub>, k&nbsp;≤&nbsp;n</sub>(I<sub>k</sub>) | ≝   | n&nbsp;=&nbsp;0 | ∅                                                                                           |
-|                                                               |     | n&nbsp;=&nbsp;1 | I<sub>1</sub>                                                                               |
-|                                                               |     | n&nbsp;=&nbsp;2 | I<sub>1</sub> ∩ I<sub>2</sub>                                                               |
-|                                                               |     | n&nbsp;>&nbsp;2 | ∩<sub>l ∈ ℕ<sub>1</sub>, l&nbsp;≤&nbsp;n&nbsp;-&nbsp;1</sub>(I<sub>l</sub>) ∩ i<sub>n</sub> |
-
-where the binary operation is defined as:
-
-> I<sub>1</sub> ∩ I<sub>2</sub> ≝ { i | v ∈ I<sub>1</sub>; w ∈ I<sub>2</sub>; i = v ∩ w; i ≠ ∅ }
-
-If either _I<sub>1</sub>_ or _I<sub>2</sub>_ is the empty collection, the intersection collection is empty too. If any
-_v ∩ w_ is not well-defined, the intersection collection is not well-defined either.
-
-Since _v ∩ w_ commutes, _I<sub>1</sub> ∩ I<sub>2</sub>_ commutes too.
-
-Some, and in practice most, _(v, w)_ combinations will have no intersection, which means that _#(I<sub>1</sub> ∩
-I<sub>2</sub>) ≤ #I<sub>1</sub>&nbsp;⋅&nbsp;#I<sub>2</sub>_. When this result is combined with I<sub>3</sub> to
-determine _(I<sub>1</sub> ∩ I<sub>2</sub>) ∩ I<sub>3</sub>_, _#(I<sub>1</sub> ∩ I<sub>2</sub>)
-&nbsp;⋅&nbsp;#I<sub>3</sub>_ evaluations have to be done. The number of evaluations necessary to determine
-_(I<sub>1</sub> ∩ I<sub>2</sub>) ∩ I<sub>3</sub> ≡ ∩(I<sub>1</sub>, I<sub>2</sub>, I<sub>3</sub>)_ is then
-_#I<sub>1</sub>&nbsp;⋅&nbsp;#I<sub>2</sub> + #(I<sub>1</sub> ∩ I<sub>2</sub>)&nbsp;⋅&nbsp;#I<sub>3</sub> ≤
-#I<sub>1</sub>&nbsp;⋅&nbsp;#I<sub>2</sub>&nbsp;⋅&nbsp;#I<sub>3</sub>_.
-
-When both interval collections are sequences (which implies that all intervals in the collection _i_ are distinct),
-I<sub>1</sub> ∩ I<sub>2</sub> is a sequence too. Indeed, suppose that there are 2 intersections _e ∩ g_ and _f ∩ h_ that
-have at least 1 point in common:
-
-> ∃ e ∈ I<sub>1</sub>, ∃ f ∈ I<sub>1</sub>, ∃ g ∈ I<sub>2</sub>, ∃ h ∈ I<sub>2</sub>: (e ∩ g) ∩ (f ∩ h) ≠ ∅
+> R<sub>1</sub> ∧ R<sub>2</sub> = R<sub>2</sub> ∧ R<sub>1</sub>
 >
-> ⇔ ∃ e ∈ I<sub>1</sub>, ∃ f ∈ I<sub>1</sub>, ∃ g ∈ I<sub>2</sub>, ∃ h ∈ I<sub>2</sub>, ∃ x: x ∈ (e ∩ g) ∧ x ∈ (f ∩ h)
+> (R<sub>1</sub> ∧ R<sub>2</sub>) ∧ R<sub>3</sub> = R<sub>1</sub> ∧ (R<sub>2</sub> ∧ R<sub>3</sub>)
+
+The binary conjunction can be extended to a multi-parameter function _∧(R<sub>i</sub>)_:
+
+> ∧(R<sub>1</sub>, R<sub>2</sub>, R<sub>3</sub>, R<sub>4</sub>) = R<sub>1</sub> ∧ R<sub>2</sub> ∧ R<sub>3</sub> ∧
+> R<sub>4</sub>
+
+### Converse
+
+The _converse_ of an Allen relation _R_, denoted _R^_, is the relation when the argument intervals are switched:
+
+> i<sub>1</sub> R i<sub>2</sub> ⇔ i<sub>2</sub> R^ <sub>1</sub>
+
+The converse of a basic relation is defined:
+
+> `(p)^` = `(P)`
 >
-> ⇔ ∃ e ∈ I<sub>1</sub>, ∃ f ∈ I<sub>1</sub>, ∃ g ∈ I<sub>2</sub>, ∃ h ∈ I<sub>2</sub>, ∃ x: (x ∈ e ∧ x ∈ g) ∧ (x ∈ f ∧
-> x ∈ h)
+> `(m)^` = `(M)`
 >
-> ⇔ ∃ e ∈ I<sub>1</sub>, ∃ f ∈ I<sub>1</sub>, ∃ g ∈ I<sub>2</sub>, ∃ h ∈ I<sub>2</sub>, ∃ x: (x ∈ e ∧ x ∈ f) ∧ (x ∈ g ∧
-> x ∈ h)
+> `(o)^` = `(O)`
 >
-> ⇔ ∃ e ∈ I<sub>1</sub>, ∃ f ∈ I<sub>1</sub>, ∃ g ∈ I<sub>2</sub>, ∃ h ∈ I<sub>2</sub>: (e ∩ f ≠ ∅) ∧ (g ∩ h ≠ ∅)
+> `(F)^` = `(f)`
+>
+> `(D)^` = `(d)`
+>
+> `(s)^` = `(S)`
+>
+> `(e)^` = `(e)`
+>
+> `(S)^` = `(s)`
+>
+> `(d)^` = `(D)`
+>
+> `(f)^` = `(F)`
+>
+> `(O)^` = `(o)`
+>
+> `(M)^` = `(m)`
+>
+> `(P)^` = `(p)`
 
-I.e., if _I<sub>1</sub> ∩ I<sub>2</sub>_ is not a sequence, neither _I<sub>1</sub>_, nor _I<sub>2</sub>_, is a sequence.
-In other words, if either _I<sub>1</sub>_ or _I<sub>2</sub>_ is a sequence, _I<sub>1</sub> ∩ I<sub>2</sub>_ is a
-sequence. Recursively: if any _I<sub>k</sub>_ is a sequence, _∩<sub>k ∈ ℕ<sub>1</sub>,
-k&nbsp;≤&nbsp;n</sub>(I<sub>k</sub>)_ is a sequence.
+The converse of a general Allen relation _R_ is the disjunction of the converse relations of the basic relations that
+are implied by _R_. E.g.:
 
-We can also define the intersection collection of a collection of intervals _I_ with 1 interval _v_, as follows:
+> `(pmoFDse)^` = `(eSdfOMP)`
 
-> I ∩ v ≝ { w | i ∈ I; w = i ∩ v; w ≠ ∅ }
+The converse of the converse of an Allen relation is the orginal Allen relation.
 
-(Note that _i ∩ v_ might generate duplicate entries, which appear only once in a set.)
+> (R^)^ = R
 
-Note that when _I_ is a sequence (which implies that all intervals _i_ are distinct), _I ∩ v_ is a sequence too.
+### Difference (min)
 
-Then
+The difference _R<sub>1</sub> \ R<sub>2</sub>_ between 2 Allen relations _R<sub>1</sub>_ and _R<sub>2</sub>_ is the
+relation that contains all basic relations of _R<sub>1</sub>_ that are not in _R<sub>2</sub>_. E.g.:
 
-> I<sub>1</sub> ∩ I<sub>2</sub> ≡ ∪<sub>v ∈ I<sub>2</sub></sub>(I<sub>1</sub> ∩ v)
+> `(sedf)` \ `(se)` = `(df)`
 
-## Inference
+The difference does not commute, is not associative:
 
-**Be aware that, in general, inference over intervals, also using Allen relations, is NP-complete.** This means that the
-time the execution of inference algorithms will take, is at least difficult to ascertain, and quickly completely
-impractical (i.e., with realistic parameters the algorithm would take longer than the universe exists — no kidding).
+> R<sub>1</sub> \ R<sub>2</sub> ≠ R<sub>2</sub> \ R<sub>1</sub>
+>
+> (R<sub>1</sub> \ R<sub>2</sub>) \ R<sub>3</sub> ≠ R<sub>1</sub> \ (R<sub>2</sub> \ R<sub>3</sub>)
 
-There are subsets of the Allen relations for which there exist algorithms that perform much better.
+### Composition
 
-This library does not offer inference functions at this time. The main intention of this library is validation.
+Given knowledge about the relation between intervals _i<sub>1</sub>_, _i<sub>2</sub>_, and between _i<sub>2</sub>_ and
+_i<sub>3</sub>_, we can derive knowledge about the relation between intervals _i<sub>1</sub>_ and _i<sub>3</sub>_
+through composition, denoted _R<sub>12</sub> ⊕ R<sub>23</sub>_.
+
+> (i<sub>1</sub> R<sub>12</sub> i<sub>2</sub>) ∧ (i<sub>2</sub> R<sub>23</sub> i<sub>3</sub>) ⇒ i<sub>1</sub>
+> (R<sub>12</sub> ⊕ R<sub>23</sub>) i<sub>3</sub>
+
+Composition is the most important operation for inference, combined with the converse and the conjunction.
+
+Composition does not commute, but is associative, and distributes over the disjunction:
+
+> R<sub>1</sub> ⊕ R<sub>2</sub> ≠ R<sub>2</sub> ⊕ R<sub>1</sub>
+>
+> (R<sub>1</sub> ⊕ R<sub>2</sub>) ⊕ R<sub>3</sub> = R<sub>1</sub> ⊕ (R<sub>2</sub> ⊕ R<sub>3</sub>)
+>
+> (R<sub>1</sub> ∨ R<sub>2</sub>) ⊕ R<sub>3</sub> = (R<sub>1</sub> ⊕ R<sub>3</sub>) ∨ (R<sub>2</sub> ⊕ R<sub>3</sub>)
+>
+> R<sub>1</sub> ⊕ (R<sub>2</sub> ∨ R<sub>3</sub>) = (R<sub>1</sub> ⊕ R<sub>2</sub>) ∨ (R<sub>1</sub> ⊕ R<sub>3</sub>)
+
+The latter is used to find the composition of general Allen relations. We determine the compositions for the cartesian
+product of all basic relations, and then combine those results for general Allen relations. E.g., we can determine that:
+
+> (i<sub>1</sub> `(p)` i<sub>2</sub>) ∧ (i<sub>2</sub> `(s)` i<sub>3</sub>) ⇒ i<sub>1</sub> `(p)` i<sub>3</sub>: `(p)` ⊕
+> `(s)` = `(p)`
+>
+> (i<sub>1</sub> `(S)` i<sub>2</sub>) ∧ (i<sub>2</sub> `(s)` i<sub>3</sub>) ⇒ i<sub>1</sub> `(seS)` i<sub>3</sub>: `(S)`
+> ⊕ `(s)` = `(seS)`
+>
+> (i<sub>1</sub> `(p)` i<sub>2</sub>) ∧ (i<sub>2</sub> `(D)` i<sub>3</sub>) ⇒ i<sub>1</sub> `(p)` i<sub>3</sub>: `(p)` ⊕
+> `(D)` = `(p)`
+>
+> (i<sub>1</sub> `(S)` i<sub>2</sub>) ∧ (i<sub>2</sub> `(D)` i<sub>3</sub>) ⇒ i<sub>1</sub> `(D)` i<sub>3</sub>: `(S)` ⊕
+> `(D)` = `(D)`
+
+The compositions of all basic relations are shown in the [basic compositions table].
+
+Then, we derive:
+
+> `(pS)` ⊕ `(sD)`
+>
+> = (`(p)` ∨ `(S)`) ⊕ `(sD)`
+>
+> = (`(p)` ⊕ `(sD)`) ∨ (`(S)` ⊕ `(sD)`)
+>
+> = (`(p)` ⊕ (`(s)` ∨ `(D)`)) ∨ (`(S)` ⊕ (`(s)` ∨ `(D)`))
+>
+> = (`(p)` ⊕ `(s)`) ∨ (`(p)` ⊕ `(D)`) ∨ (`(S)` ⊕ `(s)` ∨ (`(S)` ⊕ `(D)`)
+>
+> = `(p)` ∨ `(p)` ∨ `(seS)` ∨ `(D)`
+>
+> = `(pseSD)`
+
+Note that we can use the converse to determine _i<sub>1</sub> `(.)` i<sub>3</sub>_ if, e.g., not _i<sub>2</sub>
+R<sub>23</sub> i<sub>3</sub>_ is known, but _i<sub>3</sub> R<sub>32</sub> i<sub>2</sub>_ is:
+
+> (i<sub>1</sub> R<sub>12</sub> i<sub>2</sub>) ∧ (i<sub>3</sub> R<sub>32</sub> i<sub>2</sub>) ⇒ i<sub>1</sub>
+> (R<sub>12</sub> ⊕ R<sub>32</sub>^) i<sub>3</sub>
+
+[precedes]: AllenRelation-precedes.png
+[meets]: AllenRelation-meets.png
+[overlaps]: AllenRelation-overlaps.png
+[is finished by]: AllenRelation-finishedBy.png
+[contains]: AllenRelation-contains.png
+[starts]: AllenRelation-starts.png
+[equals]: AllenRelation-equals.png
+[is started by]: AllenRelation-startedBy.png
+[during]: AllenRelation-during.png
+[finishes]: AllenRelation-finishes.png
+[is overlapped by]: AllenRelation-overlappedBy.png
+[is met by]: AllenRelation-metBy.png
+[is preceded by]: AllenRelation-precededBy.png
+[basic compositions table]: https://www.ics.uci.edu/~alspaugh/cls/shr/allen.html#BasicCompositionsTable

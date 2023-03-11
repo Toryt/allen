@@ -18,12 +18,12 @@ import {
   commonTypeRepresentation,
   isTypeRepresentation,
   representsSuperType,
-  TypeRepresentation
+  type TypeRepresentation
 } from './TypeRepresentation'
-import { Indefinite, TypeFor } from './type'
+import { type Indefinite, type TypeFor } from './type'
 import assert from 'assert'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
-import { Comparator } from './Comparator'
+import { type Comparator } from './Comparator'
 
 /**
  * Map where each property holds a collection of Intervals. The property name is often used to refer to the collection.
@@ -35,7 +35,7 @@ import { Comparator } from './Comparator'
  */
 export type ReferenceIntervals<T> = Record<string, ReadonlyArray<Interval<T>>>
 
-function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation> (
+function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation>(
   u: unknown,
   pointType: TR | undefined,
   compareFn: Comparator<TypeFor<TR>> | undefined,
@@ -90,7 +90,7 @@ function loopProtectedIsReferenceIntervals<TR extends TypeRepresentation> (
  * @param compareFn - Optional {@link Comparator}, used to determine whether all intervals‘ `start < end`, recursively.
  *                    Mandatory when the point representations are `symbol` s, or a point representation is `NaN`.
  */
-export function isReferenceIntervals<TR extends TypeRepresentation> (
+export function isReferenceIntervals<TR extends TypeRepresentation>(
   u: unknown,
   pointType: TR | undefined,
   compareFn?: Comparator<TypeFor<TR>>
@@ -117,7 +117,7 @@ export interface Interval<T> {
   referenceIntervals?: ReferenceIntervals<T>
 }
 
-function loopProtectedIsInterval<TR extends TypeRepresentation> (
+function loopProtectedIsInterval<TR extends TypeRepresentation>(
   u: unknown,
   pointType: TR | undefined,
   compareFn: Comparator<TypeFor<TR>> | undefined,
@@ -165,7 +165,7 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
     '`compareFn` is mandatory when `i.start` or `i.end` is a `symbol` or `NaN`'
   )
 
-  function startBeforeEnd (
+  function startBeforeEnd(
     start: Indefinite<TypeFor<TR>>,
     end: Indefinite<TypeFor<TR>>,
     compare: Comparator<TypeFor<TR>>
@@ -196,7 +196,7 @@ function loopProtectedIsInterval<TR extends TypeRepresentation> (
  *                    for all intervals in `u.referenceIntervals`, recursively. Mandatory when the point representations
  *                    are `symbol` s, or a point representation is `NaN`.
  */
-export function isInterval<TR extends TypeRepresentation> (
+export function isInterval<TR extends TypeRepresentation>(
   u: unknown,
   pointType: TR | undefined,
   compareFn?: Comparator<TypeFor<TR>>

@@ -1,12 +1,12 @@
 /*
- Copyright © 2022 by Jan Dockx
-
+ Copyright © 2022 – 2023 by Jan Dockx
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,13 +14,13 @@
  limitations under the License.
  */
 
-import { Comparator } from './Comparator'
+import { type Comparator } from './Comparator'
 import { ltCompare } from './ltCompare'
-import { commonTypeRepresentation, isTypeRepresentation, TypeRepresentation } from './TypeRepresentation'
-import { ChainInterval, compareChainIntervals, isChainInterval } from './ChainInterval'
-import { Interval } from './Interval'
+import { commonTypeRepresentation, isTypeRepresentation, type TypeRepresentation } from './TypeRepresentation'
+import { type ChainInterval, compareChainIntervals, isChainInterval } from './ChainInterval'
+import { type Interval } from './Interval'
 import assert, { notEqual, ok } from 'assert'
-import { TypeFor } from './type'
+import { type TypeFor } from './type'
 
 /**
  * An array of {@link ChainInterval} elements. Each element has a definite `start`. The `end` of each element is
@@ -31,7 +31,7 @@ import { TypeFor } from './type'
  */
 export type Chain<T> = ReadonlyArray<Readonly<ChainInterval<T>>> & { __brand: 'ChainIntervalChain' }
 
-export function isChain<TR extends TypeRepresentation> (
+export function isChain<TR extends TypeRepresentation>(
   candidate: unknown,
   pointType: TR,
   compareFn?: Comparator<TypeFor<TR>>
@@ -72,7 +72,7 @@ export function isChain<TR extends TypeRepresentation> (
  * Elements of the result have the {@link ChainInterval} they represent as prototype. The last one does not have an
  * `end`.
  */
-export function chainToGaplessLeftDefiniteSequence<T> (
+export function chainToGaplessLeftDefiniteSequence<T>(
   cis: Chain<T>,
   compareFn?: Comparator<T>
 ): ReadonlyArray<Readonly<Interval<T>>> {
@@ -93,12 +93,12 @@ export function chainToGaplessLeftDefiniteSequence<T> (
 
   return sorted.map((ci, index) =>
     index < sorted.length - 1
-      ? /* prettier-ignore */ Object.create(ci, {
-        end: {
-          enumerable: true,
-          value: sorted[index + 1].start
-        }
-      })
+      ? Object.create(ci, {
+          end: {
+            enumerable: true,
+            value: sorted[index + 1].start
+          }
+        })
       : Object.create(ci)
   )
 }

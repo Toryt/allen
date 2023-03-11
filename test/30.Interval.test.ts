@@ -1,12 +1,12 @@
 /*
- Copyright © 2022 by Jan Dockx
-
+ Copyright © 2022 – 2023 by Jan Dockx
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,17 +19,17 @@
 import 'should'
 import { inspect } from 'util'
 import { stuff, stuffWithUndefined } from './_stuff'
-import { Interval, isInterval, isReferenceIntervals, ReferenceIntervals } from '../src/Interval'
+import { type Interval, isInterval, isReferenceIntervals, type ReferenceIntervals } from '../src/Interval'
 import { typeRepresentations } from './_typeRepresentationCases'
 import {
   commonTypeRepresentation,
   representsSuperType,
-  TypeRepresentation,
+  type TypeRepresentation,
   typeRepresentationOf
 } from '../src/TypeRepresentation'
-import { TypeFor } from '../src/type'
+import { type TypeFor } from '../src/type'
 import { A, B, C } from './_someClasses'
-import { Comparator } from '../src/Comparator'
+import { type Comparator } from '../src/Comparator'
 import { ltCompare } from '../src/ltCompare'
 import { ok } from 'assert'
 
@@ -117,7 +117,7 @@ const trueCases: Array<Case<TypeRepresentation>> = [
     label: 'functions',
     pointType: Function,
     p1: () => 0,
-    p2: function a () {
+    p2: function a() {
       return true
     }
   },
@@ -345,20 +345,20 @@ describe('Interval', function () {
     typeRepresentations.forEach(targetPointType => {
       describe(`pointType ${inspect(targetPointType)}`, function () {
         trueCases.forEach(({ label, pointType, p1, p2, compareFn, compareFnOptional }) => {
-          function reverse<TR extends TypeRepresentation> (comp: Comparator<TypeFor<TR>>) {
-            return function <T extends TypeFor<TR>> (t1: T, t2: T): number {
+          function reverse<TR extends TypeRepresentation>(comp: Comparator<TypeFor<TR>>) {
+            return function <T extends TypeFor<TR>>(t1: T, t2: T): number {
               return -1 * comp(t1, t2)
             }
           }
 
-          function callIt (i: unknown, reverseCompare?: boolean): boolean {
+          function callIt(i: unknown, reverseCompare?: boolean): boolean {
             return reverseCompare !== undefined
               ? compareFn !== undefined
                 ? isInterval(i, targetPointType, reverse(compareFn))
                 : isInterval(i, targetPointType, reverse(ltCompare))
-              : /* prettier-ignore */ compareFn !== undefined
-                ? isInterval(i, targetPointType, compareFn)
-                : isInterval(i, targetPointType, ltCompare)
+              : compareFn !== undefined
+              ? isInterval(i, targetPointType, compareFn)
+              : isInterval(i, targetPointType, ltCompare)
           }
 
           const isSubtypeOfTarget = representsSuperType(targetPointType, pointType) ? 'true' : 'false'

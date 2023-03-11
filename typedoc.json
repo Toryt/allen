@@ -1,6 +1,7 @@
 {
   "entryPoints": ["./src"],
   "out": "typedoc",
+  "plugin": ["typedoc-plugin-markdown"],
   "excludeExternals": true,
   "excludePrivate": true,
   "includeVersion": true,

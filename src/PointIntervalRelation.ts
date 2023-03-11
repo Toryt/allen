@@ -1,12 +1,12 @@
 /*
- Copyright © 2022 by Jan Dockx
-
+ Copyright © 2022 – 2023 by Jan Dockx
+ 
  Licensed under the Apache License, Version 2.0 (the “License”);
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
-
+ 
  http://www.apache.org/licenses/LICENSE-2.0
-
+ 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an “AS IS” BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,8 +15,8 @@
  */
 
 import assert, { equal, ok } from 'assert'
-import { Interval, isInterval } from './Interval'
-import { Comparator } from './Comparator'
+import { type Interval, isInterval } from './Interval'
+import { type Comparator } from './Comparator'
 import { commonTypeRepresentation } from './TypeRepresentation'
 import { isLTComparableOrIndefinite, ltCompare } from './ltCompare'
 import { Relation } from './Relation'
@@ -50,7 +50,7 @@ export class PointIntervalRelation extends Relation {
    *
    * There are no other `PointIntervalRelation`s than the instances of this array.
    */
-  public static generalRelation (index: number): PointIntervalRelation {
+  public static generalRelation(index: number): PointIntervalRelation {
     equal(typeof index, 'number')
     assert(Number.isInteger(index))
     assert(index >= EMPTY_BIT_PATTERN)
@@ -328,23 +328,23 @@ export class PointIntervalRelation extends Relation {
    *
    * @result BASIC_RELATIONS.every(bpir => AllenRelation.BASIC_RELATIONS.every(bar => !bpir.implies(this) || !bar.implies(ar) || result.impliedBy(BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]))
    */
-  compose (ar: AllenRelation): PointIntervalRelation {
+  compose(ar: AllenRelation): PointIntervalRelation {
     // noinspection SuspiciousTypeOfGuard
     assert(ar instanceof AllenRelation)
 
     return this.typedConstructor().BASIC_RELATIONS.reduce(
       (acc1: PointIntervalRelation, bpir: this) =>
-        /* prettier-ignore */ this.impliedBy(bpir)
+        this.impliedBy(bpir)
           ? AllenRelation.BASIC_RELATIONS.reduce(
-            (acc2: PointIntervalRelation, bar: AllenRelation) =>
-              ar.impliedBy(bar)
-                ? PointIntervalRelation.or(
-                  acc2,
-                  PointIntervalRelation.BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]
-                )
-                : acc2,
-            acc1
-          )
+              (acc2: PointIntervalRelation, bar: AllenRelation) =>
+                ar.impliedBy(bar)
+                  ? PointIntervalRelation.or(
+                      acc2,
+                      PointIntervalRelation.BASIC_COMPOSITIONS[bpir.ordinal()][bar.ordinal()]
+                    )
+                  : acc2,
+              acc1
+            )
           : acc1,
       this.typedConstructor().emptyRelation()
     )
@@ -375,7 +375,7 @@ export class PointIntervalRelation extends Relation {
    * @param compareFn - optional compare function with traditional semantics; mandatory when any point is `NaN`, or
    *                    `symbols` are used
    */
-  static relation<T> (
+  static relation<T>(
     t: Readonly<T> | undefined | null,
     i: Readonly<Interval<T>>,
     compareFn?: Comparator<T>

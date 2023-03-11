@@ -15,7 +15,7 @@
  */
 
 import { AllenRelation } from '../src/AllenRelation'
-import { Interval } from '../src/Interval'
+import { type Interval } from '../src/Interval'
 
 export interface TestIntervals<T> {
   i1: Interval<T>
@@ -34,7 +34,7 @@ export interface NonDegenerateTestIntervals<T> extends TestIntervals<T> {
  *
  * When `i1` and `i2` are swapped, we expect the `converse` relation.
  */
-export function createIntervalCoupleCases<T> (pts: T[]): Array<NonDegenerateTestIntervals<T>> {
+export function createIntervalCoupleCases<T>(pts: T[]): Array<NonDegenerateTestIntervals<T>> {
   return [
     /* all indefinite */
     {
