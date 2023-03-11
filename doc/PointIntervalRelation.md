@@ -30,23 +30,23 @@ We find that there are 5 _basic relations_ possible between a point and a defini
 
 - `t` is `BEFORE` `I` (`b`)
 
-  ![before](PointIntervalRelation-before.png)
+  ![before](../img/pir-basic/before.png)
 
 - `t` `COMMENCES` `I` (`c`)
 
-  ![begins](PointIntervalRelation-commences.png)
+  ![begins](../img/pir-basic/commences.png)
 
 - `t` `IN` `I` (`i`)
 
-  ![in](PointIntervalRelation-in.png)
+  ![in](../img/pir-basic/in.png)
 
 - `t` `TERMINATES` `I` (`t`)
 
-  ![ends](PointIntervalRelation-terminates.png)
+  ![ends](../img/pir-basic/terminates.png)
 
 - `t` is `AFTER` `I` (`a`)
 
-  ![after](PointIntervalRelation-after.png)
+  ![after](../img/pir-basic/after.png)
 
 These basic relations between a point and an interval are similar to `<`, `=`, and `>` between 2 points.
 

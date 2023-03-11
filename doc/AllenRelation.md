@@ -261,17 +261,17 @@ R<sub>23</sub> i<sub>3</sub>_ is known, but _i<sub>3</sub> R<sub>32</sub> i<sub>
 > (i<sub>1</sub> R<sub>12</sub> i<sub>2</sub>) ∧ (i<sub>3</sub> R<sub>32</sub> i<sub>2</sub>) ⇒ i<sub>1</sub>
 > (R<sub>12</sub> ⊕ R<sub>32</sub>^) i<sub>3</sub>
 
-[precedes]: AllenRelation-precedes.png
-[meets]: AllenRelation-meets.png
-[overlaps]: AllenRelation-overlaps.png
-[is finished by]: AllenRelation-finishedBy.png
-[contains]: AllenRelation-contains.png
-[starts]: AllenRelation-starts.png
-[equals]: AllenRelation-equals.png
-[is started by]: AllenRelation-startedBy.png
-[during]: AllenRelation-during.png
-[finishes]: AllenRelation-finishes.png
-[is overlapped by]: AllenRelation-overlappedBy.png
-[is met by]: AllenRelation-metBy.png
-[is preceded by]: AllenRelation-precededBy.png
+[precedes]: ../img/ar-basic/precedes.png
+[meets]: ../img/ar-basic/meets.png
+[overlaps]: ../img/ar-basic/overlaps.png
+[is finished by]: ../img/ar-basic/finishedBy.png
+[contains]: ../img/ar-basic/contains.png
+[starts]: ../img/ar-basic/starts.png
+[equals]: ../img/ar-basic/equals.png
+[is started by]: ../img/ar-basic/startedBy.png
+[during]: ../img/ar-basic/during.png
+[finishes]: ../img/ar-basic/finishes.png
+[is overlapped by]: ../img/ar-basic/overlappedBy.png
+[is met by]: ../img/ar-basic/metBy.png
+[is preceded by]: ../img/ar-basic/precededBy.png
 [basic compositions table]: https://www.ics.uci.edu/~alspaugh/cls/shr/allen.html#BasicCompositionsTable

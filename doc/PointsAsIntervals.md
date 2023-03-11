@@ -39,21 +39,21 @@ _represented by a point_, too. The Allen relation between the point representati
 same for `p1` and `p2`, we know both point-intervals have the same length or duration, and a shorter length is
 impossible. This limits the possibilities further.
 
-| `p1 (.) p2` | Illustration                                        | Definition (mentioned properties must be definite, and …)   | Point relation |
-| ----------- | --------------------------------------------------- | ----------------------------------------------------------- | -------------- |
-| `p1 (p) p2` | ![precedes](AllenRelation-precedes.png)             | `p1.end < p2.start`                                         | `p1 < p2`      |
-| `p1 (m) p2` | ![meets](AllenRelation-meets.png)                   | `p1.end = p2.start`                                         | `p1 < p2`      |
-| `p1 (o) p2` | ![overlaps](AllenRelation-overlaps.png)             | `p1.start < p2.start ∧ p2.start < p1.end ∧ p1.end < p2.end` | ❌ 3.          |
-| `p1 (F) p2` | ![is finished by](AllenRelation-finishedBy.png)     | `p1.start < p2.start ∧ p1.end = p2.end`                     | ❌ 1. 2.       |
-| `p1 (D) p2` | ![contains](AllenRelation-contains.png)             | `p1.start < p2.start ∧ p2.end < p1.end`                     | ❌ 2.          |
-| `p1 (s) p2` | ![starts](AllenRelation-starts.png)                 | `p1.start = p2.start ∧ p1.end < p2.end`                     | ❌ 1.          |
-| `p1 (e) p2` | ![equals](AllenRelation-equals.png)                 | `p1.start = p2.start ∧ p1.end = p2.end`                     | `p1 = p2`      |
-| `p1 (S) p2` | ![is started by](AllenRelation-startedBy.png)       | `p2.start = p1.start ∧ p2.end < p1.end`                     | ❌ 1.          |
-| `p1 (d) p2` | ![during](AllenRelation-during.png)                 | `p2.start < p1.start ∧ p1.end < p2.end`                     | ❌ 2.          |
-| `p1 (f) p2` | ![finishes](AllenRelation-finishes.png)             | `p2.start < p1.start ∧ p1.end = p2.end`                     | ❌ 1. 2.       |
-| `p1 (O) p2` | ![is overlapped by](AllenRelation-overlappedBy.png) | `p2.start < p1.start ∧ p1.start < p2.end ∧ p2.end < p1.end` | ❌ 3.          |
-| `p1 (M) p2` | ![is met by](AllenRelation-metBy.png)               | `p2.end = p1.start`                                         | `p2 < p1`      |
-| `p1 (P) p2` | ![is preceded by](AllenRelation-precededBy.png)     | `p2.end < p1.start`                                         | `p2 < p1`      |
+| `p1 (.) p2` | Illustration        | Definition (mentioned properties must be definite, and …)   | Point relation |
+| ----------- | ------------------- | ----------------------------------------------------------- | -------------- |
+| `p1 (p) p2` | ![precedes]         | `p1.end < p2.start`                                         | `p1 < p2`      |
+| `p1 (m) p2` | ![meets]            | `p1.end = p2.start`                                         | `p1 < p2`      |
+| `p1 (o) p2` | ![overlaps]         | `p1.start < p2.start ∧ p2.start < p1.end ∧ p1.end < p2.end` | ❌ 3.          |
+| `p1 (F) p2` | ![is finished by]   | `p1.start < p2.start ∧ p1.end = p2.end`                     | ❌ 1. 2.       |
+| `p1 (D) p2` | ![contains]         | `p1.start < p2.start ∧ p2.end < p1.end`                     | ❌ 2.          |
+| `p1 (s) p2` | ![starts]           | `p1.start = p2.start ∧ p1.end < p2.end`                     | ❌ 1.          |
+| `p1 (e) p2` | ![equals]           | `p1.start = p2.start ∧ p1.end = p2.end`                     | `p1 = p2`      |
+| `p1 (S) p2` | ![is started by]    | `p2.start = p1.start ∧ p2.end < p1.end`                     | ❌ 1.          |
+| `p1 (d) p2` | ![during]           | `p2.start < p1.start ∧ p1.end < p2.end`                     | ❌ 2.          |
+| `p1 (f) p2` | ![finishes]         | `p2.start < p1.start ∧ p1.end = p2.end`                     | ❌ 1. 2.       |
+| `p1 (O) p2` | ![is overlapped by] | `p2.start < p1.start ∧ p1.start < p2.end ∧ p2.end < p1.end` | ❌ 3.          |
+| `p1 (M) p2` | ![is met by]        | `p2.end = p1.start`                                         | `p2 < p1`      |
+| `p1 (P) p2` | ![is preceded by]   | `p2.end < p1.start`                                         | `p2 < p1`      |
 
 1. When either `start` or `end` of `p1` and `p2` should be equal according to the definition (`(F)`, `(s)`, `(e)`,
    ` (S)`, `(f)`), the other end will be equal too, since `p1` and `p2` as intervals have equal length. This is only
@@ -126,3 +126,17 @@ an interval of fixed minimal length `pl`. This means the above rules apply, and 
 point representation with another, definite or indefinite point representation, must be `(pm)`, `(e)`, or `(MP)`. Since
 we do not know where on the number line this interval is located, we cannot limit the relation more, and the result is
 `(pmeMP)`.
+
+[precedes]: ../img/ar-basic/precedes.png
+[meets]: ../img/ar-basic/meets.png
+[overlaps]: ../img/ar-basic/overlaps.png
+[is finished by]: ../img/ar-basic/finishedBy.png
+[contains]: ../img/ar-basic/contains.png
+[starts]: ../img/ar-basic/starts.png
+[equals]: ../img/ar-basic/equals.png
+[is started by]: ../img/ar-basic/startedBy.png
+[during]: ../img/ar-basic/during.png
+[finishes]: ../img/ar-basic/finishes.png
+[is overlapped by]: ../img/ar-basic/overlappedBy.png
+[is met by]: ../img/ar-basic/metBy.png
+[is preceded by]: ../img/ar-basic/precededBy.png
