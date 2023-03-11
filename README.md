@@ -52,21 +52,21 @@ a specialization of a more general class, that allows other extensions for algeb
 We find that there are 13 _basic relations_ possible between definite intervals. In this library, we use the notation as
 found in [Thomas A. Alspaugh “Allen's interval algebra”].
 
-| Basic relation                               | i<sub>1</sub> (.) i<sub>2</sub> | Illustration        |
-| -------------------------------------------- | ------------------------------- | ------------------- |
-| i<sub>1</sub> precedes i<sub>2</sub>         | i<sub>1</sub> (p) i<sub>2</sub> | ![precedes]         |
-| i<sub>1</sub> meets i<sub>2</sub>            | i<sub>1</sub> (m) i<sub>2</sub> | ![meets]            |
-| i<sub>1</sub> overlaps i<sub>2</sub>         | i<sub>1</sub> (o) i<sub>2</sub> | ![overlaps]         |
-| i<sub>1</sub> is finished by i<sub>2</sub>   | i<sub>1</sub> (F) i<sub>2</sub> | ![is finished by]   |
-| i<sub>1</sub> contains i<sub>2</sub>         | i<sub>1</sub> (D) i<sub>2</sub> | ![contains]         |
-| i<sub>1</sub> starts i<sub>2</sub>           | i<sub>1</sub> (s) i<sub>2</sub> | ![starts]           |
-| i<sub>1</sub> equals i<sub>2</sub>           | i<sub>1</sub> (e) i<sub>2</sub> | ![equals]           |
-| i<sub>1</sub> is started by i<sub>2</sub>    | i<sub>1</sub> (S) i<sub>2</sub> | ![is started by]    |
-| i<sub>1</sub> during i<sub>2</sub>           | i<sub>1</sub> (d) i<sub>2</sub> | ![during]           |
-| i<sub>1</sub> finishes i<sub>2</sub>         | i<sub>1</sub> (f) i<sub>2</sub> | ![finishes]         |
-| i<sub>1</sub> is overlapped by i<sub>2</sub> | i<sub>1</sub> (O) i<sub>2</sub> | ![is overlapped by] |
-| i<sub>1</sub> is met by i<sub>2</sub>        | i<sub>1</sub> (M) i<sub>2</sub> | ![is met by]        |
-| i<sub>1</sub> is preceded by i<sub>2</sub>   | i<sub>1</sub> (P) i<sub>2</sub> | ![is preceded by]   |
+|                               Basic relation | AR(i<sub>1</sub>, i<sub>2</sub>) | Illustration        |
+| -------------------------------------------: | :------------------------------: | ------------------- |
+|         i<sub>1</sub> precedes i<sub>2</sub> |               (p)                | ![precedes]         |
+|            i<sub>1</sub> meets i<sub>2</sub> |               (m)                | ![meets]            |
+|         i<sub>1</sub> overlaps i<sub>2</sub> |               (o)                | ![overlaps]         |
+|   i<sub>1</sub> is finished by i<sub>2</sub> |               (F)                | ![is finished by]   |
+|         i<sub>1</sub> contains i<sub>2</sub> |               (D)                | ![contains]         |
+|           i<sub>1</sub> starts i<sub>2</sub> |               (s)                | ![starts]           |
+|           i<sub>1</sub> equals i<sub>2</sub> |               (e)                | ![equals]           |
+|    i<sub>1</sub> is started by i<sub>2</sub> |               (S)                | ![is started by]    |
+|           i<sub>1</sub> during i<sub>2</sub> |               (d)                | ![during]           |
+|         i<sub>1</sub> finishes i<sub>2</sub> |               (f)                | ![finishes]         |
+| i<sub>1</sub> is overlapped by i<sub>2</sub> |               (O)                | ![is overlapped by] |
+|        i<sub>1</sub> is met by i<sub>2</sub> |               (M)                | ![is met by]        |
+|   i<sub>1</sub> is preceded by i<sub>2</sub> |               (P)                | ![is preceded by]   |
 
 These 13 _basic relations_ are an orthogonal basis for all possible _general_ relation-conditions between two intervals
 (`AllenRelation`).
