@@ -174,54 +174,38 @@ last updated in December 2008.
 All links are to Bitbucket, and not relative, because otherwise they do not work on the `npm` page.
 -->
 
-[precedes]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precedes.png
-[meets]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-meets.png
-[overlaps]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlaps.png
-[is finished by]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishedBy.png
-[contains]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-contains.png
-[starts]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-starts.png
-[equals]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-equals.png
-[is started by]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-startedBy.png
-[during]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-during.png
-[finishes]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishes.png
-[is overlapped by]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlappedBy.png
-[is met by]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-metBy.png
-[is preceded by]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precededBy.png
+[precedes]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/precedes.png
+[meets]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/meets.png
+[overlaps]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/overlaps.png
+[is finished by]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/finishedBy.png
+[contains]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/contains.png
+[starts]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/starts.png
+[equals]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/equals.png
+[is started by]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/startedBy.png
+[during]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/during.png
+[finishes]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/finishes.png
+[is overlapped by]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/overlappedBy.png
+[is met by]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/metBy.png
+[is preceded by]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/precededBy.png
 [allen, james f. “maintaining knowledge about temporal intervals”]: https://dl.acm.org/doi/pdf/10.1145/182.358434
 [wikipedia]: https://en.wikipedia.org/wiki/Allen%27s_interval_algebra
 [thomas a. alspaugh “allen's interval algebra”]: https://www.ics.uci.edu/~alspaugh/cls/shr/allen.html
 [@toryt/intervals]: https://bitbucket.org/toryt/intervals
 [ppwcode dotnet-util-allen]: https://bitbucket.org/ppwcode/dotnet-util-allen
 [strict total order]: https://en.wikipedia.org/wiki/Total¬_order
-[precedes]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precedes.png
-[meets]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-meets.png
-[overlaps]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlaps.png
-[is finished by]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishedBy.png
-[contains]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-contains.png
-[starts]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-starts.png
-[equals]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-equals.png
-[is started by]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-startedBy.png
-[during]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-during.png
-[finishes]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishes.png
-[is overlapped by]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlappedBy.png
-[is met by]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-metBy.png
-[is preceded by]:
-  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precededBy.png
+[precedes]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/precedes.png
+[meets]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/meets.png
+[overlaps]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/overlaps.png
+[is finished by]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/finishedBy.png
+[contains]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/contains.png
+[starts]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/starts.png
+[equals]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/equals.png
+[is started by]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/startedBy.png
+[during]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/during.png
+[finishes]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/finishes.png
+[is overlapped by]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/overlappedBy.png
+[is met by]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/metBy.png
+[is preceded by]: https://bitbucket.org/toryt/allen/raw/master/img/ar-basic/precededBy.png
 [allen relations]: https://bitbucket.org/toryt/allen/src/master/doc/AllenRelation.md
 [interval constraints]: https://bitbucket.org/toryt/allen/src/master/doc/IntervalConstraints.md
 [points as intervals]: https://bitbucket.org/toryt/allen/src/master/doc/PointAsIntervals.md
