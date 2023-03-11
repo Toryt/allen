@@ -45,8 +45,6 @@ and can also be applied to sets with a different number of relations (e.g., 3 fo
 &gt;), or 5 for the relationships between points and intervals). Allen’s Interval Algebra is realized in this library as
 a specialization of a more general class, that allows other extensions for algebras with a different number of elements.
 
-[TOC]
-
 ## Introduction
 
 We find that there are 13 _basic relations_ possible between definite intervals. In this library, we use the notation as
