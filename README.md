@@ -136,14 +136,17 @@ seems to be a viable approach.
 
 ## Further reading
 
-- [van Beek, Peter; Cohen, Robin “Exact and Approximate Reasoning about Temporal Relations”], _Computational
+- van Beek, Peter; Cohen, Robin [“Exact and Approximate Reasoning about Temporal Relations”][van Beek], _Computational
   Intelligence 6:132-144, 1990_
-- [Hogge, J. C. “TPLAN: A Temporal Interval-Based Planner with Novel Extensions”], _University of Illinois Department of
-  Computer Science Technical Report UIUCDCS-R-87-1367, September 1987_ (no version found on the internet)
-- [Freuder, E. C. “Synthesizing Constraint Expressions”], _Communications of the ACM 21 pages 958-966; November 1978_
-- [Eriksson, Leif; Lagerkvist, Victor “Improved Algorithms for Allen’s Interval Algebra: a Dynamic Programming
-  Approach”], _Proceedings of the Thirtieth International Joint Conference on Artificial Intelligence (IJCAI-21)_
-- [”Principles of Knowledge Representation and Reasoning; Proceedings of the Second International Conference”]
+- Hogge, J. C. [“TPLAN: A Temporal Interval-Based Planner with Novel Extensions”][Hogge], _University of Illinois
+  Department of Computer Science Technical Report UIUCDCS-R-87-1367, September 1987_ (no version found on the internet)
+- Freuder, E. C. [“Synthesizing Constraint Expressions”][Freuder], _Communications of the ACM 21 pages 958-966; November
+  1978_
+- Eriksson, Leif; Lagerkvist, Victor [“Improved Algorithms for Allen’s Interval Algebra: a Dynamic Programming
+  Approach”][Eriksson], _Proceedings of the Thirtieth International Joint Conference on Artificial Intelligence
+  (IJCAI-21)_
+- Allen, J.; Fikes, R.; Sandewall, E. [”Principles of Knowledge Representation and Reasoning; Proceedings of the Second
+  International Conference (KR91)”][Principles]
 
 ## License
 
@@ -209,15 +212,11 @@ All links are to Bitbucket, and not relative, because otherwise they do not work
 [points as intervals]: https://bitbucket.org/toryt/allen/src/master/doc/PointAsIntervals.md
 [comparing points with intervals]: https://bitbucket.org/toryt/allen/src/master/doc/ComparingPointsWithIntervals.md
 [code documentation]: https://bitbucket.org/toryt/allen/src/master/docs/index.html
-[van Beek, Peter; Cohen, Robin “Exact and Approximate Reasoning about Temporal Relations”]:
-  https://cs.uwaterloo.ca/~vanbeek/Publications/ci90.pdf
-[Hogge, J. C. “TPLAN: A Temporal Interval-Based Planner with Novel Extensions”]:
-  https://books.google.be/books/about/TPLAN.html?id=Sm85jtrtS7gC&redir_esc=y
-[Freuder, E. C. “Synthesizing Constraint Expressions”]: https://dl.acm.org/doi/10.1145/359642.359654
-[Eriksson, Leif; Lagerkvist, Victor “Improved Algorithms for Allen’s Interval Algebra: a Dynamic Programming Approach”]:
-  https://www.ijcai.org/proceedings/2021/0258.pdf
-[”Principles of Knowledge Representation and Reasoning; Proceedings of the Second International Conference”]:
-  https://kr.org/proceedings/KR-1991-proceedings-scanned.pdf
+[van Beek]: https://cs.uwaterloo.ca/~vanbeek/Publications/ci90.pdf
+[Hogge]: https://books.google.be/books/about/TPLAN.html?id=Sm85jtrtS7gC&redir_esc=y
+[Freuder]: https://dl.acm.org/doi/10.1145/359642.359654
+[Eriksson]: https://www.ijcai.org/proceedings/2021/0258.pdf
+[Principles]: https://kr.org/proceedings/KR-1991-proceedings-scanned.pdf
 [bitbucket]: https://bitbucket.org/toryt/allen
 [github]: https://github.com/Toryt/allen
 [npm]: https://www.npmjs.com/package/@toryt/allen
