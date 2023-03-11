@@ -14,214 +14,96 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-# Allen
+# @toryt/allen
 
-Validate and reason about relations between intervals, and between points and intervals, in JavaScript and TypeScript.
+Reason about relations between intervals, and between points and intervals, in JavaScript and TypeScript.
 
-When working with intervals, we often want to express constraints (invariants) that limit acceptable combinations.
-Expressing this correctly proves difficult in practice. Falling back to working with isolated start and end points, and
-reasoning about their relations, in practice proves to be even much more difficult and error-prone. This problem was
-tackled in 1983 by James Allen:
-
-- [Allen, James F. “Maintaining knowledge about temporal intervals”], _Communications of the ACM 26(11) pages 832-843;
-  November 1983_
+In 1983, James Allen proposed reasoning about the relationships between intervals with an interval algebra (IA): [Allen,
+James F. “Maintaining knowledge about temporal intervals”], _Communications of the ACM 26(11) pages 832-843; November
+1983_.
 
 Good synopses of this theory are
 
 - [Wikipedia]
 - [Thomas A. Alspaugh “Allen's interval algebra”].
 
-More:
+Allen noticed that reasoning about time often has to deal with incomplete or imprecise data, and that this is difficult
+when this is done with points on a time axis (“state space approaches”). He found that reasoning instead about the
+relationships between _intervals as first class objects_, without mapping them to a time axis, is often easier and leads
+to better results. This is not limited to reasoning about time, but applies to all domains where intervals are used on a
+set with [strict total order].
 
-- [van Beek, Peter; Cohen, Robin “Exact and Approximate Reasoning about Temporal Relations”](https://cs.
-  uwaterloo.ca/~vanbeek/Publications/ci90.pdf), _Computational Intelligence 6:132-144, 1990_
-- [Hogge, J. C. “TPLAN: A Temporal Interval-Based Planner with Novel Extensions”](https://books.google.be/books/about/TPLAN.html?id=Sm85jtrtS7gC&redir_esc=y), _University of Illinois Department
-  of Computer Science Technical Report UIUCDCS-R-87-1367, September 1987_
-- [Freuder, E. C. “Synthesizing Constraint Expressions”](), _Communications of the ACM 21 pages 958-966; November 1978_
-- [Eriksson, Leif; Lagerkvist, Victor “Improved Algorithms for Allen’s Interval Algebra: a Dynamic Programming Approach”](https://www.ijcai.org/proceedings/2021/0258.pdf),
-  _Proceedings of the Thirtieth International Joint Conference on Artificial Intelligence (IJCAI-21)_
-- [”Principles of Knowledge Representation and Reasoning; Proceedings of the Second International Conference”]
-  (https://kr.org/proceedings/KR-1991-proceedings-scanned.pdf)
+This library realizes Allen’s Interval Algebra, and offers his implementation for inference.
 
-This library is aimed in the first place at dealing with intervals in traditional software.
+The main reason for the existence of this library however is the fact that in modern business software we are confronted
+with incomplete and imprecise data about time with points on a time axis nevertheless. It is used as a dependency in
+[@toryt/intervals], which attempts to bridge the gap. [ppwcode dotnet-util-allen] offers a C# version of the
+functionality of this library.
 
-This library only offers limited support for inference. Be aware that, in general, inference over intervals, also using
-Allen relations, is NP-complete. This means that the time the execution of inference algorithms will take, is at least
-difficult to ascertain, and quickly completely impractical. There are subsets of the Allen relations for which there
-exist algorithms that perform much better. Such optimizations are not supported by this library.
+Allen’s Interval Algebra is an algebra over a set with 13 relations as elements. The approach however is more general,
+and can also be applied to sets with a different number of relations (e.g., 3 for the [strict total order] (&lt;, =,
+&gt;), or 5 for the relationships between points and intervals). Allen’s Interval Algebra is realized in this library as
+a specialization of a more general class, that allows other extensions for algebras with a different number of elements.
 
-[ppwcode dotnet-util-allen] offers a C# version of the functionality of this library.
+[TOC]
 
-## How to use
+## Introduction
 
-### Example
+We find that there are 13 _basic relations_ possible between definite intervals. In this library, we use the notation as
+found in [Thomas A. Alspaugh “Allen's interval algebra”].
 
-#### JavaScript
+| Basic relation                               | i<sub>1</sub> (.) i<sub>2</sub> | Illustration        |
+| -------------------------------------------- | ------------------------------- | ------------------- |
+| i<sub>1</sub> precedes i<sub>2</sub>         | i<sub>1</sub> (p) i<sub>2</sub> | ![precedes]         |
+| i<sub>1</sub> meets i<sub>2</sub>            | i<sub>1</sub> (m) i<sub>2</sub> | ![meets]            |
+| i<sub>1</sub> overlaps i<sub>2</sub>         | i<sub>1</sub> (o) i<sub>2</sub> | ![overlaps]         |
+| i<sub>1</sub> is finished by i<sub>2</sub>   | i<sub>1</sub> (F) i<sub>2</sub> | ![is finished by]   |
+| i<sub>1</sub> contains i<sub>2</sub>         | i<sub>1</sub> (D) i<sub>2</sub> | ![contains]         |
+| i<sub>1</sub> starts i<sub>2</sub>           | i<sub>1</sub> (s) i<sub>2</sub> | ![starts]           |
+| i<sub>1</sub> equals i<sub>2</sub>           | i<sub>1</sub> (e) i<sub>2</sub> | ![equals]           |
+| i<sub>1</sub> is started by i<sub>2</sub>    | i<sub>1</sub> (S) i<sub>2</sub> | ![is started by]    |
+| i<sub>1</sub> during i<sub>2</sub>           | i<sub>1</sub> (d) i<sub>2</sub> | ![during]           |
+| i<sub>1</sub> finishes i<sub>2</sub>         | i<sub>1</sub> (f) i<sub>2</sub> | ![finishes]         |
+| i<sub>1</sub> is overlapped by i<sub>2</sub> | i<sub>1</sub> (O) i<sub>2</sub> | ![is overlapped by] |
+| i<sub>1</sub> is met by i<sub>2</sub>        | i<sub>1</sub> (M) i<sub>2</sub> | ![is met by]        |
+| i<sub>1</sub> is preceded by i<sub>2</sub>   | i<sub>1</sub> (P) i<sub>2</sub> | ![is preceded by]   |
 
-```javascript
-const { AllenRelation, PointIntervalRelation } = require('@toryt/allen')
+These 13 _basic relations_ are an orthogonal basis for all possible _general_ relation-conditions between two intervals
+(`AllenRelation`).
 
-function allenRelationExample () {
-  const iiCondition1 = AllenRelation.fromString('psSd')
-  const iiCondition2 = AllenRelation.fromString('sde')
-  const iiCondition = iiCondition1.compose(iiCondition2)
+**i<sub>1</sub> (pm) i<sub>2</sub>** says that an interval i<sub>1</sub> _precedes **or** meets_ an interval
+i<sub>2</sub>. **i<sub>3</sub> (FDseSdf) i<sub>4</sub>** says that an interval i<sub>3</sub> _is finished by **or**
+contains **or** starts **or** equals **or** is started by **or** is during **or** finishes_ an interval i<sub>4</sub>.
+This implies **¬ (i<sub>3</sub> (pmoOMP) i<sub>4</sub>)**: i<sub>3</sub> _does not precede **and** does not meet **and**
+does not overlap **and** is not overlapped by **and** is not met by **and** is not preceded by_ i<sub>4</sub>.
 
-  const i1 = { start: '2022-11-04', end: '2023-04-12' }
-  const i2 = { start: '2021-08-22' }
+Each general relation expresses a certain amount of _uncertainty_, where a basic relation expresses certainty, and the
+**FULL** relation **(pmoFDseSdfOMP)** expresses complete uncertainty.
 
-  const iiActual = AllenRelation.relation(i1, i2)
-  if (!iiActual.implies(iiCondition)) {
-    throw new Error(`i1 and i2 do no uphold ${iiCondition.toString()}`)
-  }
+These 8192 (2<sup>13</sup>), general relations form an algebra, with the operations:
 
-  return iiActual
-}
+- **∁** `complement`
+- **~** `converse`
+- **\\** `min`
+- **∨** (disjunction, union, `or`)
+- **∧** (conjunction, intersection, `and`)
+- **⨾** (`compose`)
 
-function pointIntervalExample () {
-  const piCondition1 = PointIntervalRelation.or(PointIntervalRelation.BEFORE, PointIntervalRelation.TERMINATES)
-  const iiCondition2 = AllenRelation.fromString('sde')
-  const piCondition = piCondition1.compose(iiCondition2)
+A relation `implies` another relation, or not. E.g., if we have determined that a relation between i<sub>1</sub> and
+i<sub>2</sub> is **(oO)**, and we need it to be **(pmoOMP)**, this is ok because **(oO) ⊢ (pmoOMP)**. If the relation is
+**(oeO)** however, it is not ok (**(oO) ⊬ (pmoOMP)**), because **(pmoOMP)** does not allow the intervals to be equal
+(**(e)**).
 
-  const p = '2021-08-15'
-  const i = { start: '2021-08-22' }
+When the relation between 2 intervals i<sub>1</sub> and i<sub>2</sub> is, e.g., **(oFD)**, we write **i1 (oFD) i2** or
+**AR(i<sub>1</sub>, i<sub>2</sub>) = (oFD)**.
 
-  const piActual = PointIntervalRelation.relation(p, i)
-  if (!piActual.implies(piCondition)) {
-    throw new Error(`p and i2 do not uphold ${piCondition.toString()}`)
-  }
+## Details
 
-  return piActual
-}
-```
-
-#### TypeScript
-
-```ts
-import { AllenRelation, Interval, PointIntervalRelation } from '@toryt/allen'
-
-function allenRelationExample (): AllenRelation {
-  const iiCondition1: AllenRelation = AllenRelation.fromString<AllenRelation>('psSd')
-  const iiCondition2: AllenRelation = AllenRelation.fromString<AllenRelation>('sde')
-  const iiCondition: AllenRelation = iiCondition1.compose(iiCondition2)
-
-  const i1: Interval<string> = { start: '2022-11-04', end: '2023-04-12' }
-  const i2: Interval<string> = { start: '2021-08-22' }
-
-  const iiActual: AllenRelation = AllenRelation.relation(i1, i2)
-  if (!iiActual.implies(iiCondition)) {
-    throw new Error(`i1 and i2 do no uphold ${iiCondition.toString()}`)
-  }
-
-  return iiActual
-}
-
-function pointIntervalExample (): PointIntervalRelation {
-  const piCondition1: PointIntervalRelation = PointIntervalRelation.or(
-    PointIntervalRelation.BEFORE,
-    PointIntervalRelation.TERMINATES
-  )
-  const iiCondition2: AllenRelation = AllenRelation.fromString<AllenRelation>('sde')
-  const piCondition: PointIntervalRelation = piCondition1.compose(iiCondition2)
-
-  const p: string = '2021-08-15'
-  const i: Interval<string> = { start: '2021-08-22' }
-
-  const piActual: PointIntervalRelation = PointIntervalRelation.relation(p, i)
-  if (!piActual.implies(piCondition)) {
-    throw new Error(`p and i2 do not uphold ${piCondition.toString()}`)
-  }
-
-  return piActual
-}
-```
-
-### Algebra
-
-We find that there are 5 _basic relations_ possible between a definite point and a definite interval:
-
-- `t` is `BEFORE` `I` (`b`)
-
-  ![before](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/PointIntervalRelation-before.png)
-
-- `t` `COMMENCES` `I` (`c`)
-
-  ![begins](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/PointIntervalRelation-commences.png)
-
-- `t` `IN` `I` (`i`)
-
-  ![in](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/PointIntervalRelation-in.png)
-
-- `t` `TERMINATES`I`(`t`)
-
-  ![ends](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/PointIntervalRelation-terminates.png)
-
-- `t` is `AFTER` `I` (`a`)
-
-  ![after](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/PointIntervalRelation-after.png)
-
-and that there are 13 _basic relations_ possible between definite intervals:
-
-| Basic relation             | `(.)` | Illustration                                                                                                                           |
-| -------------------------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `i1` precedes `i2`         | `(p)` | ![precedes](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precedes.png)             |
-| `i1` meets `i2`            | `(m)` | ![meets](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-meets.png)                   |
-| `i1` overlaps `i2`         | `(o)` | ![overlaps](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlaps.png)             |
-| `i1` is finished by `i2`   | `(F)` | ![is finished by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishedBy.png)     |
-| `i1` contains `i2`         | `(D)` | ![contains](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-contains.png)             |
-| `i1` starts `i2`           | `(s)` | ![starts](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-starts.png)                 |
-| `i1` equals `i2`           | `(e)` | ![equals](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-equals.png)                 |
-| `i1` is started by `i2`    | `(S)` | ![is started by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-startedBy.png)       |
-| `i1` during `i2`           | `(d)` | ![during](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-during.png)                 |
-| `i1` finishes `i2`         | `(f)` | ![finishes](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishes.png)             |
-| `i1` is overlapped by `i2` | `(O)` | ![is overlapped by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlappedBy.png) |
-| `i1` is met by `i2`        | `(M)` | ![is met by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-metBy.png)               |
-| `i1` is preceded by `i2`   | `(P)` | ![is preceded by](https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precededBy.png)     |
-
-These 5, respectively 13, _basic relations_ are an orthogonal basis for all possible _general_ relation-conditions
-between a point and an interval (`PointIntervalRelation`), respectively between two intervals (`AllenRelation`).
-
-`(bt)` says that a point can be _before_ an interval, or `terminate` it. `(sde)` says that an interval `i1` may _start_
-an interval `i2`, may be _during_ `i2`, or be _equal_ to it. Each general relation expresses a certain amount of
-_uncertainty_, where a basic relation expresses certainty, and the `FULL` relation ( `(bcita)`, respectively
-`(pmoFDseSdfOMP)`) expresses complete uncertainty.
-
-These 32 (2<sup>5</sup>), respectively 8192 (2<sup>13</sup>), general relations form an algebra, with the operations
-
-- `complement`
-- `converse` (only for `AllenRelation`)
-- `min`
-- `or`
-- `and`
-- `compose`
-
-A relation to be used as a condition to the problem at hand is build using these operations.
-
-A relation `implies` another relation, or not. E.g., if we have determined that a relation between `i1` and `i2` is
-`(oO)`, and we need it to be `(pmoOMP)`, this is ok because `(oO)` `implies` `(pmoOMP)`. If the relation is `(oeO)`
-however, it is not ok, because `(pmoOMP)` does not allow the intervals to be `equal`.
-
-Things get even more interesting when we need to reason about _indefinite_ intervals, where the `start` or `end` is
-unknown 🤷.
-
-There are some pitfalls.
-
-### Details
-
-- [Points and comparison]
-- [Intervals]
-- [Point – Interval Relations]
 - [Allen Relations]
 - [Interval Constraints]
-- [Reasoning with unknown but constrained start and end point]
 - [Points as intervals]
 - [Comparing points with intervals]
-- [Intersection]
-- [Chops]
 - [Code documentation]
-
-All functions and methods are protected with explicit `assert`s, that throw when a precondition is violated. Although
-written in TypeScript, types are verified dynamically too, so that type safety is ensured dynamically when the library
-is used with plain JavaScript too.
 
 ## Where to find
 
@@ -240,6 +122,11 @@ pull requests there will not be reviewed.</p>
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
 This code uses the [application to TypeScript][eslint-config-standard-with-typescript] of the [Standard] coding style.
+
+All functions and methods are protected with explicit `assert`s, that throw when a precondition is violated. Although
+written in TypeScript, types are verified dynamically too, so that type safety is ensured dynamically when the library
+is used with plain JavaScript too.
+
 Tests require complete code coverage.
 
 ### Linting and formatting
@@ -249,12 +136,23 @@ for years. At this time,
 [Setting up ESlint with Standard and Prettier](https://medium.com/nerd-for-tech/setting-up-eslint-with-standard-and-prettier-be245cb9fc64)
 seems to be a viable approach.
 
+## Further reading
+
+- [van Beek, Peter; Cohen, Robin “Exact and Approximate Reasoning about Temporal Relations”], _Computational
+  Intelligence 6:132-144, 1990_
+- [Hogge, J. C. “TPLAN: A Temporal Interval-Based Planner with Novel Extensions”], _University of Illinois Department of
+  Computer Science Technical Report UIUCDCS-R-87-1367, September 1987_ (no version found on the internet)
+- [Freuder, E. C. “Synthesizing Constraint Expressions”], _Communications of the ACM 21 pages 958-966; November 1978_
+- [Eriksson, Leif; Lagerkvist, Victor “Improved Algorithms for Allen’s Interval Algebra: a Dynamic Programming
+  Approach”], _Proceedings of the Thirtieth International Joint Conference on Artificial Intelligence (IJCAI-21)_
+- [”Principles of Knowledge Representation and Reasoning; Proceedings of the Second International Conference”]
+
 ## License
 
 Released under the [Apache License, Version 2.0][license].
 
 <div style="font-style: italic; color: darkslategray;">
-<p>Copyright © 2022 by Jan Dockx</p>
+<p>Copyright © 2022 – 2023 by Jan Dockx</p>
 
 <p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with
 the License. You may obtain a copy of the License at</p>
@@ -272,26 +170,75 @@ This code was based on
 [a Java implementation](https://github.com/jandppw/ppwcode-recovered-from-google-code/tree/master/java/value/trunk/src/main/java/org/ppwcode/value_III/time/interval)
 last updated in December 2008.
 
+<!---
+All links are to Bitbucket, and not relative, because otherwise they do not work on the `npm` page.
+-->
+
+[precedes]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precedes.png
+[meets]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-meets.png
+[overlaps]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlaps.png
+[is finished by]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishedBy.png
+[contains]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-contains.png
+[starts]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-starts.png
+[equals]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-equals.png
+[is started by]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-startedBy.png
+[during]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-during.png
+[finishes]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishes.png
+[is overlapped by]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlappedBy.png
+[is met by]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-metBy.png
+[is preceded by]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precededBy.png
 [allen, james f. “maintaining knowledge about temporal intervals”]: https://dl.acm.org/doi/pdf/10.1145/182.358434
 [wikipedia]: https://en.wikipedia.org/wiki/Allen%27s_interval_algebra
 [thomas a. alspaugh “allen's interval algebra”]: https://www.ics.uci.edu/~alspaugh/cls/shr/allen.html
+[@toryt/intervals]: https://bitbucket.org/toryt/intervals
+[ppwcode dotnet-util-allen]: https://bitbucket.org/ppwcode/dotnet-util-allen
 [strict total order]: https://en.wikipedia.org/wiki/Total¬_order
-[points and comparison]: https://bitbucket.org/toryt/allen/src/master/doc/Points.md
-[intervals]: https://bitbucket.org/toryt/allen/src/master/doc/Intervals.md
-[point – interval relations]: https://bitbucket.org/toryt/allen/src/master/doc/PointIntervalRelation.md
+[precedes]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precedes.png
+[meets]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-meets.png
+[overlaps]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlaps.png
+[is finished by]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishedBy.png
+[contains]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-contains.png
+[starts]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-starts.png
+[equals]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-equals.png
+[is started by]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-startedBy.png
+[during]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-during.png
+[finishes]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-finishes.png
+[is overlapped by]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-overlappedBy.png
+[is met by]: https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-metBy.png
+[is preceded by]:
+  https://bitbucket.org/toryt/allen/raw/b28db81b9d03cb22325e3676f24af0e56a1f449b/doc/AllenRelation-precededBy.png
 [allen relations]: https://bitbucket.org/toryt/allen/src/master/doc/AllenRelation.md
 [interval constraints]: https://bitbucket.org/toryt/allen/src/master/doc/IntervalConstraints.md
-[reasoning with unknown but constrained start and end point]:
-  https://bitbucket.org/toryt/allen/src/master/doc/ReasoningWithUnknownButConstrained.md
 [points as intervals]: https://bitbucket.org/toryt/allen/src/master/doc/PointAsIntervals.md
 [comparing points with intervals]: https://bitbucket.org/toryt/allen/src/master/doc/ComparingPointsWithIntervals.md
-[intersection]: https://bitbucket.org/toryt/allen/src/master/doc/Intersection.md
-[chops]: https://bitbucket.org/toryt/allen/src/master/doc/Chops.md
-[code documentation]: docs/index.html
+[code documentation]: https://bitbucket.org/toryt/allen/src/master/docs/index.html
+[van Beek, Peter; Cohen, Robin “Exact and Approximate Reasoning about Temporal Relations”]:
+  https://cs.uwaterloo.ca/~vanbeek/Publications/ci90.pdf
+[Hogge, J. C. “TPLAN: A Temporal Interval-Based Planner with Novel Extensions”]:
+  https://books.google.be/books/about/TPLAN.html?id=Sm85jtrtS7gC&redir_esc=y
+[Freuder, E. C. “Synthesizing Constraint Expressions”]: https://dl.acm.org/doi/10.1145/359642.359654
+[Eriksson, Leif; Lagerkvist, Victor “Improved Algorithms for Allen’s Interval Algebra: a Dynamic Programming Approach”]:
+  https://www.ijcai.org/proceedings/2021/0258.pdf
+[”Principles of Knowledge Representation and Reasoning; Proceedings of the Second International Conference”]:
+  https://kr.org/proceedings/KR-1991-proceedings-scanned.pdf
 [bitbucket]: https://bitbucket.org/toryt/allen
 [github]: https://github.com/Toryt/allen
 [npm]: https://www.npmjs.com/package/@toryt/allen
 [standard]: https://standardjs.com
 [eslint-config-standard-with-typescript]: https://github.com/standard/eslint-config-standard-with-typescript
-[license]: ./LICENSE
-[ppwcode dotnet-util-allen]: https://bitbucket.org/ppwcode/dotnet-util-allen
+[license]: https://bitbucket.org/toryt/allen/src/master/LICENSE
