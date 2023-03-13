@@ -40,10 +40,10 @@ with incomplete and imprecise data about time with points on a time axis neverth
 [@toryt/intervals], which attempts to bridge the gap. [ppwcode dotnet-util-allen] offers a C# version of the
 functionality of this library.
 
-Allen’s Interval Algebra is an algebra over a set with 13 relations as elements. The approach however is more general,
-and can also be applied to sets with a different number of relations (e.g., 3 for the [strict total order] (&lt;, =,
-&gt;), or 5 for the relationships between points and intervals). Allen’s Interval Algebra is realized in this library as
-a specialization of a more general class, that allows other extensions for algebras with a different number of elements.
+Allen’s Interval Algebra is an algebra over a set with 13 relations as elements. The approach is general and can also be
+applied to sets with a different number of relations (e.g., 3 for the [strict total order] (&lt;, =, &gt;), or 5 for the
+relationships between points and intervals). Allen’s Interval Algebra is realized in this library as a specialization of
+a more general class, that allows other extensions for algebras with a different number of elements.
 
 ## Introduction
 
