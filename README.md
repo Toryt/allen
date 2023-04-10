@@ -66,8 +66,7 @@ found in [Thomas A. Alspaugh “Allen's interval algebra”].
 |        i<sub>1</sub> is met by i<sub>2</sub> |               (M)                | ![is met by][is met by]               |
 |   i<sub>1</sub> is preceded by i<sub>2</sub> |               (P)                | ![is preceded by][is preceded by]     |
 
-These 13 _basic relations_ are an orthogonal basis for all possible _general_ relation-conditions between two intervals
-(`AllenRelation`).
+These 13 _basic relations_ are an orthogonal basis for all possible _general_ relation-conditions between two intervals.
 
 **i<sub>1</sub> (pm) i<sub>2</sub>** says that an interval i<sub>1</sub> _precedes **or** meets_ an interval
 i<sub>2</sub>. **i<sub>3</sub> (FDseSdf) i<sub>4</sub>** says that an interval i<sub>3</sub> _is finished by **or**
@@ -76,7 +75,7 @@ This implies **¬ (i<sub>3</sub> (pmoOMP) i<sub>4</sub>)**: i<sub>3</sub> _does 
 does not overlap **and** is not overlapped by **and** is not met by **and** is not preceded by_ i<sub>4</sub>.
 
 Each general relation expresses a certain amount of _uncertainty_, where a basic relation expresses certainty, and the
-**FULL** relation **(pmoFDseSdfOMP)** expresses complete uncertainty.
+_full relation_ **(pmoFDseSdfOMP)** expresses complete uncertainty.
 
 These 8192 (2<sup>13</sup>), general relations form an algebra, with the operations:
 

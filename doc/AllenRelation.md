@@ -17,78 +17,108 @@ limitations under the License.
 # Allen Relations
 
 When working with intervals, we often want to express constraints (invariants) that limit acceptable combinations.
-Expressing this correctly proves difficult in practice. Falling back to working with isolated start and end points, and
-reasoning about their relations, in practice proves to be even much more difficult and error-prone.
+Expressing this correctly proves difficult in practice. Falling back to working with isolated start and end points
+(“state space approaches”), and reasoning about their relations, in practice proves to be even much more difficult and
+error-prone.
 
-This problem was tackled in 1983 by James Allen (<a href="https://dl.acm.org/doi/pdf/10.1145/182.358434"><cite>Allen,
-James F. &quot;Maintaining knowledge about temporal intervals&quot;; Communications of the ACM 26(11) pages 832-843;
-November 1983</cite></a>).
+This problem was tackled in 1983 by James Allen ([Allen, James F. “Maintaining knowledge about temporal intervals”]
+[allen], _Communications of the ACM 26(11) pages 832-843; November 1983_) by introducing an _interval algebra_ (IA).
 
-Good synopses of this theory are [Wikipedia](https://en.wikipedia.org/wiki/Allen%27s_interval_algebra), and
-<a href="https://www.ics.uci.edu/~alspaugh/cls/shr/allen.html"><cite>Thomas A. Alspaugh &quot;Allen's interval
-algebra&quot;</cite></a>, on which the conventions used here are based.
+Good synopses of this theory are [Wikipedia], and [Thomas A. Alspaugh “Allen's interval algebra”][alspaugh]. The
+notation used in this text for the Allen Relations is the one used by [Alspaugh].
 
 ## Quick overview
 
-Allen finds that there are 13 _basic relations_ possible between definite intervals:
+### Basic Relations
 
-| Basic relation             | `(.)` | Illustration        | Definition (mentioned properties must be definite, and …)   |
-| -------------------------- | ----- | ------------------- | ----------------------------------------------------------- |
-| `i1` precedes `i2`         | `(p)` | ![precedes]         | `i1.end < i2.start`                                         |
-| `i1` meets `i2`            | `(m)` | ![meets]            | `i1.end = i2.start`                                         |
-| `i1` overlaps `i2`         | `(o)` | ![overlaps]         | `i1.start < i2.start ∧ i2.start < i1.end ∧ i1.end < i2.end` |
-| `i1` is finished by `i2`   | `(F)` | ![is finished by]   | `i1.start < i2.start ∧ i1.end = i2.end`                     |
-| `i1` contains `i2`         | `(D)` | ![contains]         | `i1.start < i2.start ∧ i2.end < i1.end`                     |
-| `i1` starts `i2`           | `(s)` | ![starts]           | `i1.start = i2.start ∧ i1.end < i2.end`                     |
-| `i1` equals `i2`           | `(e)` | ![equals]           | `i1.start = i2.start ∧ i1.end = i2.end`                     |
-| `i1` is started by `i2`    | `(S)` | ![is started by]    | `i2.start = i1.start ∧ i2.end < i1.end`                     |
-| `i1` during `i2`           | `(d)` | ![during]           | `i2.start < i1.start ∧ i1.end < i2.end`                     |
-| `i1` finishes `i2`         | `(f)` | ![finishes]         | `i2.start < i1.start ∧ i1.end = i2.end`                     |
-| `i1` is overlapped by `i2` | `(O)` | ![is overlapped by] | `i2.start < i1.start ∧ i1.start < i2.end ∧ i2.end < i1.end` |
-| `i1` is met by `i2`        | `(M)` | ![is met by]        | `i2.end = i1.start`                                         |
-| `i1` is preceded by `i2`   | `(P)` | ![is preceded by]   | `i2.end < i1.start`                                         |
+[Allen] finds that there are 13 _basic relations_ possible between intervals:
 
-These basic relations can be compared to the relations `<`, `=`, and `>` between 2 points.
+|                               Basic relation | AR(i<sub>1</sub>, i<sub>2</sub>) | Illustration                          | Definition                                                  |
+| -------------------------------------------: | :------------------------------: | ------------------------------------- | ----------------------------------------------------------- |
+|         i<sub>1</sub> precedes i<sub>2</sub> |               (p)                | ![precedes][precedes]                 | `i1.end < i2.start`                                         |
+|            i<sub>1</sub> meets i<sub>2</sub> |               (m)                | ![meets][meets]                       | `i1.end = i2.start`                                         |
+|         i<sub>1</sub> overlaps i<sub>2</sub> |               (o)                | ![overlaps][overlaps]                 | `i1.start < i2.start ∧ i2.start < i1.end ∧ i1.end < i2.end` |
+|   i<sub>1</sub> is finished by i<sub>2</sub> |               (F)                | ![is finished by][is finished by]     | `i1.start < i2.start ∧ i1.end = i2.end`                     |
+|         i<sub>1</sub> contains i<sub>2</sub> |               (D)                | ![contains][contains]                 | `i1.start < i2.start ∧ i2.end < i1.end`                     |
+|           i<sub>1</sub> starts i<sub>2</sub> |               (s)                | ![starts][starts]                     | `i1.start = i2.start ∧ i1.end < i2.end`                     |
+|           i<sub>1</sub> equals i<sub>2</sub> |               (e)                | ![equals][equals]                     | `i1.start = i2.start ∧ i1.end = i2.end`                     |
+|    i<sub>1</sub> is started by i<sub>2</sub> |               (S)                | ![is started by][is started by]       | `i2.start = i1.start ∧ i2.end < i1.end`                     |
+|           i<sub>1</sub> during i<sub>2</sub> |               (d)                | ![during][during]                     | `i2.start < i1.start ∧ i1.end < i2.end`                     |
+|         i<sub>1</sub> finishes i<sub>2</sub> |               (f)                | ![finishes][finishes]                 | `i2.start < i1.start ∧ i1.end = i2.end`                     |
+| i<sub>1</sub> is overlapped by i<sub>2</sub> |               (O)                | ![is overlapped by][is overlapped by] | `i2.start < i1.start ∧ i1.start < i2.end ∧ i2.end < i1.end` |
+|        i<sub>1</sub> is met by i<sub>2</sub> |               (M)                | ![is met by][is met by]               | `i2.end = i1.start`                                         |
+|   i<sub>1</sub> is preceded by i<sub>2</sub> |               (P)                | ![is preceded by][is preceded by]     | `i2.end < i1.start`                                         |
 
-When reasoning about the relationship between intervals however, like when comparing points, we also often employ
-_indeterminate_ relations, such as `I1 (pm) I2` (`I1` `PRECEDES` `I2`, or `MEETS` `I2`). This is comparable to reasoning
-with `≤`, `≥`, and `≠` with points.
+These basic relations can be compared to the 3 relations **<**, **=**, and **>** between 2 points.
 
-For intervals, given 13 basic relations, we get 8192 (= 2<sup>13</sup>) possible _general relations_. The 13 basic
-relations are an _orthogonal basis_ for all possible general relations. This includes the `FULL` relation (comparable to
-`< ⋁ = ⋁ >` with points), which expresses the maximum uncertainty about the relation between two intervals. `FULL` means
-you are from Barcelona. The `EMPTY` relation is not a true relation. It does not express a relational condition between
-two intervals. It is needed for consistency with some algebraic operations on relations.
+### General Relations
+
+When reasoning about the relationship between intervals, like when comparing points, we also often employ
+_indeterminate_ relations, such as **i<sub>1</sub> (pm) i<sub>2</sub>** (i<sub>1</sub> _precedes_ i<sub>2</sub> **or**
+i<sub>1</sub> _meets_ i<sub>2</sub>). This is comparable to reasoning with **≤**, **≥**, and **≠** with points.
+
+When comparing points **a** and **b**, given 3 basic relations, there are 8 (= 2<sup>3</sup>) possible _general
+relations_: the 3 basic relations **a < b**, **a = b**, and **a > b**; all possible binary disjunctions , **a < b ∨ a =
+b ≝ a ≤ b**, **a < b ∨ a > b ≝ a ≠ b**, and **a = b ∨ a > b ≝ a ≥ b**; the ternary disjunction **a < b ∨ a = b ∨ a >
+b**, that expresses complete uncertainty; and the combination of 0 basic relations.
+
+For IA, given 13 basic relations, we get 8192 (= 2<sup>13</sup>) possible _general relations_. The 13 basic relations
+are an _orthogonal basis_ for all possible general relations.
+
+This includes the _full relation_ **i<sub>1</sub> (pmoFDseSdfOMP) i<sub>2</sub>** (comparable to **a = b ∨ a > b ≝ a ≥
+b** with points), which expresses the maximum uncertainty about the relation between two intervals. The _full relation_
+means you are from Barcelona.
+
+The _empty relation_ **i<sub>1</sub> () i<sub>2</sub>** is not a true relation. It does not express a relational
+condition between two intervals. It is needed for consistency with some algebraic operations on relations.
 
 ## Notation
 
-_i<sub>1</sub> `(sedf)` i<sub>2</sub>_ expresses that we know for certain that _i<sub>1</sub>_ starts, is equal to, is
-during, or finishes _i<sub>2</sub>_, and does not precede, meet, overlaps with, is finished by, contains, is overlapped
-by, is met by, nor is preceded by _i<sub>2</sub>_.
+When discussing specific Allen relations in isolation, we write the basic relations they are composed of in brackets.
+**i<sub>1</sub> (sedf) i<sub>2</sub>** expresses that we know for certain that **i<sub>1</sub>** _starts_, _is equal
+to_, is _during_, or _finishes_ **i<sub>2</sub>**, and does not _precede_, _meet_, _overlaps with_, _is finished by_,
+_contains_, _is overlapped by_, _is met by_, nor is _preceded by_ **i<sub>2</sub>**.
 
-When we are discussing an, as yet, unknown relation, we write _i<sub>1</sub> `(.)` i<sub>2</sub>_.
+When the relation between 2 intervals **i<sub>1</sub>** and **i<sub>2</sub>** is, e.g., **(oFD)**, we write **i1 (oFD)
+i2** or **AR(i<sub>1</sub>, i<sub>2</sub>) = (oFD)**.
 
-When discussing Allen relations in isolation, we write the basic relations they are composed of in brackets, e.g.,
-`(sedf)`. As variables, they are often denoted _R<sub>1</sub>_, _R<sub>2</sub>_, …. E.g.: _R<sub>1</sub> = `(sedf)`_.
+As variables, they are often denoted **R<sub>1</sub>**, **R<sub>2</sub>**, …. E.g.: **R<sub>1</sub> = (sedf)**.
 
-Combined, _i<sub>1</sub> R<sub>1</sub> i<sub>2</sub>_ expresses that we know the Allen relation from _i<sub>1</sub>_ to
-_i<sub>2</sub>_ is _R<sub>1</sub>_.
+The set of all general Allen relations is denoted **𝓐** (Allen’s interval algebra).
+
+Combined, **i<sub>1</sub> R<sub>1</sub> i<sub>2</sub>** expresses that we know the Allen relation from **i<sub>1</sub>**
+to **i<sub>2</sub>** is **R<sub>1</sub>**.
 
 ## Operations
 
+The set of 8192 general Allen relations for an algebra, with the following operations:
+
 ### Implication
 
-_R<sub>1</sub> ⊆ R<sub>2</sub>_ expresses that _R<sub>1</sub>_ **implies** _R<sub>2</sub>_, and that _R<sub>2</sub>_
-**is implied by** _R<sub>1</sub>_.
+**R<sub>1</sub> ⊢ R<sub>2</sub>** expresses that **R<sub>1</sub>** _implies_ **R<sub>2</sub>**, and that
+**R<sub>2</sub>** _is implied by_ **R<sub>1</sub>**. **R<sub>3</sub> ⊬ R<sub>4</sub>** expresses that **R<sub>3</sub>**
+_does not imply_ **R<sub>4</sub>**.
 
-For example, _`(se)` ⊆ `(sedf)`_: knowing _i<sub>1</sub> `(se)` i<sub>2</sub>_ **implies** knowning _i<sub>1</sub>
-`(sedf)` i<sub>2</sub>_. If _i1_ starts or is equal to _i2_, it is true that it starts, is equal to, is during, or
-finishes _i<sub>2</sub>_.
+For example, **(se) ⊢ (sedf)**: knowing **i<sub>1</sub> (se) i<sub>2</sub>** _implies_ knowning **i<sub>1</sub> (sedf)
+i<sub>2</sub>**. If **i1** _starts_ or _equals_ **i2**, it is true that it _starts_, _equals_, is _during_, or
+_finishes_ **i<sub>2</sub>**.
 
-The implication is often used to verify whether a constraint is upheld. We require _i<sub>1</sub> `(sedf)`
-i<sub>2</sub>_, and our reasoning leads us to known _i<sub>1</sub> `(se)` i<sub>2</sub>_. Because _`(se)` ⊆ `(sedf)`_,
-we know the constraint is upheld. When our reasoning leads us to know _i<sub>1</sub> `(sedfOMP)` i<sub>2</sub>_, or
-_i<sub>1</sub> `(pm)` i<sub>2</sub>_, e.g., the constraint is not upheld.
+The implication is often used to verify whether a constraint is upheld. Suppose we require **i<sub>1</sub> (sedf)
+i<sub>2</sub>**, and our reasoning leads us to know **i<sub>1</sub> (se) i<sub>2</sub>**. Because **(se) ⊢ (sedf)**, we
+are sure the constraint is upheld. When our reasoning leads us to know **i<sub>1</sub> (sedfOMP) i<sub>2</sub>** instead
+we are not certain the constraint is upheld. **(sedfOMP) ⊬ (sedf)**, because the relation could also be **O**, **M**, or
+**P**. When our reasoning leads us to know **i<sub>1</sub> (pm) i<sub>2</sub>**, we are certain the constraint is not
+upheld. **(pm) ⊬ (sedf)**: we explicitly know the relation is not **s**, **e**, **d**, nor **f**.
+
+The implicitation is
+
+- reflexive: **∀ R ∈ 𝓐: R ⊢ R**
+- anti-symmetric: **∀ R<sub>1</sub>, R<sub>2</sub> ∈ 𝓐: R<sub>1</sub> ⊢ R<sub>2</sub> ∧ R<sub>2</sub> ⊢ R<sub>1</sub> ⇒
+  R<sub>1</sub> = R<sub>2</sub>**
+- transitive: **∀ R<sub>1</sub>, R<sub>2</sub>, R<sub>3</sub> ∈ 𝓐: R<sub>1</sub> ⊢ R<sub>2</sub> ∧ R<sub>2</sub> ⊢
+  R<sub>3</sub> ⇒ R<sub>1</sub> ⊢ R<sub>3</sub>**
+
+and thus defines a partial order on **𝓐**.
 
 ### Complement
 
@@ -261,6 +291,9 @@ R<sub>23</sub> i<sub>3</sub>_ is known, but _i<sub>3</sub> R<sub>32</sub> i<sub>
 > (i<sub>1</sub> R<sub>12</sub> i<sub>2</sub>) ∧ (i<sub>3</sub> R<sub>32</sub> i<sub>2</sub>) ⇒ i<sub>1</sub>
 > (R<sub>12</sub> ⊕ R<sub>32</sub>^) i<sub>3</sub>
 
+[allen]: https://dl.acm.org/doi/pdf/10.1145/182.358434
+[wikipedia]: https://en.wikipedia.org/wiki/Allen%27s_interval_algebra
+[alspaugh]: https://www.ics.uci.edu/~alspaugh/cls/shr/allen.html
 [precedes]: ../img/ar-basic/precedes.png
 [meets]: ../img/ar-basic/meets.png
 [overlaps]: ../img/ar-basic/overlaps.png
