@@ -62,8 +62,9 @@ relations_: the 3 basic relations **a < b**, **a = b**, and **a > b**; all possi
 b ≝ a ≤ b**, **a < b ∨ a > b ≝ a ≠ b**, and **a = b ∨ a > b ≝ a ≥ b**; the ternary disjunction **a < b ∨ a = b ∨ a >
 b**, that expresses complete uncertainty; and the combination of 0 basic relations.
 
-For IA, given 13 basic relations, we get 8192 (= 2<sup>13</sup>) possible _general relations_. The 13 basic relations
-are an _orthogonal basis_ for all possible general relations.
+For IA, given 13 basic relations, we get 8192 (= 2<sup>13</sup>) possible _general relations_. The set of general
+relations is equivalent to the power set of the basic relations. The 13 basic relations are an _orthogonal basis_ for
+all possible general relations, seen as elements.
 
 This includes the _full relation_ **i<sub>1</sub> (pmoFDseSdfOMP) i<sub>2</sub>** (comparable to **a = b ∨ a > b ≝ a ≥
 b** with points), which expresses the maximum uncertainty about the relation between two intervals. The _full relation_
@@ -84,10 +85,15 @@ i2** or **AR(i<sub>1</sub>, i<sub>2</sub>) = (oFD)**.
 
 As variables, they are often denoted **R<sub>1</sub>**, **R<sub>2</sub>**, …. E.g.: **R<sub>1</sub> = (sedf)**.
 
-The set of all general Allen relations is denoted **𝓐** (Allen’s interval algebra).
-
 Combined, **i<sub>1</sub> R<sub>1</sub> i<sub>2</sub>** expresses that we know the Allen relation from **i<sub>1</sub>**
 to **i<sub>2</sub>** is **R<sub>1</sub>**.
+
+The set of all general Allen relations is denoted **𝓐** (Allen’s interval algebra). The subset of all basic Allen
+relations is denoted **𝓐<sup>⊥</sup> = {p, m, o, F, D, s, e, S, d, f, O, M, P}**. <span style="float: right;">(1)</span>
+
+**𝓐 ≅ 2<sup>𝓐<sup>⊥</sup></sup>**. **S: 2<sup>𝓐<sup>⊥</sup></sup> → 𝓐** maps sets of basic relations to the general
+Allen relation that is the disjunction of the elements of that set, and **S<sup>-1</sup>** does the reverse.
+<span style="float: right;">(2)</span>
 
 ## Operations
 
@@ -103,6 +109,9 @@ For example, **(se) ⊢ (sedf)**: knowing **i<sub>1</sub> (se) i<sub>2</sub>** _
 i<sub>2</sub>**. If **i1** _starts_ or _equals_ **i2**, it is true that it _starts_, _equals_, is _during_, or
 _finishes_ **i<sub>2</sub>**.
 
+> ∀ R<sub>1</sub>, R<sub>2</sub> ∈ 𝓐: R<sub>1</sub> ⊢ R<sub>2</sub> ≝ S<sup>-1</sup>(R<sub>1</sub>) ⊆
+> S<sup>-1</sup>(R<sub>2</sub>) <span style="float: right;">(3)</span>
+
 The implication is often used to verify whether a constraint is upheld. Suppose we require **i<sub>1</sub> (sedf)
 i<sub>2</sub>**, and our reasoning leads us to know **i<sub>1</sub> (se) i<sub>2</sub>**. Because **(se) ⊢ (sedf)**, we
 are sure the constraint is upheld. When our reasoning leads us to know **i<sub>1</sub> (sedfOMP) i<sub>2</sub>** instead
@@ -112,30 +121,78 @@ upheld. **(pm) ⊬ (sedf)**: we explicitly know the relation is not **s**, **e**
 
 The implicitation is
 
-- reflexive: **∀ R ∈ 𝓐: R ⊢ R**
+- reflexive: **∀ R ∈ 𝓐: R ⊢ R** (or, **∀ R<sub>1</sub>, R<sub>2</sub> ∈ 𝓐: R<sub>1</sub> = R<sub>2</sub> ⇒ R<sub>1</sub>
+  ⊢ R<sub>2</sub> ∧ R<sub>2</sub> ⊢ R<sub>1</sub>**) <span style="float: right;">(4)</span>
 - anti-symmetric: **∀ R<sub>1</sub>, R<sub>2</sub> ∈ 𝓐: R<sub>1</sub> ⊢ R<sub>2</sub> ∧ R<sub>2</sub> ⊢ R<sub>1</sub> ⇒
-  R<sub>1</sub> = R<sub>2</sub>**
+  R<sub>1</sub> = R<sub>2</sub>** <span style="float: right;">(5)</span>
 - transitive: **∀ R<sub>1</sub>, R<sub>2</sub>, R<sub>3</sub> ∈ 𝓐: R<sub>1</sub> ⊢ R<sub>2</sub> ∧ R<sub>2</sub> ⊢
-  R<sub>3</sub> ⇒ R<sub>1</sub> ⊢ R<sub>3</sub>**
+  R<sub>3</sub> ⇒ R<sub>1</sub> ⊢ R<sub>3</sub>** <span style="float: right;">(6)</span>
 
 and thus defines a partial order on **𝓐**.
+
+If the right hand side is a basic relation, implication implies equality or the empty relation:
+
+**∀ R ∈ 𝓐, ∀ R<sub>b</sub> ∈ 𝓐<sup>⊥</sup>: R ⊢ R<sub>b</sub> ⇒ R = R<sub>b</sub> ∨ R = ()** <span style="float:right;">
+(7)</span>
+
+Proof:
+
+**∀ R ∈ 𝓐, ∀ R<sub>b</sub> ∈ 𝓐<sup>⊥</sup>:**
+
+|     | R ⊢ R<sub>b</sub>                                                                                                      |                                         |
+| --- | :--------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| ⇒   | S<sup>-1</sup>(R) ⊆ S<sup>-1</sup>(R<sub>b</sub>)                                                                      | _(3)_                                   |
+| ⇒   | ∃! b ∈ 𝓐<sup>⊥</sup>, S<sup>-1</sup>(R<sub>b</sub>) = {b}: S<sup>-1</sup>(R) ⊆ {b}                                     | _(2)_                                   |
+| ⇒   | ∃! b ∈ 𝓐<sup>⊥</sup>, S<sup>-1</sup>(R<sub>b</sub>) = {b}: S<sup>-1</sup>(R) = {b} ∨ S<sup>-1</sup>(R) = ∅             | _⊆ of a singleton_                      |
+| ⇒   | ∃! b ∈ 𝓐<sup>⊥</sup>, S<sup>-1</sup>(R<sub>b</sub>) = {b}: S(S<sup>-1</sup>(R)) = S({b}) ∨ S(S<sup>-1</sup>(R)) = S(∅) | _apply **S** to both sides of equality_ |
+| ⇒   | ∃! b ∈ 𝓐<sup>⊥</sup>, S<sup>-1</sup>(R<sub>b</sub>) = {b}: R = R<sub>b</sub> ∨ R = ()                                  | _**S ∘ S<sup>-1</sup> = 1**_            |
+| ⇒   | R = R<sub>b</sub> ∨ R = ()                                                                                             | _remove unused quantifier_              |
+|     |                                                                                                                        | ⃞                                       |
 
 ### Complement
 
 The complement of an Allen relation is the disjunction of all basic relations that are not implied by the Allen
-relation. The complement of _R_ is denoted _~R_.
+relation.
 
-> `~(pmoFDs)` = `(eSdfOMP)`
+The complement of **R** is denoted **∁R**, e.g. **∁(pmoFDs) = (eSdfOMP)**.
 
-The complement of a basic relation is the disjunction of all the other basic relations. E.g.:
+The complement of a basic relation is the disjunction of all the other basic relations. E.g.: **∁(p) = (moFDseSdfOMP)**.
 
-> `~(p)` = `(moFDseSdfOMP)`
+The complement of the complement of an Allen relation is the orginal Allen relation: **∀ R ∈ 𝓐: ∁(∁R) = R**
 
-The complement of the complement of an Allen relation is the orginal Allen relation.
+**Be aware that the complement has in general a different meaning than the logic negation of an implication.**
 
-> ~(~R) = R
+Suppose we require **i<sub>1</sub> R<sub>c</sub> i<sub>2</sub>**, and want to throw an exception if the constraint is
+violated by an actual Allen relation **R<sub>a</sub>**:
 
-**Be aware that the complement has in general a different meaning than a logic negation.**
+```ts
+import { AllenRelation } from './AllenRelation'
+
+function verify(/** R **/ constraint: AllenRelation, actual: AllenRelation): void {
+  if (!actual.implies(constraint)) {
+    throw new Error(`${actual.toString()} does not uphold ${constraint.toString()}`)
+  }
+}
+```
+
+We might be tempted to write instead:
+
+```ts
+import { AllenRelation } from './AllenRelation'
+
+function verify(/** R **/ constraint: AllenRelation, actual: AllenRelation): void {
+  if (actual.implies(constraint.complement())) {
+    throw new Error(`${actual.toString()} does not uphold ${constraint.toString()}`)
+  }
+}
+```
+
+This would suppose that **¬(R<sub>a</sub> ⊢ R<sub>c</sub>) = R<sub>a</sub> ⊢ ∁R<sub>c</sub>**. This is true when
+R<sub>c</sub> is a basic relation:
+
+> \*\*∀ R<sub>b</sub> ∈ 𝓐<sup>⊥</sup>, ∀ R<sub>a</sub> ∈ 𝓐: R<sub>a</sub> ⊢ R<sub>b</sub> ⇒
+
+R<sub>a</sub> = R<sub>b</sub> ∨ R<sub>a</sub> = ()
 
 <div style="background-color: red; color: white; padding: 5mm;">// TODO</div>
 
