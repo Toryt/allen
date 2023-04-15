@@ -49,93 +49,9 @@ notation used in this text for the Allen Relations is the one used by [Alspaugh]
 
 These basic relations can be compared to the 3 relations **<**, **=**, and **>** between 2 points.
 
-If we fall back to mapping intervals to an ordered set of points, with **𝓈(i)** denoting the start point of **i**, and
-**ℯ(i)** denoting the end point of **i**, we can define the 13 basic relations as conjunctions of predicates on the
-start and end points of the related intervals. This isn't necessary, as the set of intervals and the 13 basic relations
-are given axiomatically in IA, but it helps our understanding.
-
 The set of intervals is denoted **𝓘**. The set of points, in general is denoted **𝓟**, with a [strict total order]
 **<**. Often we imagine **𝓟** to be a continous, uncountably infinite set, isomorph with ℝ, such as classic
 non-relativistic time or classic relativistic proper time.
-
-BELOW IS IDIOTIC. 🤷IS THE NAME OF A VARIABLE (A TRUE UNKNOWN), NOT AN ELEMENT OF 𝓟
-
-This can be extended to **𝓟<sub>🤷</sub>**, where **🤷** represents “unknown”, different from and incomparable to all
-other elements:
-
-> 𝓟<sub>🤷</sub> ≝ 𝓟 ∪ {🤷}
->
-> ∀ p<sub>1</sub>, p<sub>2</sub> ∈ 𝓟<sub>🤷</sub>: p<sub>1</sub> =<sub>🤷</sub> p<sub>2</sub> ≝ p<sub>1</sub> ∈ 𝓟 ∧
-> p<sub>2</sub> ∈ 𝓟 ∧ p<sub>1</sub> = p<sub>2</sub>
->
-> ∀ p<sub>1</sub>, p<sub>2</sub> ∈ 𝓟<sub>🤷</sub>: p<sub>1</sub> <<sub>🤷</sub> p<sub>2</sub> ≝ p<sub>1</sub> ∈ 𝓟 ∧
-> p<sub>2</sub> ∈ 𝓟 ∧ p<sub>1</sub> < p<sub>2</sub>
-
-> ∀ p ∈ 𝓟: ¬(p =<sub>🤷</sub> 🤷)
->
-> ∀ p ∈ 𝓟: ¬(🤷 =<sub>🤷</sub> p)
->
-> ¬(🤷 =<sub>🤷</sub> 🤷)
->
-> ∀ p ∈ 𝓟: ¬(p <<sub>🤷</sub> 🤷)
->
-> ∀ p ∈ 𝓟: ¬(🤷 <<sub>🤷</sub> p)
->
-> ¬(🤷 <<sub>🤷</sub> 🤷)
-
-=<sub>🤷</sub> is not an [equivalence relation]. It is symmetric and transitive, but not reflexive.
-
-> ¬(🤷 =<sub>🤷</sub> 🤷)
->
-> ∀ p<sub>1</sub>, p<sub>2</sub> ∈ 𝓟<sub>🤷</sub>: p<sub>1</sub> =<sub>🤷</sub> p<sub>2</sub> ⇔ p<sub>2</sub>
-> =<sub>🤷</sub> p<sub>1</sub>
->
-> ∀ p<sub>1</sub>, p<sub>2</sub>, p<sub>3</sub> ∈ 𝓟<sub>🤷</sub>: p<sub>1</sub> =<sub>🤷</sub> p<sub>2</sub> ∧
-> p<sub>2</sub> =<sub>🤷</sub> p<sub>3</sub> ⇒ p<sub>1</sub> =<sub>🤷</sub> p<sub>3</sub>
-
-<sub>🤷</sub> is still a [strict partial order], but no longer a [strict total order] (it is not [connected]).
-
-For this mapping, we define intervals as any couple of points where
-
-> 𝓘 ≝ { [p<sub>1</sub>, p<sub>2</sub>[ | p<sub>1</sub>, p<sub>2</sub> ∈ 𝓟 ∧ p<sub>1</sub> < p<sub>2</sub> }
-
-We can define **𝓟<sup>2◹</sup>** as
-
-> 𝓟 ⨯ 𝓟 ⊃ 𝓟<sup>2◹</sup> ≝ { (p<sub>1</sub>, p<sub>2</sub>) | p<sub>1</sub> ∈ 𝓟, p<sub>2</sub> ∈ 𝓟: p<sub>1</sub> <
-> p<sub>2</sub> }
-
-and then see that **𝓘 ≅ 𝓟<sup>2◹</sup>**.
-
-Mapping operators are **[…, …[**, **𝓈**, and **ℯ**
-
-> […, …[: 𝓟<sup>2◹</sup> → 𝓘: (p<sub>1</sub>, p<sub>2</sub>) → [p<sub>1</sub>, p<sub>2</sub>[
->
-> 𝓈: 𝓘 → 𝓟: [p<sub>1</sub>, p<sub>2</sub>[ → p<sub>1</sub>
->
-> ℯ: 𝓘 → 𝓟: [p<sub>1</sub>, p<sub>2</sub>[ → p<sub>2</sub>
-
-Note that for most definitions of basic interval relations, some relations between the 4 points are implicit, and some
-are indefinite.
-
-**(p)** expresses a [strict total order] between all 4 points:
-
-> i<sub>1</sub> (p) i<sub>2</sub> ⇔ ℯ(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) _(definition of (p))_
->
-> ⇔ 𝓈(i<sub>1</sub>) < ℯ(i<sub>1</sub>) ∧ ℯ(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) ∧ 𝓈(i<sub>2</sub>) < ℯ(i<sub>2</sub>)
-> _(definition of 𝓘)_
->
-> ⇔ 𝓈(i<sub>1</sub>) < ℯ(i<sub>2</sub>) _(transitivity of < in 𝓟)_
-
-and so do **(o)**, **(D)**, **(d)**, **(O)**, and **(P)**.
-
-**(s)** expresses a [strict total order] between all 3 points (2 points are explicitly equal):
-
-> i<sub>1</sub> (s) i<sub>2</sub> ⇔ ℯ(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) _(definition of (p))_
->
-> ⇔ 𝓈(i<sub>1</sub>) < ℯ(i<sub>1</sub>) ∧ ℯ(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) ∧ 𝓈(i<sub>2</sub>) < ℯ(i<sub>2</sub>)
-> _(definition of 𝓘)_
->
-> ⇔ 𝓈(i<sub>1</sub>) < ℯ(i<sub>2</sub>) _(transitivity of < in 𝓟)_
 
 ### General Relations
 
