@@ -31,27 +31,25 @@ notation used in this text for the Allen Relations is the one used by [Alspaugh]
 
 [Allen] finds that there are 13 _basic relations_ possible between intervals:
 
-|                               Basic relation | AR(i<sub>1</sub>, i<sub>2</sub>) | Illustration                          | Definition                                                                                                      |
-| -------------------------------------------: | :------------------------------: | ------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-|         i<sub>1</sub> precedes i<sub>2</sub> |               (p)                | ![precedes][precedes]                 | ℯ(i<sub>1</sub>) < 𝓈(i<sub>2</sub>)                                                                             |
-|            i<sub>1</sub> meets i<sub>2</sub> |               (m)                | ![meets][meets]                       | ℯ(i<sub>1</sub>) = 𝓈(i<sub>2</sub>)                                                                             |
-|         i<sub>1</sub> overlaps i<sub>2</sub> |               (o)                | ![overlaps][overlaps]                 | 𝓈(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) ∧ 𝓈(i<sub>2</sub>) < ℯ(i<sub>1</sub>) ∧ ℯ(i<sub>1</sub>) < ℯ(i<sub>2</sub>) |
-|   i<sub>1</sub> is finished by i<sub>2</sub> |               (F)                | ![is finished by][is finished by]     | 𝓈(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) ∧ ℯ(i<sub>1</sub>) = ℯ(i<sub>2</sub>)                                       |
-|         i<sub>1</sub> contains i<sub>2</sub> |               (D)                | ![contains][contains]                 | 𝓈(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) ∧ ℯ(i<sub>2</sub>) < ℯ(i<sub>1</sub>)                                       |
-|           i<sub>1</sub> starts i<sub>2</sub> |               (s)                | ![starts][starts]                     | 𝓈(i<sub>1</sub>) = 𝓈(i<sub>2</sub>) ∧ ℯ(i<sub>1</sub>) < ℯ(i<sub>2</sub>)                                       |
-|           i<sub>1</sub> equals i<sub>2</sub> |               (e)                | ![equals][equals]                     | 𝓈(i<sub>1</sub>) = 𝓈(i<sub>2</sub>) ∧ ℯ(i<sub>1</sub>) = ℯ(i<sub>2</sub>)                                       |
-|    i<sub>1</sub> is started by i<sub>2</sub> |               (S)                | ![is started by][is started by]       | 𝓈(i<sub>2</sub>) = 𝓈(i<sub>1</sub>) ∧ ℯ(i<sub>2</sub>) < ℯ(i<sub>1</sub>)                                       |
-|           i<sub>1</sub> during i<sub>2</sub> |               (d)                | ![during][during]                     | 𝓈(i<sub>2</sub>) < 𝓈(i<sub>1</sub>) ∧ ℯ(i<sub>1</sub>) < ℯ(i<sub>2</sub>)                                       |
-|         i<sub>1</sub> finishes i<sub>2</sub> |               (f)                | ![finishes][finishes]                 | 𝓈(i<sub>2</sub>) < 𝓈(i<sub>1</sub>) ∧ ℯ(i<sub>1</sub>) = ℯ(i<sub>2</sub>)                                       |
-| i<sub>1</sub> is overlapped by i<sub>2</sub> |               (O)                | ![is overlapped by][is overlapped by] | 𝓈(i<sub>2</sub>) < 𝓈(i<sub>1</sub>) ∧ 𝓈(i<sub>1</sub>) < ℯ(i<sub>2</sub>) ∧ ℯ(i<sub>2</sub>) < ℯ(i<sub>1</sub>) |
-|        i<sub>1</sub> is met by i<sub>2</sub> |               (M)                | ![is met by][is met by]               | ℯ(i<sub>2</sub>) = 𝓈(i<sub>1</sub>)                                                                             |
-|   i<sub>1</sub> is preceded by i<sub>2</sub> |               (P)                | ![is preceded by][is preceded by]     | ℯ(i<sub>2</sub>) < 𝓈(i<sub>1</sub>)                                                                             |
+|                               Basic relation | AR(i<sub>1</sub>, i<sub>2</sub>) | Illustration                          |
+| -------------------------------------------: | :------------------------------: | ------------------------------------- |
+|         i<sub>1</sub> precedes i<sub>2</sub> |               (p)                | ![precedes][precedes]                 |
+|            i<sub>1</sub> meets i<sub>2</sub> |               (m)                | ![meets][meets]                       |
+|         i<sub>1</sub> overlaps i<sub>2</sub> |               (o)                | ![overlaps][overlaps]                 |
+|   i<sub>1</sub> is finished by i<sub>2</sub> |               (F)                | ![is finished by][is finished by]     |
+|         i<sub>1</sub> contains i<sub>2</sub> |               (D)                | ![contains][contains]                 |
+|           i<sub>1</sub> starts i<sub>2</sub> |               (s)                | ![starts][starts]                     |
+|           i<sub>1</sub> equals i<sub>2</sub> |               (e)                | ![equals][equals]                     |
+|    i<sub>1</sub> is started by i<sub>2</sub> |               (S)                | ![is started by][is started by]       |
+|           i<sub>1</sub> during i<sub>2</sub> |               (d)                | ![during][during]                     |
+|         i<sub>1</sub> finishes i<sub>2</sub> |               (f)                | ![finishes][finishes]                 |
+| i<sub>1</sub> is overlapped by i<sub>2</sub> |               (O)                | ![is overlapped by][is overlapped by] |
+|        i<sub>1</sub> is met by i<sub>2</sub> |               (M)                | ![is met by][is met by]               |
+|   i<sub>1</sub> is preceded by i<sub>2</sub> |               (P)                | ![is preceded by][is preceded by]     |
 
 These basic relations can be compared to the 3 relations **<**, **=**, and **>** between 2 points.
 
-The set of intervals is denoted **𝓘**. The set of points, in general is denoted **𝓟**, with a [strict total order]
-**<**. Often we imagine **𝓟** to be a continous, uncountably infinite set, isomorph with ℝ, such as classic
-non-relativistic time or classic relativistic proper time.
+In IA, the 13 basic relations are defined axiomatically.
 
 ### General Relations
 
@@ -65,8 +63,8 @@ b ≝ a ≤ b**, **a < b ∨ a > b ≝ a ≠ b**, and **a = b ∨ a > b ≝ a �
 b**, that expresses complete uncertainty; and the combination of 0 basic relations.
 
 For IA, given 13 basic relations, we get 8192 (= 2<sup>13</sup>) possible _general relations_. The set of general
-relations is equivalent to the power set of the basic relations. The 13 basic relations are an _orthogonal basis_ for
-all possible general relations, seen as elements.
+relations is isomorph to the power set of the basic relations. The 13 basic relations are an _orthogonal basis_ for all
+possible general relations, seen as elements.
 
 This includes the _full relation_ **i<sub>1</sub> (pmoFDseSdfOMP) i<sub>2</sub>** (comparable to **a = b ∨ a > b ≝ a ≥
 b** with points), which expresses the maximum uncertainty about the relation between two intervals. The _full relation_
@@ -77,6 +75,8 @@ condition between two intervals. It is needed for consistency with some algebrai
 
 ## Notation
 
+The set of intervals is denoted **𝓘**.
+
 When discussing specific Allen relations in isolation, we write the basic relations they are composed of in brackets.
 **i<sub>1</sub> (sedf) i<sub>2</sub>** expresses that we know for certain that **i<sub>1</sub>** _starts_, _is equal
 to_, is _during_, or _finishes_ **i<sub>2</sub>**, and does not _precede_, _meet_, _overlaps with_, _is finished by_,
@@ -85,7 +85,8 @@ _contains_, _is overlapped by_, _is met by_, nor is _preceded by_ **i<sub>2</sub
 When the relation between 2 intervals **i<sub>1</sub>** and **i<sub>2</sub>** is, e.g., **(oFD)**, we write **i1 (oFD)
 i2** or **AR(i<sub>1</sub>, i<sub>2</sub>) = (oFD)**.
 
-As variables, they are often denoted **R<sub>1</sub>**, **R<sub>2</sub>**, …. E.g.: **R<sub>1</sub> = (sedf)**.
+As variables, Allen relations are often denoted **R<sub>1</sub>**, **R<sub>2</sub>**, …. E.g.: **R<sub>1</sub> =
+(sedf)**.
 
 Combined, **i<sub>1</sub> R<sub>1</sub> i<sub>2</sub>** expresses that we know the Allen relation from **i<sub>1</sub>**
 to **i<sub>2</sub>** is **R<sub>1</sub>**.
@@ -93,13 +94,14 @@ to **i<sub>2</sub>** is **R<sub>1</sub>**.
 The set of all general Allen relations is denoted **𝓐** (Allen’s interval algebra). The subset of all basic Allen
 relations is denoted **𝓐<sup>⊥</sup> = {p, m, o, F, D, s, e, S, d, f, O, M, P}**. <span style="float: right;">(1)</span>
 
-**𝓐 ≅ 2<sup>𝓐<sup>⊥</sup></sup>**. **S: 2<sup>𝓐<sup>⊥</sup></sup> → 𝓐** maps sets of basic relations to the general
-Allen relation that is the disjunction of the elements of that set, and **S<sup>-1</sup>** does the reverse.
-<span style="float: right;">(2)</span>
+**𝓐 ≅ 2<sup>𝓐<sup>⊥</sup></sup>**.
+
+**𝑨𝑹: 2<sup>𝓐<sup>⊥</sup></sup> → 𝓐** maps sets of basic relations to the general Allen relation that is the disjunction
+of the elements of that set, and **𝑨𝑹<sup>-1</sup>** does the reverse. <span style="float: right;">(2)</span>
 
 ## Operations
 
-The set of 8192 general Allen relations for an algebra, with the following operations:
+The set of 8192 general Allen relations **𝓐** form an algebra, with the following operations:
 
 ### Implication
 
