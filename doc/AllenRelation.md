@@ -27,29 +27,115 @@ This problem was tackled in 1983 by James Allen ([Allen, James F. “Maintaining
 Good synopses of this theory are [Wikipedia], and [Thomas A. Alspaugh “Allen's interval algebra”][alspaugh]. The
 notation used in this text for the Allen Relations is the one used by [Alspaugh].
 
-## Quick overview
-
-### Basic Relations
+## Basic Relations
 
 [Allen] finds that there are 13 _basic relations_ possible between intervals:
 
-|                               Basic relation | AR(i<sub>1</sub>, i<sub>2</sub>) | Illustration                          | Definition                                                  |
-| -------------------------------------------: | :------------------------------: | ------------------------------------- | ----------------------------------------------------------- |
-|         i<sub>1</sub> precedes i<sub>2</sub> |               (p)                | ![precedes][precedes]                 | `i1.end < i2.start`                                         |
-|            i<sub>1</sub> meets i<sub>2</sub> |               (m)                | ![meets][meets]                       | `i1.end = i2.start`                                         |
-|         i<sub>1</sub> overlaps i<sub>2</sub> |               (o)                | ![overlaps][overlaps]                 | `i1.start < i2.start ∧ i2.start < i1.end ∧ i1.end < i2.end` |
-|   i<sub>1</sub> is finished by i<sub>2</sub> |               (F)                | ![is finished by][is finished by]     | `i1.start < i2.start ∧ i1.end = i2.end`                     |
-|         i<sub>1</sub> contains i<sub>2</sub> |               (D)                | ![contains][contains]                 | `i1.start < i2.start ∧ i2.end < i1.end`                     |
-|           i<sub>1</sub> starts i<sub>2</sub> |               (s)                | ![starts][starts]                     | `i1.start = i2.start ∧ i1.end < i2.end`                     |
-|           i<sub>1</sub> equals i<sub>2</sub> |               (e)                | ![equals][equals]                     | `i1.start = i2.start ∧ i1.end = i2.end`                     |
-|    i<sub>1</sub> is started by i<sub>2</sub> |               (S)                | ![is started by][is started by]       | `i2.start = i1.start ∧ i2.end < i1.end`                     |
-|           i<sub>1</sub> during i<sub>2</sub> |               (d)                | ![during][during]                     | `i2.start < i1.start ∧ i1.end < i2.end`                     |
-|         i<sub>1</sub> finishes i<sub>2</sub> |               (f)                | ![finishes][finishes]                 | `i2.start < i1.start ∧ i1.end = i2.end`                     |
-| i<sub>1</sub> is overlapped by i<sub>2</sub> |               (O)                | ![is overlapped by][is overlapped by] | `i2.start < i1.start ∧ i1.start < i2.end ∧ i2.end < i1.end` |
-|        i<sub>1</sub> is met by i<sub>2</sub> |               (M)                | ![is met by][is met by]               | `i2.end = i1.start`                                         |
-|   i<sub>1</sub> is preceded by i<sub>2</sub> |               (P)                | ![is preceded by][is preceded by]     | `i2.end < i1.start`                                         |
+|                               Basic relation | AR(i<sub>1</sub>, i<sub>2</sub>) | Illustration                          | Definition                                                                                                      |
+| -------------------------------------------: | :------------------------------: | ------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+|         i<sub>1</sub> precedes i<sub>2</sub> |               (p)                | ![precedes][precedes]                 | ℯ(i<sub>1</sub>) < 𝓈(i<sub>2</sub>)                                                                             |
+|            i<sub>1</sub> meets i<sub>2</sub> |               (m)                | ![meets][meets]                       | ℯ(i<sub>1</sub>) = 𝓈(i<sub>2</sub>)                                                                             |
+|         i<sub>1</sub> overlaps i<sub>2</sub> |               (o)                | ![overlaps][overlaps]                 | 𝓈(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) ∧ 𝓈(i<sub>2</sub>) < ℯ(i<sub>1</sub>) ∧ ℯ(i<sub>1</sub>) < ℯ(i<sub>2</sub>) |
+|   i<sub>1</sub> is finished by i<sub>2</sub> |               (F)                | ![is finished by][is finished by]     | 𝓈(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) ∧ ℯ(i<sub>1</sub>) = ℯ(i<sub>2</sub>)                                       |
+|         i<sub>1</sub> contains i<sub>2</sub> |               (D)                | ![contains][contains]                 | 𝓈(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) ∧ ℯ(i<sub>2</sub>) < ℯ(i<sub>1</sub>)                                       |
+|           i<sub>1</sub> starts i<sub>2</sub> |               (s)                | ![starts][starts]                     | 𝓈(i<sub>1</sub>) = 𝓈(i<sub>2</sub>) ∧ ℯ(i<sub>1</sub>) < ℯ(i<sub>2</sub>)                                       |
+|           i<sub>1</sub> equals i<sub>2</sub> |               (e)                | ![equals][equals]                     | 𝓈(i<sub>1</sub>) = 𝓈(i<sub>2</sub>) ∧ ℯ(i<sub>1</sub>) = ℯ(i<sub>2</sub>)                                       |
+|    i<sub>1</sub> is started by i<sub>2</sub> |               (S)                | ![is started by][is started by]       | 𝓈(i<sub>2</sub>) = 𝓈(i<sub>1</sub>) ∧ ℯ(i<sub>2</sub>) < ℯ(i<sub>1</sub>)                                       |
+|           i<sub>1</sub> during i<sub>2</sub> |               (d)                | ![during][during]                     | 𝓈(i<sub>2</sub>) < 𝓈(i<sub>1</sub>) ∧ ℯ(i<sub>1</sub>) < ℯ(i<sub>2</sub>)                                       |
+|         i<sub>1</sub> finishes i<sub>2</sub> |               (f)                | ![finishes][finishes]                 | 𝓈(i<sub>2</sub>) < 𝓈(i<sub>1</sub>) ∧ ℯ(i<sub>1</sub>) = ℯ(i<sub>2</sub>)                                       |
+| i<sub>1</sub> is overlapped by i<sub>2</sub> |               (O)                | ![is overlapped by][is overlapped by] | 𝓈(i<sub>2</sub>) < 𝓈(i<sub>1</sub>) ∧ 𝓈(i<sub>1</sub>) < ℯ(i<sub>2</sub>) ∧ ℯ(i<sub>2</sub>) < ℯ(i<sub>1</sub>) |
+|        i<sub>1</sub> is met by i<sub>2</sub> |               (M)                | ![is met by][is met by]               | ℯ(i<sub>2</sub>) = 𝓈(i<sub>1</sub>)                                                                             |
+|   i<sub>1</sub> is preceded by i<sub>2</sub> |               (P)                | ![is preceded by][is preceded by]     | ℯ(i<sub>2</sub>) < 𝓈(i<sub>1</sub>)                                                                             |
 
 These basic relations can be compared to the 3 relations **<**, **=**, and **>** between 2 points.
+
+If we fall back to mapping intervals to an ordered set of points, with **𝓈(i)** denoting the start point of **i**, and
+**ℯ(i)** denoting the end point of **i**, we can define the 13 basic relations as conjunctions of predicates on the
+start and end points of the related intervals. This isn't necessary, as the set of intervals and the 13 basic relations
+are given axiomatically in IA, but it helps our understanding.
+
+The set of intervals is denoted **𝓘**. The set of points, in general is denoted **𝓟**, with a [strict total order]
+**<**. Often we imagine **𝓟** to be a continous, uncountably infinite set, isomorph with ℝ, such as classic
+non-relativistic time or classic relativistic proper time.
+
+BELOW IS IDIOTIC. 🤷IS THE NAME OF A VARIABLE (A TRUE UNKNOWN), NOT AN ELEMENT OF 𝓟
+
+This can be extended to **𝓟<sub>🤷</sub>**, where **🤷** represents “unknown”, different from and incomparable to all
+other elements:
+
+> 𝓟<sub>🤷</sub> ≝ 𝓟 ∪ {🤷}
+>
+> ∀ p<sub>1</sub>, p<sub>2</sub> ∈ 𝓟<sub>🤷</sub>: p<sub>1</sub> =<sub>🤷</sub> p<sub>2</sub> ≝ p<sub>1</sub> ∈ 𝓟 ∧
+> p<sub>2</sub> ∈ 𝓟 ∧ p<sub>1</sub> = p<sub>2</sub>
+>
+> ∀ p<sub>1</sub>, p<sub>2</sub> ∈ 𝓟<sub>🤷</sub>: p<sub>1</sub> <<sub>🤷</sub> p<sub>2</sub> ≝ p<sub>1</sub> ∈ 𝓟 ∧
+> p<sub>2</sub> ∈ 𝓟 ∧ p<sub>1</sub> < p<sub>2</sub>
+
+> ∀ p ∈ 𝓟: ¬(p =<sub>🤷</sub> 🤷)
+>
+> ∀ p ∈ 𝓟: ¬(🤷 =<sub>🤷</sub> p)
+>
+> ¬(🤷 =<sub>🤷</sub> 🤷)
+>
+> ∀ p ∈ 𝓟: ¬(p <<sub>🤷</sub> 🤷)
+>
+> ∀ p ∈ 𝓟: ¬(🤷 <<sub>🤷</sub> p)
+>
+> ¬(🤷 <<sub>🤷</sub> 🤷)
+
+=<sub>🤷</sub> is not an [equivalence relation]. It is symmetric and transitive, but not reflexive.
+
+> ¬(🤷 =<sub>🤷</sub> 🤷)
+>
+> ∀ p<sub>1</sub>, p<sub>2</sub> ∈ 𝓟<sub>🤷</sub>: p<sub>1</sub> =<sub>🤷</sub> p<sub>2</sub> ⇔ p<sub>2</sub>
+> =<sub>🤷</sub> p<sub>1</sub>
+>
+> ∀ p<sub>1</sub>, p<sub>2</sub>, p<sub>3</sub> ∈ 𝓟<sub>🤷</sub>: p<sub>1</sub> =<sub>🤷</sub> p<sub>2</sub> ∧
+> p<sub>2</sub> =<sub>🤷</sub> p<sub>3</sub> ⇒ p<sub>1</sub> =<sub>🤷</sub> p<sub>3</sub>
+
+<sub>🤷</sub> is still a [strict partial order], but no longer a [strict total order] (it is not [connected]).
+
+For this mapping, we define intervals as any couple of points where
+
+> 𝓘 ≝ { [p<sub>1</sub>, p<sub>2</sub>[ | p<sub>1</sub>, p<sub>2</sub> ∈ 𝓟 ∧ p<sub>1</sub> < p<sub>2</sub> }
+
+We can define **𝓟<sup>2◹</sup>** as
+
+> 𝓟 ⨯ 𝓟 ⊃ 𝓟<sup>2◹</sup> ≝ { (p<sub>1</sub>, p<sub>2</sub>) | p<sub>1</sub> ∈ 𝓟, p<sub>2</sub> ∈ 𝓟: p<sub>1</sub> <
+> p<sub>2</sub> }
+
+and then see that **𝓘 ≅ 𝓟<sup>2◹</sup>**.
+
+Mapping operators are **[…, …[**, **𝓈**, and **ℯ**
+
+> […, …[: 𝓟<sup>2◹</sup> → 𝓘: (p<sub>1</sub>, p<sub>2</sub>) → [p<sub>1</sub>, p<sub>2</sub>[
+>
+> 𝓈: 𝓘 → 𝓟: [p<sub>1</sub>, p<sub>2</sub>[ → p<sub>1</sub>
+>
+> ℯ: 𝓘 → 𝓟: [p<sub>1</sub>, p<sub>2</sub>[ → p<sub>2</sub>
+
+Note that for most definitions of basic interval relations, some relations between the 4 points are implicit, and some
+are indefinite.
+
+**(p)** expresses a [strict total order] between all 4 points:
+
+> i<sub>1</sub> (p) i<sub>2</sub> ⇔ ℯ(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) _(definition of (p))_
+>
+> ⇔ 𝓈(i<sub>1</sub>) < ℯ(i<sub>1</sub>) ∧ ℯ(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) ∧ 𝓈(i<sub>2</sub>) < ℯ(i<sub>2</sub>)
+> _(definition of 𝓘)_
+>
+> ⇔ 𝓈(i<sub>1</sub>) < ℯ(i<sub>2</sub>) _(transitivity of < in 𝓟)_
+
+and so do **(o)**, **(D)**, **(d)**, **(O)**, and **(P)**.
+
+**(s)** expresses a [strict total order] between all 3 points (2 points are explicitly equal):
+
+> i<sub>1</sub> (s) i<sub>2</sub> ⇔ ℯ(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) _(definition of (p))_
+>
+> ⇔ 𝓈(i<sub>1</sub>) < ℯ(i<sub>1</sub>) ∧ ℯ(i<sub>1</sub>) < 𝓈(i<sub>2</sub>) ∧ 𝓈(i<sub>2</sub>) < ℯ(i<sub>2</sub>)
+> _(definition of 𝓘)_
+>
+> ⇔ 𝓈(i<sub>1</sub>) < ℯ(i<sub>2</sub>) _(transitivity of < in 𝓟)_
 
 ### General Relations
 
@@ -364,4 +450,8 @@ R<sub>23</sub> i<sub>3</sub>_ is known, but _i<sub>3</sub> R<sub>32</sub> i<sub>
 [is overlapped by]: ../img/ar-basic/overlappedBy.png
 [is met by]: ../img/ar-basic/metBy.png
 [is preceded by]: ../img/ar-basic/precededBy.png
+[strict total order]: https://en.wikipedia.org/wiki/Total_order#Strict_and_non-strict_total_orders
+[equivalence relation]: https://en.wikipedia.org/wiki/Equivalence_relation
+[strict partial order]: https://en.wikipedia.org/wiki/Partially_ordered_set#strict_partial_order
+[connected]: https://en.wikipedia.org/wiki/Connected_relation
 [basic compositions table]: https://www.ics.uci.edu/~alspaugh/cls/shr/allen.html#BasicCompositionsTable
