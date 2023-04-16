@@ -69,7 +69,57 @@ we can define the 13 basic relations as conjunctions of predicates on the start 
 |        i<sub>1</sub> is met by i<sub>2</sub> |               (M)                | ![is met by][is met by]               | ℯ(i<sub>2</sub>) = 𝓈(i<sub>1</sub>)                                                                             |
 |   i<sub>1</sub> is preceded by i<sub>2</sub> |               (P)                | ![is preceded by][is preceded by]     | ℯ(i<sub>2</sub>) < 𝓈(i<sub>1</sub>)                                                                             |
 
-Note that for most definitions of basic interval relations, some relations between the 4 points are explicitly not
+## Right-half open interval
+
+_**MUDO:** explain_
+
+## No degenerate intervals
+
+An interval **[p, p[**, where the start and the end are the same point, would be a _degenerate interval_. This is not an
+interval in our definition, because that states **p<sub>1</sub> < p<sub>2</sub>**.
+
+This is a deliberate choice. We found that allowing degenerate intervals invokes complexity at different points, and
+does not add to the useability.
+
+## Indefinite intervals
+
+_**MUDO:** explain_
+
+## 𝓟 is not necessarily a continous, uncountably infinite set with a strict total order
+
+In none of the above it is required that **𝓟** is a continous, uncountably infinite set, with a [strict total order],
+isomorph with **ℝ**. The only requirement on **𝓟** is that an [equivalence relation] **=** and a [strict partial order]
+**<** is defined.
+
+**𝓟** might be a finite set, such as a set of colors, or countable, such as **ℕ**.
+
+Working with a [non-total strict order][strict partial order] means that some points cannot be compared.
+**¬(p<sub>1</sub> < p<sub>2</sub>)** does _not_ imply **p<sub>1</sub> ≥ p<sub>2</sub>** (i.e., **p<sub>1</sub> =
+p<sub>2</sub> ∨ p<sub>2</sub> < p<sub>1</sub>**). When points are incomparable, all 3 point-relations are false at the
+same time:
+
+> ¬(p<sub>1</sub> < p<sub>2</sub>) ∧ ¬(p<sub>1</sub> = p<sub>2</sub>) ∧ ¬(p<sub>2</sub> < p<sub>1</sub>)
+>
+> ⇔ ¬(p<sub>1</sub> < p<sub>2</sub> ∨ p<sub>1</sub> = p<sub>2</sub> ∨ p<sub>2</sub> < p<sub>1</sub>)
+
+In contrast to a [strict total order], **p<sub>1</sub> < p<sub>2</sub> ∨ p<sub>1</sub> = p<sub>2</sub> ∨ p<sub>2</sub> <
+p<sub>1</sub>** is _not_ a tautology:
+
+> (p<sub>1</sub> < p<sub>2</sub> ∨ p<sub>1</sub> = p<sub>2</sub> ∨ p<sub>2</sub> < p<sub>1</sub>) ≠ true
+
+An example is classic relativistic time.
+
+Looking at the definition of **𝓘** as couples of points, the couples where **p<sub>1</sub> < p<sub>2</sub> = false** are
+excluded. With a [non-total strict order][strict partial order] there are couples that are excluded, not because
+**p<sub>1</sub> ≥ p<sub>2</sub>**, but because **p<sub>1</sub>** and **p<sub>2</sub>** are _incomparable_. There are
+“less” intervals.
+
+The defininitions of the 13 basic relations of IA all require 1 or more of the point-relations to be **true**. The
+definitions explicitly do _not_ mention some of the relations, which might thus be either **true** or **false**.
+
+## Basic relations imply a strict total order on the points involved
+
+Note that for most definitions of _basic_ Allen relations, some relations between the 4 points are explicitly not
 mentioned. Yet, in all cases, the subset of points involved when the Allen Relation between 2 intervals is basic, is
 [totally ordered][strict total order].
 
@@ -103,11 +153,11 @@ and so do **(o)**, **(D)**, **(d)**, **(O)**, and **(P)**.
 > ⇔ (𝓈(i<sub>1</sub>) < ℯ(i<sub>1</sub>) ∧ 𝓈(i<sub>2</sub>) < ℯ(i<sub>1</sub>)) ∧ ℯ(i<sub>1</sub>) < ℯ(i<sub>2</sub>) ∧
 > 𝓈(i<sub>1</sub>) < ℯ(i<sub>2</sub>) _(substitute 𝓈(i<sub>2</sub>))_
 
-|                                    | 𝓈(i<sub>1</sub>) = 𝓈(i<sub>2</sub>) | ℯ(i<sub>1</sub>) | ℯ(i<sub>2</sub>) |
-| ---------------------------------- | ----------------------------------- | ---------------- | ---------------- |
-| 𝓈(i<sub>1</sub>)= 𝓈(i<sub>2</sub>) | =                                   | <                | <                |
-| ℯ(i<sub>1</sub>)                   |                                     | =                | <                |
-| ℯ(i<sub>2</sub>)                   |                                     |                  | =                |
+|                                     | 𝓈(i<sub>1</sub>) = 𝓈(i<sub>2</sub>) | ℯ(i<sub>1</sub>) | ℯ(i<sub>2</sub>) |
+| ----------------------------------- | ----------------------------------- | ---------------- | ---------------- |
+| 𝓈(i<sub>1</sub>) = 𝓈(i<sub>2</sub>) | =                                   | <                | <                |
+| ℯ(i<sub>1</sub>)                    |                                     | =                | <                |
+| ℯ(i<sub>2</sub>)                    |                                     |                  | =                |
 
 and so do **m**, **(F)**, **(S)**, **(f)**, and **M**.
 
@@ -121,44 +171,101 @@ and so do **m**, **(F)**, **(S)**, **(f)**, and **M**.
 This is not true for general Allen Relations though. Explicitly not mentioning some point relations in the definitions
 leaves room for indefinite relations between points.
 
-_**MUDO:** add example_
+<div style='margin: 2mm; padding: 5mm; background-color: red; color: yellow'>
+<strong>MUDO:</strong> below is wrong. Is there a way to get it right?
+</div>
 
-## Right-half open interval
+Consider Alice and Bob. For both, we look at 2 intervals that meet:
 
-_**MUDO:** explain_
+> - i<sub>a1</sub> (m) i<sub>a2</sub>
+>
+> - i<sub>b1</sub> (m) i<sub>b2</sub>
 
-## No degenerate intervals
+For both Alice and Bob, 3 points are involved, since **(m)** implies **ℯ(i<sub>a1</sub>) = 𝓈(i<sub>a2</sub>)** and
+**ℯ(i<sub>b1</sub>) = 𝓈(i<sub>b2</sub>)**. We will call these middle points **p<sub>am</sub>** and **p<sub>bm</sub>**.
 
-_**MUDO:** explain_
+Alice stays in one inertial frame of reference for our experiment, while Bob travels away at some speed in
+**i<sub>b1</sub>**, and returns to Alice at another speed in **i<sub>b2</sub>**. Bob’s inertial reference frame changes
+at **p<sub>bm</sub>**.
 
-## Indefinite intervals
+Alice’s and Bob’s first intervals start together, and their second intervals end together:
 
-_**MUDO:** explain_
+> - i<sub>a1</sub> (seS) i<sub>b1</sub>
+>
+> - i<sub>a2</sub> (Fef) i<sub>b2</sub>
 
-## 𝓟 is not necessarily a continous, uncountably infinite set with a strict total order
+Note that these relations are non-basic. This says nothing about the relation between **p<sub>am</sub>** and
+**p<sub>bm</sub>**.
 
-In none of the above it is required that **𝓟** is a continous, uncountably infinite set, with a [strict total order],
-isomorph with **ℝ**. The only requirement on **𝓟** is that an [equivalence relation] **=** and a [strict partial order]
-**<** is defined.
+> i<sub>a1</sub> (seS) i<sub>b1</sub>
+>
+> ⇔ (𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>) ∧ p<sub>am</sub> < p<sub>bm</sub>)
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;∨ (𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>) ∧ p<sub>am</sub> = p<sub>bm</sub>)
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;∨ (𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>) ∧ p<sub>bm</sub> < p<sub>am</sub>)
+>
+> ⇔ 𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>)
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;∧ (p<sub>am</sub> < p<sub>bm</sub> ∨ p<sub>am</sub> = p<sub>bm</sub> ∨ p<sub>bm</sub> <
+> p<sub>am</sub>)
+>
+> <div style='margin: 2mm; padding: 5mm; background-color: red; color: yellow'>
+> This step is the problem. We just said that <bold>(p<sub>am</sub> < p<sub>bm</sub> ∨ p<sub>am</sub> = 
+> p<sub>bm</sub> ∨ p<sub>bm</sub> < p<sub>am</sub>) ≠ true</bold>. Stronger, the statement above explicitly says that
+> <bold>p<sub>am</sub></bold> and <bold>p<sub>bm</sub></bold> <strong>must</strong> be related.
+> </div>
+>
+> ⇔ 𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>) ∧ true
+>
+> ⇔ 𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>)
 
-### Non-total strict order
+> i<sub>a2</sub> (FeF) i<sub>b2</sub>
+>
+> ⇔ (p<sub>am</sub> < p<sub>bm</sub> ∧ ℯ(i<sub>a2</sub>) = ℯ(i<sub>b2</sub>))
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;∨ (p<sub>am</sub> = p<sub>bm</sub> ∧ ℯ(i<sub>a2</sub>) = ℯ(i<sub>b2</sub>))
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;∨ (p<sub>bm</sub> < p<sub>am</sub> ∧ ℯ(i<sub>a2</sub>) = ℯ(i<sub>b2</sub>))
+>
+> ⇔ (p<sub>am</sub> < p<sub>bm</sub> ∨ p<sub>am</sub> = p<sub>bm</sub> ∨ p<sub>bm</sub> < p<sub>am</sub>)
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;∧ ℯ(i<sub>a2</sub>) = ℯ(i<sub>b2</sub>)
+>
+> <div style='margin: 2mm; padding: 5mm; background-color: red; color: yellow'>
+> This step is the problem. We just said that <bold>(p<sub>am</sub> < p<sub>bm</sub> ∨ p<sub>am</sub> = 
+> p<sub>bm</sub> ∨ p<sub>bm</sub> < p<sub>am</sub>) ≠ true</bold>. Stronger, the statement above explicitly says that
+> <bold>p<sub>am</sub></bold> and <bold>p<sub>bm</sub></bold> <strong>must</strong> be related.
+> </div>
+>
+> ⇔ true ∧ ℯ(i<sub>a2</sub>) = ℯ(i<sub>b2</sub>)
+>
+> ⇔ ℯ(i<sub>a2</sub>) = ℯ(i<sub>b2</sub>)
 
-Working with a [non-total strict order][strict partial order] means that some points cannot be compared.
-**¬(p<sub>1</sub> < p<sub>2</sub>)** does _not_ imply **p<sub>1</sub> ≥ p<sub>2</sub>** (i.e., **p<sub>1</sub> =
-p<sub>2</sub> ∨ p<sub>2</sub> < p<sub>1</sub>**). When points are incomparable, all 3 point-relations are false at the
-same time:
+We will call the common start point **p<sub>s</sub>**, and the common end point **p<sub>e</sub>**. Only 4 points are
+involved in this example.
 
-> p<sub>1</sub> ≮ p<sub>2</sub> ∧ p<sub>1</sub> ≠ p<sub>2</sub> ∧ p<sub>1</sub> ≯ p<sub>2</sub>
+Since the 4 intervals are intervals, we know
 
-An example is classic relativistic time.
+> - p<sub>s</sub> < p<sub>am</sub>
+>
+> - p<sub>am</sub> < p<sub>e</sub>
+>
+> - p<sub>s</sub> < p<sub>bm</sub>
+>
+> - p<sub>bm</sub> < p<sub>e</sub>
+>
+> - p<sub>s</sub> < p<sub>e</sub> _(transitivity of < in 𝓟)_
 
-Looking at the definition of **𝓘** as couples of points, the couples where **p<sub>1</sub> < p<sub>2</sub> = false** are
-excluded. With a [non-total strict order][strict partial order] there are couples that are excluded, not because
-**p<sub>1</sub> ≥ p<sub>2</sub>**, but because **p<sub>1</sub>** and **p<sub>2</sub>** are _incomparable_. There are
-“less” intervals.
+|                | p<sub>s</sub> | p<sub>am</sub> | p<sub>bm</sub> | p<sub>e</sub> |
+| -------------- | ------------- | -------------- | -------------- | ------------- |
+| p<sub>s</sub>  | =             | <              | <              | <             |
+| p<sub>am</sub> |               | =              | 🤷             | <             |
+| p<sub>bm</sub> |               |                | =              | <             |
+| p<sub>e</sub>  |               |                |                | =             |
 
-The defininitions of the 13 basic relations of IA all require 1 or more of the point-relations to be **true**. The
-definitions explicitly do _not_ mention some of the relations, which might thus be either **true** or **false**.
+The relation between **p<sub>am</sub>** and **p<sub>bm</sub>** is 🤷 undefined. Special relativity shows that we cannot
+compare durations in different inertial reference frames consistently. There is only causality.
 
 [allen]: https://dl.acm.org/doi/pdf/10.1145/182.358434
 [precedes]: ../img/ar-basic/precedes.png
