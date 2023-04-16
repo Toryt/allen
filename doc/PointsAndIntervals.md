@@ -242,6 +242,103 @@ Note that these relations are non-basic. This says nothing about the relation be
 >
 > ⇔ ℯ(i<sub>a2</sub>) = ℯ(i<sub>b2</sub>)
 
+<div style='margin: 2mm; padding: 5mm; background-color: red; color: yellow'>
+A solution would be, in the definitions, to never say explicitly that points are related in some way, but rather 
+that they are not related in the other 2 ways. This keeps everything as it is when a total order is used. E.g.:
+</div>
+
+> i<sub>a1</sub> (seS) i<sub>b1</sub>
+>
+> ⇔ (𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>) ∧ ¬(p<sub>am</sub> = p<sub>bm</sub>) ∧ ¬(p<sub>bm</sub> < p<sub>am</sub>))
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;∨ (𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>) ∧ ¬(p<sub>am</sub> < p<sub>bm</sub>) ∧
+> ¬(p<sub>bm</sub> < p<sub>am</sub>))
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;∨ (𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>) ∧ ¬(p<sub>am</sub> < p<sub>bm</sub>) ∧
+> ¬(p<sub>am</sub> = p<sub>bm</sub>))
+>
+> ⇔ 𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>)
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;∧ ( (¬(p<sub>am</sub> = p<sub>bm</sub>) ∧ ¬(p<sub>bm</sub> < p<sub>am</sub>))
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∨ (¬(p<sub>am</sub> < p<sub>bm</sub>) ∧ ¬(p<sub>bm</sub> <
+> p<sub>am</sub>))
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∨ (¬(p<sub>am</sub> < p<sub>bm</sub>) ∧ ¬(p<sub>am</sub> =
+> p<sub>bm</sub>)) )
+>
+> ⇔ 𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>)
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;∧ ( ¬(p<sub>am</sub> = p<sub>bm</sub> ∨ p<sub>bm</sub> < p<sub>am</sub>)
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∨ ¬(p<sub>am</sub> < p<sub>bm</sub> ∨ p<sub>bm</sub> <
+> p<sub>am</sub>))
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∨ ¬(p<sub>am</sub> < p<sub>bm</sub> ∨ p<sub>am</sub> = p<sub>bm</sub>)
+> )
+>
+> ⇔ 𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>)
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;∧ ¬( (p<sub>am</sub> = p<sub>bm</sub> ∨ p<sub>bm</sub> < p<sub>am</sub>)
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∧ (p<sub>am</sub> < p<sub>bm</sub> ∨ p<sub>bm</sub> < p<sub>am</sub>))
+>
+> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;∧ (p<sub>am</sub> < p<sub>bm</sub> ∨ p<sub>am</sub> = p<sub>bm</sub>)
+> )
+>
+> ⇔ 𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>) ∧ ¬(false)
+>
+> ⇔ 𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>) ∧ true
+>
+> ⇔ 𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>)
+>
+> _(Any 2 of the 3 disjunctions cannot be true at the same time, because a partial order is irreflexive. If
+> p<sub>am</sub> = p<sub>bm</sub> is true, then (p<sub>am</sub> < p<sub>bm</sub> ∨ p<sub>bm</sub> < p<sub>am</sub>) is
+> false. If p<sub>bm</sub> < p<sub>am</sub> is true, then (p<sub>am</sub> < p<sub>bm</sub> ∨ p<sub>am</sub> =
+> p<sub>bm</sub>) is false.)_
+
+<div style="margin: 2mm; padding: 5mm; background-color: red; color: yellow">
+Above nowhere it is said that <bold>p<sub>am</sub></bold> and <bold>p<sub>bm</sub></bold> must be related. Problem 
+solved (not).
+<br />
+<br />
+This has to be done everywhere. <bold>𝓈(i<sub>a1</sub>) = 𝓈(i<sub>b1</sub>)</bold> above has to be replaced with
+<bold>¬(𝓈(i<sub>a1</sub>) < 𝓈(i<sub>b1</sub>)) ∧ ¬(𝓈(i<sub>b1</sub>) < 𝓈(i<sub>a1</sub>)) ⇔ ¬(𝓈(i<sub>a1</sub>) <
+𝓈(i<sub>b1</sub>) ∨ 𝓈(i<sub>b1</sub>) < 𝓈(i<sub>a1</sub>))</bold>. We can no longer conclude that <bold>𝓈(i<sub>a1</sub>)
+= 𝓈(i<sub>b1</sub>)</bold>, but rather that they are equal, <em>or incomparable</em>.
+<br />
+<br />
+This no longer expresses that “Alice’s and Bob’s first intervals start together”. With these definitions, the basic
+relations are no longer complete. That “Alice’s and Bob’s first intervals start together” can no longer be expressed.
+<br />
+<br />
+The conclusion is that
+<ol style="margin: 2mm; padding: 5mm; background-color: red; color: yellow">
+<li>the definitions are correct as they are for IA</li>
+<li>although a partial order is all we need on 𝓟, the subset of points involved in any related intervals are 
+totally ordered as a consequence of these definitions, and there is no way around that, without losing the core 
+semantics of the 13 basic relations.
+<li>Maybe something can be done with more basic relations, but in that case the basic relations will not be a basis
+anymore.</li>
+<li>although a partial order is all we need on 𝓟, when talking abount points involved in any related intervals
+<bold>(p<sub>1</sub> < p<sub>2</sub> ∨ p<sub>1</sub> = p<sub>2</sub> ∨ p<sub>2</sub> < p<sub>1</sub>) <em>=</em> 
+true</bold> for those points. This will help in reasoning.</li>
+<li>IA cannot be used with special relativity. A paper that does this is mentioned however. Need to look that up.</li>
+<li>When comparing points to intervals <bold>(p<sub>1</sub> < p<sub>2</sub> ∨ p<sub>1</sub> = p<sub>2</sub> ∨
+p<sub>2</sub> < p<sub>1</sub>) <em>≠</em> true</bold>. What is the effect of this on reasoning about points as 
+intervals?</li>
+<li>Since the subset of all points involved in related intervals is totally ordered anyway, and we are only talking 
+about interval relations, it is easier to define 𝓟 as totally ordered. If the user has a set with a partial order, 
+the user can choose 𝓟 as a subset for which the order is total. Intervals of such disjunct subsets cannot be 
+related anyway.</li>
+<li>Change the text to reflect this. Say at the start that we need a total order. Then discuss that, up until now,
+a partial order would have been enough. Then show that the definitions imply a total order on all points involved.
+Then say it is easier to just demand a total order on 𝓟, and have the user select subsets, because _see above_. 
+Finally note that special relativity is out.</li>
+</ol>
+
+</div>
+
 We will call the common start point **p<sub>s</sub>**, and the common end point **p<sub>e</sub>**. Only 4 points are
 involved in this example.
 
